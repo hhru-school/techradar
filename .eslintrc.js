@@ -1,40 +1,47 @@
+const path = require('path');
+
 module.exports = {
-    env: {
-        browser: true,
-        es6: true,
-        node: true,
-    },
-    extends: [
-        'eslint:recommended',
-        'plugin:react/recommended',
-        'plugin:react-hooks/recommended',
-        'plugin:prettier/recommended',
-        'plugin:jsx-a11y/strict',
-    ],
-    parser: '@typescript-eslint/parser',
-    parserOptions: {
-        ecmaFeatures: {
-            jsx: true,
-        },
-        ecmaVersion: 2018,
-        sourceType: 'module',
-    },
-    plugins: ['react', 'jsx-a11y', '@typescript-eslint'],
+    root: true,
+    extends: ['plugin:jest/recommended', '@hh.ru/eslint-config', 'prettier'],
+    plugins: ['@typescript-eslint', 'babel', 'prettier'],
+    parserOptions: { requireConfigFile: false },
     rules: {
-        'react-hooks/exhaustive-deps': 'error',
-        'no-var': 'error',
-        'brace-style': 'error',
-        'prefer-template': 'error',
-        radix: 'error',
-        'space-before-blocks': 'error',
-        'import/prefer-default-export': 'off',
+        'no-restricted-imports': 0,
+        'import/extensions': ['error', 'always', { js: 'never', jsx: 'never', ts: 'never', tsx: 'never' }],
+        'arrow-parens': ['error', 'always'],
+        'no-console': ['error', { allow: ['warn', 'error'] }],
+        'prettier/prettier': ['error'],
+        'no-unused-vars': ['error', { ignoreRestSiblings: true }],
+        'no-undef': 0,
+        'class-methods-use-this': 'off',
+        'babel/no-unused-expressions': ['error', { allowShortCircuit: true }],
+        'no-unused-expressions': 'off',
     },
     overrides: [
         {
-            files: ['**/*.test.js', '**/*.test.jsx', '**/*.test.tsx', '**/*.spec.js', '**/*.spec.jsx', '**/*.spec.tsx'],
-            env: {
-                jest: true,
+            files: ['*.ts', '*.tsx', '*.d.ts'],
+            extends: ['@hh.ru/eslint-config/typescript'],
+            parserOptions: {
+                project: path.join(__dirname, 'tsconfig.json'),
             },
         },
     ],
+    settings: {
+        'import/extensions': ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
+        'import/resolver': {
+            alias: {
+                map: [
+                    ['src', './src'],
+                    ['bloko', './node_modules/@hh.ru/bloko/build'],
+                ],
+                extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
+            },
+            node: {
+                extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
+            },
+        },
+        react: {
+            version: 'detect',
+        },
+    },
 };
