@@ -30,10 +30,7 @@ module.exports = {
         'import/extensions': ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
         'import/resolver': {
             alias: {
-                map: [
-                    ['src', './src'],
-                    ['bloko', './node_modules/@hh.ru/bloko/build'],
-                ],
+                map: [['src', './src']],
                 extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
             },
             node: {
