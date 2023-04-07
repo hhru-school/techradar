@@ -10,6 +10,7 @@ function App(): JSX.Element {
             <Routes>
                 <Route path="/" element={<Main />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/techradar" element={<TechRadar />} />
             </Routes>
         </>
     );
