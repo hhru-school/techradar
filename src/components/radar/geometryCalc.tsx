@@ -31,16 +31,6 @@ export const getRadiusListEqualSquare: RadiusListCallback = (numOfRings: number,
     return radiusParamList;
 };
 
-// //////////////////////////////////
-export function getRandomColor(): string {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
 // ///////////////////////////////////
 export interface Offset {
     x: number;
@@ -54,4 +44,8 @@ export function getCorrection(startAngle: number, sweepAngle: number, gap: numbe
         x: (gap / 2) * Math.sin(angle),
         y: (-gap / 2) * Math.cos(angle),
     };
+}
+
+export function getTextRotationAngle(rad: number): number {
+    return (rad * 180) / Math.PI - 90;
 }

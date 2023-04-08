@@ -7,10 +7,11 @@ type Props = {
     radius: number;
     sectorNames: string[];
     ringNames: string[];
-    gap?: number;
+    gap: number;
+    colorScheme: string[];
 };
 
-const Field: FC<Props> = ({ radius, sectorNames, ringNames, startAngle, gap = 0 }) => {
+const Field: FC<Props> = ({ radius, sectorNames, ringNames, startAngle, gap = 0, colorScheme }) => {
     const sweepAngle = (2 * Math.PI) / sectorNames.length;
     let currentStartAngle = startAngle;
     const sectors = sectorNames.map((item, i) => {
@@ -23,6 +24,7 @@ const Field: FC<Props> = ({ radius, sectorNames, ringNames, startAngle, gap = 0 
                 sweepAngle={sweepAngle}
                 startAngle={currentStartAngle}
                 gap={gap}
+                baseColor={colorScheme[i]}
             />
         );
         currentStartAngle += sweepAngle;

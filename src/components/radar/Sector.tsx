@@ -2,7 +2,7 @@ import { FC } from 'react';
 import * as d3 from 'd3-color';
 
 import ArcItem from './ArcItem';
-import { Offset, RadiusData, getCorrection, getRadiusListEqualSquare, getRandomColor } from './geometryCalc';
+import { Offset, RadiusData, getCorrection, getRadiusListEqualSquare } from './geometryCalc';
 
 type Props = {
     sectorName: string;
@@ -11,12 +11,13 @@ type Props = {
     startAngle: number;
     sweepAngle: number;
     gap: number;
+    baseColor: string;
 };
 
-const Sector: FC<Props> = ({ sectorName, ringNames, radius, startAngle, sweepAngle, gap = 0 }) => {
+const Sector: FC<Props> = ({ sectorName, ringNames, radius, startAngle, sweepAngle, gap = 0, baseColor }) => {
     const offsetXY: Offset = getCorrection(startAngle, sweepAngle, gap);
     const radiusData: RadiusData[] = getRadiusListEqualSquare(ringNames.length, radius);
-    const rgb = getRandomColor();
+
     const arcs = radiusData.map((item, i) => (
         <ArcItem
             key={`${sectorName}_${i}`}
@@ -26,10 +27,11 @@ const Sector: FC<Props> = ({ sectorName, ringNames, radius, startAngle, sweepAng
             endAngle={startAngle + sweepAngle}
             color={
                 d3
-                    .color(rgb)
+                    .color(baseColor)
                     ?.brighter(i / 3)
                     .toString() || ''
             }
+            ringName={ringNames[i]}
         />
     ));
     return (
