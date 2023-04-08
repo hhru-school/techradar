@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from './components/Header/Header';
 import Account from './pages/admin/Account/Account';
 import MyRadar from './pages/admin/MyRadar/MyRadar';
+import RadarConstructor from './pages/admin/RadarConstructor/RadarConstructor';
 import Main from './pages/main/Main';
 import TechRadar from './pages/techradar/TechRadar';
 
@@ -27,6 +28,7 @@ const App: FC = () => {
                 </Route>
                 <Route path="/account" element={<Account />} />
                 <Route path="/radars" element={<MyRadar />} />
+                <Route path="/constructor" element={<RadarConstructor />} />
             </Routes>
         </ThemeProvider>
     );

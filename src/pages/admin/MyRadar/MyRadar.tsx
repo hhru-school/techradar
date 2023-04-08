@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 import { Divider, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,18 +14,9 @@ import RadarItem from '../RadarItem/RadarItem';
 import './MyRadar.css';
 
 const MyRadar: FC = () => {
-    // const [privacy, setPrivacy] = useState('Все');
-    // const [sortByTime, setSortByTime] = useState('Сначала новые');
-    // const [sortByCompany, setSortByCompany] = useState('Все');
-
     return (
         <Container maxWidth="xl">
-            <Grid
-                container
-                spacing={3}
-                sx={{ padding: '10px 0', display: 'flex', justifyContent: 'space-around' }}
-                justifyContent={'space-around'}
-            >
+            <Grid container spacing={3} sx={{ padding: '10px 0', display: 'flex', justifyContent: 'space-around' }}>
                 <Grid item xs={3} md={3} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Typography variant="h5">Мои радары</Typography>
                 </Grid>
@@ -65,9 +57,11 @@ const MyRadar: FC = () => {
                                 <option value={'old'}>Сначала старые</option>
                             </NativeSelect>
                         </FormControl>
-                        <Button variant="contained" color="success">
-                            Создать
-                        </Button>
+                        <Link to="/constructor">
+                            <Button variant="contained" color="success">
+                                Создать
+                            </Button>
+                        </Link>
                     </Stack>
                 </Grid>
             </Grid>

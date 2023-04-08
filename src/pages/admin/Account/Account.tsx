@@ -33,9 +33,6 @@ function TabPanel(props: TabPanelProps) {
 }
 
 const Account: FC = () => {
-    // const [privacy, setPrivacy] = useState('Все');
-    // const [sortByTime, setSortByTime] = useState('Сначала новые');
-    // const [sortByCompany, setSortByCompany] = useState('Все');
     const [value, setValue] = useState<number>(0);
 
     const handleChange = (event: SyntheticEvent, newValue: number) => {

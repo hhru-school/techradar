@@ -103,7 +103,9 @@ const AuthFormModal: FC = () => {
 
     return (
         <div>
-            <Button onClick={handleOpen}>Open modal</Button>
+            <Button onClick={handleOpen} style={{ display: 'none' }}>
+                Open modal
+            </Button>
             {Json}
             <Modal
                 aria-labelledby="transition-modal-title"
