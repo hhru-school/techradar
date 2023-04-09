@@ -1,12 +1,20 @@
 import { FC, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Divider, Typography } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Fab from '@mui/material/Fab';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText';
 import Grid from '@mui/material/Grid';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
 import NativeSelect from '@mui/material/NativeSelect';
@@ -29,22 +37,114 @@ type InputProps = {
     autoComplete: string;
 };
 
-const MyTextInput = ({ label, ...props }: InputProps) => {
+const MyTextInput = ({ label, id, ...props }: InputProps) => {
     const [field, meta] = useField(props);
     return (
-        <TextField
-            label={label}
-            variant="outlined"
-            {...field}
-            {...props}
-            helperText={meta.error}
-            style={{ marginTop: 20, width: 280 }}
-        />
+        <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
+            <InputLabel htmlFor={id}>{label}</InputLabel>
+            <Input
+                id={id}
+                {...field}
+                {...props}
+                aria-describedby="standard-weight-helper-text"
+                inputProps={{
+                    'aria-label': 'weight',
+                }}
+                endAdornment={
+                    <InputAdornment position="end">
+                        <AddIcon />
+                    </InputAdornment>
+                }
+            />
+            <FormHelperText id="standard-weight-helper-text">{meta.error}</FormHelperText>
+        </FormControl>
+        // <TextField
+        //     label={label}
+        //     variant="outlined"
+        //     {...field}
+        //     {...props}
+        //     helperText={meta.error}
+        //     style={{ marginTop: 20, width: 280 }}
+        // />
     );
 };
 
+const inputs = [
+    {
+        label: 'Название радара',
+        id: 'name',
+        name: 'name',
+        type: 'text',
+        autoComplete: 'off',
+    },
+    {
+        label: 'Название квадранта 1',
+        id: 'name-quadrant-1',
+        name: 'name-quadrant-1',
+        type: 'text',
+        autoComplete: 'off',
+    },
+    {
+        label: 'Название квадранта 2',
+        id: 'name-quadrant-2',
+        name: 'name-quadrant-2',
+        type: 'text',
+        autoComplete: 'off',
+    },
+    {
+        label: 'Название квадранта 3',
+        id: 'name-quadrant-3',
+        name: 'name-quadrant-3',
+        type: 'text',
+        autoComplete: 'off',
+    },
+    {
+        label: 'Название квадранта 4',
+        id: 'name-quadrant-4',
+        name: 'name-quadrant-4',
+        type: 'text',
+        autoComplete: 'off',
+    },
+    {
+        label: 'Количество колец',
+        id: 'cercle-count',
+        name: 'cercle-count',
+        type: 'number',
+        autoComplete: 'off',
+    },
+    {
+        label: 'Название кольца 1',
+        id: 'name-cercle-1',
+        name: 'name-cercle-1',
+        type: 'text',
+        autoComplete: 'off',
+    },
+    {
+        label: 'Название кольца 2',
+        id: 'name-cercle-2',
+        name: 'name-cercle-2',
+        type: 'text',
+        autoComplete: 'off',
+    },
+    {
+        label: 'Название кольца 3',
+        id: 'name-cercle-3',
+        name: 'name-cercle-3',
+        type: 'text',
+        autoComplete: 'off',
+    },
+    {
+        label: 'Название кольца 4',
+        id: 'name-cercle-4',
+        name: 'name-cercle-4',
+        type: 'text',
+        autoComplete: 'off',
+    },
+];
+
 const RadarConstructor: FC = () => {
     const [checked, setChecked] = useState(false);
+    const [expanded, setExpanded] = useState(true);
 
     const handleChange = () => {
         setChecked((prev) => !prev);
@@ -79,7 +179,7 @@ const RadarConstructor: FC = () => {
                         </Grid>
                         <Grid item xs>
                             <Stack direction="row" justifyContent={'flex-end'} spacing={3}>
-                                <Fab variant="extended" color="primary">
+                                <Fab disabled variant="extended" color="primary">
                                     <AddIcon />
                                     добавить технологию
                                 </Fab>
@@ -111,82 +211,123 @@ const RadarConstructor: FC = () => {
                         </Grid>
                     </Grid>
                     <Divider />
-
-                    <List
-                        sx={{
-                            width: '100%',
-                            maxWidth: 300,
-                            bgcolor: 'background.paper',
-                            position: 'relative',
-                            overflow: 'auto',
-                            maxHeight: 700,
-                        }}
-                    >
-                        <MyTextInput label="Название радара" id="name" name="name" type="text" autoComplete="off" />
-                        <MyTextInput
-                            label="Название квадранта 1"
-                            id="name-quadrant-1"
-                            name="name-quadrant-1"
-                            type="text"
-                            autoComplete="off"
-                        />
-                        <MyTextInput
-                            label="Название квадранта 2"
-                            id="name-quadrant-2"
-                            name="name-quadrant-2"
-                            type="text"
-                            autoComplete="off"
-                        />
-                        <MyTextInput
-                            label="Название квадранта 3"
-                            id="name-quadrant-3"
-                            name="name-quadrant-3"
-                            type="text"
-                            autoComplete="off"
-                        />
-                        <MyTextInput
-                            label="Название квадранта 4"
-                            id="name-quadrant-4"
-                            name="name-quadrant-4"
-                            type="text"
-                            autoComplete="off"
-                        />
-                        <MyTextInput
-                            label="Количество колец"
-                            id="cercle-count"
-                            name="cercle-count"
-                            type="number"
-                            autoComplete="off"
-                        />
-                        <MyTextInput
-                            label="Название кольца 1"
-                            id="name-cercle-1"
-                            name="name-cercle-1"
-                            type="text"
-                            autoComplete="off"
-                        />
-                        <MyTextInput
-                            label="Название кольца 2"
-                            id="name-cercle-2"
-                            name="name-cercle-2"
-                            type="text"
-                            autoComplete="off"
-                        />
-                        <MyTextInput
-                            label="Название кольца 3"
-                            id="name-cercle-3"
-                            name="name-cercle-3"
-                            type="text"
-                            autoComplete="off"
-                        />
-                        <MyTextInput
-                            label="Название кольца 4"
-                            id="name-cercle-4"
-                            name="name-cercle-4"
-                            type="text"
-                            autoComplete="off"
-                        />
-                    </List>
+                    <Accordion sx={{ width: 300, mt: '5px', border: 0 }} expanded={expanded}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                            onClick={() => setExpanded(!expanded)}
+                        >
+                            <Typography>Настройки радара</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails sx={{ height: '58vh', padding: '0 16px 8px 16px' }}>
+                            <List
+                                sx={{
+                                    width: '100%',
+                                    bgcolor: 'background.paper',
+                                    position: 'relative',
+                                    overflow: 'auto',
+                                    maxHeight: '100%',
+                                }}
+                            >
+                                {inputs.map((item) => {
+                                    return (
+                                        <MyTextInput
+                                            label={item.label}
+                                            id={item.id}
+                                            name={item.name}
+                                            type={item.type}
+                                            autoComplete={item.autoComplete}
+                                        />
+                                    );
+                                })}
+                            </List>
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion sx={{ width: 300 }} expanded={!expanded}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel2a-content"
+                            id="panel2a-header"
+                            onClick={() => setExpanded(!expanded)}
+                        >
+                            <Typography>Добавление технологий</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails sx={{ height: '58vh' }}>
+                            <List
+                                sx={{
+                                    width: '100%',
+                                    bgcolor: 'background.paper',
+                                    position: 'relative',
+                                    overflow: 'auto',
+                                    maxHeight: '100%',
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'space-between',
+                                        marginTop: '10px',
+                                        borderRadius: '5px',
+                                        padding: '10px 10px',
+                                        border: '1px solid',
+                                        borderColor: 'rgba(0, 0, 0, 0.23)',
+                                        height: '200px',
+                                    }}
+                                >
+                                    <TextField
+                                        label="Название технологии"
+                                        id="standard-size-small"
+                                        defaultValue=""
+                                        size="small"
+                                        variant="standard"
+                                    />
+                                    <FormControl fullWidth>
+                                        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                                            Квадрант
+                                        </InputLabel>
+                                        <NativeSelect
+                                            defaultValue={30}
+                                            inputProps={{
+                                                name: 'age',
+                                                id: 'uncontrolled-native',
+                                            }}
+                                        >
+                                            <option value={1}>1</option>
+                                            <option value={2}>2</option>
+                                            <option value={3}>3</option>
+                                            <option value={4}>4</option>
+                                        </NativeSelect>
+                                    </FormControl>
+                                    <FormControl fullWidth>
+                                        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                                            Сектор
+                                        </InputLabel>
+                                        <NativeSelect
+                                            defaultValue={30}
+                                            inputProps={{
+                                                name: 'age',
+                                                id: 'uncontrolled-native',
+                                            }}
+                                        >
+                                            <option value={1}>1</option>
+                                            <option value={2}>2</option>
+                                            <option value={3}>3</option>
+                                            <option value={4}>4</option>
+                                        </NativeSelect>
+                                    </FormControl>
+                                    <TextField
+                                        label="Комментарий"
+                                        id="standard-size-small"
+                                        defaultValue=""
+                                        size="small"
+                                        variant="standard"
+                                    />
+                                </Box>
+                            </List>
+                        </AccordionDetails>
+                    </Accordion>
                 </Form>
             </Formik>
         </Container>
