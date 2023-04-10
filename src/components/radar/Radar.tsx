@@ -1,6 +1,8 @@
 import { FC } from 'react';
 
 import Sector from './Sector';
+import * as config from './styleConfig';
+import { Blip } from './types';
 
 type Props = {
     startAngle: number;
@@ -9,22 +11,32 @@ type Props = {
     ringNames: string[];
     gap: number;
     colorScheme: string[];
+    data?: Blip[] | null;
 };
 
-const Field: FC<Props> = ({ radius, sectorNames, ringNames, startAngle, gap = 0, colorScheme }) => {
+const Field: FC<Props> = ({
+    radius,
+    sectorNames,
+    ringNames,
+    startAngle,
+    gap = config.defaultGap,
+    colorScheme,
+    data = null,
+}) => {
     const sweepAngle = (2 * Math.PI) / sectorNames.length;
     let currentStartAngle = startAngle;
-    const sectors = sectorNames.map((item, i) => {
+    const sectors = sectorNames.map((name, i) => {
         const sector = (
             <Sector
-                key={`${item}_${i}`}
-                sectorName={item}
+                key={`${name}_${i}`}
+                sectorName={name}
                 ringNames={ringNames}
                 radius={radius}
                 sweepAngle={sweepAngle}
                 startAngle={currentStartAngle}
                 gap={gap}
                 baseColor={colorScheme[i]}
+                data={data && data.filter((item) => item.sectorName === name)}
             />
         );
         currentStartAngle += sweepAngle;

@@ -49,3 +49,23 @@ export function getCorrection(startAngle: number, sweepAngle: number, gap: numbe
 export function getTextRotationAngle(rad: number): number {
     return (rad * 180) / Math.PI - 90;
 }
+
+export function getDisIsolineBlips(angle: number, radius: number): number {
+    return Math.sin(angle / 2) * radius;
+}
+
+export function getMinAngle(itemRadius: number, radius: number): number {
+    return Math.asin(itemRadius / radius);
+}
+
+export interface Cartesian {
+    x: number;
+    y: number;
+}
+
+export function radialToCartesian(radius: number, angle: number): Cartesian {
+    return {
+        x: radius * Math.sin(angle),
+        y: -radius * Math.cos(angle),
+    };
+}
