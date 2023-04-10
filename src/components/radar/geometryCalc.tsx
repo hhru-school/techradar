@@ -55,7 +55,7 @@ export function getDisIsolineBlips(angle: number, radius: number): number {
 }
 
 export function getMinAngle(itemRadius: number, radius: number): number {
-    return Math.asin(itemRadius / radius);
+    return Math.asin(itemRadius / radius) * 2;
 }
 
 export interface Cartesian {
@@ -63,7 +63,7 @@ export interface Cartesian {
     y: number;
 }
 
-export function radialToCartesian(radius: number, angle: number): Cartesian {
+export function polarToCartesian(radius: number, angle: number): Cartesian {
     return {
         x: radius * Math.sin(angle),
         y: -radius * Math.cos(angle),
