@@ -23,7 +23,12 @@ const MyRadar: FC = () => {
                 <Grid item xs>
                     <Stack direction="row" justifyContent={'space-between'} spacing={3}>
                         <Box>
-                            <input type="text" className="my-radar__input" placeholder="Найти радар..." />
+                            <input
+                                style={{ margin: 'auto 0' }}
+                                type="text"
+                                className="my-radar__input"
+                                placeholder="Найти радар..."
+                            />
                         </Box>
                         <FormControl style={{ width: 200 }}>
                             <InputLabel variant="standard" htmlFor="uncontrolled-native">
@@ -43,7 +48,7 @@ const MyRadar: FC = () => {
                             </NativeSelect>
                         </FormControl>
                         <FormControl style={{ width: 200 }}>
-                            <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                            <InputLabel variant="standard" htmlFor="sortByTime">
                                 По времени
                             </InputLabel>
                             <NativeSelect

@@ -1,26 +1,33 @@
 import { FC, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
+import AdjustIcon from '@mui/icons-material/Adjust';
+import ContactSupportIcon from '@mui/icons-material/ContactSupport';
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Divider, Typography } from '@mui/material';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import Fab from '@mui/material/Fab';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormHelperText from '@mui/material/FormHelperText';
-import Grid from '@mui/material/Grid';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import InputLabel from '@mui/material/InputLabel';
-import List from '@mui/material/List';
-import NativeSelect from '@mui/material/NativeSelect';
-import Stack from '@mui/material/Stack';
-import Switch from '@mui/material/Switch';
-import TextField from '@mui/material/TextField';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import {
+    Divider,
+    Typography,
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Box,
+    Button,
+    Container,
+    Fab,
+    FormControl,
+    FormControlLabel,
+    FormHelperText,
+    Grid,
+    Input,
+    InputAdornment,
+    InputLabel,
+    List,
+    NativeSelect,
+    Stack,
+    Switch,
+    TextField,
+} from '@mui/material';
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
@@ -39,6 +46,34 @@ type InputProps = {
 
 const MyTextInput = ({ label, id, ...props }: InputProps) => {
     const [field, meta] = useField(props);
+
+    let icon;
+    switch (id) {
+        case 'name':
+            icon = <ContactSupportIcon />;
+            break;
+        case 'name-quadrant-1':
+            icon = <DashboardCustomizeIcon sx={{ transform: 'rotate(-90deg)' }} />;
+            break;
+        case 'name-quadrant-2':
+            icon = <DashboardCustomizeIcon />;
+            break;
+        case 'name-quadrant-3':
+            icon = <DashboardCustomizeIcon sx={{ transform: 'rotate(90deg)' }} />;
+            break;
+        case 'name-quadrant-4':
+            icon = <DashboardCustomizeIcon sx={{ transform: 'rotate(180deg)' }} />;
+            break;
+        case 'cercle-count':
+            icon = <FormatListNumberedIcon />;
+            break;
+        case 'name-cercle':
+            icon = <AdjustIcon />;
+            break;
+        default:
+            break;
+    }
+
     return (
         <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
             <InputLabel htmlFor={id}>{label}</InputLabel>
@@ -50,22 +85,10 @@ const MyTextInput = ({ label, id, ...props }: InputProps) => {
                 inputProps={{
                     'aria-label': 'weight',
                 }}
-                endAdornment={
-                    <InputAdornment position="end">
-                        <AddIcon />
-                    </InputAdornment>
-                }
+                endAdornment={<InputAdornment position="end">{icon}</InputAdornment>}
             />
             <FormHelperText id="standard-weight-helper-text">{meta.error}</FormHelperText>
         </FormControl>
-        // <TextField
-        //     label={label}
-        //     variant="outlined"
-        //     {...field}
-        //     {...props}
-        //     helperText={meta.error}
-        //     style={{ marginTop: 20, width: 280 }}
-        // />
     );
 };
 
@@ -114,28 +137,28 @@ const inputs = [
     },
     {
         label: 'Название кольца 1',
-        id: 'name-cercle-1',
+        id: 'name-cercle',
         name: 'name-cercle-1',
         type: 'text',
         autoComplete: 'off',
     },
     {
         label: 'Название кольца 2',
-        id: 'name-cercle-2',
+        id: 'name-cercle',
         name: 'name-cercle-2',
         type: 'text',
         autoComplete: 'off',
     },
     {
         label: 'Название кольца 3',
-        id: 'name-cercle-3',
+        id: 'name-cercle',
         name: 'name-cercle-3',
         type: 'text',
         autoComplete: 'off',
     },
     {
         label: 'Название кольца 4',
-        id: 'name-cercle-4',
+        id: 'name-cercle',
         name: 'name-cercle-4',
         type: 'text',
         autoComplete: 'off',
@@ -179,14 +202,6 @@ const RadarConstructor: FC = () => {
                         </Grid>
                         <Grid item xs>
                             <Stack direction="row" justifyContent={'flex-end'} spacing={3}>
-                                <Fab disabled variant="extended" color="primary">
-                                    <AddIcon />
-                                    добавить технологию
-                                </Fab>
-                                <FormControlLabel
-                                    control={<Switch checked={checked} onChange={handleChange} />}
-                                    label="Сделать публичным после создания"
-                                />
                                 <FormControl style={{ width: 200 }}>
                                     <InputLabel variant="standard" htmlFor="uncontrolled-native">
                                         Взять за основу сущестующий
@@ -204,6 +219,10 @@ const RadarConstructor: FC = () => {
                                         <option value={'radar 3'}>Радар 3</option>
                                     </NativeSelect>
                                 </FormControl>
+                                <FormControlLabel
+                                    control={<Switch checked={checked} onChange={handleChange} />}
+                                    label="Сделать публичным после создания"
+                                />
                                 <Button variant="contained" color="success">
                                     Создать
                                 </Button>
@@ -227,7 +246,7 @@ const RadarConstructor: FC = () => {
                                     bgcolor: 'background.paper',
                                     position: 'relative',
                                     overflow: 'auto',
-                                    maxHeight: '100%',
+                                    maxHeight: '95%',
                                 }}
                             >
                                 {inputs.map((item) => {
@@ -326,6 +345,10 @@ const RadarConstructor: FC = () => {
                                     />
                                 </Box>
                             </List>
+                            <Fab variant="extended" color="primary">
+                                <AddIcon />
+                                добавить технологию
+                            </Fab>
                         </AccordionDetails>
                     </Accordion>
                 </Form>
