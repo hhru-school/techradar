@@ -300,7 +300,7 @@ const Header: FC = () => {
                                     Мои компании
                                 </MenuItem>
                             </Link>
-                            <Link to="/radars">
+                            <Link to="/my-radars">
                                 <MenuItem onClick={handleClose}>
                                     <ListItemIcon>
                                         <RadarIcon fontSize="small" />
@@ -308,7 +308,7 @@ const Header: FC = () => {
                                     Мои радары
                                 </MenuItem>
                             </Link>
-                            <Link to="/technologies">
+                            <Link to="/my-tech">
                                 <MenuItem onClick={handleClose}>
                                     <ListItemIcon>
                                         <ConstructionIcon fontSize="small" />

@@ -10,21 +10,17 @@ import InputLabel from '@mui/material/InputLabel';
 import NativeSelect from '@mui/material/NativeSelect';
 import Stack from '@mui/material/Stack';
 
-import RadarItem from '../RadarItem/RadarItem';
-
-import './MyRadar.less';
-
-const MyRadar: FC = () => {
+const MyTechnologies: FC = () => {
     return (
         <Container maxWidth="xl">
             <Grid container spacing={3} sx={{ padding: '10px 0', display: 'flex', justifyContent: 'space-around' }}>
                 <Grid item xs={4} md={3} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <Typography variant="h5">Мои радары</Typography>
+                    <Typography variant="h5">Мои технологии</Typography>
                 </Grid>
                 <Grid item xs>
                     <Stack direction="row" justifyContent={'space-between'} spacing={3}>
                         <Box sx={{ margin: 'auto 0' }}>
-                            <input type="text" className="my-radar__input" placeholder="Найти радар..." />
+                            <input type="text" className="my-radar__input" placeholder="Найти технологию..." />
                         </Box>
                         <FormControl style={{ width: 200 }}>
                             <InputLabel variant="standard" htmlFor="uncontrolled-native">
@@ -58,7 +54,7 @@ const MyRadar: FC = () => {
                                 <option value={'old'}>Сначала старые</option>
                             </NativeSelect>
                         </FormControl>
-                        <Link to="/radar-constructor">
+                        <Link to="/constructor">
                             <Button variant="contained" color="success" sx={{ height: '100%' }}>
                                 Создать
                             </Button>
@@ -67,15 +63,8 @@ const MyRadar: FC = () => {
                 </Grid>
             </Grid>
             <Divider />
-            <Grid container columns={{ xs: 3, sm: 3, md: 12 }} style={{ margin: '10px 0' }}>
-                {[1, 1, 1, 1, 1, 1].map((_, index) => (
-                    <Grid xs={3} style={{ padding: 5 }} key={index}>
-                        <RadarItem />
-                    </Grid>
-                ))}
-            </Grid>
         </Container>
     );
 };
 
-export default MyRadar;
+export default MyTechnologies;

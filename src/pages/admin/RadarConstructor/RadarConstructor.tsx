@@ -223,7 +223,7 @@ const RadarConstructor: FC = () => {
                                     control={<Switch checked={checked} onChange={handleChange} />}
                                     label="Сделать публичным после создания"
                                 />
-                                <Button variant="contained" color="success">
+                                <Button disabled={true} variant="contained" color="success">
                                     Создать
                                 </Button>
                             </Stack>
