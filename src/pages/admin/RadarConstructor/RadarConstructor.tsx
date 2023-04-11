@@ -137,28 +137,28 @@ const inputs = [
     },
     {
         label: 'Название кольца 1',
-        id: 'name-cercle',
+        id: 'name-cercle-1',
         name: 'name-cercle-1',
         type: 'text',
         autoComplete: 'off',
     },
     {
         label: 'Название кольца 2',
-        id: 'name-cercle',
+        id: 'name-cercle-2',
         name: 'name-cercle-2',
         type: 'text',
         autoComplete: 'off',
     },
     {
         label: 'Название кольца 3',
-        id: 'name-cercle',
+        id: 'name-cercle-3',
         name: 'name-cercle-3',
         type: 'text',
         autoComplete: 'off',
     },
     {
         label: 'Название кольца 4',
-        id: 'name-cercle',
+        id: 'name-cercle 4',
         name: 'name-cercle-4',
         type: 'text',
         autoComplete: 'off',
@@ -249,9 +249,10 @@ const RadarConstructor: FC = () => {
                                     maxHeight: '95%',
                                 }}
                             >
-                                {inputs.map((item) => {
+                                {inputs.map((item, i) => {
                                     return (
                                         <MyTextInput
+                                            key={i}
                                             label={item.label}
                                             id={item.id}
                                             name={item.name}

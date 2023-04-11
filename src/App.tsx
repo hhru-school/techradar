@@ -3,11 +3,14 @@ import { Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import About from './components/About/About';
+import Companies from './components/Companies/Companies';
 import Header from './components/Header/Header';
+import Tech from './components/Tech/Tech';
 import Account from './pages/admin/Account/Account';
 import MyRadar from './pages/admin/MyRadar/MyRadar';
 import MyTechnologies from './pages/admin/MyTechnologies/MyTechnologies';
 import RadarConstructor from './pages/admin/RadarConstructor/RadarConstructor';
+import TechConstructor from './pages/admin/TechConstructor/TechConstructor';
 import Main from './pages/main/Main';
 import TechRadar from './pages/techradar/TechRadar';
 
@@ -28,11 +31,14 @@ const App: FC = () => {
                 <Route path="/techradar">
                     <Route path=":company/:category/:radar" element={<TechRadar />} />
                 </Route>
+                <Route path="/companies" element={<Companies />} />
+                <Route path="/tech" element={<Tech />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/my-radars" element={<MyRadar />} />
-                <Route path="/radar-constructor" element={<RadarConstructor />} />
+                <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
                 <Route path="/my-tech" element={<MyTechnologies />} />
+                <Route path="/my-tech/tech-constructor" element={<TechConstructor />} />
             </Routes>
         </ThemeProvider>
     );

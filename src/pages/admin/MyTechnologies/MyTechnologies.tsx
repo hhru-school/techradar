@@ -10,6 +10,8 @@ import InputLabel from '@mui/material/InputLabel';
 import NativeSelect from '@mui/material/NativeSelect';
 import Stack from '@mui/material/Stack';
 
+import TechItem from '../TechItem/TechItem';
+
 const MyTechnologies: FC = () => {
     return (
         <Container maxWidth="xl">
@@ -23,20 +25,19 @@ const MyTechnologies: FC = () => {
                             <input type="text" className="my-radar__input" placeholder="Найти технологию..." />
                         </Box>
                         <FormControl style={{ width: 200 }}>
-                            <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                По приватности
+                            <InputLabel variant="standard" htmlFor="sortByTime">
+                                По названию
                             </InputLabel>
                             <NativeSelect
-                                defaultValue={'all'}
+                                defaultValue={'bca'}
                                 inputProps={{
-                                    name: 'privacy',
-                                    id: 'privacy',
+                                    name: 'sortByName',
+                                    id: 'sortByName',
                                 }}
                             >
-                                <option value={'all'}>Все</option>
-                                <option value={'public'}>Публичные</option>
-                                <option value={'via link'}>Доступные по ссылке</option>
-                                <option value={'private'}>Приватные</option>
+                                <option value={'abc'}>По алфавиту</option>
+                                <option value={'cba'}>В обратном порядке</option>
+                                <option value={'bca'}>Вразброс</option>
                             </NativeSelect>
                         </FormControl>
                         <FormControl style={{ width: 200 }}>
@@ -54,7 +55,7 @@ const MyTechnologies: FC = () => {
                                 <option value={'old'}>Сначала старые</option>
                             </NativeSelect>
                         </FormControl>
-                        <Link to="/constructor">
+                        <Link to="/my-tech/tech-constructor">
                             <Button variant="contained" color="success" sx={{ height: '100%' }}>
                                 Создать
                             </Button>
@@ -63,6 +64,13 @@ const MyTechnologies: FC = () => {
                 </Grid>
             </Grid>
             <Divider />
+            <Grid container columns={{ xs: 3, sm: 3, md: 12 }} style={{ margin: '10px 0' }}>
+                {[1, 1, 1, 1, 1, 1].map((_, index) => (
+                    <Grid item xs={3} style={{ padding: 5 }} key={index}>
+                        <TechItem />
+                    </Grid>
+                ))}
+            </Grid>
         </Container>
     );
 };

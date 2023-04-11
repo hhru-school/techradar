@@ -185,9 +185,8 @@ const Header: FC = () => {
 
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                             {pages.map((page, i) => (
-                                <Link to={`/${page[1]}`}>
+                                <Link key={i} to={`/${page[1]}`}>
                                     <Button
-                                        key={i}
                                         onClick={handleCloseNavMenu}
                                         sx={{ my: 2, color: 'white', display: 'block' }}
                                     >

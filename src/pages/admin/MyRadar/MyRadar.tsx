@@ -27,6 +27,22 @@ const MyRadar: FC = () => {
                             <input type="text" className="my-radar__input" placeholder="Найти радар..." />
                         </Box>
                         <FormControl style={{ width: 200 }}>
+                            <InputLabel variant="standard" htmlFor="sortByTime">
+                                По названию
+                            </InputLabel>
+                            <NativeSelect
+                                defaultValue={'bca'}
+                                inputProps={{
+                                    name: 'sortByName',
+                                    id: 'sortByName',
+                                }}
+                            >
+                                <option value={'abc'}>По алфавиту</option>
+                                <option value={'cba'}>В обратном порядке</option>
+                                <option value={'bca'}>Вразброс</option>
+                            </NativeSelect>
+                        </FormControl>
+                        <FormControl style={{ width: 200 }}>
                             <InputLabel variant="standard" htmlFor="uncontrolled-native">
                                 По приватности
                             </InputLabel>
@@ -58,7 +74,7 @@ const MyRadar: FC = () => {
                                 <option value={'old'}>Сначала старые</option>
                             </NativeSelect>
                         </FormControl>
-                        <Link to="/radar-constructor">
+                        <Link to="/my-radars/radar-constructor">
                             <Button variant="contained" color="success" sx={{ height: '100%' }}>
                                 Создать
                             </Button>
@@ -69,7 +85,7 @@ const MyRadar: FC = () => {
             <Divider />
             <Grid container columns={{ xs: 3, sm: 3, md: 12 }} style={{ margin: '10px 0' }}>
                 {[1, 1, 1, 1, 1, 1].map((_, index) => (
-                    <Grid xs={3} style={{ padding: 5 }} key={index}>
+                    <Grid item xs={3} style={{ padding: 5 }} key={index}>
                         <RadarItem />
                     </Grid>
                 ))}
