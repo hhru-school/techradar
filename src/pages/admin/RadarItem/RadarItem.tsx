@@ -1,15 +1,17 @@
 import { FC } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import ShareIcon from '@mui/icons-material/Share';
-import { Typography } from '@mui/material';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import IconButton from '@mui/material/IconButton';
-import Switch from '@mui/material/Switch';
+import {
+    Typography,
+    Card,
+    CardActions,
+    CardContent,
+    CardHeader,
+    Checkbox,
+    FormControlLabel,
+    IconButton,
+    Switch,
+} from '@mui/material';
 
 const RadarItem: FC = () => {
     return (

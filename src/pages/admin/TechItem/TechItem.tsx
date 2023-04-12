@@ -2,14 +2,7 @@ import { FC } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import ShareIcon from '@mui/icons-material/Share';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, IconButton, Typography } from '@mui/material';
 
 const TechItem: FC = () => {
     return (

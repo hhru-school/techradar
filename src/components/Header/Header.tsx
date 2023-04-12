@@ -1,14 +1,10 @@
 import { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AdbIcon from '@mui/icons-material/Adb';
-import BusinessIcon from '@mui/icons-material/Business';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import Logout from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import RadarIcon from '@mui/icons-material/Radar';
-import SearchIcon from '@mui/icons-material/Search';
-import Settings from '@mui/icons-material/Settings';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -16,27 +12,21 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import InputBase from '@mui/material/InputBase';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { styled, alpha } from '@mui/material/styles';
 
 import AuthFormModal from '../AuthFormModal/AuthFormModal';
 
 import './Header.less';
 
-const pages = [
-    ['КОМПАНИИ', 'companies'],
-    ['ТЕХНОЛОГИИ', 'tech'],
-    ['О РАДАРЕ', 'about'],
-];
+const pages = [['О РАДАРЕ', 'about']];
 
 const Header: FC = () => {
-    const [auth, setAuth] = useState<boolean>(false);
+    // const [auth, setAuth] = useState<boolean>(false);
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -57,47 +47,6 @@ const Header: FC = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-    const Search = styled('div')(({ theme }) => ({
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: alpha(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: alpha(theme.palette.common.white, 0.25),
-        },
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(1),
-            width: 'auto',
-        },
-    }));
-
-    const SearchIconWrapper = styled('div')(({ theme }) => ({
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }));
-
-    const StyledInputBase = styled(InputBase)(({ theme }) => ({
-        color: 'inherit',
-        '& .MuiInputBase-input': {
-            padding: theme.spacing(1, 1, 1, 0),
-            paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-            transition: theme.transitions.create('width'),
-            width: '100%',
-            [theme.breakpoints.up('sm')]: {
-                width: '12ch',
-                '&:focus': {
-                    width: '20ch',
-                },
-            },
-        },
-    }));
 
     return (
         <>
@@ -194,23 +143,6 @@ const Header: FC = () => {
                                     </Button>
                                 </Link>
                             ))}
-
-                            <Toolbar>
-                                <Search>
-                                    <SearchIconWrapper>
-                                        <SearchIcon />
-                                    </SearchIconWrapper>
-                                    <StyledInputBase placeholder="поиск…" inputProps={{ 'aria-label': 'search' }} />
-                                </Search>
-
-                                <Button
-                                    style={{ marginLeft: 10 }}
-                                    variant="contained"
-                                    onClick={auth ? () => setAuth(false) : () => setAuth(true)}
-                                >
-                                    Искать
-                                </Button>
-                            </Toolbar>
                         </Box>
 
                         <Box
@@ -221,7 +153,7 @@ const Header: FC = () => {
                             }}
                         >
                             <Tooltip title="Account settings">
-                                {auth ? (
+                                {true ? (
                                     <IconButton
                                         onClick={handleClick}
                                         size="small"
@@ -283,22 +215,6 @@ const Header: FC = () => {
                             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                         >
-                            <Link to="/account">
-                                <MenuItem onClick={handleClose}>
-                                    <ListItemIcon>
-                                        <AccountCircleIcon fontSize="small" />
-                                    </ListItemIcon>
-                                    Профиль
-                                </MenuItem>
-                            </Link>
-                            <Link to="/companies">
-                                <MenuItem onClick={handleClose}>
-                                    <ListItemIcon>
-                                        <BusinessIcon fontSize="small" />
-                                    </ListItemIcon>
-                                    Мои компании
-                                </MenuItem>
-                            </Link>
                             <Link to="/my-radars">
                                 <MenuItem onClick={handleClose}>
                                     <ListItemIcon>
@@ -316,12 +232,6 @@ const Header: FC = () => {
                                 </MenuItem>
                             </Link>
                             <Divider />
-                            <MenuItem onClick={handleClose}>
-                                <ListItemIcon>
-                                    <Settings fontSize="small" />
-                                </ListItemIcon>
-                                Настройки
-                            </MenuItem>
                             <MenuItem onClick={handleClose}>
                                 <ListItemIcon>
                                     <Logout fontSize="small" />

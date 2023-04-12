@@ -85,7 +85,7 @@ const MyTextInput = ({ label, id, ...props }: InputProps) => {
 
 const inputs = [
     {
-        label: 'Наиминование',
+        label: 'Название',
         id: 'name',
         name: 'name',
         type: 'text',
@@ -95,13 +95,6 @@ const inputs = [
         label: 'Ссылка на доку',
         id: 'name-quadrant-1',
         name: 'name-quadrant-1',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Описание',
-        id: 'name-quadrant-2',
-        name: 'name-quadrant-2',
         type: 'text',
         autoComplete: 'off',
     },
@@ -123,7 +116,7 @@ const inputs = [
         label: 'Недостатки',
         id: 'cercle-count',
         name: 'cercle-count',
-        type: 'number',
+        type: 'text',
         autoComplete: 'off',
     },
     {

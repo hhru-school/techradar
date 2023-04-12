@@ -31,6 +31,8 @@ import {
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
+import SideBar from './SideBar';
+
 interface Values {
     email: string;
     password: string;
@@ -202,6 +204,7 @@ const RadarConstructor: FC = () => {
                         </Grid>
                         <Grid item xs>
                             <Stack direction="row" justifyContent={'flex-end'} spacing={3}>
+                                <SideBar />
                                 <FormControl style={{ width: 200 }}>
                                     <InputLabel variant="standard" htmlFor="uncontrolled-native">
                                         Взять за основу сущестующий
@@ -230,6 +233,7 @@ const RadarConstructor: FC = () => {
                         </Grid>
                     </Grid>
                     <Divider />
+
                     <Accordion sx={{ width: 300, mt: '5px', border: 0 }} expanded={expanded}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}

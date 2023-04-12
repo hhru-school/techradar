@@ -1,14 +1,17 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { Divider, Typography } from '@mui/material';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import FormControl from '@mui/material/FormControl';
-import Grid from '@mui/material/Grid';
-import InputLabel from '@mui/material/InputLabel';
-import NativeSelect from '@mui/material/NativeSelect';
-import Stack from '@mui/material/Stack';
+import {
+    Divider,
+    Typography,
+    Box,
+    Button,
+    Container,
+    FormControl,
+    Grid,
+    InputLabel,
+    NativeSelect,
+    Stack,
+} from '@mui/material';
 
 import RadarItem from '../RadarItem/RadarItem';
 
