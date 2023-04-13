@@ -1,4 +1,4 @@
-import { FC, useState, Fragment } from 'react';
+import { FC, useState, Fragment, KeyboardEvent, MouseEvent } from 'react';
 import { Typography, Box, Button, Divider, Drawer, Grid } from '@mui/material';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
@@ -8,10 +8,10 @@ const SideBar: FC = () => {
         right: false,
     });
 
-    const toggleDrawer = (anchor: Anchor, open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    const toggleDrawer = (anchor: Anchor, open: boolean) => (event: KeyboardEvent | MouseEvent) => {
         if (
             event.type === 'keydown' &&
-            ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
+            ((event as KeyboardEvent).key === 'Tab' || (event as KeyboardEvent).key === 'Shift')
         ) {
             return;
         }
@@ -21,7 +21,7 @@ const SideBar: FC = () => {
 
     const list = (anchor: Anchor) => (
         <Box
-            sx={{ width: '600px', padding: '20px' }}
+            sx={{ width: '300px', padding: '20px' }}
             role="presentation"
             onClick={toggleDrawer(anchor, false)}
             onKeyDown={toggleDrawer(anchor, false)}
@@ -32,55 +32,16 @@ const SideBar: FC = () => {
                     item
                     xs={6}
                     sx={{
-                        maxHeight: '95vh',
+                        maxHeight: '80vh',
                     }}
                 >
-                    <Typography variant="h5">Комментарии</Typography>
+                    <Typography variant="h6">Лог изменений</Typography>
                     <Box
                         sx={{
                             boxSizing: 'border-box',
                             display: 'flex',
                             flexDirection: 'column',
-                            width: '100%',
-                            bgcolor: 'background.paper',
-                            position: 'relative',
-                            overflow: 'auto',
-                            maxHeight: '95%',
-                            borderRadius: '5px',
-                            padding: '15px 15px',
-                            border: '1px solid',
-                            borderColor: 'rgba(0, 0, 0, 0.23)',
-                        }}
-                    >
-                        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => (
-                            <Box key={index} sx={{ borderBottom: '1px solid', marginBottom: '10px' }}>
-                                <Typography>
-                                    <strong>
-                                        11/04/2023 <br />
-                                        14:22
-                                    </strong>
-                                    <br />
-                                    НИЧО ТАК Мне Зашло.
-                                    <br /> Вася Пупкин
-                                </Typography>
-                            </Box>
-                        ))}
-                    </Box>
-                </Grid>
-                <Grid
-                    item
-                    xs={6}
-                    sx={{
-                        maxHeight: '95vh',
-                    }}
-                >
-                    <Typography variant="h5">Лог изменений</Typography>
-                    <Box
-                        sx={{
-                            boxSizing: 'border-box',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            width: '250px',
+                            width: '280px',
                             bgcolor: 'background.paper',
                             position: 'relative',
                             overflow: 'auto',

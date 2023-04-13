@@ -1,5 +1,7 @@
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 import AdjustIcon from '@mui/icons-material/Adjust';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
@@ -21,6 +23,8 @@ import {
 } from '@mui/material';
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
+
+import { useAppSelector } from '../../../store/hooks';
 
 interface Values {
     email: string;
@@ -78,57 +82,14 @@ const MyTextInput = ({ label, id, ...props }: InputProps) => {
                 }}
                 endAdornment={<InputAdornment position="end">{icon}</InputAdornment>}
             />
-            <FormHelperText id="standard-weight-helper-text">{meta.error}</FormHelperText>
+            <FormHelperText id="helper-text">{meta.error}</FormHelperText>
         </FormControl>
     );
 };
 
-const inputs = [
-    {
-        label: 'Название',
-        id: 'name',
-        name: 'name',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Ссылка на доку',
-        id: 'name-quadrant-1',
-        name: 'name-quadrant-1',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Где применяется?',
-        id: 'name-quadrant-3',
-        name: 'name-quadrant-3',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Преимущества',
-        id: 'name-quadrant-4',
-        name: 'name-quadrant-4',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Недостатки',
-        id: 'cercle-count',
-        name: 'cercle-count',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Комментарий',
-        id: 'name-cercle',
-        name: 'name-cercle-1',
-        type: 'text',
-        autoComplete: 'off',
-    },
-];
-
 const TechConstructor: FC = () => {
+    const inputs = useAppSelector((state) => state.data.techContructorInputs);
+
     return (
         <Container maxWidth="xl">
             <Formik
@@ -148,6 +109,19 @@ const TechConstructor: FC = () => {
             >
                 <Form className="form">
                     <Grid container spacing={3} sx={{ padding: '10px 0', display: 'flex' }}>
+                        <Grid
+                            item
+                            xs={1}
+                            md={1}
+                            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                        >
+                            <Link
+                                style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                                to="/my-tech"
+                            >
+                                <ArrowBackIosIcon /> НАЗАД
+                            </Link>
+                        </Grid>
                         <Grid
                             item
                             xs={3}
@@ -194,9 +168,9 @@ const TechConstructor: FC = () => {
                         </Grid>
                         <Grid
                             item
-                            xs={3}
+                            xs={6}
                             sx={{
-                                maxHeight: '85vh',
+                                maxHeight: '80vh',
                             }}
                         >
                             <Typography variant="h5">Описание</Typography>
@@ -212,46 +186,7 @@ const TechConstructor: FC = () => {
                             item
                             xs={3}
                             sx={{
-                                maxHeight: '85vh',
-                            }}
-                        >
-                            <Typography variant="h5">Комментарии</Typography>
-                            <Box
-                                sx={{
-                                    boxSizing: 'border-box',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    width: '100%',
-                                    bgcolor: 'background.paper',
-                                    position: 'relative',
-                                    overflow: 'auto',
-                                    maxHeight: '95%',
-                                    borderRadius: '5px',
-                                    padding: '15px 15px',
-                                    border: '1px solid',
-                                    borderColor: 'rgba(0, 0, 0, 0.23)',
-                                }}
-                            >
-                                {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => (
-                                    <Box key={index} sx={{ borderBottom: '1px solid', marginBottom: '10px' }}>
-                                        <Typography>
-                                            <strong>
-                                                11/04/2023 <br />
-                                                14:22
-                                            </strong>
-                                            <br />
-                                            НИЧО ТАК Мне Зашло.
-                                            <br /> Вася Пупкин
-                                        </Typography>
-                                    </Box>
-                                ))}
-                            </Box>
-                        </Grid>
-                        <Grid
-                            item
-                            xs={3}
-                            sx={{
-                                maxHeight: '85vh',
+                                maxHeight: '80vh',
                             }}
                         >
                             <Typography variant="h5">Лог изменений</Typography>

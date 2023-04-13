@@ -1,14 +1,11 @@
-import { FC, useState } from 'react';
+import { FC, useState, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
-import AdbIcon from '@mui/icons-material/Adb';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import Logout from '@mui/icons-material/Logout';
-import MenuIcon from '@mui/icons-material/Menu';
 import RadarIcon from '@mui/icons-material/Radar';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -23,24 +20,12 @@ import AuthFormModal from '../AuthFormModal/AuthFormModal';
 
 import './Header.less';
 
-const pages = [['О РАДАРЕ', 'about']];
-
 const Header: FC = () => {
-    // const [auth, setAuth] = useState<boolean>(false);
-    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const open = Boolean(anchorEl);
 
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-    };
-
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    const handleClick = (event: MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
 
@@ -52,99 +37,13 @@ const Header: FC = () => {
         <>
             <AppBar position="static">
                 <Container maxWidth="xl">
-                    <Toolbar disableGutters>
-                        <Link to={`/`}>
-                            <RadarIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                        </Link>
-                        <Typography
-                            variant="h6"
-                            noWrap
-                            component="a"
-                            href="/"
-                            sx={{
-                                mr: 2,
-                                display: { xs: 'none', md: 'flex' },
-                                fontFamily: 'monospace',
-                                fontWeight: 700,
-                                letterSpacing: '.3rem',
-                                color: 'inherit',
-                                textDecoration: 'none',
-                            }}
-                        >
+                    <Toolbar>
+                        <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                            <RadarIcon />
+                        </IconButton>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             TechRadar
                         </Typography>
-
-                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                            <IconButton
-                                size="large"
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleOpenNavMenu}
-                                color="inherit"
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorElNav}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                                open={Boolean(anchorElNav)}
-                                onClose={handleCloseNavMenu}
-                                sx={{
-                                    display: { xs: 'block', md: 'none' },
-                                }}
-                            >
-                                {pages.map((page, i) => (
-                                    <MenuItem key={i} onClick={handleCloseNavMenu}>
-                                        <Link to={`/${page[1]}`}>
-                                            <Typography textAlign="center">{page[0]}</Typography>
-                                        </Link>
-                                    </MenuItem>
-                                ))}
-                            </Menu>
-                        </Box>
-                        <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-                        <Typography
-                            variant="h5"
-                            noWrap
-                            component="a"
-                            href=""
-                            sx={{
-                                mr: 2,
-                                display: { xs: 'flex', md: 'none' },
-                                flexGrow: 1,
-                                fontFamily: 'monospace',
-                                fontWeight: 700,
-                                letterSpacing: '.3rem',
-                                color: 'inherit',
-                                textDecoration: 'none',
-                            }}
-                        >
-                            TechRadar
-                        </Typography>
-
-                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                            {pages.map((page, i) => (
-                                <Link key={i} to={`/${page[1]}`}>
-                                    <Button
-                                        onClick={handleCloseNavMenu}
-                                        sx={{ my: 2, color: 'white', display: 'block' }}
-                                    >
-                                        {page[0]}
-                                    </Button>
-                                </Link>
-                            ))}
-                        </Box>
-
                         <Box
                             sx={{
                                 display: 'flex',
@@ -153,31 +52,16 @@ const Header: FC = () => {
                             }}
                         >
                             <Tooltip title="Account settings">
-                                {true ? (
-                                    <IconButton
-                                        onClick={handleClick}
-                                        size="small"
-                                        sx={{ ml: 2 }}
-                                        aria-controls={open ? 'account-menu' : undefined}
-                                        aria-haspopup="true"
-                                        aria-expanded={open ? 'true' : undefined}
-                                    >
-                                        <Avatar sx={{ bgcolor: 'red' }} alt="unknow" src="/broken-image.jpg">
-                                            B
-                                        </Avatar>
-                                    </IconButton>
-                                ) : (
-                                    <IconButton
-                                        onClick={handleClick}
-                                        size="small"
-                                        sx={{ ml: 2 }}
-                                        aria-controls={open ? 'account-menu' : undefined}
-                                        aria-haspopup="true"
-                                        aria-expanded={open ? 'true' : undefined}
-                                    >
-                                        <Avatar src="/broken-image.jpg" />
-                                    </IconButton>
-                                )}
+                                <IconButton
+                                    onClick={handleClick}
+                                    size="small"
+                                    sx={{ ml: 2 }}
+                                    aria-controls={open ? 'account-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={open ? 'true' : undefined}
+                                >
+                                    <Avatar src="/broken-image.jpg" />
+                                </IconButton>
                             </Tooltip>
                         </Box>
                         <Menu

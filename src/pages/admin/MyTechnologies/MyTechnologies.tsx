@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import {
     Divider,
     Typography,
@@ -19,6 +20,11 @@ const MyTechnologies: FC = () => {
     return (
         <Container maxWidth="xl">
             <Grid container spacing={3} sx={{ padding: '10px 0', display: 'flex', justifyContent: 'space-around' }}>
+                <Grid item xs={1} md={1} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Link style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} to="/">
+                        <ArrowBackIosIcon /> НАЗАД
+                    </Link>
+                </Grid>
                 <Grid item xs={4} md={3} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Typography variant="h5">Мои технологии</Typography>
                 </Grid>
@@ -67,9 +73,9 @@ const MyTechnologies: FC = () => {
                 </Grid>
             </Grid>
             <Divider />
-            <Grid container columns={{ xs: 3, sm: 3, md: 12 }} style={{ margin: '10px 0' }}>
+            <Grid container columns={{ xs: 3, sm: 3, md: 12 }} sx={{ margin: '10px 0' }}>
                 {[1, 1, 1, 1, 1, 1].map((_, index) => (
-                    <Grid item xs={3} style={{ padding: 5 }} key={index}>
+                    <Grid item xs={3} md={3} sm={1} style={{ padding: 5 }} key={index}>
                         <TechItem />
                     </Grid>
                 ))}

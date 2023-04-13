@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, MouseEvent } from 'react';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
@@ -51,7 +51,7 @@ const AuthFormModal: FC = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
-    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault();
+    const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => event.preventDefault();
 
     const MyTextInput = ({ label, ...props }: InputProps) => {
         const [field, meta] = useField(props);

@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import {
     Divider,
     Typography,
@@ -21,6 +22,17 @@ const MyRadar: FC = () => {
     return (
         <Container maxWidth="xl">
             <Grid container spacing={3} sx={{ padding: '10px 0', display: 'flex', justifyContent: 'space-around' }}>
+                <Grid
+                    item
+                    xs={1}
+                    md={1}
+                    sm={1}
+                    sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                >
+                    <Link style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} to="/">
+                        <ArrowBackIosIcon /> НАЗАД
+                    </Link>
+                </Grid>
                 <Grid item xs={4} md={3} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Typography variant="h5">Мои радары</Typography>
                 </Grid>
@@ -46,7 +58,7 @@ const MyRadar: FC = () => {
                             </NativeSelect>
                         </FormControl>
                         <FormControl style={{ width: 200 }}>
-                            <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                            <InputLabel variant="standard" htmlFor="privacy">
                                 По приватности
                             </InputLabel>
                             <NativeSelect
@@ -88,7 +100,7 @@ const MyRadar: FC = () => {
             <Divider />
             <Grid container columns={{ xs: 3, sm: 3, md: 12 }} style={{ margin: '10px 0' }}>
                 {[1, 1, 1, 1, 1, 1].map((_, index) => (
-                    <Grid item xs={3} style={{ padding: 5 }} key={index}>
+                    <Grid item xs={3} md={3} sm={1} style={{ padding: 5 }} key={index}>
                         <RadarItem />
                     </Grid>
                 ))}

@@ -1,6 +1,8 @@
-import { FC, useState } from 'react';
+import { FC, useState, SetStateAction, ChangeEvent, Dispatch } from 'react';
+import { Link } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import AdjustIcon from '@mui/icons-material/Adjust';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -11,7 +13,6 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
-    Box,
     Button,
     Container,
     Fab,
@@ -26,12 +27,13 @@ import {
     NativeSelect,
     Stack,
     Switch,
-    TextField,
 } from '@mui/material';
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import SideBar from './SideBar';
+import { useAppSelector } from '../../../store/hooks';
+import SideBar from '../CommentsSideBar/CommentsSideBar';
+import RadarConstructorTechCard from './RadarConstructorTechCard';
 
 interface Values {
     email: string;
@@ -44,6 +46,15 @@ type InputProps = {
     id?: string;
     type: string;
     autoComplete: string;
+};
+
+type CercleInputProps = {
+    label: string;
+    name: string;
+    id?: string;
+    type: string;
+    autoComplete: string;
+    onChangeFunc: Dispatch<SetStateAction<number>>;
 };
 
 const MyTextInput = ({ label, id, ...props }: InputProps) => {
@@ -66,9 +77,6 @@ const MyTextInput = ({ label, id, ...props }: InputProps) => {
         case 'name-quadrant-4':
             icon = <DashboardCustomizeIcon sx={{ transform: 'rotate(180deg)' }} />;
             break;
-        case 'cercle-count':
-            icon = <FormatListNumberedIcon />;
-            break;
         case 'name-cercle':
             icon = <AdjustIcon />;
             break;
@@ -83,97 +91,55 @@ const MyTextInput = ({ label, id, ...props }: InputProps) => {
                 id={id}
                 {...field}
                 {...props}
-                aria-describedby="standard-weight-helper-text"
+                aria-describedby="helper-text"
                 inputProps={{
-                    'aria-label': 'weight',
+                    'aria-label': 'radar-input',
                 }}
                 endAdornment={<InputAdornment position="end">{icon}</InputAdornment>}
             />
-            <FormHelperText id="standard-weight-helper-text">{meta.error}</FormHelperText>
+            <FormHelperText id="helper-text">{meta.error}</FormHelperText>
         </FormControl>
     );
 };
 
-const inputs = [
-    {
-        label: 'Название радара',
-        id: 'name',
-        name: 'name',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Название квадранта 1',
-        id: 'name-quadrant-1',
-        name: 'name-quadrant-1',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Название квадранта 2',
-        id: 'name-quadrant-2',
-        name: 'name-quadrant-2',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Название квадранта 3',
-        id: 'name-quadrant-3',
-        name: 'name-quadrant-3',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Название квадранта 4',
-        id: 'name-quadrant-4',
-        name: 'name-quadrant-4',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Количество колец',
-        id: 'cercle-count',
-        name: 'cercle-count',
-        type: 'number',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Название кольца 1',
-        id: 'name-cercle-1',
-        name: 'name-cercle-1',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Название кольца 2',
-        id: 'name-cercle-2',
-        name: 'name-cercle-2',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Название кольца 3',
-        id: 'name-cercle-3',
-        name: 'name-cercle-3',
-        type: 'text',
-        autoComplete: 'off',
-    },
-    {
-        label: 'Название кольца 4',
-        id: 'name-cercle 4',
-        name: 'name-cercle-4',
-        type: 'text',
-        autoComplete: 'off',
-    },
-];
+const CountCercleInput = ({ label, id, onChangeFunc, ...props }: CercleInputProps) => {
+    const [field, meta] = useField(props);
+
+    return (
+        <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
+            <InputLabel htmlFor={id}>{label}</InputLabel>
+            <Input
+                id={id}
+                {...field}
+                {...props}
+                aria-describedby="helper-text"
+                inputProps={{
+                    'aria-label': 'radar-input',
+                }}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => onChangeFunc(+e.target.value)}
+                endAdornment={<InputAdornment position="end">{<FormatListNumberedIcon />}</InputAdornment>}
+            />
+            <FormHelperText id="helper-text">{meta.error}</FormHelperText>
+        </FormControl>
+    );
+};
 
 const RadarConstructor: FC = () => {
+    const inputs = useAppSelector((state) => state.data.radarConstructorInputs);
+
     const [checked, setChecked] = useState(false);
     const [expanded, setExpanded] = useState(true);
+    const [countCercleInputs, setCountCercleInputs] = useState<number>(4);
+
+    const CercleInputs = [];
 
     const handleChange = () => {
         setChecked((prev) => !prev);
     };
+
+    for (let i = 0; i < countCercleInputs; i++) {
+        CercleInputs.push(MyTextInput);
+    }
 
     return (
         <Container maxWidth="xl">
@@ -194,6 +160,19 @@ const RadarConstructor: FC = () => {
             >
                 <Form className="form">
                     <Grid container spacing={3} sx={{ padding: '10px 0', display: 'flex' }}>
+                        <Grid
+                            item
+                            xs={1}
+                            md={1}
+                            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                        >
+                            <Link
+                                style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                                to="/my-radars"
+                            >
+                                <ArrowBackIosIcon /> НАЗАД
+                            </Link>
+                        </Grid>
                         <Grid
                             item
                             xs={3}
@@ -265,6 +244,14 @@ const RadarConstructor: FC = () => {
                                         />
                                     );
                                 })}
+                                <CountCercleInput
+                                    label={'Количество колец'}
+                                    id={'cercle-count'}
+                                    name={'cercle-count'}
+                                    type={'number'}
+                                    autoComplete={'off'}
+                                    onChangeFunc={setCountCercleInputs}
+                                />
                             </List>
                         </AccordionDetails>
                     </Accordion>
@@ -287,68 +274,7 @@ const RadarConstructor: FC = () => {
                                     maxHeight: '100%',
                                 }}
                             >
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        justifyContent: 'space-between',
-                                        marginTop: '10px',
-                                        borderRadius: '5px',
-                                        padding: '10px 10px',
-                                        border: '1px solid',
-                                        borderColor: 'rgba(0, 0, 0, 0.23)',
-                                        height: '200px',
-                                    }}
-                                >
-                                    <TextField
-                                        label="Название технологии"
-                                        id="standard-size-small"
-                                        defaultValue=""
-                                        size="small"
-                                        variant="standard"
-                                    />
-                                    <FormControl fullWidth>
-                                        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                            Квадрант
-                                        </InputLabel>
-                                        <NativeSelect
-                                            defaultValue={30}
-                                            inputProps={{
-                                                name: 'age',
-                                                id: 'uncontrolled-native',
-                                            }}
-                                        >
-                                            <option value={1}>1</option>
-                                            <option value={2}>2</option>
-                                            <option value={3}>3</option>
-                                            <option value={4}>4</option>
-                                        </NativeSelect>
-                                    </FormControl>
-                                    <FormControl fullWidth>
-                                        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                            Сектор
-                                        </InputLabel>
-                                        <NativeSelect
-                                            defaultValue={30}
-                                            inputProps={{
-                                                name: 'age',
-                                                id: 'uncontrolled-native',
-                                            }}
-                                        >
-                                            <option value={1}>1</option>
-                                            <option value={2}>2</option>
-                                            <option value={3}>3</option>
-                                            <option value={4}>4</option>
-                                        </NativeSelect>
-                                    </FormControl>
-                                    <TextField
-                                        label="Комментарий"
-                                        id="standard-size-small"
-                                        defaultValue=""
-                                        size="small"
-                                        variant="standard"
-                                    />
-                                </Box>
+                                <RadarConstructorTechCard />
                             </List>
                             <Fab variant="extended" color="primary">
                                 <AddIcon />

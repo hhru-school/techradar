@@ -6,7 +6,7 @@ import { Box, Button, Card, CardActions, CardContent, CardHeader, IconButton, Ty
 
 const TechItem: FC = () => {
     return (
-        <Box sx={{ minWidth: 275 }}>
+        <Box sx={{ maxWidth: 275 }}>
             <Card variant="outlined">
                 <CardHeader
                     action={

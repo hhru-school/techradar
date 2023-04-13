@@ -1,13 +1,13 @@
-import { FC, SyntheticEvent, useState } from 'react';
+import { FC, SyntheticEvent, useState, ReactNode } from 'react';
 import { Divider, Box, Container, Tab, Tabs, Typography } from '@mui/material';
 
 interface TabPanelProps {
-    children?: React.ReactNode;
+    children?: ReactNode;
     index: number;
     value: number;
 }
 
-function TabPanel(props: TabPanelProps) {
+const TabPanel = (props: TabPanelProps) => {
     const { children, value, index, ...other } = props;
 
     return (
@@ -25,7 +25,7 @@ function TabPanel(props: TabPanelProps) {
             )}
         </div>
     );
-}
+};
 
 const Main: FC = () => {
     const [value, setValue] = useState<number>(0);
