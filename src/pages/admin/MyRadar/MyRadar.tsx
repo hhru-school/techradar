@@ -11,7 +11,6 @@ import {
     Grid,
     InputLabel,
     NativeSelect,
-    Stack,
 } from '@mui/material';
 
 import RadarItem from '../RadarItem/RadarItem';
@@ -33,68 +32,78 @@ const MyRadar: FC = () => {
                         <ArrowBackIosIcon /> НАЗАД
                     </Link>
                 </Grid>
-                <Grid item xs={4} md={3} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Grid item sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Typography variant="h5">Мои радары</Typography>
                 </Grid>
-                <Grid item xs>
-                    <Stack direction="row" justifyContent={'space-between'} spacing={3}>
-                        <Box sx={{ margin: 'auto 0' }}>
-                            <input type="text" className="my-radar__input" placeholder="Найти радар..." />
-                        </Box>
-                        <FormControl style={{ width: 200 }}>
-                            <InputLabel variant="standard" htmlFor="sortByTime">
-                                По названию
-                            </InputLabel>
-                            <NativeSelect
-                                defaultValue={'bca'}
-                                inputProps={{
-                                    name: 'sortByName',
-                                    id: 'sortByName',
-                                }}
-                            >
-                                <option value={'abc'}>По алфавиту</option>
-                                <option value={'cba'}>В обратном порядке</option>
-                                <option value={'bca'}>Вразброс</option>
-                            </NativeSelect>
-                        </FormControl>
-                        <FormControl style={{ width: 200 }}>
-                            <InputLabel variant="standard" htmlFor="privacy">
-                                По приватности
-                            </InputLabel>
-                            <NativeSelect
-                                defaultValue={'all'}
-                                inputProps={{
-                                    name: 'privacy',
-                                    id: 'privacy',
-                                }}
-                            >
-                                <option value={'all'}>Все</option>
-                                <option value={'public'}>Публичные</option>
-                                <option value={'via link'}>Доступные по ссылке</option>
-                                <option value={'private'}>Приватные</option>
-                            </NativeSelect>
-                        </FormControl>
-                        <FormControl style={{ width: 200 }}>
-                            <InputLabel variant="standard" htmlFor="sortByTime">
-                                По времени
-                            </InputLabel>
-                            <NativeSelect
-                                defaultValue={'new'}
-                                inputProps={{
-                                    name: 'sortByTime',
-                                    id: 'sortByTime',
-                                }}
-                            >
-                                <option value={'new'}>Сначала новые</option>
-                                <option value={'old'}>Сначала старые</option>
-                            </NativeSelect>
-                        </FormControl>
+                <Grid item>
+                    <Box sx={{ margin: 'auto 0' }}>
+                        <input type="text" className="my-radar__input" placeholder="Найти радар..." />
+                    </Box>
+                </Grid>
+                <Grid item sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                    <Grid item sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                        <Grid item>
+                            <FormControl style={{ maxWidth: 200 }}>
+                                <InputLabel variant="standard" htmlFor="sortByTime">
+                                    По названию
+                                </InputLabel>
+                                <NativeSelect
+                                    defaultValue={'bca'}
+                                    inputProps={{
+                                        name: 'sortByName',
+                                        id: 'sortByName',
+                                    }}
+                                >
+                                    <option value={'abc'}>По алфавиту</option>
+                                    <option value={'cba'}>В обратном порядке</option>
+                                    <option value={'bca'}>Вразброс</option>
+                                </NativeSelect>
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl style={{ maxWidth: 200 }}>
+                                <InputLabel variant="standard" htmlFor="privacy">
+                                    По приватности
+                                </InputLabel>
+                                <NativeSelect
+                                    defaultValue={'all'}
+                                    inputProps={{
+                                        name: 'privacy',
+                                        id: 'privacy',
+                                    }}
+                                >
+                                    <option value={'all'}>Все</option>
+                                    <option value={'public'}>Публичные</option>
+                                    <option value={'via link'}>Доступные по ссылке</option>
+                                    <option value={'private'}>Приватные</option>
+                                </NativeSelect>
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl style={{ maxWidth: 200 }}>
+                                <InputLabel variant="standard" htmlFor="sortByTime">
+                                    По времени
+                                </InputLabel>
+                                <NativeSelect
+                                    defaultValue={'new'}
+                                    inputProps={{
+                                        name: 'sortByTime',
+                                        id: 'sortByTime',
+                                    }}
+                                >
+                                    <option value={'new'}>Сначала новые</option>
+                                    <option value={'old'}>Сначала старые</option>
+                                </NativeSelect>
+                            </FormControl>
+                        </Grid>
+                    </Grid>
+                    <Grid item>
                         <Link to="/my-radars/radar-constructor">
                             <Button variant="contained" color="success" sx={{ height: '100%' }}>
                                 Создать
                             </Button>
                         </Link>
-                    </Stack>
+                    </Grid>
                 </Grid>
             </Grid>
             <Divider />

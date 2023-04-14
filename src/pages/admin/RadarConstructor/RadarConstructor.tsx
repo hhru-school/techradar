@@ -1,4 +1,4 @@
-import { FC, useState, SetStateAction, ChangeEvent, Dispatch } from 'react';
+import { FC, useState, SetStateAction, ChangeEvent, Dispatch, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import AdjustIcon from '@mui/icons-material/Adjust';
@@ -25,7 +25,6 @@ import {
     InputLabel,
     List,
     NativeSelect,
-    Stack,
     Switch,
 } from '@mui/material';
 import { Formik, Form, useField, FormikHelpers } from 'formik';
@@ -129,17 +128,36 @@ const RadarConstructor: FC = () => {
 
     const [checked, setChecked] = useState(false);
     const [expanded, setExpanded] = useState(true);
-    const [countCercleInputs, setCountCercleInputs] = useState<number>(4);
-
-    const CercleInputs = [];
+    const [countCercleInputs, setCountCercleInputs] = useState<number>(0);
+    const [cercleInputsData, setCercleInputsData] = useState<Array<InputProps>>([
+        {
+            label: 'Название кольца',
+            id: `name-cercle`,
+            name: `name-cercle`,
+            type: 'text',
+            autoComplete: 'off',
+        },
+    ]);
 
     const handleChange = () => {
         setChecked((prev) => !prev);
     };
 
-    for (let i = 0; i < countCercleInputs; i++) {
-        CercleInputs.push(MyTextInput);
-    }
+    useEffect(() => {
+        const arr: SetStateAction<InputProps[]> = [];
+        for (let i = 0; i < countCercleInputs; i++) {
+            arr.push({
+                label: 'Название кольца',
+                id: `name-cercle`,
+                name: `name-cercle-${i}`,
+                type: 'text',
+                autoComplete: 'off',
+            });
+        }
+        setCercleInputsData(arr);
+    }, [countCercleInputs, setCercleInputsData]);
+
+    const flexCenter = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
 
     return (
         <Container maxWidth="xl">
@@ -160,55 +178,57 @@ const RadarConstructor: FC = () => {
             >
                 <Form className="form">
                     <Grid container spacing={3} sx={{ padding: '10px 0', display: 'flex' }}>
-                        <Grid
-                            item
-                            xs={1}
-                            md={1}
-                            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                        >
-                            <Link
-                                style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                                to="/my-radars"
-                            >
+                        <Grid item md={1} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <Link style={flexCenter} to="/my-radars">
                                 <ArrowBackIosIcon /> НАЗАД
                             </Link>
                         </Grid>
-                        <Grid
-                            item
-                            xs={3}
-                            md={3}
-                            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                        >
+                        <Grid item md={3} xs sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Typography variant="h5">Конструктор радара</Typography>
                         </Grid>
-                        <Grid item xs>
-                            <Stack direction="row" justifyContent={'flex-end'} spacing={3}>
-                                <SideBar />
-                                <FormControl style={{ width: 200 }}>
-                                    <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                        Взять за основу сущестующий
-                                    </InputLabel>
-                                    <NativeSelect
-                                        defaultValue={'all'}
-                                        inputProps={{
-                                            name: 'privacy',
-                                            id: 'privacy',
-                                        }}
-                                    >
-                                        <option value={'all'}>Нет</option>
-                                        <option value={'radar 1'}>Радар 1</option>
-                                        <option value={'radar 2'}>Радар 2</option>
-                                        <option value={'radar 3'}>Радар 3</option>
-                                    </NativeSelect>
-                                </FormControl>
-                                <FormControlLabel
-                                    control={<Switch checked={checked} onChange={handleChange} />}
-                                    label="Сделать публичным после создания"
-                                />
+                        <Grid item xs sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                            <Grid item xs sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                                <Grid item xs sx={flexCenter}>
+                                    <SideBar />
+                                </Grid>
+                                <Grid item xs sx={flexCenter}>
+                                    <FormControl style={{ width: 200 }}>
+                                        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                                            Взять за основу сущестующий
+                                        </InputLabel>
+                                        <NativeSelect
+                                            defaultValue={'all'}
+                                            inputProps={{
+                                                name: 'privacy',
+                                                id: 'privacy',
+                                            }}
+                                        >
+                                            <option value={'all'}>Нет</option>
+                                            <option value={'radar 1'}>Радар 1</option>
+                                            <option value={'radar 2'}>Радар 2</option>
+                                            <option value={'radar 3'}>Радар 3</option>
+                                        </NativeSelect>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs md={4} sx={flexCenter}>
+                                    <FormControlLabel
+                                        control={<Switch checked={checked} onChange={handleChange} />}
+                                        label="Публичный"
+                                    />
+                                </Grid>
+                            </Grid>
+
+                            <Grid
+                                item
+                                xs
+                                md={2}
+                                sm={3}
+                                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                            >
                                 <Button disabled={true} variant="contained" color="success">
                                     Создать
                                 </Button>
-                            </Stack>
+                            </Grid>
                         </Grid>
                     </Grid>
                     <Divider />
@@ -252,6 +272,18 @@ const RadarConstructor: FC = () => {
                                     autoComplete={'off'}
                                     onChangeFunc={setCountCercleInputs}
                                 />
+                                {cercleInputsData.map((item, i) => {
+                                    return (
+                                        <MyTextInput
+                                            key={i}
+                                            label={item.label}
+                                            id={item.id}
+                                            name={item.name}
+                                            type={item.type}
+                                            autoComplete={item.autoComplete}
+                                        />
+                                    );
+                                })}
                             </List>
                         </AccordionDetails>
                     </Accordion>

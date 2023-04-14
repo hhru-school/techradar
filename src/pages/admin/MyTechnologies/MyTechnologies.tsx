@@ -11,65 +11,76 @@ import {
     Grid,
     InputLabel,
     NativeSelect,
-    Stack,
 } from '@mui/material';
 
 import TechItem from '../TechItem/TechItem';
 
+const flexCenter = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
+
 const MyTechnologies: FC = () => {
     return (
         <Container maxWidth="xl">
-            <Grid container spacing={3} sx={{ padding: '10px 0', display: 'flex', justifyContent: 'space-around' }}>
-                <Grid item xs={1} md={1} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <Link style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} to="/">
+            <Grid container sx={{ padding: '10px 0', display: 'flex', justifyContent: 'space-around' }}>
+                <Grid item md={1} xs sx={flexCenter}>
+                    <Link style={flexCenter} to="/">
                         <ArrowBackIosIcon /> НАЗАД
                     </Link>
                 </Grid>
-                <Grid item xs={4} md={3} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Grid item md={3} xs sx={{ ...flexCenter, margin: '15px 0' }}>
                     <Typography variant="h5">Мои технологии</Typography>
                 </Grid>
-                <Grid item xs>
-                    <Stack direction="row" justifyContent={'space-between'} spacing={3}>
-                        <Box sx={{ margin: 'auto 0' }}>
-                            <input type="text" className="my-radar__input" placeholder="Найти технологию..." />
-                        </Box>
-                        <FormControl style={{ width: 200 }}>
-                            <InputLabel variant="standard" htmlFor="sortByTime">
-                                По названию
-                            </InputLabel>
-                            <NativeSelect
-                                defaultValue={'bca'}
-                                inputProps={{
-                                    name: 'sortByName',
-                                    id: 'sortByName',
-                                }}
-                            >
-                                <option value={'abc'}>По алфавиту</option>
-                                <option value={'cba'}>В обратном порядке</option>
-                                <option value={'bca'}>Вразброс</option>
-                            </NativeSelect>
-                        </FormControl>
-                        <FormControl style={{ width: 200 }}>
-                            <InputLabel variant="standard" htmlFor="sortByTime">
-                                По времени
-                            </InputLabel>
-                            <NativeSelect
-                                defaultValue={'new'}
-                                inputProps={{
-                                    name: 'sortByTime',
-                                    id: 'sortByTime',
-                                }}
-                            >
-                                <option value={'new'}>Сначала новые</option>
-                                <option value={'old'}>Сначала старые</option>
-                            </NativeSelect>
-                        </FormControl>
-                        <Link to="/my-tech/tech-constructor">
-                            <Button variant="contained" color="success" sx={{ height: '100%' }}>
-                                Создать
-                            </Button>
-                        </Link>
-                    </Stack>
+                <Grid item sm={7}>
+                    <Grid item xs sm={12} sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                        <Grid item sm={9} sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+                            <Grid item sx={{ ...flexCenter, marginBottom: '10px' }}>
+                                <FormControl style={{ maxWidth: '100%' }}>
+                                    <InputLabel variant="standard" htmlFor="sortByTime">
+                                        По названию
+                                    </InputLabel>
+                                    <NativeSelect
+                                        defaultValue={'bca'}
+                                        inputProps={{
+                                            name: 'sortByName',
+                                            id: 'sortByName',
+                                        }}
+                                    >
+                                        <option value={'abc'}>По алфавиту</option>
+                                        <option value={'cba'}>В обратном порядке</option>
+                                        <option value={'bca'}>Вразброс</option>
+                                    </NativeSelect>
+                                </FormControl>
+                            </Grid>
+                            <Grid item sx={{ ...flexCenter, marginBottom: '10px' }}>
+                                <FormControl style={{ maxWidth: 200 }}>
+                                    <InputLabel variant="standard" htmlFor="sortByTime">
+                                        По времени
+                                    </InputLabel>
+                                    <NativeSelect
+                                        defaultValue={'new'}
+                                        inputProps={{
+                                            name: 'sortByTime',
+                                            id: 'sortByTime',
+                                        }}
+                                    >
+                                        <option value={'new'}>Сначала новые</option>
+                                        <option value={'old'}>Сначала старые</option>
+                                    </NativeSelect>
+                                </FormControl>
+                            </Grid>
+                            <Grid item sx={{ maxWidth: 200, margin: 'auto auto' }}>
+                                <Box sx={{ width: '90%' }}>
+                                    <input type="text" className="my-radar__input" placeholder="Найти технологию..." />
+                                </Box>
+                            </Grid>
+                        </Grid>
+                        <Grid item sm={3} sx={{ margin: '10px auto' }}>
+                            <Link to="/my-tech/tech-constructor">
+                                <Button variant="contained" color="success" sx={{ height: '100%' }}>
+                                    Создать
+                                </Button>
+                            </Link>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
             <Divider />

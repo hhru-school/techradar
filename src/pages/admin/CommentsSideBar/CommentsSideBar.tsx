@@ -73,8 +73,9 @@ const SideBar: FC = () => {
     return (
         <div>
             <Fragment>
-                <Button onClick={toggleDrawer('right', true)}>ИСТОРИЯ И КОММЕНТАРИИ</Button>
-
+                <Button onClick={toggleDrawer('right', true)} variant="outlined">
+                    ИСТОРИЯ
+                </Button>
                 <Drawer anchor={'right'} open={state.right} onClose={toggleDrawer('right', false)}>
                     {list('right')}
                 </Drawer>
