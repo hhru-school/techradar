@@ -108,13 +108,8 @@ const TechConstructor: FC = () => {
                 }}
             >
                 <Form className="form">
-                    <Grid container spacing={3} sx={{ padding: '10px 0', display: 'flex' }}>
-                        <Grid
-                            item
-                            xs={1}
-                            md={1}
-                            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                        >
+                    <Grid container spacing={3} sx={{ padding: '10px 0', display: 'flex', justifyContent: 'center' }}>
+                        <Grid item md={1} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Link
                                 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                                 to="/my-tech"
@@ -122,12 +117,7 @@ const TechConstructor: FC = () => {
                                 <ArrowBackIosIcon /> НАЗАД
                             </Link>
                         </Grid>
-                        <Grid
-                            item
-                            xs={3}
-                            md={3}
-                            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                        >
+                        <Grid item xs md={3} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Typography variant="h5">Конструктор технологии</Typography>
                         </Grid>
                         <Grid item xs>
@@ -139,8 +129,19 @@ const TechConstructor: FC = () => {
                         </Grid>
                     </Grid>
                     <Divider />
-                    <Grid container spacing={2} sx={{ mt: '5px' }}>
-                        <Grid item xs={3}>
+                    <Grid
+                        container
+                        spacing={2}
+                        sm={12}
+                        sx={{
+                            mt: '5px',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                        }}
+                    >
+                        <Grid item>
                             <List
                                 sx={{
                                     display: 'flex',
@@ -149,7 +150,7 @@ const TechConstructor: FC = () => {
                                     bgcolor: 'background.paper',
                                     position: 'relative',
                                     overflow: 'auto',
-                                    maxHeight: '95%',
+                                    maxHeight: '500px',
                                 }}
                             >
                                 {inputs.map((item, i) => {
@@ -168,6 +169,7 @@ const TechConstructor: FC = () => {
                         </Grid>
                         <Grid
                             item
+                            sm={4}
                             xs={6}
                             sx={{
                                 maxHeight: '80vh',
@@ -184,12 +186,16 @@ const TechConstructor: FC = () => {
                         </Grid>
                         <Grid
                             item
-                            xs={3}
+                            // sm={4}
+                            xs
                             sx={{
                                 maxHeight: '80vh',
+                                width: '100%',
                             }}
                         >
-                            <Typography variant="h5">Лог изменений</Typography>
+                            <Typography sx={{ textAlign: 'center' }} variant="h5">
+                                Лог изменений
+                            </Typography>
                             <Box
                                 sx={{
                                     boxSizing: 'border-box',

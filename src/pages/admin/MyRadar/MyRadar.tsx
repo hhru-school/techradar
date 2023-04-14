@@ -35,14 +35,23 @@ const MyRadar: FC = () => {
                 <Grid item sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Typography variant="h5">Мои радары</Typography>
                 </Grid>
-                <Grid item>
+                <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ margin: 'auto 0' }}>
                         <input type="text" className="my-radar__input" placeholder="Найти радар..." />
                     </Box>
                 </Grid>
-                <Grid item sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                    <Grid item sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                        <Grid item>
+                <Grid item sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <Grid
+                        item
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Grid item sx={{ margin: '10px 5px' }}>
                             <FormControl style={{ maxWidth: 200 }}>
                                 <InputLabel variant="standard" htmlFor="sortByTime">
                                     По названию
@@ -60,7 +69,7 @@ const MyRadar: FC = () => {
                                 </NativeSelect>
                             </FormControl>
                         </Grid>
-                        <Grid item>
+                        <Grid item sx={{ margin: '10px 5px' }}>
                             <FormControl style={{ maxWidth: 200 }}>
                                 <InputLabel variant="standard" htmlFor="privacy">
                                     По приватности
@@ -79,7 +88,7 @@ const MyRadar: FC = () => {
                                 </NativeSelect>
                             </FormControl>
                         </Grid>
-                        <Grid item>
+                        <Grid item sx={{ margin: '10px 5px' }}>
                             <FormControl style={{ maxWidth: 200 }}>
                                 <InputLabel variant="standard" htmlFor="sortByTime">
                                     По времени
@@ -97,9 +106,9 @@ const MyRadar: FC = () => {
                             </FormControl>
                         </Grid>
                     </Grid>
-                    <Grid item>
+                    <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                         <Link to="/my-radars/radar-constructor">
-                            <Button variant="contained" color="success" sx={{ height: '100%' }}>
+                            <Button variant="contained" color="success" sx={{ height: '37px' }}>
                                 Создать
                             </Button>
                         </Link>

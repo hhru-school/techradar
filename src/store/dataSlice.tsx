@@ -6,6 +6,7 @@ interface CounterState {
     value: number;
     techContructorInputs: ConstructorInputs;
     radarConstructorInputs: ConstructorInputs;
+    auth: boolean;
 }
 
 const initialState: CounterState = {
@@ -119,12 +120,16 @@ const initialState: CounterState = {
             autoComplete: 'off',
         },
     ],
+    auth: false,
 };
 
 export const counterSlice = createSlice({
     name: 'data',
     initialState,
     reducers: {
+        authentification: (state) => {
+            state.auth = !state.auth;
+        },
         increment: (state) => {
             state.value += 1;
         },
