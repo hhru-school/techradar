@@ -1,7 +1,7 @@
 export const defaultColorScheme = getColorScheme(10);
 export const defaultGap = 20;
 
-export const textOffsetY = -7;
+export const textOffsetY = 14;
 
 function getColorScheme(numOfSectors: number) {
     const res: string[] = [];

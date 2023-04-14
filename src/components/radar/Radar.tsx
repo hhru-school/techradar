@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import RadarSector from './RadarSector';
 import { Blip } from './types';
+import { deg, offset } from './utils';
 
 type Props = {
     sectorNames: string[];
@@ -13,23 +14,33 @@ type Props = {
 };
 
 const RadarField: FC<Props> = ({ ringNames, sectorNames, radius, gap, colorScheme, data }) => {
-    const sweepAngle = (2 * Math.PI) / sectorNames.length;
+    const angle = (2 * Math.PI) / sectorNames.length;
+
     let currentAngle = 0;
+    const ofst = offset(gap, angle / 2);
     const sectors = sectorNames.map((sectorName, i) => {
         const sector = (
-            <g key={sectorName} transform={`translate (${radius + gap / 2},${radius + gap / 2} )`}>
+            <g
+                key={sectorName}
+                transform={`translate (${radius + gap / 2 + ofst.x} ${radius + gap / 2 + ofst.y}) rotate(${deg(
+                    currentAngle
+                )} ${-ofst.x} ${-ofst.y}) `}
+            >
                 <RadarSector
-                    startAngle={currentAngle}
-                    endAngle={currentAngle + sweepAngle}
+                    key={sectorName}
+                    angle={angle}
                     radius={radius}
                     sectorName={sectorName}
                     ringNames={ringNames}
                     baseColor={colorScheme[i]}
                     data={data?.filter((item) => item.sectorName === sectorName)}
+                    seed={i}
+                    rotationAngle={currentAngle}
                 />
             </g>
         );
-        currentAngle += sweepAngle;
+        currentAngle += angle;
+
         return sector;
     });
     return (

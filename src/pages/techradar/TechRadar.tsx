@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import RadarField from '../../components/radar/RadarField';
+import Radar from '../../components/radar/Radar';
 import { defaultColorScheme } from '../../components/radar/styleConfig';
 import { Blip } from '../../components/radar/types';
 
@@ -18,15 +18,21 @@ const data: Blip[] = [
 const TechRadar: FC = () => {
     return (
         <>
-            <RadarField
-                sectorNames={['Faa', 'Foo', 'Fee']}
+            <Radar
+                sectorNames={['Faa', 'Foo', 'Fee', 'Fuu', 'Goo']}
                 ringNames={['Active', 'Test', 'Hold']}
                 radius={200}
-                gap={0}
+                gap={30}
                 colorScheme={defaultColorScheme}
                 data={data}
             />
-            {/* <TestArc segment={segment} /> */}
+
+            {/* <svg width={500} height={500}>
+                <g transform="translate (200, 200)">
+                    <RadarSegment id={''} segment={segment} color={'grey'} ringName={''} />
+                    {dots}
+                </g>
+            </svg> */}
         </>
     );
 };

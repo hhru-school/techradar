@@ -3,31 +3,39 @@ import * as d3 from 'd3-color';
 
 import RadarSegment from './RadarSegment';
 import { Blip } from './types';
-import { Segment, getRadiusListEqualSquare } from './utils';
+import { Segment, radiusListEqualSquare } from './utils';
 
 type Props = {
     sectorName: string;
     ringNames: string[];
     radius: number;
-    startAngle: number;
-    endAngle: number;
+    angle: number;
+    rotationAngle: number;
     baseColor: string;
     data?: Blip[] | null;
+    seed?: number;
 };
 
-const RadarSector: FC<Props> = ({ sectorName, ringNames, radius, startAngle, endAngle, baseColor, data = null }) => {
-    const radiuses = getRadiusListEqualSquare(ringNames.length, radius);
+const RadarSector: FC<Props> = ({
+    sectorName,
+    ringNames,
+    radius,
+    angle,
+    rotationAngle,
+    baseColor,
+    data = null,
+    seed = 0,
+}) => {
+    const radiuses = radiusListEqualSquare(ringNames.length, radius);
 
     const segments = radiuses.map((ring, i) => {
         const segment: Segment = {
-            centerX: 0,
-            centerY: 0,
             innerRadius: ring.innerRadius,
             outerRadius: ring.outerRadius,
-            startAngle,
-            endAngle,
+            startAngle: 0,
+            endAngle: angle,
         };
-        const id = `${sectorName}-${ringNames[i]}`.toLocaleLowerCase();
+        const id = `${sectorName}-${ringNames[i]}`.toLowerCase();
         return (
             <RadarSegment
                 id={id}
@@ -41,16 +49,13 @@ const RadarSector: FC<Props> = ({ sectorName, ringNames, radius, startAngle, end
                         ?.brighter(i / 3)
                         .toString() || ''
                 }
+                rotationAngle={rotationAngle}
+                seed={seed}
             />
         );
     });
 
-    return (
-        <g>
-            {segments}
-            {/* <g transform={`translate (${radius + offsetXY.x + gap / 2}, ${radius + offsetXY.y + gap / 2})`}>{arcs}</g> */}
-        </g>
-    );
+    return <g>{segments}</g>;
 };
 
 export default RadarSector;

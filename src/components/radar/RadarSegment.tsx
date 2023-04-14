@@ -1,27 +1,31 @@
 import { FC } from 'react';
 
 import packEntries from './packEngine';
+import { textOffsetY } from './styleConfig';
 import { Blip } from './types';
-import { Entry, Segment, segmentToD3 } from './utils';
+import { Entry, Segment, randomPoint, segmentToD3 } from './utils';
 
 type Props = {
     id: string;
     segment: Segment;
     color: string;
     ringName: string;
+    rotationAngle: number;
     data?: Blip[] | null;
+    seed?: number;
 };
 
-const RadarSegment: FC<Props> = ({ id, segment, color }) => {
+const RadarSegment: FC<Props> = ({ id, segment, color, ringName, seed = 0 }) => {
     const testData = new Array<Entry>();
-
-    for (let i = 0; i < 5; i++) {
-        testData.push({ x: 10 * i, y: 20 * i, radius: 5 });
+    const p = randomPoint(seed);
+    for (let i = 0; i < 10; i++) {
+        testData.push({ x: p.x, y: p.y, r: 10 });
     }
-
-    const dots = packEntries(testData, segment, 2, 11).map((dot) => {
-        return <circle cx={dot.x} cy={dot.y} r="5" fill="yellow" />;
+    const packed = packEntries(testData, segment);
+    const dots = packed.map((dot) => {
+        return <circle cx={dot.x} cy={dot.y} r="5" fill="white" stroke="black" />;
     });
+
     const path: string = segmentToD3(segment);
 
     return (
@@ -29,16 +33,15 @@ const RadarSegment: FC<Props> = ({ id, segment, color }) => {
             <g>
                 <path id={id} d={path} fill={color} />
                 {dots}
+                <div>df</div>
 
-                {/* <text
+                <text
                     textAnchor="middle"
-                    dominantBaseline="middle"
-                    x={innerRadius + (outerRadius - innerRadius) / 2}
+                    x={segment.innerRadius + (segment.outerRadius - segment.innerRadius) / 2}
                     y={textOffsetY}
-                    transform={`rotate(${getTextRotationAngle(startAngle)} 0 0)`}
                 >
                     {ringName}
-                </text> */}
+                </text>
             </g>
         </>
     );
