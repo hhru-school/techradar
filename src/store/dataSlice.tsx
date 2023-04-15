@@ -2,14 +2,20 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type ConstructorInputs = Array<{ label: string; id: string; name: string; type: string; autoComplete: string }>;
 
-interface CounterState {
+export interface AuthFormInputs {
+    email: string | null;
+    password: string | null;
+}
+
+interface State {
     value: number;
     techContructorInputs: ConstructorInputs;
     radarConstructorInputs: ConstructorInputs;
-    auth: boolean;
+    authentificationFormOpen: boolean;
+    authentificationFormData: AuthFormInputs;
 }
 
-const initialState: CounterState = {
+const initialState: State = {
     value: 0,
     techContructorInputs: [
         {
@@ -120,28 +126,23 @@ const initialState: CounterState = {
             autoComplete: 'off',
         },
     ],
-    auth: false,
+    authentificationFormOpen: false,
+    authentificationFormData: { email: null, password: null },
 };
 
-export const counterSlice = createSlice({
+export const dataSlice = createSlice({
     name: 'data',
     initialState,
     reducers: {
-        authentification: (state) => {
-            state.auth = !state.auth;
+        setAuthFormOpen: (state, action: PayloadAction<boolean>) => {
+            state.authentificationFormOpen = action.payload;
         },
-        increment: (state) => {
-            state.value += 1;
-        },
-        decrement: (state) => {
-            state.value -= 1;
-        },
-        incrementByAmount: (state, action: PayloadAction<number>) => {
-            state.value += action.payload;
+        setAuthFormData: (state, action: PayloadAction<AuthFormInputs>) => {
+            state.authentificationFormData = action.payload;
         },
     },
 });
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { setAuthFormOpen, setAuthFormData } = dataSlice.actions;
 
-export default counterSlice.reducer;
+export default dataSlice.reducer;

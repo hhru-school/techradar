@@ -16,11 +16,16 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
+import { setAuthFormOpen, setAuthFormData } from '../../store/dataSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import AuthFormModal from '../AuthFormModal/AuthFormModal';
 
 import './Header.less';
 
 const Header: FC = () => {
+    const dispatch = useAppDispatch();
+    const authentificationFormData = useAppSelector((state) => state.data.authentificationFormData);
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const open = Boolean(anchorEl);
@@ -31,6 +36,7 @@ const Header: FC = () => {
 
     const handleClose = () => {
         setAnchorEl(null);
+        dispatch(setAuthFormData({ email: null, password: null }));
     };
 
     return (
@@ -38,11 +44,13 @@ const Header: FC = () => {
             <AppBar position="static">
                 <Container maxWidth="xl">
                     <Toolbar>
-                        <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-                            <RadarIcon />
+                        <IconButton edge="start" color="inherit" aria-label="menu" sx={{ margin: 'auto 0' }}>
+                            <Link to="/">
+                                <RadarIcon />
+                            </Link>
                         </IconButton>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            TechRadar
+                            <Link to="/">TechRadar</Link>
                         </Typography>
                         <Box
                             sx={{
@@ -52,16 +60,26 @@ const Header: FC = () => {
                             }}
                         >
                             <Tooltip title="Account settings">
-                                <IconButton
-                                    onClick={handleClick}
-                                    size="small"
-                                    sx={{ ml: 2 }}
-                                    aria-controls={open ? 'account-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
-                                >
-                                    <Avatar src="/broken-image.jpg" />
-                                </IconButton>
+                                {authentificationFormData.email === null ? (
+                                    <IconButton
+                                        onClick={() => dispatch(setAuthFormOpen(true))}
+                                        size="small"
+                                        sx={{ ml: 2 }}
+                                    >
+                                        <Avatar src="/broken-image.jpg" />
+                                    </IconButton>
+                                ) : (
+                                    <IconButton
+                                        onClick={handleClick}
+                                        size="small"
+                                        sx={{ ml: 2 }}
+                                        aria-controls={open ? 'account-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? 'true' : undefined}
+                                    >
+                                        <Avatar>{authentificationFormData.email[0]}</Avatar>
+                                    </IconButton>
+                                )}
                             </Tooltip>
                         </Box>
                         <Menu

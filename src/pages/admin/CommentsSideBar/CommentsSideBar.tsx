@@ -21,7 +21,7 @@ const SideBar: FC = () => {
 
     const list = (anchor: Anchor) => (
         <Box
-            sx={{ width: '300px', padding: '20px' }}
+            sx={{ width: '280px', padding: '20px' }}
             role="presentation"
             onClick={toggleDrawer(anchor, false)}
             onKeyDown={toggleDrawer(anchor, false)}
@@ -35,7 +35,9 @@ const SideBar: FC = () => {
                         maxHeight: '80vh',
                     }}
                 >
-                    <Typography variant="h6">Лог изменений</Typography>
+                    <Typography sx={{ textAlign: 'center' }} variant="h6">
+                        Лог изменений
+                    </Typography>
                     <Box
                         sx={{
                             boxSizing: 'border-box',

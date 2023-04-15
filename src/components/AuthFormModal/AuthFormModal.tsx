@@ -18,7 +18,10 @@ import {
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-interface Values {
+import { setAuthFormOpen, setAuthFormData } from '../../store/dataSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+
+export interface Values {
     email: string;
     password: string;
 }
@@ -44,12 +47,11 @@ const style = {
 };
 
 const AuthFormModal: FC = () => {
-    const [Json, setJson] = useState('');
-    const [open, setOpen] = useState(false);
+    const dispatch = useAppDispatch();
+    const authentificationFormOpen = useAppSelector((state) => state.data.authentificationFormOpen);
+
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => event.preventDefault();
 
@@ -104,65 +106,60 @@ const AuthFormModal: FC = () => {
     };
 
     return (
-        <div>
-            <Button onClick={handleOpen} style={{ display: 'none' }}>
-                Open modal
-            </Button>
-            {Json}
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                slots={{ backdrop: Backdrop }}
-                slotProps={{
-                    backdrop: {
-                        timeout: 500,
-                    },
-                }}
-            >
-                <Fade in={open}>
-                    <Box sx={style}>
-                        <Typography id="transition-modal-title" variant="h6" component="h2">
-                            Вход в учетную запись TechRadar
-                        </Typography>
-                        <Formik
-                            initialValues={{
-                                email: '',
-                                password: '',
-                            }}
-                            validationSchema={Yup.object({
-                                email: Yup.string().email('Неправильный email адрес').required('Обязательное поле!'),
-                                password: Yup.string()
-                                    .min(2, 'Минимум 2 символа для заполнения')
-                                    .required('Обязательное поле!'),
-                            })}
-                            onSubmit={(values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-                                setTimeout(() => {
-                                    setJson(JSON.stringify(values, null, 2));
-                                    setSubmitting(false);
-                                }, 500);
-                            }}
-                        >
-                            <Form className="form" style={{ display: 'flex', flexDirection: 'column' }}>
-                                <MyTextInput label="Email" id="email" name="email" type="email" autoComplete="off" />
-                                <MyPassInput
-                                    label="Пароль"
-                                    id="password"
-                                    name="password"
-                                    type={showPassword ? 'text' : 'password'}
-                                    autoComplete="off"
-                                />
-                                <Button type="submit" variant="contained" color="success" style={{ marginTop: 20 }}>
-                                    Войти
-                                </Button>
-                            </Form>
-                        </Formik>
-                    </Box>
-                </Fade>
-            </Modal>
-        </div>
+        <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={authentificationFormOpen}
+            onClose={() => dispatch(setAuthFormOpen(false))}
+            closeAfterTransition
+            slots={{ backdrop: Backdrop }}
+            slotProps={{
+                backdrop: {
+                    timeout: 500,
+                },
+            }}
+        >
+            <Fade in={authentificationFormOpen}>
+                <Box sx={style}>
+                    <Typography id="transition-modal-title" variant="h6" component="h2">
+                        Вход в учетную запись TechRadar
+                    </Typography>
+                    <Formik
+                        initialValues={{
+                            email: '',
+                            password: '',
+                        }}
+                        validationSchema={Yup.object({
+                            email: Yup.string().email('Неправильный email адрес').required('Обязательное поле!'),
+                            password: Yup.string()
+                                .min(2, 'Минимум 2 символа для заполнения')
+                                .required('Обязательное поле!'),
+                        })}
+                        onSubmit={(values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+                            setTimeout(() => {
+                                dispatch(setAuthFormData(values));
+                                dispatch(setAuthFormOpen(false));
+                                setSubmitting(false);
+                            }, 500);
+                        }}
+                    >
+                        <Form className="form" style={{ display: 'flex', flexDirection: 'column' }}>
+                            <MyTextInput label="Email" id="email" name="email" type="email" autoComplete="off" />
+                            <MyPassInput
+                                label="Пароль"
+                                id="password"
+                                name="password"
+                                type={showPassword ? 'text' : 'password'}
+                                autoComplete="off"
+                            />
+                            <Button type="submit" variant="contained" color="success" style={{ marginTop: 20 }}>
+                                Войти
+                            </Button>
+                        </Form>
+                    </Formik>
+                </Box>
+            </Fade>
+        </Modal>
     );
 };
 
