@@ -1,6 +1,7 @@
 import { SimulationNodeDatum, forceCollide, forceSimulation } from 'd3';
 
-import { Entry, Segment, clip } from './utils';
+import { Entry, Segment } from './types';
+import { clip } from './utils';
 
 interface Node extends SimulationNodeDatum {
     x: number;
@@ -8,18 +9,21 @@ interface Node extends SimulationNodeDatum {
     r: number;
 }
 
+const velocityDecay = 0.5;
+const strength = 0.3;
+
 function packEntries(entries: Entry[], segment: Segment): Node[] {
     const nodes: Node[] = entries.map((d) => ({ ...d }));
 
     const simulation = forceSimulation()
         .nodes(nodes)
-        .velocityDecay(0.2)
+        .velocityDecay(velocityDecay)
         .force(
             'collide',
             forceCollide()
                 .radius((node: SimulationNodeDatum) => (node as Node).r)
 
-                .strength(0.3)
+                .strength(strength)
         )
         .stop();
 

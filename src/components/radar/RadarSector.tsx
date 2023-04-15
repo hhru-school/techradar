@@ -2,16 +2,21 @@ import { FC } from 'react';
 import * as d3 from 'd3-color';
 
 import RadarSegment from './RadarSegment';
-import { Blip } from './types';
-import { Segment, radiusListEqualSquare } from './utils';
+import { sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
+import { Blip, Segment } from './types';
+import { arc, radiusListEqualSquare } from './utils';
+
+import styles from './radar.module.less';
 
 type Props = {
     sectorName: string;
     ringNames: string[];
     radius: number;
-    angle: number;
-    rotationAngle: number;
+    startAngle: number;
+    sweepAngle: number;
     baseColor: string;
+    blipRadius: number;
+    gap?: number;
     data?: Blip[] | null;
     seed?: number;
 };
@@ -20,11 +25,13 @@ const RadarSector: FC<Props> = ({
     sectorName,
     ringNames,
     radius,
-    angle,
-    rotationAngle,
+    startAngle,
+    sweepAngle,
     baseColor,
+    blipRadius,
     data = null,
     seed = 0,
+    gap = 0,
 }) => {
     const radiuses = radiusListEqualSquare(ringNames.length, radius);
 
@@ -32,8 +39,8 @@ const RadarSector: FC<Props> = ({
         const segment: Segment = {
             innerRadius: ring.innerRadius,
             outerRadius: ring.outerRadius,
-            startAngle: 0,
-            endAngle: angle,
+            startAngle,
+            endAngle: startAngle + sweepAngle,
         };
         const id = `${sectorName}-${ringNames[i]}`.toLowerCase();
         return (
@@ -49,13 +56,30 @@ const RadarSector: FC<Props> = ({
                         ?.brighter(i / 3)
                         .toString() || ''
                 }
-                rotationAngle={rotationAngle}
                 seed={seed}
+                gap={gap}
+                blipRadius={blipRadius}
             />
         );
     });
 
-    return <g>{segments}</g>;
+    return (
+        <g>
+            <path id={`curve-${sectorName}`} fill="transparent" d={arc(startAngle, startAngle + sweepAngle, radius)} />
+            <text fontSize={sectorNameFontSize}>
+                <textPath
+                    xlinkHref={`#curve-${sectorName}`}
+                    dominantBaseline="middle"
+                    className={styles.sectorName}
+                    startOffset="50%"
+                >
+                    {' '}
+                    <tspan dy={-sectorNameTextOffset}>{sectorName}</tspan>
+                </textPath>
+            </text>
+            {segments}
+        </g>
+    );
 };
 
 export default RadarSector;

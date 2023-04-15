@@ -1,8 +1,9 @@
 import { FC } from 'react';
 
 import RadarSector from './RadarSector';
+import { defaultBlipRadius, sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
 import { Blip } from './types';
-import { deg, offset } from './utils';
+import { offset, offsetXY } from './utils';
 
 type Props = {
     sectorNames: string[];
@@ -11,43 +12,55 @@ type Props = {
     gap: number;
     colorScheme: string[];
     data?: Blip[] | null;
+    blipRadus?: number;
 };
 
-const RadarField: FC<Props> = ({ ringNames, sectorNames, radius, gap, colorScheme, data }) => {
-    const angle = (2 * Math.PI) / sectorNames.length;
+const Radar: FC<Props> = ({
+    ringNames,
+    sectorNames,
+    radius,
+    gap,
+    colorScheme,
+    data = null,
+    blipRadus: blipRadius = defaultBlipRadius,
+}) => {
+    const sweepAngle = (2 * Math.PI) / sectorNames.length;
 
     let currentAngle = 0;
-    const ofst = offset(gap, angle / 2);
+
+    const ofst = offset(gap, sweepAngle);
+    const svgRadius = radius + ofst + sectorNameFontSize + sectorNameTextOffset;
     const sectors = sectorNames.map((sectorName, i) => {
+        const ofstXY = offsetXY(gap, currentAngle, sweepAngle);
+
         const sector = (
-            <g
-                key={sectorName}
-                transform={`translate (${radius + gap / 2 + ofst.x} ${radius + gap / 2 + ofst.y}) rotate(${deg(
-                    currentAngle
-                )} ${-ofst.x} ${-ofst.y}) `}
-            >
+            <g key={sectorName} transform={`translate (${svgRadius + ofstXY.x} ${svgRadius + ofstXY.y})`}>
                 <RadarSector
                     key={sectorName}
-                    angle={angle}
+                    startAngle={currentAngle}
+                    sweepAngle={sweepAngle}
                     radius={radius}
                     sectorName={sectorName}
                     ringNames={ringNames}
                     baseColor={colorScheme[i]}
-                    data={data?.filter((item) => item.sectorName === sectorName)}
+                    data={data && data.filter((item) => item.sectorName === sectorName)}
                     seed={i}
-                    rotationAngle={currentAngle}
+                    gap={gap}
+                    blipRadius={blipRadius}
                 />
             </g>
         );
-        currentAngle += angle;
+        currentAngle += sweepAngle;
 
         return sector;
     });
+
     return (
-        <svg width={2 * radius + gap} height={2 * radius + gap}>
+        <svg width={svgRadius * 2} height={svgRadius * 2} viewBox={`0 0 ${svgRadius * 2} ${svgRadius * 2}`}>
             {sectors}
+            Sorry, your browser does not support inline SVG.
         </svg>
     );
 };
 
-export default RadarField;
+export default Radar;

@@ -1,49 +1,74 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
+import RadarBlip from './RadarBlip';
 import packEntries from './packEngine';
-import { textOffsetY } from './styleConfig';
-import { Blip } from './types';
-import { Entry, Segment, randomPoint, segmentToD3 } from './utils';
+import { Blip, Entry, Segment } from './types';
+import { deg, randomPoint, segmentToD3 } from './utils';
+
+import styles from './radar.module.less';
 
 type Props = {
     id: string;
     segment: Segment;
     color: string;
     ringName: string;
-    rotationAngle: number;
+    blipRadius: number;
+    gap?: number;
     data?: Blip[] | null;
     seed?: number;
 };
 
-const RadarSegment: FC<Props> = ({ id, segment, color, ringName, seed = 0 }) => {
-    const testData = new Array<Entry>();
-    const p = randomPoint(seed);
-    for (let i = 0; i < 10; i++) {
-        testData.push({ x: p.x, y: p.y, r: 10 });
-    }
-    const packed = packEntries(testData, segment);
-    const dots = packed.map((dot) => {
-        return <circle cx={dot.x} cy={dot.y} r="5" fill="white" stroke="black" />;
-    });
+const textRotation = (rotationAngle: number): number => {
+    const d = deg(rotationAngle);
+    return d > 90 && d <= 270 ? 180 : 0;
+};
+
+const RadarSegment: FC<Props> = ({ id, segment, color, ringName, seed = 0, gap = 0, data = null, blipRadius }) => {
+    const blips = useMemo(() => {
+        if (!data) return null;
+        const entries = new Array<Entry>(data.length);
+        entries.fill({ ...randomPoint(seed), r: blipRadius * 2 });
+        const packed = packEntries(entries, segment);
+        return packed.map((entry, i) => {
+            return (
+                <RadarBlip
+                    key={data[i].id}
+                    id={data[i].id}
+                    description={data[i].description}
+                    r={blipRadius}
+                    x={entry.x}
+                    y={entry.y}
+                />
+            );
+        });
+    }, [data, blipRadius, seed, segment]);
 
     const path: string = segmentToD3(segment);
 
-    return (
-        <>
-            <g>
-                <path id={id} d={path} fill={color} />
-                {dots}
-                <div>df</div>
+    const x = segment.innerRadius + (segment.outerRadius - segment.innerRadius) / 2;
+    const y = gap / 2;
 
+    return (
+        <g>
+            <path id={id} d={path} fill={color} className={styles.segment} />
+            {/* {dots} */}
+            {blips}
+
+            {gap && (
                 <text
+                    className={styles.ringName}
                     textAnchor="middle"
-                    x={segment.innerRadius + (segment.outerRadius - segment.innerRadius) / 2}
-                    y={textOffsetY}
+                    dominantBaseline="middle"
+                    x={x}
+                    y={y}
+                    transform={`rotate(${-deg(segment.startAngle)}  0 0) rotate(${textRotation(
+                        segment.startAngle
+                    )} ${x} ${y})`}
                 >
                     {ringName}
                 </text>
-            </g>
-        </>
+            )}
+        </g>
     );
 };
 

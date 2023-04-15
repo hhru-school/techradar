@@ -1,6 +1,8 @@
 import { Arc, DefaultArcObject } from 'd3';
 import * as d3 from 'd3';
 
+import { Cartesian, Entry, Polar, Segment } from './types';
+
 function ringSquare(innerRadius = 0, outerRadius: number): number {
     return Math.PI * (Math.pow(outerRadius, 2) - Math.pow(innerRadius, 2));
 }
@@ -34,39 +36,19 @@ export const radiusListEqualSquare: RadiusListCallback = (numOfRings: number, ra
     return radiusParamList;
 };
 
-export interface Offset {
-    x: number;
-    y: number;
+export function offset(gap: number, sweepAngle: number): number {
+    if (sweepAngle > Math.PI) return 0;
+    return gap / 2 / Math.sin(sweepAngle / 2);
 }
 
-export function offset(gap: number, angle: number): Offset {
+export function offsetXY(gap: number, startAngle: number, sweepAngle: number): Cartesian {
+    const ofst = offset(gap, sweepAngle);
+    const a = startAngle + sweepAngle / 2;
+    if (Math.sin(a) === 0) return { x: -offset, y: 0 };
     return {
-        x: (gap / 2) * Math.cos(angle),
-        y: -(gap / 2) * Math.sin(angle),
+        x: ofst * Math.cos(a),
+        y: -ofst * Math.sin(a),
     };
-}
-
-export interface Cartesian {
-    x: number;
-    y: number;
-}
-
-export interface Polar {
-    r: number;
-    a: number;
-}
-
-export interface Entry {
-    x: number;
-    y: number;
-    r: number;
-}
-
-export interface Segment {
-    innerRadius: number;
-    outerRadius: number;
-    startAngle: number;
-    endAngle: number;
 }
 
 export function cartesian(radius: number, angle: number): Cartesian {
@@ -77,9 +59,10 @@ export function cartesian(radius: number, angle: number): Cartesian {
 }
 
 export function polar(x: number, y: number): Polar {
+    const a = Math.atan2(y, x);
     return {
         r: Math.sqrt(x * x + y * y),
-        a: Math.atan2(y, x),
+        a: a < 0 ? a + 2 * Math.PI : a,
     };
 }
 
@@ -94,7 +77,6 @@ function boundSegment(segment: Segment, pol: Polar): Cartesian {
     const r = boundInterval(segment.innerRadius, segment.outerRadius, pol.r);
 
     const a = boundInterval(segment.startAngle, segment.endAngle, pol.a);
-    // const a = pol.a;
 
     return cartesian(r, a);
 }
@@ -103,10 +85,17 @@ export function clip(entry: Entry, segment: Segment): Cartesian {
     const cart = entry;
     const pol = polar(cart.x, cart.y);
 
-    const offset = pol.r > entry.r ? Math.asin(entry.r / pol.r) : (segment.endAngle - segment.startAngle) / 2;
+    if (segment.endAngle - segment.startAngle === 2 * Math.PI) {
+        const r = boundInterval(segment.innerRadius + entry.r, segment.outerRadius - entry.r, pol.r);
+        return cartesian(r, pol.a);
+    }
+
+    const bisector = (segment.endAngle - segment.startAngle) / 2;
+
+    const offset = pol.r > entry.r ? Math.asin(entry.r / pol.r) : bisector;
 
     const crop: Segment = {
-        innerRadius: segment.innerRadius + entry.r,
+        innerRadius: Math.max(entry.r / Math.sin(bisector), segment.innerRadius + entry.r),
         outerRadius: segment.outerRadius - entry.r,
         startAngle: segment.startAngle + offset,
         endAngle: segment.endAngle - offset,
@@ -135,9 +124,17 @@ function pseudoRandom(seed: number): number {
 
 export function randomPoint(seed: number): Cartesian {
     return {
-        x: pseudoRandom(seed) * 100,
-        y: pseudoRandom(seed) * 100,
+        x: pseudoRandom(seed),
+        y: pseudoRandom(seed),
     };
+}
+
+export function arc(startAngle: number, endAngle: number, r: number): string {
+    const startX = r * Math.cos(endAngle);
+    const startY = -r * Math.sin(endAngle);
+    const endX = r * Math.cos(startAngle);
+    const endY = -r * Math.sin(startAngle);
+    return `M ${startX} ${startY} A ${r} ${r} 0 0 1 ${endX},${endY} `;
 }
 
 export function deg(rad: number): number {
