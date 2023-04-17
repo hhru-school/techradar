@@ -17,10 +17,8 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import { setAuthFormOpen, setAuthFormData } from '../../store/dataSlice';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AuthFormModal from '../AuthFormModal/AuthFormModal';
-
-import './Header.less';
 
 const Header: FC = () => {
     const dispatch = useAppDispatch();
