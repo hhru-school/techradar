@@ -1,9 +1,9 @@
 declare module '*.less' {
-  const classes: { [key: string]: string };
-  export default classes;
+    const classes: { [key: string]: string };
+    export default classes;
 }
 
 declare module '*.module.less' {
-  const classes: { [className: string]: string };
-  export default classes;
+    const classes: { [className: string]: string };
+    export default classes;
 }
