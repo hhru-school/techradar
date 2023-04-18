@@ -4,7 +4,7 @@ import * as d3 from 'd3-color';
 import RadarSegment from './RadarSegment';
 import { sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
 import { Blip, Segment } from './types';
-import { arc, radiusListEqualSquare } from './utils';
+import { buildArc, getRadiusListEqualSquare } from './utils';
 
 import styles from './radar.module.less';
 
@@ -33,7 +33,7 @@ const RadarSector: FC<Props> = ({
     seed = 0,
     gap = 0,
 }) => {
-    const radiuses = radiusListEqualSquare(ringNames.length, radius);
+    const radiuses = getRadiusListEqualSquare(ringNames.length, radius);
 
     const segments = radiuses.map((ring, i) => {
         const segment: Segment = {
@@ -65,7 +65,11 @@ const RadarSector: FC<Props> = ({
 
     return (
         <g>
-            <path id={`curve-${sectorName}`} fill="transparent" d={arc(startAngle, startAngle + sweepAngle, radius)} />
+            <path
+                id={`curve-${sectorName}`}
+                fill="transparent"
+                d={buildArc(startAngle, startAngle + sweepAngle, radius)}
+            />
             <text fontSize={sectorNameFontSize}>
                 <textPath
                     xlinkHref={`#curve-${sectorName}`}

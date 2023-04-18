@@ -3,7 +3,7 @@ import { FC } from 'react';
 import RadarSector from './RadarSector';
 import { defaultBlipRadius, sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
 import { Blip } from './types';
-import { offset, offsetXY } from './utils';
+import { getOffset, getOffsetXY } from './utils';
 
 type Props = {
     sectorNames: string[];
@@ -28,10 +28,10 @@ const Radar: FC<Props> = ({
 
     let currentAngle = 0;
 
-    const ofst = offset(gap, sweepAngle);
+    const ofst = getOffset(gap, sweepAngle);
     const svgRadius = radius + ofst + sectorNameFontSize + sectorNameTextOffset;
     const sectors = sectorNames.map((sectorName, i) => {
-        const ofstXY = offsetXY(gap, currentAngle, sweepAngle);
+        const ofstXY = getOffsetXY(gap, currentAngle, sweepAngle);
 
         const sector = (
             <g key={sectorName} transform={`translate (${svgRadius + ofstXY.x} ${svgRadius + ofstXY.y})`}>

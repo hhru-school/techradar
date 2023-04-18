@@ -3,11 +3,11 @@ import * as d3 from 'd3';
 
 import { Cartesian, Entry, Polar, Segment } from './types';
 
-function ringSquare(innerRadius = 0, outerRadius: number): number {
+function getRingSquare(innerRadius = 0, outerRadius: number): number {
     return Math.PI * (Math.pow(outerRadius, 2) - Math.pow(innerRadius, 2));
 }
 
-function outerRadius(innerRadius: number, square: number): number {
+function getOuterRadius(innerRadius: number, square: number): number {
     return Math.sqrt((square + Math.PI * Math.pow(innerRadius, 2)) / Math.PI);
 }
 
@@ -20,13 +20,13 @@ export interface RadiusListCallback {
     (numOfRings: number, radius: number): RadiusData[];
 }
 
-export const radiusListEqualSquare: RadiusListCallback = (numOfRings: number, radius: number) => {
-    const itemSquare = ringSquare(0, radius) / numOfRings;
+export const getRadiusListEqualSquare: RadiusListCallback = (numOfRings: number, radius: number) => {
+    const itemSquare = getRingSquare(0, radius) / numOfRings;
     const radiusParamList: RadiusData[] = [];
     let currentInnerRadius = 0;
     let currentOuterRadius;
     for (let i = 0; i < numOfRings; i++) {
-        currentOuterRadius = outerRadius(currentInnerRadius, itemSquare);
+        currentOuterRadius = getOuterRadius(currentInnerRadius, itemSquare);
         radiusParamList.push({
             innerRadius: currentInnerRadius,
             outerRadius: currentOuterRadius,
@@ -36,29 +36,29 @@ export const radiusListEqualSquare: RadiusListCallback = (numOfRings: number, ra
     return radiusParamList;
 };
 
-export function offset(gap: number, sweepAngle: number): number {
+export function getOffset(gap: number, sweepAngle: number): number {
     if (sweepAngle > Math.PI) return 0;
     return gap / 2 / Math.sin(sweepAngle / 2);
 }
 
-export function offsetXY(gap: number, startAngle: number, sweepAngle: number): Cartesian {
-    const ofst = offset(gap, sweepAngle);
+export function getOffsetXY(gap: number, startAngle: number, sweepAngle: number): Cartesian {
+    const ofst = getOffset(gap, sweepAngle);
     const a = startAngle + sweepAngle / 2;
-    if (Math.sin(a) === 0) return { x: -offset, y: 0 };
+    if (Math.sin(a) === 0) return { x: -getOffset, y: 0 };
     return {
         x: ofst * Math.cos(a),
         y: -ofst * Math.sin(a),
     };
 }
 
-export function cartesian(radius: number, angle: number): Cartesian {
+export function getCartesian(radius: number, angle: number): Cartesian {
     return {
         x: radius * Math.cos(angle),
         y: radius * Math.sin(angle),
     };
 }
 
-export function polar(x: number, y: number): Polar {
+export function getPolar(x: number, y: number): Polar {
     const a = Math.atan2(y, x);
     return {
         r: Math.sqrt(x * x + y * y),
@@ -78,16 +78,16 @@ function boundSegment(segment: Segment, pol: Polar): Cartesian {
 
     const a = boundInterval(segment.startAngle, segment.endAngle, pol.a);
 
-    return cartesian(r, a);
+    return getCartesian(r, a);
 }
 
 export function clip(entry: Entry, segment: Segment): Cartesian {
     const cart = entry;
-    const pol = polar(cart.x, cart.y);
+    const pol = getPolar(cart.x, cart.y);
 
     if (segment.endAngle - segment.startAngle === 2 * Math.PI) {
         const r = boundInterval(segment.innerRadius + entry.r, segment.outerRadius - entry.r, pol.r);
-        return cartesian(r, pol.a);
+        return getCartesian(r, pol.a);
     }
 
     const bisector = (segment.endAngle - segment.startAngle) / 2;
@@ -104,7 +104,7 @@ export function clip(entry: Entry, segment: Segment): Cartesian {
     return boundSegment(crop, pol);
 }
 
-export function segmentToD3(segment: Segment): string {
+export function translateSegmentToD3(segment: Segment): string {
     /* eslint-disable  @typescript-eslint/no-explicit-any */
     const arcGen: Arc<any, DefaultArcObject> = d3.arc();
     /* eslint-enable  @typescript-eslint/no-explicit-any */
@@ -118,18 +118,18 @@ export function segmentToD3(segment: Segment): string {
     );
 }
 
-function pseudoRandom(seed: number): number {
+function getPseudoRandom(seed: number): number {
     return Math.abs(Math.sin(seed));
 }
 
-export function randomPoint(seed: number): Cartesian {
+export function getRandomPoint(seed: number): Cartesian {
     return {
-        x: pseudoRandom(seed),
-        y: pseudoRandom(seed),
+        x: getPseudoRandom(seed),
+        y: getPseudoRandom(seed),
     };
 }
 
-export function arc(startAngle: number, endAngle: number, r: number): string {
+export function buildArc(startAngle: number, endAngle: number, r: number): string {
     const startX = r * Math.cos(endAngle);
     const startY = -r * Math.sin(endAngle);
     const endX = r * Math.cos(startAngle);
@@ -137,6 +137,6 @@ export function arc(startAngle: number, endAngle: number, r: number): string {
     return `M ${startX} ${startY} A ${r} ${r} 0 0 1 ${endX},${endY} `;
 }
 
-export function deg(rad: number): number {
+export function convertRadToDeg(rad: number): number {
     return (rad * 180) / Math.PI;
 }

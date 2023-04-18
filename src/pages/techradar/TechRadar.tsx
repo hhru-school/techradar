@@ -9,16 +9,14 @@ const data: Blip[] = generateData(30);
 
 const TechRadar: FC = () => {
     return (
-        <>
-            <Radar
-                sectorNames={sectorNames}
-                ringNames={ringNames}
-                radius={300}
-                gap={defaultGap}
-                colorScheme={defaultColorScheme}
-                data={data}
-            />
-        </>
+        <Radar
+            sectorNames={sectorNames}
+            ringNames={ringNames}
+            radius={300}
+            gap={defaultGap}
+            colorScheme={defaultColorScheme}
+            data={data}
+        />
     );
 };
 

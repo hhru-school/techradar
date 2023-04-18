@@ -3,7 +3,7 @@ import { FC, useMemo } from 'react';
 import RadarBlip from './RadarBlip';
 import packEntries from './packEngine';
 import { Blip, Entry, Segment } from './types';
-import { deg, randomPoint, segmentToD3 } from './utils';
+import { convertRadToDeg, getRandomPoint, translateSegmentToD3 } from './utils';
 
 import styles from './radar.module.less';
 
@@ -19,7 +19,7 @@ type Props = {
 };
 
 const textRotation = (rotationAngle: number): number => {
-    const d = deg(rotationAngle);
+    const d = convertRadToDeg(rotationAngle);
     return d > 90 && d <= 270 ? 180 : 0;
 };
 
@@ -27,7 +27,7 @@ const RadarSegment: FC<Props> = ({ id, segment, color, ringName, seed = 0, gap =
     const blips = useMemo(() => {
         if (!data) return null;
         const entries = new Array<Entry>(data.length);
-        entries.fill({ ...randomPoint(seed), r: blipRadius * 2 });
+        entries.fill({ ...getRandomPoint(seed), r: blipRadius * 2 });
         const packed = packEntries(entries, segment);
         return packed.map((entry, i) => {
             return (
@@ -43,7 +43,7 @@ const RadarSegment: FC<Props> = ({ id, segment, color, ringName, seed = 0, gap =
         });
     }, [data, blipRadius, seed, segment]);
 
-    const path: string = segmentToD3(segment);
+    const path: string = translateSegmentToD3(segment);
 
     const x = segment.innerRadius + (segment.outerRadius - segment.innerRadius) / 2;
     const y = gap / 2;
@@ -61,7 +61,7 @@ const RadarSegment: FC<Props> = ({ id, segment, color, ringName, seed = 0, gap =
                     dominantBaseline="middle"
                     x={x}
                     y={y}
-                    transform={`rotate(${-deg(segment.startAngle)}  0 0) rotate(${textRotation(
+                    transform={`rotate(${-convertRadToDeg(segment.startAngle)}  0 0) rotate(${textRotation(
                         segment.startAngle
                     )} ${x} ${y})`}
                 >
