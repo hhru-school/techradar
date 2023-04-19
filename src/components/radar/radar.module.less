@@ -1,7 +1,7 @@
-@label-color: rgb(150, 150, 150);
 @line-color: rgb(88, 88, 88);
 @blip-color: rgb(76, 76, 76);
 @blip-hover: rgb(57, 188, 195);
+@label-color: rgb(150, 150, 150);
 
 .ringName {
     fill: @label-color;
@@ -26,13 +26,13 @@
     stroke: @blip-color;
     color: @blip-color;
     pointer-events: all;
-}
-
-.blip:hover {
-    cursor: pointer;
-    stroke: @blip-hover;
-    color: @blip-hover;
-    stroke-width: 3px;
+    &Active,
+    &:hover {
+        cursor: pointer;
+        stroke: @blip-hover;
+        color: @blip-hover;
+        stroke-width: 3px;
+    }
 }
 
 .blipText {
