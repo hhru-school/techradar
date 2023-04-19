@@ -91,7 +91,7 @@ const validSchema = Yup.object({
     password: Yup.string().min(2, 'Минимум 2 символа для заполнения').required('Обязательное поле!'),
 });
 
-const style = {
+export const styleModal = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -105,13 +105,13 @@ const style = {
 
 const AuthFormModal: FC = () => {
     const dispatch = useAppDispatch();
-    const authentificationFormOpen = useAppSelector((state) => state.data.authentificationFormOpen);
+    const showAuthentificationForm = useAppSelector((state) => state.data.showAuthentificationForm);
 
     return (
         <Modal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
-            open={authentificationFormOpen}
+            open={showAuthentificationForm}
             onClose={() => dispatch(setAuthFormOpen(false))}
             closeAfterTransition
             slots={{ backdrop: Backdrop }}
@@ -121,8 +121,8 @@ const AuthFormModal: FC = () => {
                 },
             }}
         >
-            <Fade in={authentificationFormOpen}>
-                <Box sx={style}>
+            <Fade in={showAuthentificationForm}>
+                <Box sx={styleModal}>
                     <Typography id="transition-modal-title" variant="h6" component="h2">
                         Вход в учетную запись TechRadar
                     </Typography>

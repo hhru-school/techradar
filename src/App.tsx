@@ -7,7 +7,6 @@ import Header from './components/Header/Header';
 import MyRadars from './pages/admin/MyRadars/MyRadars';
 import MyTechnologies from './pages/admin/MyTechnologies/MyTechnologies';
 import RadarConstructor from './pages/admin/RadarConstructor/RadarConstructor';
-import TechConstructor from './pages/admin/TechConstructor/TechConstructor';
 import Main from './pages/main/Main';
 import TechRadar from './pages/techradar/TechRadar';
 
@@ -45,7 +44,6 @@ const App: FC = () => {
                 <Route path="/my-radars/*" element={<MyRadars />} />
                 <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
                 <Route path="/my-tech" element={<MyTechnologies />} />
-                <Route path="/my-tech/tech-constructor" element={<TechConstructor />} />
             </Routes>
         </ThemeProvider>
     );

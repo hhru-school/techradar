@@ -110,10 +110,7 @@ const TechConstructor: FC = () => {
                 <Form className="form">
                     <Grid container spacing={3} sx={{ padding: '10px 0', display: 'flex', justifyContent: 'center' }}>
                         <Grid item md={1} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <Link
-                                style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                                to="/my-tech"
-                            >
+                            <Link className="form-link" to="/my-tech">
                                 <ArrowBackIosIcon /> НАЗАД
                             </Link>
                         </Grid>

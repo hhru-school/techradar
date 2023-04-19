@@ -1,10 +1,24 @@
 import { FC, useEffect, useCallback, useState } from 'react';
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Box } from '@mui/material';
-import { DataGrid, GridColDef, ruRU } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, ruRU, GridRenderCellParams } from '@mui/x-data-grid';
 
-type Row = { id: number; radarName: string; relevantAt: string; lastUpdate: string; status: string };
-type Grid = Array<Row>;
+import { useAppSelector } from '../../../../store/hooks';
+
+type RowRadar = {
+    id: number;
+    link?: string;
+    radarName: string;
+    relevantAt: string;
+    lastUpdate: string;
+    status: string;
+};
+type GridRadar = Array<RowRadar>;
+
+export interface GridRadarObj {
+    [index: string]: GridRadar;
+}
 
 const columns: GridColDef[] = [
     {
@@ -14,14 +28,15 @@ const columns: GridColDef[] = [
         width: 150,
         editable: true,
     },
-    // {
-    //     field: 'actions',
-    //     type: 'actions',
-    //     width: 80,
-    //     getActions: (params: GridRowParams<string>) => [
-    //         <GridActionsCellItem icon={<Link to={params.value}>{params.value}</Link>} label="LINK" />,
-    //     ],
-    // },
+    {
+        field: 'link',
+        headerName: 'Ссылка',
+        type: 'string',
+        width: 150,
+        renderCell: (params: GridRenderCellParams<typeof Link>) => (
+            <Link to={params.value as string}>{params.value}</Link>
+        ),
+    },
     {
         field: 'relevantAt',
         headerName: 'Актуальность',
@@ -33,7 +48,7 @@ const columns: GridColDef[] = [
         field: 'lastUpdate',
         headerName: 'Последнее обновление',
         type: 'string',
-        width: 180,
+        width: 200,
         editable: true,
     },
     {
@@ -45,116 +60,32 @@ const columns: GridColDef[] = [
     },
 ];
 
-const rows = {
-    android: [
-        {
-            id: 1,
-            radarName: '2023Q1',
-            link: 'android-radar',
-            relevantAt: '01.01.2023',
-            lastUpdate: '16 апреля 2023 20:55',
-            status: 'Опубликовано',
-        },
-        {
-            id: 2,
-            radarName: '2023Q2',
-            relevantAt: '01.05.2023',
-            lastUpdate: '16 апреля 2023 20:55',
-            status: 'Опубликовано',
-        },
-    ],
-    backend: [
-        {
-            id: 1,
-            radarName: '2023Q4',
-            relevantAt: '01.04.2023',
-            lastUpdate: '16 апреля 2023 20:55',
-            status: 'Опубликовано',
-        },
-    ],
-    data: [
-        {
-            id: 1,
-            radarName: '2023',
-            relevantAt: '01.04.2023',
-            lastUpdate: '16 апреля 2023 20:55',
-            status: 'Опубликовано',
-        },
-    ],
-    frontend: [
-        {
-            id: 1,
-            radarName: '2023',
-            relevantAt: '01.04.2023',
-            lastUpdate: '16 апреля 2023 20:55',
-            status: 'Опубликовано',
-        },
-    ],
-    ios: [
-        {
-            id: 1,
-            radarName: '2023',
-            relevantAt: '01.04.2023',
-            lastUpdate: '16 апреля 2023 20:55',
-            status: 'Опубликовано',
-        },
-    ],
-    qa: [
-        {
-            id: 1,
-            radarName: '2023',
-            relevantAt: '01.04.2023',
-            lastUpdate: '16 апреля 2023 20:55',
-            status: 'Опубликовано',
-        },
-    ],
-    datawarehouse: [
-        {
-            id: 1,
-            radarName: '2023',
-            relevantAt: '01.04.2023',
-            lastUpdate: '16 апреля 2023 20:55',
-            status: 'Опубликовано',
-        },
-    ],
-};
-
 const MyRadarsDataGrid: FC = () => {
+    const rows = useAppSelector((state) => state.data.radarGrid);
     const { rowsId } = useParams();
-    const [grid, setGrid] = useState<Grid>([
+    const [grid, setGrid] = useState<GridRadar>([
         {
             id: 1,
-            radarName: '2023Q4',
-            relevantAt: '01.04.2023',
-            lastUpdate: '16 апреля 2023 20:55',
-            status: 'Опубликовано',
-        },
-        {
-            id: 4,
-            radarName: '2023Q4',
-            relevantAt: '01.04.2023',
-            lastUpdate: '16 апреля 2023 20:55',
-            status: 'Опубликовано',
-        },
-        {
-            id: 5,
-            radarName: '2023Q4',
-            relevantAt: '01.04.2023',
-            lastUpdate: '16 апреля 2023 20:55',
-            status: 'Опубликовано',
+            radarName: 'ошибка',
+            relevantAt: 'ошибка',
+            lastUpdate: 'ошибка',
+            status: 'ошибка',
         },
     ]);
 
     const updateRows = useCallback(() => {
-        return typeof rowsId !== undefined ? setGrid(rows[rowsId] as Grid) : setGrid(rows[rowsId] as Grid);
-    }, [rowsId]);
+        if (typeof rowsId === 'string') {
+            return setGrid(rows[rowsId]);
+        }
+        return setGrid(grid);
+    }, [rowsId, grid, rows]);
 
     useEffect(() => {
         updateRows();
     }, [rowsId, updateRows]);
 
     return (
-        <Box sx={{ height: '100vh', width: '100%' }}>
+        <Box sx={{ height: 'calc(100vh - 240px)', width: '100%' }}>
             <DataGrid
                 rows={grid}
                 columns={columns}

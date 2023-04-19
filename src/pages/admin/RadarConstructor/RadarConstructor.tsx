@@ -1,90 +1,59 @@
-import { FC, useState, SetStateAction, ChangeEvent, Dispatch, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import AddIcon from '@mui/icons-material/Add';
-import AdjustIcon from '@mui/icons-material/Adjust';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ContactSupportIcon from '@mui/icons-material/ContactSupport';
-import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import { FC, useState, ReactElement } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
-    Divider,
-    Typography,
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Button,
     Container,
-    Fab,
     FormControl,
-    FormControlLabel,
     FormHelperText,
     Grid,
     Input,
-    InputAdornment,
     InputLabel,
-    List,
-    NativeSelect,
-    Switch,
+    TextField,
+    Box,
+    Button,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    Typography,
 } from '@mui/material';
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { useAppSelector } from '../../../store/hooks';
-import SideBar from '../CommentsSideBar/CommentsSideBar';
-import RadarConstructorTechCard from './RadarConstructorTechCard';
+import { setRadarConstrTechModalOpen } from '../../../store/dataSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import AddTechModal from './AddTechModal/AddTechModal';
+import CercleInputs from './CercleInputs/CercleInputs';
+import RadarConstructorGrid from './RadarConstructorGrid/RadarConstructorGrid';
+import RadarPublishBtn from './RadarPublishBtn/RadarPublishBtn';
+import SectorInputs from './SectorInputs/SectorInputs';
+
+import './RadarConstructor.less';
 
 interface Values {
-    email: string;
-    password: string;
+    radarName: string;
+    nameCercle1: string;
+    nameCercle2: string;
+    nameCercle3: string;
+    nameCercle4: string;
+    nameSector1: string;
+    nameSector2: string;
+    nameSector3: string;
+    nameSector4: string;
 }
 
-type InputProps = {
+export interface InputProps {
     label: string;
     name: string;
     id?: string;
     type: string;
     autoComplete: string;
-};
+}
 
-type CercleInputProps = {
-    label: string;
-    name: string;
-    id?: string;
-    type: string;
-    autoComplete: string;
-    onChangeFunc: Dispatch<SetStateAction<number>>;
-};
-
-const MyTextInput = ({ label, id, ...props }: InputProps) => {
+export const MyTextInput = ({ label, id, ...props }: InputProps): ReactElement => {
     const [field, meta] = useField(props);
 
-    let icon;
-    switch (id) {
-        case 'name':
-            icon = <ContactSupportIcon />;
-            break;
-        case 'name-quadrant-1':
-            icon = <DashboardCustomizeIcon sx={{ transform: 'rotate(-90deg)' }} />;
-            break;
-        case 'name-quadrant-2':
-            icon = <DashboardCustomizeIcon />;
-            break;
-        case 'name-quadrant-3':
-            icon = <DashboardCustomizeIcon sx={{ transform: 'rotate(90deg)' }} />;
-            break;
-        case 'name-quadrant-4':
-            icon = <DashboardCustomizeIcon sx={{ transform: 'rotate(180deg)' }} />;
-            break;
-        case 'name-cercle':
-            icon = <AdjustIcon />;
-            break;
-        default:
-            break;
-    }
-
     return (
-        <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
+        <FormControl sx={{ m: 1, width: '160px' }} variant="standard">
             <InputLabel htmlFor={id}>{label}</InputLabel>
             <Input
                 id={id}
@@ -94,228 +63,169 @@ const MyTextInput = ({ label, id, ...props }: InputProps) => {
                 inputProps={{
                     'aria-label': 'radar-input',
                 }}
-                endAdornment={<InputAdornment position="end">{icon}</InputAdornment>}
             />
             <FormHelperText id="helper-text">{meta.error}</FormHelperText>
         </FormControl>
     );
 };
 
-const CountCercleInput = ({ label, id, onChangeFunc, ...props }: CercleInputProps) => {
+type RadarInput = {
+    id: number | string;
+    name: string;
+    label: string;
+    placeholder: string;
+};
+
+const RadarNameInput = ({ label, id, ...props }: RadarInput): ReactElement => {
     const [field, meta] = useField(props);
+    const [editNameReadOnly, setEditNameReadOnly] = useState<boolean>(true);
 
     return (
-        <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
-            <InputLabel htmlFor={id}>{label}</InputLabel>
-            <Input
-                id={id}
+        <Box>
+            <TextField
                 {...field}
                 {...props}
-                aria-describedby="helper-text"
-                inputProps={{
-                    'aria-label': 'radar-input',
+                name="radarName"
+                onBlur={() => setEditNameReadOnly(true)}
+                id="radarName"
+                label="Название радара"
+                InputProps={{
+                    readOnly: editNameReadOnly,
+                    endAdornment: (
+                        <label className="radarNameLabel" htmlFor={editNameReadOnly ? '' : 'radarName'}>
+                            <MoreVertIcon
+                                color="primary"
+                                sx={{ cursor: 'pointer' }}
+                                onClick={() => setEditNameReadOnly(!editNameReadOnly)}
+                            />
+                        </label>
+                    ),
                 }}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => onChangeFunc(+e.target.value)}
-                endAdornment={<InputAdornment position="end">{<FormatListNumberedIcon />}</InputAdornment>}
+                placeholder="Введите название радара"
             />
             <FormHelperText id="helper-text">{meta.error}</FormHelperText>
-        </FormControl>
+        </Box>
     );
 };
+
+const formikInitValues = {
+    radarName: '',
+    nameCercle1: '',
+    nameCercle2: '',
+    nameCercle3: '',
+    nameCercle4: '',
+    nameSector1: '',
+    nameSector2: '',
+    nameSector3: '',
+    nameSector4: '',
+};
+
+const formikValid = Yup.object({
+    radarName: Yup.string().required('Обязательное поле!'),
+    nameCercle1: Yup.string().required('Обязательное поле!'),
+    nameCercle2: Yup.string().required('Обязательное поле!'),
+    nameCercle3: Yup.string().required('Обязательное поле!'),
+    nameCercle4: Yup.string().required('Обязательное поле!'),
+    nameSector1: Yup.string().required('Обязательное поле!'),
+    nameSector2: Yup.string().required('Обязательное поле!'),
+    nameSector3: Yup.string().required('Обязательное поле!'),
+    nameSector4: Yup.string().required('Обязательное поле!'),
+});
 
 const RadarConstructor: FC = () => {
-    const inputs = useAppSelector((state) => state.data.radarConstructorInputs);
-
-    const [checked, setChecked] = useState(false);
-    const [expanded, setExpanded] = useState(true);
-    const [countCercleInputs, setCountCercleInputs] = useState<number>(0);
-    const [cercleInputsData, setCercleInputsData] = useState<Array<InputProps>>([
-        {
-            label: 'Название кольца',
-            id: `name-cercle`,
-            name: `name-cercle`,
-            type: 'text',
-            autoComplete: 'off',
-        },
-    ]);
-
-    const handleChange = () => {
-        setChecked((prev) => !prev);
-    };
-
-    useEffect(() => {
-        const arr: SetStateAction<InputProps[]> = [];
-        for (let i = 0; i < countCercleInputs; i++) {
-            arr.push({
-                label: 'Название кольца',
-                id: `name-cercle`,
-                name: `name-cercle-${i}`,
-                type: 'text',
-                autoComplete: 'off',
-            });
-        }
-        setCercleInputsData(arr);
-    }, [countCercleInputs, setCercleInputsData]);
-
-    const flexCenter = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
+    const dispatch = useAppDispatch();
+    const showRadarConstrTechModal = useAppSelector((state) => state.data.showRadarConstrTechModal);
 
     return (
         <Container maxWidth="xl">
             <Formik
-                initialValues={{
-                    email: '',
-                    password: '',
-                }}
-                validationSchema={Yup.object({
-                    email: Yup.string().email('Неправильный email адрес').required('Обязательное поле!'),
-                    password: Yup.string().min(2, 'Минимум 2 символа для заполнения').required('Обязательное поле!'),
-                })}
+                initialValues={formikInitValues}
+                validationSchema={formikValid}
                 onSubmit={(values: Values, { setSubmitting }: FormikHelpers<Values>) => {
                     setTimeout(() => {
+                        // console.log(values);
                         setSubmitting(false);
                     }, 500);
                 }}
             >
                 <Form className="form">
-                    <Grid container spacing={3} sx={{ padding: '10px 0', display: 'flex' }}>
-                        <Grid item md={1} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <Link style={flexCenter} to="/my-radars">
-                                <ArrowBackIosIcon /> НАЗАД
-                            </Link>
+                    <Grid
+                        container
+                        sm={12}
+                        spacing={3}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            minHeight: '125px',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <Grid item sm={6} sx={{ padding: '15px 0 0 0' }}>
+                            <RadarNameInput
+                                name="radarName"
+                                id="radarName"
+                                label="Название радара"
+                                placeholder="Введите название радара"
+                            />
                         </Grid>
-                        <Grid item md={3} xs sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <Typography variant="h5">Конструктор радара</Typography>
+                        <Grid item sm={4}>
+                            <RadarPublishBtn />
                         </Grid>
-                        <Grid item xs sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <Grid item xs sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                                <Grid item xs sx={flexCenter}>
-                                    <SideBar />
-                                </Grid>
-                                <Grid item xs sx={flexCenter}>
-                                    <FormControl style={{ width: 200 }}>
-                                        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                            Взять за основу сущестующий
-                                        </InputLabel>
-                                        <NativeSelect
-                                            defaultValue={'all'}
-                                            inputProps={{
-                                                name: 'privacy',
-                                                id: 'privacy',
-                                            }}
-                                        >
-                                            <option value={'all'}>Нет</option>
-                                            <option value={'radar 1'}>Радар 1</option>
-                                            <option value={'radar 2'}>Радар 2</option>
-                                            <option value={'radar 3'}>Радар 3</option>
-                                        </NativeSelect>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs md={4} sx={flexCenter}>
-                                    <FormControlLabel
-                                        control={<Switch checked={checked} onChange={handleChange} />}
-                                        label="Публичный"
-                                    />
-                                </Grid>
-                            </Grid>
-
+                        <Grid item sm={1}>
+                            <Button type="submit" variant="contained" color={'success'}>
+                                СОХРАНИТЬ
+                            </Button>
+                        </Grid>
+                    </Grid>
+                    <Grid container sm={12}>
+                        <Grid sm={8}>{/* РАДАР СУВАТЬ СЮДА */}</Grid>
+                        <Grid
+                            item
+                            spacing={3}
+                            sm={4}
+                            sx={{
+                                width: '280px',
+                            }}
+                        >
                             <Grid
                                 item
-                                xs
-                                md={2}
-                                sm={3}
-                                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                }}
                             >
-                                <Button disabled={true} variant="contained" color="success">
-                                    Создать
-                                </Button>
+                                <Grid item sx={{ width: '100%' }}>
+                                    <Accordion>
+                                        <AccordionSummary expandIcon={<ExpandMoreIcon />} id="edit-settings">
+                                            <Typography>Кольца и секторы</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails sx={{ display: 'flex', flexDirection: 'row' }}>
+                                            <CercleInputs />
+                                            <SectorInputs />
+                                        </AccordionDetails>
+                                    </Accordion>
+                                </Grid>
+                            </Grid>
+                            <Grid item>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '10px 0' }}>
+                                    <Typography sx={{ textAlign: 'center' }} variant="h5">
+                                        Технологии
+                                    </Typography>
+                                    <Button
+                                        onClick={() => dispatch(setRadarConstrTechModalOpen(true))}
+                                        variant="contained"
+                                        color={'success'}
+                                    >
+                                        + Добавить
+                                    </Button>
+                                </Box>
+                                <RadarConstructorGrid />
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Divider />
-
-                    <Accordion sx={{ width: 300, mt: '5px', border: 0 }} expanded={expanded}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                            onClick={() => setExpanded(!expanded)}
-                        >
-                            <Typography>Настройки радара</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails sx={{ height: '58vh', padding: '0 16px 8px 16px' }}>
-                            <List
-                                sx={{
-                                    width: '100%',
-                                    bgcolor: 'background.paper',
-                                    position: 'relative',
-                                    overflow: 'auto',
-                                    maxHeight: '95%',
-                                }}
-                            >
-                                {inputs.map((item, i) => {
-                                    return (
-                                        <MyTextInput
-                                            key={i}
-                                            label={item.label}
-                                            id={item.id}
-                                            name={item.name}
-                                            type={item.type}
-                                            autoComplete={item.autoComplete}
-                                        />
-                                    );
-                                })}
-                                <CountCercleInput
-                                    label={'Количество колец'}
-                                    id={'cercle-count'}
-                                    name={'cercle-count'}
-                                    type={'number'}
-                                    autoComplete={'off'}
-                                    onChangeFunc={setCountCercleInputs}
-                                />
-                                {cercleInputsData.map((item, i) => {
-                                    return (
-                                        <MyTextInput
-                                            key={i}
-                                            label={item.label}
-                                            id={item.id}
-                                            name={item.name}
-                                            type={item.type}
-                                            autoComplete={item.autoComplete}
-                                        />
-                                    );
-                                })}
-                            </List>
-                        </AccordionDetails>
-                    </Accordion>
-                    <Accordion sx={{ width: 300 }} expanded={!expanded}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel2a-content"
-                            id="panel2a-header"
-                            onClick={() => setExpanded(!expanded)}
-                        >
-                            <Typography>Добавление технологий</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails sx={{ height: '58vh' }}>
-                            <List
-                                sx={{
-                                    width: '100%',
-                                    bgcolor: 'background.paper',
-                                    position: 'relative',
-                                    overflow: 'auto',
-                                    maxHeight: '100%',
-                                }}
-                            >
-                                <RadarConstructorTechCard />
-                            </List>
-                            <Fab variant="extended" color="primary">
-                                <AddIcon />
-                                добавить технологию
-                            </Fab>
-                        </AccordionDetails>
-                    </Accordion>
                 </Form>
             </Formik>
+            {showRadarConstrTechModal && <AddTechModal />}
         </Container>
     );
 };

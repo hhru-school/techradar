@@ -1,3 +1,7 @@
+import { GridRadarObj } from '../pages/admin/MyRadars/MyRadarsDataGrid/MyRadarsDataGrid';
+import { GridTech } from '../pages/admin/MyTechnologies/MyTechDataGrid/MyTechDataGrid';
+import { GridRadarConstructor } from '../pages/admin/RadarConstructor/RadarConstructorGrid/RadarConstructorGrid';
+
 type Input = { label: string; id: string; name: string; type: string; autoComplete: string };
 
 type ConstructorInputs = Array<Input>;
@@ -8,15 +12,20 @@ export interface AuthFormInputs {
 }
 
 interface State {
-    value: number;
     techContructorInputs: ConstructorInputs;
-    radarConstructorInputs: ConstructorInputs;
-    authentificationFormOpen: boolean;
     authentificationFormData: AuthFormInputs;
+    techGrid: GridTech;
+    radarGrid: GridRadarObj;
+    radarConstructorGrid: GridRadarConstructor;
+    countCercleInputs: number;
+    countSectorInputs: number;
+    showAuthentificationForm: boolean;
+    showRadarsCreateModal: boolean;
+    showTechCreateModal: boolean;
+    showRadarConstrTechModal: boolean;
 }
 
 export const initialState: State = {
-    value: 0,
     techContructorInputs: [
         {
             label: 'Название',
@@ -61,71 +70,128 @@ export const initialState: State = {
             autoComplete: 'off',
         },
     ],
-    radarConstructorInputs: [
+    authentificationFormData: { email: null, password: null },
+    techGrid: [
         {
-            label: 'Название радара',
-            id: 'name',
-            name: 'name',
-            type: 'text',
-            autoComplete: 'off',
+            id: 1,
+            techName: 'babel',
+            link: 'babel',
+            relevantAt: '01.01.2023',
+            lastVersion: '01.01.2023',
+            comment: 'preset-env на уровне ES2018',
         },
         {
-            label: 'Название квадранта 1',
-            id: 'name-quadrant-1',
-            name: 'name-quadrant-1',
-            type: 'text',
-            autoComplete: 'off',
+            id: 2,
+            techName: 'Typescript',
+            relevantAt: '01.05.2023',
+            lastVersion: '01.05.2023',
+            comment: 'Планируем внедрять, есть чемпионское направление.',
         },
         {
-            label: 'Название квадранта 2',
-            id: 'name-quadrant-2',
-            name: 'name-quadrant-2',
-            type: 'text',
-            autoComplete: 'off',
-        },
-        {
-            label: 'Название квадранта 3',
-            id: 'name-quadrant-3',
-            name: 'name-quadrant-3',
-            type: 'text',
-            autoComplete: 'off',
-        },
-        {
-            label: 'Название квадранта 4',
-            id: 'name-quadrant-4',
-            name: 'name-quadrant-4',
-            type: 'text',
-            autoComplete: 'off',
-        },
-        {
-            label: 'Название кольца 1',
-            id: 'name-cercle-1',
-            name: 'name-cercle-1',
-            type: 'text',
-            autoComplete: 'off',
-        },
-        {
-            label: 'Название кольца 2',
-            id: 'name-cercle-2',
-            name: 'name-cercle-2',
-            type: 'text',
-            autoComplete: 'off',
-        },
-        {
-            label: 'Название кольца 3',
-            id: 'name-cercle-3',
-            name: 'name-cercle-3',
-            type: 'text',
-            autoComplete: 'off',
-        },
-        {
-            label: 'Название кольца 4',
-            id: 'name-cercle 4',
-            name: 'name-cercle-4',
-            type: 'text',
-            autoComplete: 'off',
+            id: 3,
+            techName: 'Less',
+            relevantAt: '01.05.2023',
+            lastVersion: '01.05.2023',
+            comment: 'Только без фанатизма и вложенных &, их сложнее грепать.',
         },
     ],
-    authentificationFormOpen: false,
-    authentificationFormData: { email: null, password: null },
+    radarConstructorGrid: [
+        {
+            id: 1,
+            techName: 'babel',
+            cercle: 1,
+            sector: 2,
+        },
+        {
+            id: 2,
+            techName: 'react',
+            cercle: 3,
+            sector: 4,
+        },
+        {
+            id: 3,
+            techName: 'JS',
+            cercle: 2,
+            sector: 4,
+        },
+    ],
+    radarGrid: {
+        android: [
+            {
+                id: 1,
+                radarName: '2023Q1',
+                link: 'android-radar',
+                relevantAt: '01.01.2023',
+                lastUpdate: '16 апреля 2023 20:55',
+                status: 'Опубликовано',
+            },
+            {
+                id: 2,
+                radarName: '2023Q2',
+                relevantAt: '01.05.2023',
+                lastUpdate: '16 апреля 2023 20:55',
+                status: 'Опубликовано',
+            },
+        ],
+        backend: [
+            {
+                id: 1,
+                radarName: '2023Q4',
+                relevantAt: '01.04.2023',
+                lastUpdate: '16 апреля 2023 20:55',
+                status: 'Опубликовано',
+            },
+        ],
+        data: [
+            {
+                id: 1,
+                radarName: '2023',
+                relevantAt: '01.04.2023',
+                lastUpdate: '16 апреля 2023 20:55',
+                status: 'Опубликовано',
+            },
+        ],
+        frontend: [
+            {
+                id: 1,
+                radarName: '2023',
+                relevantAt: '01.04.2023',
+                lastUpdate: '16 апреля 2023 20:55',
+                status: 'Опубликовано',
+            },
+        ],
+        ios: [
+            {
+                id: 1,
+                radarName: '2023',
+                relevantAt: '01.04.2023',
+                lastUpdate: '16 апреля 2023 20:55',
+                status: 'Опубликовано',
+            },
+        ],
+        qa: [
+            {
+                id: 1,
+                radarName: '2023',
+                relevantAt: '01.04.2023',
+                lastUpdate: '16 апреля 2023 20:55',
+                status: 'Опубликовано',
+            },
+        ],
+        datawarehouse: [
+            {
+                id: 1,
+                radarName: '2023',
+                relevantAt: '01.04.2023',
+                lastUpdate: '16 апреля 2023 20:55',
+                status: 'Опубликовано',
+            },
+        ],
+    },
+    showAuthentificationForm: false,
+    showRadarsCreateModal: false,
+    showTechCreateModal: false,
+    showRadarConstrTechModal: false,
+    countCercleInputs: 4,
+    countSectorInputs: 4,
 };

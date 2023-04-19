@@ -35,7 +35,7 @@ const Main: FC = () => {
     };
 
     return (
-        <Container maxWidth="xl" style={{ paddingTop: 16 }}>
+        <Container maxWidth="xl" sx={{ paddingTop: 16 }}>
             <Typography variant="h3" component="h3" align={'center'} gutterBottom>
                 HeadHunter (hh.ru)
             </Typography>
