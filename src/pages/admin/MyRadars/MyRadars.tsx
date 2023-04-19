@@ -12,9 +12,9 @@ const tabs: Array<Tab> = [
     { id: 2, label: 'backend' },
     { id: 3, label: 'data science' },
     { id: 4, label: 'frontend' },
-    { id: 5, label: 'IOS' },
-    { id: 6, label: 'QA Infrastructure' },
-    { id: 7, label: 'DataWarehouse' },
+    { id: 5, label: 'ios' },
+    { id: 6, label: 'qa infrastructure' },
+    { id: 7, label: 'datawarehouse' },
 ];
 
 const MyRadar: FC = () => {
@@ -28,6 +28,7 @@ const MyRadar: FC = () => {
         <Container maxWidth="xl">
             <Box>
                 <Tabs
+                    sx={{ display: 'flex', alignItems: 'center', height: '48px' }}
                     value={value}
                     onChange={handleChange}
                     scrollButtons
@@ -38,15 +39,16 @@ const MyRadar: FC = () => {
                     {tabs.map((item) => {
                         return (
                             <Tab
-                                label={''}
-                                sx={{ width: '145px' }}
+                                sx={{ minHeight: '48px' }}
+                                label={item.label}
                                 icon={
                                     <Link
                                         key={item.id}
-                                        to={`grid/${item.label}`}
+                                        to={`grid/${item.label.split(' ')[0]}`}
                                         style={{
+                                            margin: '0',
                                             width: '100%',
-                                            height: '100%',
+                                            height: '48px',
                                             position: 'absolute',
                                             display: 'flex',
                                             justifyContent: 'center',
@@ -74,7 +76,7 @@ const MyRadar: FC = () => {
             <Divider />
             <Divider />
             <Routes>
-                <Route path="my-radar/grid/:rowsId" element={<MyRadarsDataGrid />} />
+                <Route path="/grid/:rowsId" element={<MyRadarsDataGrid />} />
             </Routes>
         </Container>
     );

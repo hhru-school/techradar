@@ -1,7 +1,10 @@
 import { FC, useEffect, useCallback, useState } from 'react';
 import { useParams } from 'react-router';
 import { Box } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, ruRU } from '@mui/x-data-grid';
+
+type Row = { id: number; radarName: string; relevantAt: string; lastUpdate: string; status: string };
+type Grid = Array<Row>;
 
 const columns: GridColDef[] = [
     {
@@ -11,6 +14,14 @@ const columns: GridColDef[] = [
         width: 150,
         editable: true,
     },
+    // {
+    //     field: 'actions',
+    //     type: 'actions',
+    //     width: 80,
+    //     getActions: (params: GridRowParams<string>) => [
+    //         <GridActionsCellItem icon={<Link to={params.value}>{params.value}</Link>} label="LINK" />,
+    //     ],
+    // },
     {
         field: 'relevantAt',
         headerName: 'Актуальность',
@@ -22,14 +33,14 @@ const columns: GridColDef[] = [
         field: 'lastUpdate',
         headerName: 'Последнее обновление',
         type: 'string',
-        width: 110,
+        width: 180,
         editable: true,
     },
     {
         field: 'status',
         headerName: 'Статус',
         type: 'string',
-        width: 110,
+        width: 150,
         editable: true,
     },
 ];
@@ -39,6 +50,7 @@ const rows = {
         {
             id: 1,
             radarName: '2023Q1',
+            link: 'android-radar',
             relevantAt: '01.01.2023',
             lastUpdate: '16 апреля 2023 20:55',
             status: 'Опубликовано',
@@ -60,13 +72,56 @@ const rows = {
             status: 'Опубликовано',
         },
     ],
+    data: [
+        {
+            id: 1,
+            radarName: '2023',
+            relevantAt: '01.04.2023',
+            lastUpdate: '16 апреля 2023 20:55',
+            status: 'Опубликовано',
+        },
+    ],
+    frontend: [
+        {
+            id: 1,
+            radarName: '2023',
+            relevantAt: '01.04.2023',
+            lastUpdate: '16 апреля 2023 20:55',
+            status: 'Опубликовано',
+        },
+    ],
+    ios: [
+        {
+            id: 1,
+            radarName: '2023',
+            relevantAt: '01.04.2023',
+            lastUpdate: '16 апреля 2023 20:55',
+            status: 'Опубликовано',
+        },
+    ],
+    qa: [
+        {
+            id: 1,
+            radarName: '2023',
+            relevantAt: '01.04.2023',
+            lastUpdate: '16 апреля 2023 20:55',
+            status: 'Опубликовано',
+        },
+    ],
+    datawarehouse: [
+        {
+            id: 1,
+            radarName: '2023',
+            relevantAt: '01.04.2023',
+            lastUpdate: '16 апреля 2023 20:55',
+            status: 'Опубликовано',
+        },
+    ],
 };
 
 const MyRadarsDataGrid: FC = () => {
     const { rowsId } = useParams();
-    const [grid, setGrid] = useState<
-        Array<{ id: number; radarName: string; relevantAt: string; lastUpdate: string; status: string }>
-    >([
+    const [grid, setGrid] = useState<Grid>([
         {
             id: 1,
             radarName: '2023Q4',
@@ -91,11 +146,7 @@ const MyRadarsDataGrid: FC = () => {
     ]);
 
     const updateRows = useCallback(() => {
-        if (typeof rowsId === 'number') {
-            setGrid(rows[rowsId]);
-        } else {
-            setGrid(rows.android);
-        }
+        return typeof rowsId !== undefined ? setGrid(rows[rowsId] as Grid) : setGrid(rows[rowsId] as Grid);
     }, [rowsId]);
 
     useEffect(() => {
@@ -115,8 +166,8 @@ const MyRadarsDataGrid: FC = () => {
                     },
                 }}
                 pageSizeOptions={[5]}
-                checkboxSelection
                 disableRowSelectionOnClick
+                localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
             />
         </Box>
     );
