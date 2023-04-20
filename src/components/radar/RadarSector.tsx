@@ -3,7 +3,7 @@ import * as d3 from 'd3-color';
 
 import RadarSegment from './RadarSegment';
 import { sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
-import { Blip, Segment } from './types';
+import { Blip, Segment, Transform } from './types';
 import { buildArc, getRadiusListEqualSquare, getTransform } from './utils';
 
 import styles from './radar.module.less';
@@ -38,14 +38,14 @@ const RadarSector: FC<Props> = ({
 }) => {
     const endAngle = startAngle + sweepAngle;
 
-    const [scale, setScale] = useState(1);
-    const [translate, setTranslate] = useState({ x: 0, y: 0 });
+    const [transform, setTransform] = useState<Transform>({ x: 0, y: 0, scale: 1 });
+
+    const [zoom, setZoom] = useState(false);
 
     const onClickHandler = () => {
-        const transform = getTransform(startAngle, endAngle, radius + gap / 2);
-
-        setScale((prev) => (prev === 1 ? transform.scale : 1));
-        setTranslate({ x: transform.x, y: transform.y });
+        const transform = zoom ? { x: 0, y: 0, scale: 1 } : getTransform(startAngle, endAngle, radius + gap / 2);
+        setTransform(transform);
+        setZoom((prev) => !prev);
     };
 
     const radiuses = getRadiusListEqualSquare(ringNames.length, radius);
@@ -82,7 +82,7 @@ const RadarSector: FC<Props> = ({
         <g
             onClick={onClickHandler}
             className={styles.animated}
-            transform={`translate(${translate.x} ${translate.y}) scale(${scale})  `}
+            transform={`translate(${transform.x} ${transform.y}) scale(${transform.scale})  `}
         >
             <path
                 id={`curve-${sectorName}`}
