@@ -2,20 +2,33 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 interface ActiveSectorState {
-    id: number | null;
+    activeSectorName: string | null;
+    hoveredSectorName: string | null;
 }
 
-const initialState: ActiveSectorState = { id: null };
+const initialState: ActiveSectorState = { activeSectorName: null, hoveredSectorName: null };
 
 export const activeSectorSlice = createSlice({
     name: 'activeSector',
     initialState,
     reducers: {
-        setActiveSector: (state, action: PayloadAction<number>) => ({ id: action.payload }),
-        clearActiveSector: () => ({ id: null }),
+        setActiveSector: (state, action: PayloadAction<string>) => ({
+            hoveredSectorName: null,
+            activeSectorName: action.payload,
+        }),
+
+        setHoveredSector: (state, action: PayloadAction<string>) => ({
+            ...state,
+            hoveredSectorName: action.payload,
+        }),
+        disableHoveredSector: (state) => ({
+            ...state,
+            hoveredSectorName: null,
+        }),
+        clearActiveSector: () => ({ activeSectorName: null, hoveredSectorName: null }),
     },
 });
 
-export const { setActiveSector, clearActiveSector } = activeSectorSlice.actions;
+export const { setActiveSector, setHoveredSector, disableHoveredSector, clearActiveSector } = activeSectorSlice.actions;
 
 export default activeSectorSlice.reducer;

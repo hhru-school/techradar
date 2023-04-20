@@ -1,6 +1,13 @@
 import { FC, useState } from 'react';
 import * as d3 from 'd3-color';
 
+import {
+    clearActiveSector,
+    disableHoveredSector,
+    setActiveSector,
+    setHoveredSector,
+} from '../../store/activeSectorSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import RadarSegment from './RadarSegment';
 import { sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
 import { Blip, Segment, Transform } from './types';
@@ -16,7 +23,6 @@ type Props = {
     sweepAngle: number;
     baseColor: string;
     blipRadius: number;
-
     svgRadius?: number;
     gap?: number;
     data?: Blip[] | null;
@@ -31,21 +37,37 @@ const RadarSector: FC<Props> = ({
     sweepAngle,
     baseColor,
     blipRadius,
-
     data = null,
     seed = 0,
     gap = 0,
 }) => {
     const endAngle = startAngle + sweepAngle;
 
-    const [transform, setTransform] = useState<Transform>({ x: 0, y: 0, scale: 1 });
+    const hoveredSector = useAppSelector((state) => state.activeSector.hoveredSectorName);
+    const activeSector = useAppSelector((state) => state.activeSector.activeSectorName);
 
+    const dispatch = useAppDispatch();
+
+    const [transform, setTransform] = useState<Transform>({ x: 0, y: 0, scale: 1 });
     const [zoom, setZoom] = useState(false);
 
     const onClickHandler = () => {
         const transform = zoom ? { x: 0, y: 0, scale: 1 } : getTransform(startAngle, endAngle, radius + gap / 2);
         setTransform(transform);
         setZoom((prev) => !prev);
+        if (activeSector) {
+            dispatch(clearActiveSector());
+        } else {
+            dispatch(setActiveSector(sectorName));
+        }
+    };
+
+    const onMouseEnterHandler = () => {
+        dispatch(setHoveredSector(sectorName));
+    };
+
+    const onMouseLeaveHandler = () => {
+        dispatch(disableHoveredSector());
     };
 
     const radiuses = getRadiusListEqualSquare(ringNames.length, radius);
@@ -81,8 +103,13 @@ const RadarSector: FC<Props> = ({
     return (
         <g
             onClick={onClickHandler}
+            onMouseEnter={onMouseEnterHandler}
+            onMouseLeave={onMouseLeaveHandler}
             className={styles.animated}
-            transform={`translate(${transform.x} ${transform.y}) scale(${transform.scale})  `}
+            transform={`translate(${transform.x} ${transform.y}) scale(${transform.scale})`}
+            opacity={hoveredSector && hoveredSector !== sectorName ? 0.5 : 1}
+            visibility={activeSector && activeSector !== sectorName ? 'hidden' : 'auto'}
+            cursor="pointer"
         >
             <path
                 id={`curve-${sectorName}`}
