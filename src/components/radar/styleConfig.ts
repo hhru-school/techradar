@@ -19,6 +19,8 @@ const colors = [
     'rgb(68, 168, 195)',
 ];
 
+export const defaultRadarRadius = 300;
+
 export const defaultColorScheme = colors;
 
 export const textOffsetY = 2;

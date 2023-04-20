@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import * as d3 from 'd3-color';
 
 import {
@@ -10,7 +10,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import RadarSegment from './RadarSegment';
 import { sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
-import { Blip, Segment, Transform } from './types';
+import { Blip, Segment } from './types';
 import { buildArc, getRadiusListEqualSquare, getTransform } from './utils';
 
 import styles from './radar.module.less';
@@ -48,13 +48,12 @@ const RadarSector: FC<Props> = ({
 
     const dispatch = useAppDispatch();
 
-    const [transform, setTransform] = useState<Transform>({ x: 0, y: 0, scale: 1 });
-    const [zoom, setZoom] = useState(false);
+    const transform =
+        activeSector && activeSector === sectorName
+            ? getTransform(startAngle, endAngle, radius + gap / 2)
+            : { x: 0, y: 0, scale: 1 };
 
     const onClickHandler = () => {
-        const transform = zoom ? { x: 0, y: 0, scale: 1 } : getTransform(startAngle, endAngle, radius + gap / 2);
-        setTransform(transform);
-        setZoom((prev) => !prev);
         if (activeSector) {
             dispatch(clearActiveSector());
         } else {
@@ -108,7 +107,7 @@ const RadarSector: FC<Props> = ({
             className={styles.animated}
             transform={`translate(${transform.x} ${transform.y}) scale(${transform.scale})`}
             opacity={hoveredSector && hoveredSector !== sectorName ? 0.5 : 1}
-            visibility={activeSector && activeSector !== sectorName ? 'hidden' : 'auto'}
+            visibility={activeSector && activeSector !== sectorName ? 'hidden' : 'visible'}
             cursor="pointer"
         >
             <path
