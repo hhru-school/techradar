@@ -28,3 +28,9 @@ export interface Blip {
     sectorName: string;
     description: string;
 }
+
+export interface Transform {
+    x: number;
+    y: number;
+    scale: number;
+}

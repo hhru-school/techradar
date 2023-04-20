@@ -1,10 +1,10 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import * as d3 from 'd3-color';
 
 import RadarSegment from './RadarSegment';
 import { sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
 import { Blip, Segment } from './types';
-import { buildArc, getRadiusListEqualSquare } from './utils';
+import { buildArc, getRadiusListEqualSquare, getTransform } from './utils';
 
 import styles from './radar.module.less';
 
@@ -16,6 +16,8 @@ type Props = {
     sweepAngle: number;
     baseColor: string;
     blipRadius: number;
+
+    svgRadius?: number;
     gap?: number;
     data?: Blip[] | null;
     seed?: number;
@@ -29,10 +31,23 @@ const RadarSector: FC<Props> = ({
     sweepAngle,
     baseColor,
     blipRadius,
+
     data = null,
     seed = 0,
     gap = 0,
 }) => {
+    const endAngle = startAngle + sweepAngle;
+
+    const [scale, setScale] = useState(1);
+    const [translate, setTranslate] = useState({ x: 0, y: 0 });
+
+    const onClickHandler = () => {
+        const transform = getTransform(startAngle, endAngle, radius + gap / 2);
+
+        setScale((prev) => (prev === 1 ? transform.scale : 1));
+        setTranslate({ x: transform.x, y: transform.y });
+    };
+
     const radiuses = getRadiusListEqualSquare(ringNames.length, radius);
 
     const segments = radiuses.map((ring, i) => {
@@ -40,7 +55,7 @@ const RadarSector: FC<Props> = ({
             innerRadius: ring.innerRadius,
             outerRadius: ring.outerRadius,
             startAngle,
-            endAngle: startAngle + sweepAngle,
+            endAngle,
         };
         const id = `${sectorName}-${ringNames[i]}`.toLowerCase();
         return (
@@ -64,7 +79,11 @@ const RadarSector: FC<Props> = ({
     });
 
     return (
-        <g>
+        <g
+            onClick={onClickHandler}
+            className={styles.animated}
+            transform={`translate(${translate.x} ${translate.y}) scale(${scale})  `}
+        >
             <path
                 id={`curve-${sectorName}`}
                 fill="transparent"
@@ -77,7 +96,6 @@ const RadarSector: FC<Props> = ({
                     className={styles.sectorName}
                     startOffset="50%"
                 >
-                    {' '}
                     <tspan dy={-sectorNameTextOffset}>{sectorName}</tspan>
                 </textPath>
             </text>

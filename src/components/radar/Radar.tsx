@@ -25,11 +25,11 @@ const Radar: FC<Props> = ({
     blipRadus: blipRadius = defaultBlipRadius,
 }) => {
     const sweepAngle = (2 * Math.PI) / sectorNames.length;
+    const ofst = getOffset(gap, sweepAngle);
+    const svgRadius = radius + ofst + sectorNameFontSize + sectorNameTextOffset;
 
     let currentAngle = 0;
 
-    const ofst = getOffset(gap, sweepAngle);
-    const svgRadius = radius + ofst + sectorNameFontSize + sectorNameTextOffset;
     const sectors = sectorNames.map((sectorName, i) => {
         const ofstXY = getOffsetXY(gap, currentAngle, sweepAngle);
 
@@ -46,6 +46,7 @@ const Radar: FC<Props> = ({
                     data={data && data.filter((item) => item.sectorName === sectorName)}
                     seed={i}
                     gap={gap}
+                    svgRadius={svgRadius}
                     blipRadius={blipRadius}
                 />
             </g>
@@ -54,9 +55,9 @@ const Radar: FC<Props> = ({
 
         return sector;
     });
-
+    // viewBox={`0 0 ${svgRadius * 2} ${svgRadius * 2}`}
     return (
-        <svg width={svgRadius * 2} height={svgRadius * 2} viewBox={`0 0 ${svgRadius * 2} ${svgRadius * 2}`}>
+        <svg width={svgRadius * 2} height={svgRadius * 2}>
             {sectors}
             Sorry, your browser does not support inline SVG.
         </svg>
