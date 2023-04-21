@@ -21,7 +21,7 @@ export const activeSectorSlice = createSlice({
             ...state,
             hoveredSectorName: action.payload,
         }),
-        disableHoveredSector: (state) => ({
+        clearHoveredSector: (state) => ({
             ...state,
             hoveredSectorName: null,
         }),
@@ -29,6 +29,6 @@ export const activeSectorSlice = createSlice({
     },
 });
 
-export const { setActiveSector, setHoveredSector, disableHoveredSector, clearActiveSector } = activeSectorSlice.actions;
+export const { setActiveSector, setHoveredSector, clearHoveredSector, clearActiveSector } = activeSectorSlice.actions;
 
 export default activeSectorSlice.reducer;

@@ -3,7 +3,7 @@ import * as d3 from 'd3-color';
 
 import {
     clearActiveSector,
-    disableHoveredSector,
+    clearHoveredSector,
     setActiveSector,
     setHoveredSector,
 } from '../../store/activeSectorSlice';
@@ -66,7 +66,7 @@ const RadarSector: FC<Props> = ({
     };
 
     const onMouseLeaveHandler = () => {
-        dispatch(disableHoveredSector());
+        dispatch(clearHoveredSector());
     };
 
     const radiuses = getRadiusListEqualSquare(ringNames.length, radius);

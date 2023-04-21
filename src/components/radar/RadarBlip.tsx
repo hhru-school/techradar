@@ -33,9 +33,18 @@ const RadarBlip: FC<Props> = ({ id, name, x, y, r }) => {
         setOpen(false);
     };
 
+    const onClickHandler = (event: React.SyntheticEvent) => {
+        event.stopPropagation();
+    };
+
     return (
         <Tooltip open={open || isActive} title={name} arrow>
-            <g className={classes} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}>
+            <g
+                className={classes}
+                onMouseEnter={mouseEnterHandler}
+                onMouseLeave={mouseLeaveHandler}
+                onClick={onClickHandler}
+            >
                 <circle cx={x} cy={y} r={r}></circle>
                 <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" className={styles.blipText}>
                     {id}
