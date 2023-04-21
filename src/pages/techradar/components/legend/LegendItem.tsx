@@ -1,7 +1,6 @@
 import { FC } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 
-import { clearActiveBlip, setActiveBlip } from '../../../../store/activeBlipSlice';
+import { clearActiveBlip, setActiveBlip, setOpenDescription } from '../../../../store/activeBlipSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 
 import styles from './legend.module.less';
@@ -10,7 +9,7 @@ type Props = { id: number; name: string; description?: string };
 
 const LegendItem: FC<Props> = ({ id, name, description = '' }) => {
     const activeId = useAppSelector((state) => state.activeBlip.id);
-
+    const isOpen = useAppSelector((state) => state.activeBlip.openDescription);
     const dispatch = useAppDispatch();
 
     const mouseEnterHandler = () => {
@@ -21,16 +20,27 @@ const LegendItem: FC<Props> = ({ id, name, description = '' }) => {
         dispatch(clearActiveBlip());
     };
 
+    const onClickHandler = () => {
+        dispatch(setOpenDescription(!isOpen));
+    };
+
+    const display = activeId === id && isOpen ? 'block' : 'none';
+
     return (
-        <li
-            className={activeId === id ? `${styles.itemActive} ${styles.item}` : styles.item}
-            onMouseEnter={mouseEnterHandler}
-            onMouseLeave={mouseLeaveHandler}
-        >
-            <Accordion style={{ boxShadow: 'none', padding: 0 }}>
-                <AccordionSummary style={{ padding: 0 }}>{`${id}. ${name}`}</AccordionSummary>
-                <AccordionDetails>{description}</AccordionDetails>
-            </Accordion>
+        <li className={styles.item} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}>
+            <div
+                onClick={onClickHandler}
+                className={
+                    activeId === id
+                        ? `${styles.accordionSummaryActive} ${styles.accordionSummary}`
+                        : styles.accordionSummary
+                }
+            >
+                {`${id}. ${name}`}
+            </div>
+            <div className={styles.accordionDescription} style={{ display }}>
+                {description}
+            </div>
         </li>
     );
 };

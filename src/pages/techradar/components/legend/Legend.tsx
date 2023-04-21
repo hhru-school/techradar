@@ -21,6 +21,7 @@ const Legend: FC<Props> = ({ blips, ringNames, sectorNames, colorScheme }) => {
         if (activeSector && activeSector !== sectorName) return null;
         return (
             <LegendSectorGroup
+                key={sectorName}
                 blips={blips.filter((blip) => blip.sectorName === sectorName)}
                 sectorName={sectorName}
                 ringNames={ringNames}

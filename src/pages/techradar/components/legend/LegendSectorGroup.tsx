@@ -9,7 +9,7 @@ type Props = { blips: Blip[]; sectorName: string; ringNames: string[]; color: st
 
 const LegendSectorGroup: FC<Props> = ({ blips, sectorName, ringNames, color, opacity }) => {
     const ringGroups = ringNames.map((ringName) => (
-        <li>
+        <li key={ringName}>
             <LegendRingGroup blips={blips.filter((blip) => blip.ringName === ringName)} ringName={ringName} />
         </li>
     ));

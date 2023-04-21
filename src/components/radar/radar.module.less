@@ -30,8 +30,8 @@
     stroke: @blip-color;
     color: @blip-color;
     pointer-events: all;
-    &Active,
-    &:hover {
+
+    &Active {
         cursor: pointer;
         stroke: @blip-hover;
         color: @blip-hover;
@@ -41,7 +41,8 @@
 
 .blipText {
     fill: @blip-color;
-    font: bold 10px sans-serif;
+    font-weight: bold;
+    font-family: sans-serif;
     stroke: none;
 }
 

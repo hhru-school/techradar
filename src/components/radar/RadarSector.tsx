@@ -94,7 +94,7 @@ const RadarSector: FC<Props> = ({
                 }
                 seed={seed}
                 gap={gap}
-                blipRadius={blipRadius}
+                blipRadius={blipRadius / transform.scale}
             />
         );
     });
@@ -107,7 +107,7 @@ const RadarSector: FC<Props> = ({
             className={styles.animated}
             transform={`translate(${transform.x} ${transform.y}) scale(${transform.scale})`}
             opacity={hoveredSector && hoveredSector !== sectorName ? 0.5 : 1}
-            visibility={activeSector && activeSector !== sectorName ? 'hidden' : 'visible'}
+            display={activeSector && activeSector !== sectorName ? 'none' : 'auto'}
             cursor="pointer"
         >
             <path

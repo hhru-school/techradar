@@ -9,7 +9,7 @@ type Props = { blips: Blip[]; ringName: string };
 
 const LegendRingGroup: FC<Props> = ({ blips, ringName }) => {
     const list = blips.map((blip) => {
-        return <LegendItem id={blip.id} name={blip.name} description={blip.description} />;
+        return <LegendItem key={blip.id} id={blip.id} name={blip.name} description={blip.description} />;
     });
 
     return (

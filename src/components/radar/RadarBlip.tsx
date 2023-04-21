@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Tooltip } from '@mui/material';
 
 import { clearActiveBlip, setActiveBlip } from '../../store/activeBlipSlice';
@@ -15,8 +15,6 @@ type Props = {
 };
 
 const RadarBlip: FC<Props> = ({ id, name, x, y, r }) => {
-    const [open, setOpen] = useState(false);
-
     const activeId = useAppSelector((state) => state.activeBlip.id);
     const dispatch = useAppDispatch();
 
@@ -25,12 +23,10 @@ const RadarBlip: FC<Props> = ({ id, name, x, y, r }) => {
 
     const mouseEnterHandler = () => {
         dispatch(setActiveBlip(id));
-        setOpen(true);
     };
 
     const mouseLeaveHandler = () => {
         dispatch(clearActiveBlip());
-        setOpen(false);
     };
 
     const onClickHandler = (event: React.SyntheticEvent) => {
@@ -38,15 +34,22 @@ const RadarBlip: FC<Props> = ({ id, name, x, y, r }) => {
     };
 
     return (
-        <Tooltip open={open || isActive} title={name} arrow>
+        <Tooltip open={isActive} title={name} arrow>
             <g
                 className={classes}
                 onMouseEnter={mouseEnterHandler}
                 onMouseLeave={mouseLeaveHandler}
                 onClick={onClickHandler}
             >
-                <circle cx={x} cy={y} r={r}></circle>
-                <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" className={styles.blipText}>
+                <circle cx={x} cy={y} r={r} strokeWidth={r / 8}></circle>
+                <text
+                    x={x}
+                    y={y}
+                    fontSize={`${0.7 * 2 * r}px`}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    className={styles.blipText}
+                >
                     {id}
                 </text>
             </g>
