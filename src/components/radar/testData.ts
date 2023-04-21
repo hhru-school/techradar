@@ -141,12 +141,12 @@ const getBlips = (numOfBlips: number): DataBlip[] => {
     return blips;
 };
 
-export const generateApiData = (numOfRings: number, numOfSectors: number, numOfBlips: number): ApiData => {
+export const generateApiData = (numOfBlips: number): ApiData => {
     return {
-        id: random(0, numOfSectors - 1),
+        id: random(0, random(0, 10000)),
         name: randomWord(8),
-        quadrants: getQuadrants(numOfSectors),
-        rings: getRings(numOfRings),
+        quadrants: getQuadrants(sectorNames.length),
+        rings: getRings(ringNames.length),
         blips: getBlips(numOfBlips),
     };
 };
