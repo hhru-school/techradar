@@ -1,15 +1,11 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Box, Button, Modal, Typography, TextField } from '@mui/material';
 import { Formik, FormikHelpers, Form, useField } from 'formik';
 import * as Yup from 'yup';
 
 import { styleModal } from '../../../../components/AuthFormModal/AuthFormModal';
-import {
-    createNewTech,
-    setTechCreateModalOpen,
-    // createNewRadarSection
-} from '../../../../store/dataSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import { createNewTech, setTechCreateModalOpen } from '../../../../store/myTechSlice';
 
 export interface ValuesTechModal {
     link: string;
@@ -45,12 +41,14 @@ const validSchema = Yup.object({
 
 const MyTechCreateModal: FC = () => {
     const dispatch = useAppDispatch();
-    const showTechCreateModal = useAppSelector((state) => state.data.showTechCreateModal);
+    const showTechCreateModal = useAppSelector((state) => state.myTech.showTechCreateModal);
+
+    const handleClose = useCallback(() => dispatch(setTechCreateModalOpen(false)), [dispatch]);
 
     return (
         <Modal
             open={showTechCreateModal}
-            onClose={() => dispatch(setTechCreateModalOpen(false))}
+            onClose={handleClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >

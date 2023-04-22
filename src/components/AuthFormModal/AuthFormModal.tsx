@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useCallback } from 'react';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
@@ -18,7 +18,7 @@ import {
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { setAuthFormOpen, setAuthFormData } from '../../store/dataSlice';
+import { setAuthFormData, setAuthFormOpen } from '../../store/authentificationSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 import './AuthFormModal.less';
@@ -42,8 +42,11 @@ const MyPassInput = ({ label, ...props }: InputProps) => {
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
     const [field, meta] = useField(props);
+
+    const hasError = Boolean(meta.touched && meta.error);
+
     return (
-        <FormControl variant="outlined" sx={{ marginTop: '20px' }} error={!!(meta.touched && meta.error)}>
+        <FormControl variant="outlined" sx={{ marginTop: '20px' }} error={!!hasError}>
             <InputLabel htmlFor={props.id}>{label}</InputLabel>
             <OutlinedInput
                 {...field}
@@ -62,7 +65,7 @@ const MyPassInput = ({ label, ...props }: InputProps) => {
                 }
                 label={label}
             />
-            {meta.touched && meta.error ? (
+            {hasError ? (
                 <p className="MuiFormHelperText-root MuiFormHelperText-sizeMedium MuiFormHelperText-contained error">
                     {meta.error}
                 </p>
@@ -96,7 +99,7 @@ export const styleModal = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    minWidth: 250,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -105,14 +108,18 @@ export const styleModal = {
 
 const AuthFormModal: FC = () => {
     const dispatch = useAppDispatch();
-    const showAuthentificationForm = useAppSelector((state) => state.data.showAuthentificationForm);
+    const showAuthentificationForm = useAppSelector((state) => state.authentification.showAuthentificationForm);
+
+    const handleClose = useCallback(() => {
+        dispatch(setAuthFormOpen(false));
+    }, [dispatch]);
 
     return (
         <Modal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
             open={showAuthentificationForm}
-            onClose={() => dispatch(setAuthFormOpen(false))}
+            onClose={handleClose}
             closeAfterTransition
             slots={{ backdrop: Backdrop }}
             slotProps={{

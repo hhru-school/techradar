@@ -1,4 +1,4 @@
-import { FC, useState, ReactElement } from 'react';
+import { FC, useState, ReactElement, useCallback } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
@@ -19,10 +19,10 @@ import {
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { setRadarConstrTechModalOpen } from '../../../store/dataSlice';
+import { setRadarConstrTechModalOpen } from '../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import AddTechModal from './AddTechModal/AddTechModal';
-import CercleInputs from './CercleInputs/CercleInputs';
+import CircleInputs from './CircleInputs/CircleInputs';
 import RadarConstructorGrid from './RadarConstructorGrid/RadarConstructorGrid';
 import RadarPublishBtn from './RadarPublishBtn/RadarPublishBtn';
 import SectorInputs from './SectorInputs/SectorInputs';
@@ -31,10 +31,10 @@ import './RadarConstructor.less';
 
 interface Values {
     radarName: string;
-    nameCercle1: string;
-    nameCercle2: string;
-    nameCercle3: string;
-    nameCercle4: string;
+    nameCircle1: string;
+    nameCircle2: string;
+    nameCircle3: string;
+    nameCircle4: string;
     nameSector1: string;
     nameSector2: string;
     nameSector3: string;
@@ -110,10 +110,10 @@ const RadarNameInput = ({ label, id, ...props }: RadarInput): ReactElement => {
 
 const formikInitValues = {
     radarName: '',
-    nameCercle1: '',
-    nameCercle2: '',
-    nameCercle3: '',
-    nameCercle4: '',
+    nameCircle1: '',
+    nameCircle2: '',
+    nameCircle3: '',
+    nameCircle4: '',
     nameSector1: '',
     nameSector2: '',
     nameSector3: '',
@@ -122,10 +122,10 @@ const formikInitValues = {
 
 const formikValid = Yup.object({
     radarName: Yup.string().required('Обязательное поле!'),
-    nameCercle1: Yup.string().required('Обязательное поле!'),
-    nameCercle2: Yup.string().required('Обязательное поле!'),
-    nameCercle3: Yup.string().required('Обязательное поле!'),
-    nameCercle4: Yup.string().required('Обязательное поле!'),
+    nameCircle1: Yup.string().required('Обязательное поле!'),
+    nameCircle2: Yup.string().required('Обязательное поле!'),
+    nameCircle3: Yup.string().required('Обязательное поле!'),
+    nameCircle4: Yup.string().required('Обязательное поле!'),
     nameSector1: Yup.string().required('Обязательное поле!'),
     nameSector2: Yup.string().required('Обязательное поле!'),
     nameSector3: Yup.string().required('Обязательное поле!'),
@@ -134,7 +134,9 @@ const formikValid = Yup.object({
 
 const RadarConstructor: FC = () => {
     const dispatch = useAppDispatch();
-    const showRadarConstrTechModal = useAppSelector((state) => state.data.showRadarConstrTechModal);
+    const showRadarConstrTechModal = useAppSelector((state) => state.constructorRadar.showRadarConstrTechModal);
+
+    const handleClick = useCallback(() => dispatch(setRadarConstrTechModalOpen(true)), [dispatch]);
 
     return (
         <Container maxWidth="xl">
@@ -151,7 +153,6 @@ const RadarConstructor: FC = () => {
                 <Form className="form">
                     <Grid
                         container
-                        sm={12}
                         spacing={3}
                         sx={{
                             display: 'flex',
@@ -177,11 +178,12 @@ const RadarConstructor: FC = () => {
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid container sm={12}>
-                        <Grid sm={8}>{/* РАДАР СУВАТЬ СЮДА */}</Grid>
+                    <Grid container>
+                        <Grid item sm={8}>
+                            {/* РАДАР СУВАТЬ СЮДА */}
+                        </Grid>
                         <Grid
                             item
-                            spacing={3}
                             sm={4}
                             sx={{
                                 width: '280px',
@@ -200,7 +202,7 @@ const RadarConstructor: FC = () => {
                                             <Typography>Кольца и секторы</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails sx={{ display: 'flex', flexDirection: 'row' }}>
-                                            <CercleInputs />
+                                            <CircleInputs />
                                             <SectorInputs />
                                         </AccordionDetails>
                                     </Accordion>
@@ -211,11 +213,7 @@ const RadarConstructor: FC = () => {
                                     <Typography sx={{ textAlign: 'center' }} variant="h5">
                                         Технологии
                                     </Typography>
-                                    <Button
-                                        onClick={() => dispatch(setRadarConstrTechModalOpen(true))}
-                                        variant="contained"
-                                        color={'success'}
-                                    >
+                                    <Button onClick={handleClick} variant="contained" color={'success'}>
                                         + Добавить
                                     </Button>
                                 </Box>

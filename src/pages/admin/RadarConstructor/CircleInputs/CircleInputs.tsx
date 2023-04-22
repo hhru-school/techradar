@@ -1,26 +1,26 @@
 import { FC, useMemo } from 'react';
 import { FormControl, InputLabel, List, NativeSelect, Typography } from '@mui/material';
 
-import { updateSectorCount } from '../../../../store/constructorRadarSlice';
+import { updateCircleCount } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { MyTextInput } from '../RadarConstructor';
 
 const optionsArr = [1, 2, 3, 4, 5, 6];
 
-const SectorInputs: FC = () => {
+const CircleInputs: FC = () => {
     const dispatch = useAppDispatch();
-    const countSectors = useAppSelector((state) => state.constructorRadar.countSectorInputs);
+    const countCircles = useAppSelector((state) => state.constructorRadar.countCircleInputs);
 
     const inputs = useMemo(
         () =>
-            new Array(countSectors).fill({}).map((_, index) => ({
-                label: `Сектор ${index + 1}`,
-                id: `name-sector-${index + 1}`,
-                name: `nameSector${index + 1}`,
+            new Array(countCircles).fill({}).map((_, index) => ({
+                label: `Кольцо ${index + 1}`,
+                id: `name-cercle-${index + 1}`,
+                name: `nameCercle${index + 1}`,
                 type: 'text',
                 autoComplete: 'on',
             })),
-        [countSectors]
+        [countCircles]
     );
 
     return (
@@ -33,14 +33,14 @@ const SectorInputs: FC = () => {
             }}
         >
             <Typography sx={{ margin: '0 0 10px 9px' }} variant="h5">
-                Секторы
+                Кольца
             </Typography>
             <FormControl sx={{ width: '130px', marginLeft: '9px' }}>
                 <InputLabel variant="standard" htmlFor="Circles-count">
-                    Количество
+                    Количество колец
                 </InputLabel>
                 <NativeSelect
-                    onChange={(e) => dispatch(updateSectorCount(+e.target.value))}
+                    onChange={(e) => dispatch(updateCircleCount(+e.target.value))}
                     defaultValue={4}
                     inputProps={{
                         name: 'Circles-count',
@@ -56,20 +56,18 @@ const SectorInputs: FC = () => {
                     })}
                 </NativeSelect>
             </FormControl>
-            {inputs.map((item, i) => {
-                return (
-                    <MyTextInput
-                        key={i}
-                        label={item.label}
-                        id={item.id}
-                        name={item.name}
-                        type={item.type}
-                        autoComplete={item.autoComplete}
-                    />
-                );
-            })}
+            {inputs.map((item, i) => (
+                <MyTextInput
+                    key={i}
+                    label={item.label}
+                    id={item.id}
+                    name={item.name}
+                    type={item.type}
+                    autoComplete={item.autoComplete}
+                />
+            ))}
         </List>
     );
 };
 
-export default SectorInputs;
+export default CircleInputs;

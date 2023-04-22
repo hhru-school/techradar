@@ -19,7 +19,7 @@ import Typography from '@mui/material/Typography';
 import {
     // setAuthFormOpen,
     setAuthFormData,
-} from '../../store/dataSlice';
+} from '../../store/authentificationSlice';
 import {
     useAppDispatch,
     // useAppSelector

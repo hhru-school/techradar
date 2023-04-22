@@ -4,8 +4,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Box } from '@mui/material';
 import { DataGrid, GridColDef, ruRU, GridRenderCellParams, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 
-import { updateTechGrid } from '../../../../store/dataSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import { updateTechGrid } from '../../../../store/myTechSlice';
 
 export interface RowTech {
     id: number | string;
@@ -19,7 +19,7 @@ export type GridTech = Array<RowTech>;
 
 const MyTechDataGrid: FC = () => {
     const dispatch = useAppDispatch();
-    const rows = useAppSelector((state) => state.data.techGrid);
+    const rows = useAppSelector((state) => state.myTech.techGrid);
 
     const deleteRow = useCallback(
         (id: GridRowId) => {

@@ -1,15 +1,15 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Box, Button, Modal, Typography, TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { Formik, FormikHelpers, Form, useField } from 'formik';
 import * as Yup from 'yup';
 
 import { styleModal } from '../../../../components/AuthFormModal/AuthFormModal';
-import { setRadarConstrTechModalOpen, updateRadarConstrTechGrid } from '../../../../store/dataSlice';
+import { setRadarConstrTechModalOpen, updateRadarConstrTechGrid } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 
 type AddTechModalData = {
     techName: string;
-    cercle: number;
+    Circle: number;
     sector: number;
 };
 
@@ -35,23 +35,15 @@ const MyTextInput = (props: PropsInput) => {
     );
 };
 
-const renderItems = (count: number) => {
-    const arr = [];
-    for (let i = 1; i < count + 1; i++) {
-        arr.push(<MenuItem value={i}>{i}</MenuItem>);
-    }
-    return arr;
-};
-
 const MySelectInput = ({ label, countItems, ...props }: PropsSelectInput) => {
     const [field, meta] = useField(props);
     return (
         <FormControl sx={{ marginTop: '20px' }}>
             <InputLabel id="demo-simple-select-label">{label}</InputLabel>
             <Select {...props} {...field} labelId="demo-simple-select-label" id="demo-simple-select" label={label}>
-                {renderItems(countItems).map((item) => {
-                    return item;
-                })}
+                {new Array(countItems).fill({}).map((_, i) => (
+                    <MenuItem value={i + 1}>{i + 1}</MenuItem>
+                ))}
             </Select>
             {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
         </FormControl>
@@ -60,20 +52,22 @@ const MySelectInput = ({ label, countItems, ...props }: PropsSelectInput) => {
 
 const validSchema = Yup.object({
     techName: Yup.string().required('Обязательное поле!'),
-    cercle: Yup.number().required('Обязательное поле!'),
+    Circle: Yup.number().required('Обязательное поле!'),
     sector: Yup.number().required('Обязательное поле!'),
 });
 
 const AddTechModal: FC = () => {
     const dispatch = useAppDispatch();
-    const showRadarConstrTechModal = useAppSelector((state) => state.data.showRadarConstrTechModal);
-    const countSectors = useAppSelector((state) => state.data.countSectorInputs);
-    const countCercles = useAppSelector((state) => state.data.countCercleInputs);
+    const showRadarConstrTechModal = useAppSelector((state) => state.constructorRadar.showRadarConstrTechModal);
+    const countSectors = useAppSelector((state) => state.constructorRadar.countSectorInputs);
+    const countCircles = useAppSelector((state) => state.constructorRadar.countCircleInputs);
+
+    const handleClose = useCallback(() => dispatch(setRadarConstrTechModalOpen(false)), [dispatch]);
 
     return (
         <Modal
             open={showRadarConstrTechModal}
-            onClose={() => dispatch(setRadarConstrTechModalOpen(false))}
+            onClose={handleClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
@@ -84,7 +78,7 @@ const AddTechModal: FC = () => {
                 <Formik
                     initialValues={{
                         techName: '',
-                        cercle: 1,
+                        Circle: 1,
                         sector: 1,
                     }}
                     validationSchema={validSchema}
@@ -97,7 +91,7 @@ const AddTechModal: FC = () => {
                     {({ isSubmitting }) => (
                         <Form className="form auth-form">
                             <MyTextInput label="Название" name="techName" placeholder="Введите название" />
-                            <MySelectInput label="Кольцо" name="cercle" countItems={countCercles} />
+                            <MySelectInput label="Кольцо" name="Circle" countItems={countCircles} />
                             <MySelectInput label="Сектор" name="sector" countItems={countSectors} />
                             <Button
                                 disabled={isSubmitting}

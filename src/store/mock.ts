@@ -17,7 +17,7 @@ interface State {
     techGrid: GridTech;
     radarGrid: GridRadarObj;
     radarConstructorGrid: GridRadarConstructor;
-    countCercleInputs: number;
+    countCircleInputs: number;
     countSectorInputs: number;
     showAuthentificationForm: boolean;
     showRadarsCreateModal: boolean;
@@ -57,15 +57,15 @@ export const initialState: State = {
         },
         {
             label: 'Недостатки',
-            id: 'cercle-count',
-            name: 'cercle-count',
+            id: 'Circle-count',
+            name: 'Circle-count',
             type: 'text',
             autoComplete: 'off',
         },
         {
             label: 'Комментарий',
-            id: 'name-cercle',
-            name: 'name-cercle-1',
+            id: 'name-Circle',
+            name: 'name-Circle-1',
             type: 'text',
             autoComplete: 'off',
         },
@@ -99,19 +99,19 @@ export const initialState: State = {
         {
             id: 1,
             techName: 'babel',
-            cercle: 1,
+            Circle: 1,
             sector: 2,
         },
         {
             id: 2,
             techName: 'react',
-            cercle: 3,
+            Circle: 3,
             sector: 4,
         },
         {
             id: 3,
             techName: 'JS',
-            cercle: 2,
+            Circle: 2,
             sector: 4,
         },
     ],
@@ -192,6 +192,6 @@ export const initialState: State = {
     showRadarsCreateModal: false,
     showTechCreateModal: false,
     showRadarConstrTechModal: false,
-    countCercleInputs: 4,
+    countCircleInputs: 4,
     countSectorInputs: 4,
 };

@@ -1,11 +1,11 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Box, Button, Modal, Typography, TextField } from '@mui/material';
 import { Formik, FormikHelpers, Form, useField, FieldHookConfig } from 'formik';
 import * as Yup from 'yup';
 
 import { styleModal } from '../../../../components/AuthFormModal/AuthFormModal';
-import { setRadarsCreateModalOpen, createNewRadarSection } from '../../../../store/dataSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import { createNewRadarSection, setRadarsCreateModalOpen } from '../../../../store/myRadarsSlice';
 
 export interface Values {
     name: string;
@@ -40,12 +40,14 @@ const validSchema = Yup.object({
 
 const MyRadarCreateModal: FC = () => {
     const dispatch = useAppDispatch();
-    const showRadarsCreateModal = useAppSelector((state) => state.data.showRadarsCreateModal);
+    const showRadarsCreateModal = useAppSelector((state) => state.myRadars.showRadarsCreateModal);
+
+    const handleClose = useCallback(() => dispatch(setRadarsCreateModalOpen(false)), [dispatch]);
 
     return (
         <Modal
             open={showRadarsCreateModal}
-            onClose={() => dispatch(setRadarsCreateModalOpen(false))}
+            onClose={handleClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >

@@ -1,43 +1,31 @@
-import { FC, SyntheticEvent, useState, useEffect, useCallback } from 'react';
+import { FC, SyntheticEvent, useState, useMemo, useCallback } from 'react';
 import { Routes, Route } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Typography, Box, Container, Tab, Tabs, Button } from '@mui/material';
 
-import { setRadarsCreateModalOpen } from '../../../store/dataSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { setRadarsCreateModalOpen } from '../../../store/myRadarsSlice';
 import MyRadarCreateModal from './MyRadarCreateModal/MyRadarCreateModal';
 import MyRadarsDataGrid from './MyRadarsDataGrid/MyRadarsDataGrid';
 
 import './MyRadars.less';
 
 type Tab = { id: number; label: string };
-type TabsList = Array<Tab>;
 
 const MyRadar: FC = () => {
     const dispatch = useAppDispatch();
-    const radarGrid = useAppSelector((state) => state.data.radarGrid);
-    const showRadarsCreateModal = useAppSelector((state) => state.data.showRadarsCreateModal);
+    const radarGrid = useAppSelector((state) => state.myRadars.radarGrid);
+    const showRadarsCreateModal = useAppSelector((state) => state.myRadars.showRadarsCreateModal);
 
-    const [tabsBtn, setTabsBtn] = useState<TabsList>([{ id: 1, label: 'ошибка' }]);
     const [value, setValue] = useState<number>(0);
 
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
-    const refreshTabs = useCallback(() => {
-        const arrTabs = [];
-        let count = 0;
-        for (const key in radarGrid) {
-            arrTabs.push({ id: count, label: key });
-            count += 1;
-        }
-        setTabsBtn(arrTabs);
-    }, [radarGrid]);
+    const tabs = useMemo(() => Object.keys(radarGrid).map((key, index) => ({ id: index, label: key })), [radarGrid]);
 
-    useEffect(() => {
-        refreshTabs();
-    }, [radarGrid, refreshTabs]);
+    const handleClick = useCallback(() => dispatch(setRadarsCreateModalOpen(true)), [dispatch]);
 
     return (
         <Container maxWidth="xl">
@@ -50,14 +38,14 @@ const MyRadar: FC = () => {
                     variant="scrollable"
                     allowScrollButtonsMobile
                 >
-                    {tabsBtn.map((item, i) => {
+                    {tabs.map((item, i) => {
                         return (
                             <Tab
                                 key={i}
                                 sx={{ minHeight: '48px' }}
                                 label={item.label}
                                 icon={
-                                    <Link key={item.id} to={`grid/${item.label.split(' ')[0]}`} className="tab-link">
+                                    <Link key={item.id} to={`grid/${item.label.split(' ')[0]}`} id={'tab-link'}>
                                         {item.label}
                                     </Link>
                                 }
@@ -65,7 +53,7 @@ const MyRadar: FC = () => {
                         );
                     })}
                     <Button
-                        onClick={() => dispatch(setRadarsCreateModalOpen(true))}
+                        onClick={handleClick}
                         variant="outlined"
                         color="secondary"
                         sx={{ height: '25px', mt: '11px' }}

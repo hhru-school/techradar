@@ -1,4 +1,4 @@
-import { FC, useEffect, useCallback, useState } from 'react';
+import { FC, useMemo } from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Box } from '@mui/material';
@@ -60,42 +60,40 @@ const columns: GridColDef[] = [
     },
 ];
 
-const MyRadarsDataGrid: FC = () => {
-    const rows = useAppSelector((state) => state.data.radarGrid);
-    const { rowsId } = useParams();
-    const [grid, setGrid] = useState<GridRadar>([
-        {
-            id: 1,
-            radarName: 'ошибка',
-            relevantAt: 'ошибка',
-            lastUpdate: 'ошибка',
-            status: 'ошибка',
+const initialState = {
+    pagination: {
+        paginationModel: {
+            pageSize: 10,
         },
-    ]);
+    },
+};
 
-    const updateRows = useCallback(() => {
-        if (typeof rowsId === 'string') {
-            return setGrid(rows[rowsId]);
-        }
-        return setGrid(grid);
-    }, [rowsId, grid, rows]);
+const MyRadarsDataGrid: FC = () => {
+    const rows = useAppSelector((state) => state.myRadars.radarGrid);
+    const { rowsId } = useParams();
 
-    useEffect(() => {
-        updateRows();
-    }, [rowsId, updateRows]);
+    const gridRows = useMemo(
+        () =>
+            typeof rowsId === 'string'
+                ? rows[rowsId]
+                : [
+                      {
+                          id: 1,
+                          radarName: 'ошибка',
+                          relevantAt: 'ошибка',
+                          lastUpdate: 'ошибка',
+                          status: 'ошибка',
+                      },
+                  ],
+        [rows, rowsId]
+    );
 
     return (
         <Box sx={{ height: 'calc(100vh - 240px)', width: '100%' }}>
             <DataGrid
-                rows={grid}
+                rows={gridRows}
                 columns={columns}
-                initialState={{
-                    pagination: {
-                        paginationModel: {
-                            pageSize: 10,
-                        },
-                    },
-                }}
+                initialState={initialState}
                 pageSizeOptions={[5]}
                 disableRowSelectionOnClick
                 localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}

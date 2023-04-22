@@ -3,22 +3,30 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Box } from '@mui/material';
 import { DataGrid, GridColDef, ruRU, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 
-import { updateRadarConstrGrid } from '../../../../store/dataSlice';
+import { updateRadarConstrGrid } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 
 export interface RowRadarConstructor {
     id: number | string;
     techName: string;
-    cercle: number;
+    Circle: number;
     sector: number;
 }
 export type GridRadarConstructor = Array<RowRadarConstructor>;
 
+const initialState = {
+    pagination: {
+        paginationModel: {
+            pageSize: 10,
+        },
+    },
+};
+
 const RadarConstructorGrid: FC = () => {
     const dispatch = useAppDispatch();
-    const rows = useAppSelector((state) => state.data.radarConstructorGrid);
-    const countSectors = useAppSelector((state) => state.data.countSectorInputs);
-    const countCercles = useAppSelector((state) => state.data.countCercleInputs);
+    const rows = useAppSelector((state) => state.constructorRadar.radarConstructorGrid);
+    const countSectors = useAppSelector((state) => state.constructorRadar.countSectorInputs);
+    const countCircles = useAppSelector((state) => state.constructorRadar.countCircleInputs);
 
     const deleteRow = useCallback(
         (id: GridRowId) => {
@@ -45,13 +53,13 @@ const RadarConstructorGrid: FC = () => {
                 editable: true,
             },
             {
-                field: 'cercle',
+                field: 'Circle',
                 headerName: 'Кольцо',
                 type: 'singleSelect',
                 width: 100,
                 editable: true,
                 valueOptions: () => {
-                    return counter(countCercles);
+                    return counter(countCircles);
                 },
             },
             {
@@ -73,7 +81,7 @@ const RadarConstructorGrid: FC = () => {
                 ],
             },
         ],
-        [deleteRow, countCercles, countSectors]
+        [deleteRow, countCircles, countSectors]
     );
 
     return (
@@ -81,13 +89,7 @@ const RadarConstructorGrid: FC = () => {
             <DataGrid
                 rows={rows}
                 columns={columns}
-                initialState={{
-                    pagination: {
-                        paginationModel: {
-                            pageSize: 10,
-                        },
-                    },
-                }}
+                initialState={initialState}
                 pageSizeOptions={[5]}
                 disableRowSelectionOnClick
                 localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
