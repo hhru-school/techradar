@@ -55,9 +55,9 @@ const Radar: FC<Props> = ({
 
         return sector;
     });
-    // viewBox={`0 0 ${svgRadius * 2} ${svgRadius * 2}`}
+
     return (
-        <svg width={svgRadius * 2} height={svgRadius * 2}>
+        <svg viewBox={`0 0 ${svgRadius * 2} ${svgRadius * 2}`} width={svgRadius * 2} height={svgRadius * 2}>
             {sectors}
             Sorry, your browser does not support inline SVG.
         </svg>

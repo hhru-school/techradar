@@ -84,6 +84,7 @@ export const sectorNames = [
     'Trust & Cybersecurity',
     'Digital Business & Products',
     'Data-driven Intelligence',
+
     // 'bla bla bla',
     // 'sfafsfsf',
     // 'dsadasdadsa',

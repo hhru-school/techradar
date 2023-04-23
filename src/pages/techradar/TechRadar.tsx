@@ -8,7 +8,7 @@ import TechRadarLayout from './components/TechRadarLayout';
 import SectorControlPanel from './components/controls/SectorControlPanel';
 import Legend from './components/legend/Legend';
 
-const apiData = generateApiData(30);
+const apiData = generateApiData(80);
 const data = formatApiData(apiData);
 
 const TechRadar: FC = () => {

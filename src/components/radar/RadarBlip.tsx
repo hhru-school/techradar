@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Tooltip } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip/Tooltip';
 
 import { clearActiveBlip, setActiveBlip } from '../../store/activeBlipSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -16,9 +16,12 @@ type Props = {
 
 const RadarBlip: FC<Props> = ({ id, name, x, y, r }) => {
     const activeId = useAppSelector((state) => state.activeBlip.id);
+    const isTransforming = useAppSelector((state) => state.activeSector.isTransforming);
+
     const dispatch = useAppDispatch();
 
     const isActive = activeId === id;
+
     const classes = isActive ? `${styles.blip} ${styles.blipActive}` : styles.blip;
 
     const mouseEnterHandler = () => {
@@ -34,7 +37,7 @@ const RadarBlip: FC<Props> = ({ id, name, x, y, r }) => {
     };
 
     return (
-        <Tooltip open={isActive} title={name} arrow>
+        <Tooltip key={activeId} open={isActive && !isTransforming} title={name} arrow>
             <g
                 className={classes}
                 onMouseEnter={mouseEnterHandler}

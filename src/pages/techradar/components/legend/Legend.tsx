@@ -2,7 +2,7 @@ import { FC, SyntheticEvent } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 
 import { Blip } from '../../../../components/radar/types';
-import { setActiveBlip } from '../../../../store/activeBlipSlice';
+import { clearActiveBlip, setActiveBlip, setOpenDescription } from '../../../../store/activeBlipSlice';
 import { setActiveSector } from '../../../../store/activeSectorSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import LegendSectorGroup from './LegendSectorGroup';
@@ -10,6 +10,8 @@ import LegendSectorGroup from './LegendSectorGroup';
 import styles from './legend.module.less';
 
 type Props = { blips: Blip[]; ringNames: string[]; sectorNames: string[]; colorScheme: string[] };
+
+const suggestsHight = 150;
 
 const Legend: FC<Props> = ({ blips, ringNames, sectorNames, colorScheme }) => {
     const hoveredSector = useAppSelector((state) => state.activeSector.hoveredSectorName);
@@ -33,8 +35,10 @@ const Legend: FC<Props> = ({ blips, ringNames, sectorNames, colorScheme }) => {
 
     const onChangeHandler = (event: SyntheticEvent, value: Blip | null) => {
         if (value) {
+            dispatch(clearActiveBlip());
             dispatch(setActiveSector(value.sectorName));
             dispatch(setActiveBlip(value.id));
+            dispatch(setOpenDescription(true));
         }
     };
 
@@ -53,11 +57,13 @@ const Legend: FC<Props> = ({ blips, ringNames, sectorNames, colorScheme }) => {
                 renderInput={(params) => <TextField {...params} label="Search" variant="standard" />}
                 ListboxProps={{
                     style: {
-                        maxHeight: '150px',
+                        maxHeight: suggestsHight,
                     },
                 }}
             />
-            <div className={styles.legendContainer}>{sectorGroups}</div>
+            <div className={styles.legendContainer} style={{ marginTop: activeSector ? suggestsHight + 30 : 0 }}>
+                {sectorGroups}
+            </div>
         </div>
     );
 };

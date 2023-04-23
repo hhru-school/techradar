@@ -6,6 +6,7 @@ import {
     clearHoveredSector,
     setActiveSector,
     setHoveredSector,
+    setIsTransforming,
 } from '../../store/activeSectorSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import RadarSegment from './RadarSegment';
@@ -47,6 +48,10 @@ const RadarSector: FC<Props> = ({
     const activeSector = useAppSelector((state) => state.activeSector.activeSectorName);
 
     const dispatch = useAppDispatch();
+
+    const transitionEndHandler = () => {
+        dispatch(setIsTransforming(false));
+    };
 
     const transform =
         activeSector && activeSector === sectorName
@@ -109,6 +114,7 @@ const RadarSector: FC<Props> = ({
             opacity={hoveredSector && hoveredSector !== sectorName ? 0.5 : 1}
             display={activeSector && activeSector !== sectorName ? 'none' : 'auto'}
             cursor="pointer"
+            onTransitionEnd={transitionEndHandler}
         >
             <path
                 id={`curve-${sectorName}`}

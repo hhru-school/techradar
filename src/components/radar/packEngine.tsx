@@ -32,7 +32,7 @@ function packEntries(entries: Entry[], segment: Segment): Node[] {
     
     Согласно документациии https://github.com/d3/d3-force: 
 
-    # simulation.alpha([alpha]) · Source
+    # simulation.alpha([alpha])
     Alpha is roughly analogous to temperature in simulated annealing.
     It decreases over time as the simulation “cools down”.
     When alpha reaches alphaMin, the simulation stops; see simulation.restart.
@@ -48,14 +48,14 @@ function packEntries(entries: Entry[], segment: Segment): Node[] {
     The simulation’s internal timer stops when the current alpha is less than the minimum alpha.
     The default alpha decay rate of ~0.0228 corresponds to 300 iterations.
 
-    # simulation.alphaDecay([decay]) · Source
+    # simulation.alphaDecay([decay]) 
 
     If decay is specified, sets the alpha decay rate to the specified number 
     in the range [0,1] and returns this simulation.
     If decay is not specified, returns the current alpha decay rate,
      which defaults to 0.0228… = 1 - pow(0.001, 1 / 300) where 0.001 is the default minimum alpha.
 
-    Т.е. по факту, из формулы Math.log(simulation.alphaMin()) / Math.log(1 - simulation.alphaDecay()) 
+    Т.е., по факту, из формулы Math.log(simulation.alphaMin()) / Math.log(1 - simulation.alphaDecay()) 
     мы получаем число 300 - количество "кадров", которое нужно просчитать до "затухания" симуляции при 
     дефолтном минимальном пороговом знчении alphaMin([min]) со скоростью затухания alphaDecay([decay]).
 

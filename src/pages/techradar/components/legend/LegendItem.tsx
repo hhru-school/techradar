@@ -2,45 +2,41 @@ import { FC } from 'react';
 
 import { clearActiveBlip, setActiveBlip, setOpenDescription } from '../../../../store/activeBlipSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import DropDown from './DropDown';
 
-import styles from './legend.module.less';
+type Props = {
+    id: number;
+    name: string;
+    description: string | null;
+};
 
-type Props = { id: number; name: string; description?: string };
-
-const LegendItem: FC<Props> = ({ id, name, description = '' }) => {
+const LegendItem: FC<Props> = ({ id, name, description }) => {
     const activeId = useAppSelector((state) => state.activeBlip.id);
-    const isOpen = useAppSelector((state) => state.activeBlip.openDescription);
+    const open = useAppSelector((state) => state.activeBlip.openDescription);
+
     const dispatch = useAppDispatch();
 
-    const mouseEnterHandler = () => {
+    const onClickHandler = () => {
+        dispatch(setActiveBlip(id));
+        dispatch(setOpenDescription(!open));
+    };
+
+    const onMouseEnterHandler = () => {
         dispatch(setActiveBlip(id));
     };
 
-    const mouseLeaveHandler = () => {
+    const onMouseLeaveHandler = () => {
         dispatch(clearActiveBlip());
     };
 
-    const onClickHandler = () => {
-        dispatch(setOpenDescription(!isOpen));
-    };
-
-    const display = activeId === id && isOpen ? 'block' : 'none';
-
     return (
-        <li className={styles.item} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}>
-            <div
-                onClick={onClickHandler}
-                className={
-                    activeId === id
-                        ? `${styles.accordionSummaryActive} ${styles.accordionSummary}`
-                        : styles.accordionSummary
-                }
-            >
-                {`${id}. ${name}`}
-            </div>
-            <div className={styles.accordionDescription} style={{ display }}>
-                {description}
-            </div>
+        <li onClick={onClickHandler} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
+            <DropDown
+                title={`${id}. ${name}`}
+                details={description}
+                open={open && activeId === id}
+                active={activeId === id}
+            />
         </li>
     );
 };

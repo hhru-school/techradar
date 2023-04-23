@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { Chip } from '@mui/material';
 
+import { clearActiveBlip } from '../../../../store/activeBlipSlice';
 import {
     clearActiveSector,
     clearHoveredSector,
@@ -22,6 +23,7 @@ const SectorControlChip: FC<Props> = ({ sectorName, color }) => {
     const onClickHandler = () => {
         if (activeSector === sectorName) dispatch(clearActiveSector());
         else dispatch(setActiveSector(sectorName));
+        dispatch(clearActiveBlip());
     };
 
     const onMouseEnterHandler = () => {
