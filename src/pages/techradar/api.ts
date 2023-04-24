@@ -76,3 +76,30 @@ export const formatApiData = (apiData: ApiData): FormattedData => {
         blips: sortedBlips,
     };
 };
+
+// Все радары компании:
+// http://localhost:8080/api/radars?companyId=1
+// Конкретный радар:
+// http://localhost:8080/api/radars/1
+
+async function getData(url: string): Promise<unknown> {
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            mode: 'cors',
+        },
+    }).then((res) => {
+        if (!res.ok) {
+            console.error(res);
+            throw new Error(res.statusText);
+        }
+        return res;
+    });
+    return response.json();
+}
+
+export async function loadRadar(id: string): Promise<ApiData> {
+    const data = await getData<ApiData>(`/api/radars/${id}`);
+    return data;
+}

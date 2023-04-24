@@ -17,7 +17,7 @@ export const activeSectorSlice = createSlice({
             ...state,
             hoveredSectorName: null,
             activeSectorName: action.payload,
-            isTransforming: !(state.activeSectorName === action.payload),
+            isTransforming: state.activeSectorName !== action.payload,
         }),
 
         setHoveredSector: (state, action: PayloadAction<string>) => ({

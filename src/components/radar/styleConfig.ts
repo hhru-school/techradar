@@ -1,6 +1,6 @@
 // export const defaultColorScheme = getColorScheme(10);
 
-export const defaultGap = 18;
+export const defaultGap = 15;
 const colors = [
     'rgb(168, 168, 168)',
     'rgb(235, 240, 168)',
