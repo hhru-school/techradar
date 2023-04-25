@@ -13,6 +13,18 @@ type Props = { blips: Blip[]; ringNames: string[]; sectorNames: string[]; colorS
 
 const suggestsHight = 150;
 
+const getOptionLabel = (blip: Blip) => blip.name;
+const groupBy = (blip: Blip) => blip.sectorName;
+const autoCompleteSx = { width: 300 };
+const renderInput = (params: AutocompleteRenderInputParams) => (
+    <TextField {...params} label="Search" variant="standard" />
+);
+const listBoxProps = {
+    style: {
+        maxHeight: suggestsHight,
+    },
+};
+
 const Legend: FC<Props> = ({ blips, ringNames, sectorNames, colorScheme }) => {
     const hoveredSector = useAppSelector((state) => state.activeSector.hoveredSectorName);
     const activeSector = useAppSelector((state) => state.activeSector.activeSectorName);
@@ -33,29 +45,16 @@ const Legend: FC<Props> = ({ blips, ringNames, sectorNames, colorScheme }) => {
         );
     });
 
-    const onChangeHandler = (event: SyntheticEvent, value: Blip | null) => {
-        if (value) {
-            dispatch(clearActiveBlip());
-            dispatch(setActiveSector(value.sectorName));
-            dispatch(setActiveBlip(value.id));
-            dispatch(setOpenDescription(true));
-        }
-    };
-
-    const getOptionLabel = useCallback((blip: Blip) => blip.name, []);
-    const groupBy = useCallback((blip: Blip) => blip.sectorName, []);
-    const autoCompleteSx = { width: 300 };
-    const renderInput = useCallback(
-        (params: AutocompleteRenderInputParams) => <TextField {...params} label="Search" variant="standard" />,
-        []
-    );
-    const listBoxProps = useMemo(
-        () => ({
-            style: {
-                maxHeight: suggestsHight,
-            },
-        }),
-        []
+    const onChangeHandler = useCallback(
+        (event: SyntheticEvent, value: Blip | null) => {
+            if (value) {
+                dispatch(clearActiveBlip());
+                dispatch(setActiveSector(value.sectorName));
+                dispatch(setActiveBlip(value.id));
+                dispatch(setOpenDescription(true));
+            }
+        },
+        [dispatch]
     );
 
     const isActiveSector = Boolean(activeSector);
