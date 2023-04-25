@@ -1,7 +1,9 @@
 import { ApiData, DataBlip, DataQuadrant, DataRing } from '../../pages/techradar/api';
 import { Blip } from './types';
 
-/* {
+/*  Пример тестовых данных, приходящих с бека:
+
+    {
     "id": 1,
     "name": "Backend Tech Radar - 2022Q4",
     "quadrants": [
@@ -84,10 +86,6 @@ export const sectorNames = [
     'Trust & Cybersecurity',
     'Digital Business & Products',
     'Data-driven Intelligence',
-
-    // 'bla bla bla',
-    // 'sfafsfsf',
-    // 'dsadasdadsa',
 ];
 
 const random = (min: number, max: number): number => {
@@ -165,3 +163,20 @@ export const generateData = (num: number): Blip[] => {
     }
     return res;
 };
+
+export function getColorScheme(numOfSectors: number): string[] {
+    const res: string[] = [];
+    for (let i = 0; i < numOfSectors; i++) {
+        res.push(getRandomColor());
+    }
+    return res;
+}
+
+export function getRandomColor(): string {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { Chip } from '@mui/material';
 
 import { clearActiveBlip } from '../../../../store/activeBlipSlice';
@@ -20,21 +20,33 @@ const SectorControlChip: FC<Props> = ({ sectorName, color }) => {
 
     const [hoverColor, setHoverColor] = useState('inherit');
 
-    const onClickHandler = () => {
-        if (activeSector === sectorName) dispatch(clearActiveSector());
-        else dispatch(setActiveSector(sectorName));
+    const onClickHandler = useCallback(() => {
+        if (activeSector === sectorName) {
+            dispatch(clearActiveSector());
+        } else {
+            dispatch(setActiveSector(sectorName));
+        }
         dispatch(clearActiveBlip());
-    };
+    }, [activeSector, sectorName, dispatch]);
 
-    const onMouseEnterHandler = () => {
+    const onMouseEnterHandler = useCallback(() => {
         if (!activeSector) dispatch(setHoveredSector(sectorName));
         setHoverColor(color);
-    };
+    }, [activeSector, sectorName, color, dispatch]);
 
-    const onMouseLeaveHandler = () => {
+    const onMouseLeaveHandler = useCallback(() => {
         dispatch(clearHoveredSector());
         setHoverColor('inherit');
-    };
+    }, [dispatch]);
+
+    const style = useMemo(
+        () => ({
+            backgroundColor: sectorName === activeSector ? color : 'inherit',
+
+            borderColor: hoverColor,
+        }),
+        [sectorName, activeSector, hoverColor, color]
+    );
 
     return (
         <Chip
@@ -44,11 +56,7 @@ const SectorControlChip: FC<Props> = ({ sectorName, color }) => {
             label={sectorName}
             variant="outlined"
             onClick={onClickHandler}
-            style={{
-                backgroundColor: sectorName === activeSector ? color : 'inherit',
-
-                borderColor: hoverColor,
-            }}
+            style={style}
         />
     );
 };

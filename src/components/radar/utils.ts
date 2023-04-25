@@ -105,9 +105,8 @@ export function clip(entry: Entry, segment: Segment): Cartesian {
 }
 
 export function translateSegmentToD3(segment: Segment): string {
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    const arcGen: Arc<any, DefaultArcObject> = d3.arc();
-    /* eslint-enable  @typescript-eslint/no-explicit-any */
+    const arcGen: Arc<unknown, DefaultArcObject> = d3.arc();
+
     return (
         arcGen({
             innerRadius: segment.innerRadius,

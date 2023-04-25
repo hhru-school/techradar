@@ -1,5 +1,5 @@
-import { FC, SyntheticEvent } from 'react';
-import { Autocomplete, TextField } from '@mui/material';
+import { FC, SyntheticEvent, useCallback, useMemo } from 'react';
+import { Autocomplete, AutocompleteRenderInputParams, TextField } from '@mui/material';
 
 import { Blip } from '../../../../components/radar/types';
 import { clearActiveBlip, setActiveBlip, setOpenDescription } from '../../../../store/activeBlipSlice';
@@ -42,6 +42,29 @@ const Legend: FC<Props> = ({ blips, ringNames, sectorNames, colorScheme }) => {
         }
     };
 
+    const getOptionLabel = useCallback((blip: Blip) => blip.name, []);
+    const groupBy = useCallback((blip: Blip) => blip.sectorName, []);
+    const autoCompleteSx = { width: 300 };
+    const renderInput = useCallback(
+        (params: AutocompleteRenderInputParams) => <TextField {...params} label="Search" variant="standard" />,
+        []
+    );
+    const listBoxProps = useMemo(
+        () => ({
+            style: {
+                maxHeight: suggestsHight,
+            },
+        }),
+        []
+    );
+
+    const isActiveSector = Boolean(activeSector);
+
+    const legendContainerStyle = useMemo(
+        () => ({ marginTop: isActiveSector ? suggestsHight + 30 : 0 }),
+        [isActiveSector]
+    );
+
     return (
         <div>
             <Autocomplete
@@ -50,18 +73,14 @@ const Legend: FC<Props> = ({ blips, ringNames, sectorNames, colorScheme }) => {
                 disablePortal
                 id="search"
                 options={blips}
-                getOptionLabel={(blip) => blip.name}
-                groupBy={(blip) => blip.sectorName}
+                getOptionLabel={getOptionLabel}
+                groupBy={groupBy}
                 onChange={onChangeHandler}
-                sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Search" variant="standard" />}
-                ListboxProps={{
-                    style: {
-                        maxHeight: suggestsHight,
-                    },
-                }}
+                sx={autoCompleteSx}
+                renderInput={renderInput}
+                ListboxProps={listBoxProps}
             />
-            <div className={styles.legendContainer} style={{ marginTop: activeSector ? suggestsHight + 30 : 0 }}>
+            <div className={styles.legendContainer} style={legendContainerStyle}>
                 {sectorGroups}
             </div>
         </div>

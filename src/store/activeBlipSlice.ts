@@ -12,8 +12,13 @@ export const activeBlipSlice = createSlice({
     name: 'activeBlip',
     initialState,
     reducers: {
-        setActiveBlip: (state, action: PayloadAction<number>) => ({ id: action.payload, openDescription: false }),
-        setOpenDescription: (state, action: PayloadAction<boolean>) => ({ ...state, openDescription: action.payload }),
+        setActiveBlip: (state, action: PayloadAction<number>) => {
+            state.id = action.payload;
+            state.openDescription = false;
+        },
+        setOpenDescription: (state, action: PayloadAction<boolean>) => {
+            state.openDescription = action.payload;
+        },
         clearActiveBlip: () => ({ id: null, openDescription: false }),
     },
 });

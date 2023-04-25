@@ -100,6 +100,6 @@ async function getData(url: string): Promise<unknown> {
 }
 
 export async function loadRadar(id: string): Promise<ApiData> {
-    const data = await getData<ApiData>(`/api/radars/${id}`);
-    return data;
+    const data = await getData(`/api/radars/${id}`);
+    return data as ApiData;
 }

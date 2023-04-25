@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
+import classNames from 'classnames';
 
 import { clearActiveBlip, setActiveBlip } from '../../store/activeBlipSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -22,7 +23,7 @@ const RadarBlip: FC<Props> = ({ id, name, x, y, r }) => {
 
     const isActive = activeId === id;
 
-    const classes = isActive ? `${styles.blip} ${styles.blipActive}` : styles.blip;
+    const classes = isActive ? classNames(styles.blip, styles.blipActive) : styles.blip;
 
     const mouseEnterHandler = () => {
         dispatch(setActiveBlip(id));

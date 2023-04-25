@@ -13,30 +13,28 @@ export const activeSectorSlice = createSlice({
     name: 'activeSector',
     initialState,
     reducers: {
-        setActiveSector: (state, action: PayloadAction<string>) => ({
-            ...state,
-            hoveredSectorName: null,
-            activeSectorName: action.payload,
-            isTransforming: state.activeSectorName !== action.payload,
-        }),
+        setActiveSector: (state, action: PayloadAction<string>) => {
+            state.hoveredSectorName = null;
+            state.activeSectorName = action.payload;
+            state.isTransforming = state.activeSectorName !== action.payload;
+        },
 
-        setHoveredSector: (state, action: PayloadAction<string>) => ({
-            ...state,
-            hoveredSectorName: action.payload,
-        }),
-        clearHoveredSector: (state) => ({
-            ...state,
-            hoveredSectorName: null,
-        }),
+        setHoveredSector: (state, action: PayloadAction<string>) => {
+            state.hoveredSectorName = action.payload;
+        },
+        clearHoveredSector: (state) => {
+            state.hoveredSectorName = null;
+        },
 
-        setIsTransforming: (state, action: PayloadAction<boolean>) => ({ ...state, isTransforming: action.payload }),
+        setIsTransforming: (state, action: PayloadAction<boolean>) => {
+            state.isTransforming = action.payload;
+        },
 
-        clearActiveSector: (state) => ({
-            ...state,
-            activeSectorName: null,
-            hoveredSectorName: null,
-            isTransforming: false,
-        }),
+        clearActiveSector: (state) => {
+            state.activeSectorName = null;
+            state.hoveredSectorName = null;
+            state.isTransforming = false;
+        },
     },
 });
 
