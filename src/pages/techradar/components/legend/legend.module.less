@@ -1,0 +1,47 @@
+@label-color: rgb(150, 150, 150);
+
+.item {
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+.ringGroup {
+    list-style-type: none;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    width: 130px;
+}
+
+.ringGroupHeader {
+    margin: 5px 0;
+    color: @label-color;
+}
+
+.sectorGroup {
+    list-style-type: none;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.sectorGroupContainer {
+    margin-bottom: 10px;
+}
+
+.sectorGroupHeader {
+    @font-size: 18px;
+    margin: 5px 0;
+    color: @label-color;
+    font-size: @font-size;
+}
+
+.legendContainer {
+    min-height: 500px;
+    transition: margin-top 0.5s ease-out;
+    // display: flex;
+    // flex-direction: column;
+}

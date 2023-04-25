@@ -23,7 +23,14 @@ export interface Segment {
 
 export interface Blip {
     id: number;
+    name: string;
     ringName: string;
     sectorName: string;
     description: string;
+}
+
+export interface Transform {
+    x: number;
+    y: number;
+    scale: number;
 }

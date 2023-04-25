@@ -1,10 +1,18 @@
 import { FC } from 'react';
 import * as d3 from 'd3-color';
 
+import {
+    clearActiveSector,
+    clearHoveredSector,
+    setActiveSector,
+    setHoveredSector,
+    setIsTransforming,
+} from '../../store/activeSectorSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import RadarSegment from './RadarSegment';
 import { sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
 import { Blip, Segment } from './types';
-import { buildArc, getRadiusListEqualSquare } from './utils';
+import { buildArc, getRadiusListEqualSquare, getTransform } from './utils';
 
 import styles from './radar.module.less';
 
@@ -16,6 +24,7 @@ type Props = {
     sweepAngle: number;
     baseColor: string;
     blipRadius: number;
+    svgRadius?: number;
     gap?: number;
     data?: Blip[] | null;
     seed?: number;
@@ -33,6 +42,38 @@ const RadarSector: FC<Props> = ({
     seed = 0,
     gap = 0,
 }) => {
+    const endAngle = startAngle + sweepAngle;
+
+    const hoveredSector = useAppSelector((state) => state.activeSector.hoveredSectorName);
+    const activeSector = useAppSelector((state) => state.activeSector.activeSectorName);
+
+    const dispatch = useAppDispatch();
+
+    const transitionEndHandler = () => {
+        dispatch(setIsTransforming(false));
+    };
+
+    const transform =
+        activeSector && activeSector === sectorName
+            ? getTransform(startAngle, endAngle, radius + gap / 2)
+            : { x: 0, y: 0, scale: 1 };
+
+    const onClickHandler = () => {
+        if (activeSector) {
+            dispatch(clearActiveSector());
+        } else {
+            dispatch(setActiveSector(sectorName));
+        }
+    };
+
+    const onMouseEnterHandler = () => {
+        dispatch(setHoveredSector(sectorName));
+    };
+
+    const onMouseLeaveHandler = () => {
+        dispatch(clearHoveredSector());
+    };
+
     const radiuses = getRadiusListEqualSquare(ringNames.length, radius);
 
     const segments = radiuses.map((ring, i) => {
@@ -40,7 +81,7 @@ const RadarSector: FC<Props> = ({
             innerRadius: ring.innerRadius,
             outerRadius: ring.outerRadius,
             startAngle,
-            endAngle: startAngle + sweepAngle,
+            endAngle,
         };
         const id = `${sectorName}-${ringNames[i]}`.toLowerCase();
         return (
@@ -58,13 +99,23 @@ const RadarSector: FC<Props> = ({
                 }
                 seed={seed}
                 gap={gap}
-                blipRadius={blipRadius}
+                blipRadius={blipRadius / transform.scale}
             />
         );
     });
 
     return (
-        <g>
+        <g
+            onClick={onClickHandler}
+            onMouseEnter={onMouseEnterHandler}
+            onMouseLeave={onMouseLeaveHandler}
+            className={styles.animated}
+            transform={`translate(${transform.x} ${transform.y}) scale(${transform.scale})`}
+            opacity={hoveredSector && hoveredSector !== sectorName ? 0.5 : 1}
+            display={activeSector && activeSector !== sectorName ? 'none' : 'auto'}
+            cursor="pointer"
+            onTransitionEnd={transitionEndHandler}
+        >
             <path
                 id={`curve-${sectorName}`}
                 fill="transparent"
@@ -77,7 +128,6 @@ const RadarSector: FC<Props> = ({
                     className={styles.sectorName}
                     startOffset="50%"
                 >
-                    {' '}
                     <tspan dy={-sectorNameTextOffset}>{sectorName}</tspan>
                 </textPath>
             </text>

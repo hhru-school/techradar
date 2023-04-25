@@ -34,7 +34,7 @@ const RadarSegment: FC<Props> = ({ id, segment, color, ringName, seed = 0, gap =
                 <RadarBlip
                     key={data[i].id}
                     id={data[i].id}
-                    description={data[i].description}
+                    name={data[i].name}
                     r={blipRadius}
                     x={entry.x}
                     y={entry.y}
@@ -51,7 +51,7 @@ const RadarSegment: FC<Props> = ({ id, segment, color, ringName, seed = 0, gap =
     return (
         <g>
             <path id={id} d={path} fill={color} className={styles.segment} />
-            {/* {dots} */}
+
             {blips}
 
             {gap && (

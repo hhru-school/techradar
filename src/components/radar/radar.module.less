@@ -1,18 +1,22 @@
-@label-color: rgb(150, 150, 150);
 @line-color: rgb(88, 88, 88);
 @blip-color: rgb(76, 76, 76);
 @blip-hover: rgb(57, 188, 195);
+@label-color: rgb(150, 150, 150);
 
 .ringName {
     fill: @label-color;
-    font: bold 12px sans-serif;
+    font: normal 8px sans-serif;
 }
 
 .sectorName {
+    user-select: none;
     fill: @label-color;
     font-weight: bold;
     font-family: sans-serif;
     text-anchor: middle;
+    &:hover {
+        fill: @blip-hover;
+    }
 }
 
 .segment {
@@ -26,17 +30,22 @@
     stroke: @blip-color;
     color: @blip-color;
     pointer-events: all;
-}
 
-.blip:hover {
-    cursor: pointer;
-    stroke: @blip-hover;
-    color: @blip-hover;
-    stroke-width: 3px;
+    &Active {
+        cursor: pointer;
+        stroke: @blip-hover;
+        color: @blip-hover;
+        stroke-width: 3px;
+    }
 }
 
 .blipText {
     fill: @blip-color;
-    font: bold 10px sans-serif;
+    font-weight: bold;
+    font-family: sans-serif;
     stroke: none;
+}
+
+.animated {
+    transition: transform 0.4s;
 }

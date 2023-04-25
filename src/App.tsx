@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import Admin from './pages/admin/Admin';
@@ -11,7 +10,9 @@ function App(): JSX.Element {
             <Routes>
                 <Route path="/" element={<Main />} />
                 <Route path="/admin" element={<Admin />} />
-                <Route path="/techradar" element={<TechRadar />} />
+                <Route path="/techradar">
+                    <Route path=":company/:category/:radar" element={<TechRadar />} />
+                </Route>
             </Routes>
         </>
     );

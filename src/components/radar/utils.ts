@@ -1,7 +1,7 @@
 import { Arc, DefaultArcObject } from 'd3';
 import * as d3 from 'd3';
 
-import { Cartesian, Entry, Polar, Segment } from './types';
+import { Cartesian, Entry, Polar, Segment, Transform } from './types';
 
 function getRingSquare(innerRadius = 0, outerRadius: number): number {
     return Math.PI * (Math.pow(outerRadius, 2) - Math.pow(innerRadius, 2));
@@ -105,9 +105,8 @@ export function clip(entry: Entry, segment: Segment): Cartesian {
 }
 
 export function translateSegmentToD3(segment: Segment): string {
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    const arcGen: Arc<any, DefaultArcObject> = d3.arc();
-    /* eslint-enable  @typescript-eslint/no-explicit-any */
+    const arcGen: Arc<unknown, DefaultArcObject> = d3.arc();
+
     return (
         arcGen({
             innerRadius: segment.innerRadius,
@@ -139,4 +138,31 @@ export function buildArc(startAngle: number, endAngle: number, r: number): strin
 
 export function convertRadToDeg(rad: number): number {
     return (rad * 180) / Math.PI;
+}
+
+export function getSectorCentroid(startAngle: number, sweepAngle: number, r: number): Cartesian {
+    return getCartesian(r / 2, startAngle + sweepAngle / 2);
+}
+
+export function getTransform(startAngle: number, endAngle: number, r: number): Transform {
+    const bisector = startAngle + (endAngle - startAngle) / 2;
+
+    if (endAngle - startAngle === Math.PI / 2) {
+        return {
+            x: -r * Math.sign(Math.cos(bisector)),
+            y: r * Math.sign(Math.sin(bisector)),
+            scale: 2,
+        };
+    }
+
+    const circumRad = r / 2 / Math.cos((endAngle - startAngle) / 2);
+    const polCircumCenter = { r: circumRad, a: bisector };
+    const cartCircumCenter = getCartesian(polCircumCenter.r, polCircumCenter.a);
+    const scale = r / circumRad;
+
+    return {
+        x: -cartCircumCenter.x * scale,
+        y: cartCircumCenter.y * scale,
+        scale,
+    };
 }
