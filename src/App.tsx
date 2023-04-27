@@ -11,7 +11,7 @@ function App(): JSX.Element {
                 <Route path="/" element={<Main />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/techradar">
-                    <Route path=":company/:category/:radar" element={<TechRadar />} />
+                    <Route path=":companyId/:radarId" element={<TechRadar />} />
                 </Route>
             </Routes>
         </>

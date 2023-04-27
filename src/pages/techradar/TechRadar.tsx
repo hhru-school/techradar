@@ -1,30 +1,35 @@
 import { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useGetCompanyRadarsQuery } from '../../api/companyRadarsApi';
 import Radar from '../../components/radar/Radar';
 import { defaultColorScheme, defaultGap } from '../../components/radar/styleConfig';
 import { FormattedData, formatApiData, loadRadar } from './api';
 import SectorControlPanel from './components/controls/SectorControlPanel';
 import Legend from './components/legend/Legend';
+import RadarsNavTabs from './components/radars-tab/RadarsNavTabs';
 
 import styles from './radar.module.less';
 
 const TechRadar: FC = () => {
-    const { radar } = useParams();
+    const { companyId, radarId } = useParams();
+
+    const { data: radars } = useGetCompanyRadarsQuery(Number(companyId));
 
     const [data, setData] = useState<FormattedData | null>(null);
 
     useEffect(() => {
-        if (radar)
-            loadRadar(radar)
+        if (radarId)
+            loadRadar(radarId)
                 .then((apiData) => {
                     setData(formatApiData(apiData));
                 })
                 .catch(() => console.error);
-    }, [radar]);
+    }, [radarId]);
 
     return (
         <>
+            {radars && <RadarsNavTabs radarId={Number(radarId)} radars={radars} />}
             {data && (
                 <div className={styles.mainContainer}>
                     <div className={styles.radarContainer}>
