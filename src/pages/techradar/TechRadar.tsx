@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useGetCompanyRadarsQuery } from '../../api/companyRadarsApi';
+import { useGetAllCompanyRadarsQuery } from '../../api/companyRadarsApi';
 import Radar from '../../components/radar/Radar';
 import { defaultColorScheme, defaultGap } from '../../components/radar/styleConfig';
 import { FormattedData, formatApiData, loadRadar } from './api';
@@ -14,7 +14,7 @@ import styles from './radar.module.less';
 const TechRadar: FC = () => {
     const { companyId, radarId } = useParams();
 
-    const { data: radars } = useGetCompanyRadarsQuery(Number(companyId));
+    const { data: radars } = useGetAllCompanyRadarsQuery(Number(companyId));
 
     const [data, setData] = useState<FormattedData | null>(null);
 
