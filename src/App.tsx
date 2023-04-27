@@ -37,7 +37,7 @@ const App: FC = () => {
             <Header />
             <Routes>
                 <Route path="/techradar">
-                    <Route path=":company/:category/:radar" element={<TechRadar />} />
+                    <Route path=":companyId/:radarId" element={<TechRadar />} />
                 </Route>
                 <Route path="/my-radars/*" element={<MyRadars />} />
 

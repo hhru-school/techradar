@@ -1,21 +1,16 @@
-import { FC, useCallback, useState } from 'react';
+import { FC } from 'react';
 import { Tabs } from '@mui/material';
 
 import LinkTab from './LinkTab';
-import { RradarNameToLink } from './radarNavApi';
 
-type Props = { tabData: RradarNameToLink[] };
+type Props = { radarId: number; radars: { id: number; name: string }[] };
 
-const RadarsNavTabs: FC<Props> = ({ tabData }) => {
-    const [value, setValue] = useState(0);
-
-    const handleChange = useCallback((event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
-    }, []);
-
-    const tabs = tabData.map((tabItem) => <LinkTab label={tabItem.radarName} href={tabItem.href} />);
+const RadarsNavTabs: FC<Props> = ({ radarId, radars }) => {
+    const tabs =
+        radars &&
+        radars.map((radar) => <LinkTab key={radar.id} label={radar.name} href={`./${radar.id}`} value={radar.id} />);
     return (
-        <Tabs value={value} onChange={handleChange} aria-label="radars of the company nav">
+        <Tabs value={radarId} aria-label="radars of the company nav" variant="scrollable" scrollButtons="auto">
             {tabs}
         </Tabs>
     );
