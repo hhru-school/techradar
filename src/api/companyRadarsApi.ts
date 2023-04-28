@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { ApiRadarData } from './radarApiUtils';
+import { ApiRadarData, FormattedRadarData, formatApiData } from './radarApiUtils';
 
 const baseUrl = '/api/radars';
 
@@ -21,8 +21,9 @@ export const companyRadarsApi = createApi({
         getAllCompanyRadars: builder.query<RadarApi[], number>({
             query: (companyId) => `?companyId=${companyId}`,
         }),
-        getRadar: builder.query<ApiRadarData, number>({
+        getRadar: builder.query<FormattedRadarData, number>({
             query: (radarId) => `/${radarId}`,
+            transformResponse: (rawResult: ApiRadarData) => formatApiData(rawResult),
         }),
     }),
 });

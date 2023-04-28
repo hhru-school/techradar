@@ -28,13 +28,13 @@ export interface ApiRadarData {
     blips: DataBlip[];
 }
 
-export interface FormattedData {
+export interface FormattedRadarData {
     blips: Blip[];
     sectorNames: string[];
     ringNames: string[];
 }
 
-export const formatApiData = (apiData: ApiRadarData): FormattedData => {
+export const formatApiData = (apiData: ApiRadarData): FormattedRadarData => {
     const sectorNames = apiData.quadrants
         .sort((quadrant1, quadrant2) => quadrant1.position - quadrant2.position)
         .map((quadrant) => quadrant.name);
