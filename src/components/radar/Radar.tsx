@@ -36,7 +36,6 @@ const Radar: FC<Props> = ({
         const sector = (
             <g key={sectorName} transform={`translate (${svgRadius + ofstXY.x} ${svgRadius + ofstXY.y})`}>
                 <RadarSector
-                    key={sectorName}
                     startAngle={currentAngle}
                     sweepAngle={sweepAngle}
                     radius={radius}

@@ -7,10 +7,6 @@ type Props = {
     value: number;
 };
 
-// const onClickHandler = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-//     event.preventDefault();
-// };
-
 const LinkTab: FC<Props> = ({ label, href, value }) => {
     return <Tab component="a" label={label} href={href} value={value} />;
 };
