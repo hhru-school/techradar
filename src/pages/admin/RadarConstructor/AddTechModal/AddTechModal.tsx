@@ -1,9 +1,10 @@
 import { FC, useCallback } from 'react';
-import { Box, Button, Modal, Typography, TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { Box, Button, Modal, Typography, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { Formik, FormikHelpers, Form, useField } from 'formik';
 import * as Yup from 'yup';
 
 import { styleModal } from '../../../../components/AuthFormModal/AuthFormModal';
+import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
 import { setRadarConstrTechModalOpen, updateRadarConstrTechGrid } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 
@@ -13,26 +14,10 @@ type AddTechModalData = {
     sector: number;
 };
 
-type PropsInput = {
-    label: string;
-    placeholder: string;
-    name: string;
-};
-
 type PropsSelectInput = {
     label: string;
     countItems: number;
     name: string;
-};
-
-const MyTextInput = (props: PropsInput) => {
-    const [field, meta] = useField(props);
-    return (
-        <>
-            <TextField {...props} {...field} sx={{ marginTop: '20px' }} variant="outlined" id="outlined-basic" />
-            {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
-        </>
-    );
 };
 
 const MySelectInput = ({ label, countItems, ...props }: PropsSelectInput) => {
@@ -60,7 +45,7 @@ const AddTechModal: FC = () => {
     const dispatch = useAppDispatch();
     const showRadarConstrTechModal = useAppSelector((state) => state.constructorRadar.showRadarConstrTechModal);
     const countSectors = useAppSelector((state) => state.constructorRadar.countSectorInputs);
-    const countCircles = useAppSelector((state) => state.constructorRadar.countCircleInputs);
+    const countRings = useAppSelector((state) => state.constructorRadar.countCircleInputs);
 
     const handleClose = useCallback(() => dispatch(setRadarConstrTechModalOpen(false)), [dispatch]);
 
@@ -90,8 +75,8 @@ const AddTechModal: FC = () => {
                 >
                     {({ isSubmitting }) => (
                         <Form className="form auth-form">
-                            <MyTextInput label="Название" name="techName" placeholder="Введите название" />
-                            <MySelectInput label="Кольцо" name="Circle" countItems={countCircles} />
+                            <TextInputOutlined label="Название" name="techName" placeholder="Введите название" />
+                            <MySelectInput label="Кольцо" name="Circle" countItems={countRings} />
                             <MySelectInput label="Сектор" name="sector" countItems={countSectors} />
                             <Button
                                 disabled={isSubmitting}

@@ -5,8 +5,8 @@ import { Typography, Box, Container, Tab, Tabs, Button } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { setRadarsCreateModalOpen } from '../../../store/myRadarsSlice';
-import MyRadarCreateModal from './MyRadarCreateModal/MyRadarCreateModal';
-import MyRadarsDataGrid from './MyRadarsDataGrid/MyRadarsDataGrid';
+import MyRadarCreateModal from './myRadarCreateModal/MyRadarCreateModal';
+import MyRadarsDataGrid from './myRadarsDataGrid/MyRadarsDataGrid';
 
 import './MyRadars.less';
 

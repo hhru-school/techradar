@@ -26,7 +26,7 @@ const RadarConstructorGrid: FC = () => {
     const dispatch = useAppDispatch();
     const rows = useAppSelector((state) => state.constructorRadar.radarConstructorGrid);
     const countSectors = useAppSelector((state) => state.constructorRadar.countSectorInputs);
-    const countCircles = useAppSelector((state) => state.constructorRadar.countCircleInputs);
+    const countRings = useAppSelector((state) => state.constructorRadar.countCircleInputs);
 
     const deleteRow = useCallback(
         (id: GridRowId) => {
@@ -59,7 +59,7 @@ const RadarConstructorGrid: FC = () => {
                 width: 100,
                 editable: true,
                 valueOptions: () => {
-                    return counter(countCircles);
+                    return counter(countRings);
                 },
             },
             {
@@ -81,7 +81,7 @@ const RadarConstructorGrid: FC = () => {
                 ],
             },
         ],
-        [deleteRow, countCircles, countSectors]
+        [deleteRow, countRings, countSectors]
     );
 
     return (

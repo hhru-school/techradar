@@ -1,9 +1,9 @@
 import { FC, useMemo } from 'react';
 import { FormControl, InputLabel, List, NativeSelect, Typography } from '@mui/material';
 
+import { TextInputStandart } from '../../../../components/textInputStandart/TextInputStandart';
 import { updateSectorCount } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { MyTextInput } from '../RadarConstructor';
 
 const optionsArr = [1, 2, 3, 4, 5, 6];
 
@@ -36,15 +36,15 @@ const SectorInputs: FC = () => {
                 Секторы
             </Typography>
             <FormControl sx={{ width: '130px', marginLeft: '9px' }}>
-                <InputLabel variant="standard" htmlFor="Circles-count">
+                <InputLabel variant="standard" htmlFor="rings-count">
                     Количество
                 </InputLabel>
                 <NativeSelect
                     onChange={(e) => dispatch(updateSectorCount(+e.target.value))}
                     defaultValue={4}
                     inputProps={{
-                        name: 'Circles-count',
-                        id: 'Circles-count',
+                        name: 'rings-count',
+                        id: 'rings-count',
                     }}
                 >
                     {optionsArr.map((num, i) => {
@@ -58,7 +58,7 @@ const SectorInputs: FC = () => {
             </FormControl>
             {inputs.map((item, i) => {
                 return (
-                    <MyTextInput
+                    <TextInputStandart
                         key={i}
                         label={item.label}
                         id={item.id}

@@ -2,7 +2,6 @@ import { FC, useState, useCallback } from 'react';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
-    TextField,
     Backdrop,
     Box,
     Button,
@@ -20,6 +19,7 @@ import * as Yup from 'yup';
 
 import { setAuthFormData, setAuthFormOpen } from '../../store/authentificationSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import TextInputOutlined from '../textInputOutlined/TextInputOutlined';
 
 import './AuthFormModal.less';
 
@@ -74,21 +74,6 @@ const MyPassInput = ({ label, ...props }: InputProps) => {
     );
 };
 
-const MyTextInput = ({ label, ...props }: InputProps) => {
-    const [field, meta] = useField(props);
-    return (
-        <TextField
-            id="outlined-basic"
-            label={label}
-            variant="outlined"
-            {...field}
-            {...props}
-            helperText={meta.error}
-            sx={{ marginTop: '20px' }}
-        />
-    );
-};
-
 const validSchema = Yup.object({
     email: Yup.string().email('Неправильный email адрес').required('Обязательное поле!'),
     password: Yup.string().min(2, 'Минимум 2 символа для заполнения').required('Обязательное поле!'),
@@ -106,6 +91,17 @@ export const styleModal = {
     p: 4,
 };
 
+const slots = { backdrop: Backdrop };
+const initialValues = {
+    email: '',
+    password: '',
+};
+const slotProps = {
+    backdrop: {
+        timeout: 500,
+    },
+};
+
 const AuthFormModal: FC = () => {
     const dispatch = useAppDispatch();
     const showAuthentificationForm = useAppSelector((state) => state.authentification.showAuthentificationForm);
@@ -121,12 +117,8 @@ const AuthFormModal: FC = () => {
             open={showAuthentificationForm}
             onClose={handleClose}
             closeAfterTransition
-            slots={{ backdrop: Backdrop }}
-            slotProps={{
-                backdrop: {
-                    timeout: 500,
-                },
-            }}
+            slots={slots}
+            slotProps={slotProps}
         >
             <Fade in={showAuthentificationForm}>
                 <Box sx={styleModal}>
@@ -134,10 +126,7 @@ const AuthFormModal: FC = () => {
                         Вход в учетную запись TechRadar
                     </Typography>
                     <Formik
-                        initialValues={{
-                            email: '',
-                            password: '',
-                        }}
+                        initialValues={initialValues}
                         validationSchema={validSchema}
                         onSubmit={(values: Values, { setSubmitting }: FormikHelpers<Values>) => {
                             dispatch(setAuthFormData(values));
@@ -146,7 +135,7 @@ const AuthFormModal: FC = () => {
                         }}
                     >
                         <Form className="form auth-form">
-                            <MyTextInput label="Email" id="email" name="email" type="email" autoComplete="off" />
+                            <TextInputOutlined label="Email" id="email" name="email" type="email" autoComplete="off" />
                             <MyPassInput label="Пароль" id="password" name="password" autoComplete="off" />
                             <Button type="submit" variant="contained" color="success" sx={{ marginTop: '20px' }}>
                                 Войти

@@ -3,11 +3,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
     Container,
-    FormControl,
     FormHelperText,
     Grid,
-    Input,
-    InputLabel,
     TextField,
     Box,
     Button,
@@ -21,11 +18,11 @@ import * as Yup from 'yup';
 
 import { setRadarConstrTechModalOpen } from '../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import AddTechModal from './AddTechModal/AddTechModal';
-import CircleInputs from './CircleInputs/CircleInputs';
-import RadarConstructorGrid from './RadarConstructorGrid/RadarConstructorGrid';
-import RadarPublishBtn from './RadarPublishBtn/RadarPublishBtn';
-import SectorInputs from './SectorInputs/SectorInputs';
+import AddTechModal from './addTechModal/AddTechModal';
+import RadarConstructorGrid from './radarConstructorGrid/RadarConstructorGrid';
+import RadarPublishBtn from './radarPublishBtn/RadarPublishBtn';
+import CircleInputs from './ringInputs/ringInputs';
+import SectorInputs from './sectorInputs/SectorInputs';
 
 import './RadarConstructor.less';
 
@@ -40,34 +37,6 @@ interface Values {
     nameSector3: string;
     nameSector4: string;
 }
-
-export interface InputProps {
-    label: string;
-    name: string;
-    id?: string;
-    type: string;
-    autoComplete: string;
-}
-
-export const MyTextInput = ({ label, id, ...props }: InputProps): ReactElement => {
-    const [field, meta] = useField(props);
-
-    return (
-        <FormControl sx={{ m: 1, width: '160px' }} variant="standard">
-            <InputLabel htmlFor={id}>{label}</InputLabel>
-            <Input
-                id={id}
-                {...field}
-                {...props}
-                aria-describedby="helper-text"
-                inputProps={{
-                    'aria-label': 'radar-input',
-                }}
-            />
-            <FormHelperText id="helper-text">{meta.error}</FormHelperText>
-        </FormControl>
-    );
-};
 
 type RadarInput = {
     id: number | string;

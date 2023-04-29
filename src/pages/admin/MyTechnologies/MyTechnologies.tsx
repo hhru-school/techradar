@@ -3,8 +3,8 @@ import { Typography, Button, Container } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { setTechCreateModalOpen } from '../../../store/myTechSlice';
-import MyTechCreateModal from './MyTechCreateModal/MyTechCreateModal';
-import MyTechDataGrid from './MyTechDataGrid/MyTechDataGrid';
+import MyTechCreateModal from './myTechCreateModal/MyTechCreateModal';
+import MyTechDataGrid from './myTechDataGrid/MyTechDataGrid';
 
 const MyTechnologies: FC = () => {
     const dispatch = useAppDispatch();

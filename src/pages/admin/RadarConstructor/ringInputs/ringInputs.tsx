@@ -1,26 +1,26 @@
 import { FC, useMemo } from 'react';
 import { FormControl, InputLabel, List, NativeSelect, Typography } from '@mui/material';
 
+import { TextInputStandart } from '../../../../components/textInputStandart/TextInputStandart';
 import { updateCircleCount } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { MyTextInput } from '../RadarConstructor';
 
 const optionsArr = [1, 2, 3, 4, 5, 6];
 
 const CircleInputs: FC = () => {
     const dispatch = useAppDispatch();
-    const countCircles = useAppSelector((state) => state.constructorRadar.countCircleInputs);
+    const countRings = useAppSelector((state) => state.constructorRadar.countCircleInputs);
 
     const inputs = useMemo(
         () =>
-            new Array(countCircles).fill({}).map((_, index) => ({
+            new Array(countRings).fill({}).map((_, index) => ({
                 label: `Кольцо ${index + 1}`,
-                id: `name-cercle-${index + 1}`,
-                name: `nameCercle${index + 1}`,
+                id: `name-Circle-${index + 1}`,
+                name: `nameCircle${index + 1}`,
                 type: 'text',
                 autoComplete: 'on',
             })),
-        [countCircles]
+        [countRings]
     );
 
     return (
@@ -36,15 +36,15 @@ const CircleInputs: FC = () => {
                 Кольца
             </Typography>
             <FormControl sx={{ width: '130px', marginLeft: '9px' }}>
-                <InputLabel variant="standard" htmlFor="Circles-count">
+                <InputLabel variant="standard" htmlFor="Rings-count">
                     Количество колец
                 </InputLabel>
                 <NativeSelect
                     onChange={(e) => dispatch(updateCircleCount(+e.target.value))}
                     defaultValue={4}
                     inputProps={{
-                        name: 'Circles-count',
-                        id: 'Circles-count',
+                        name: 'rings-count',
+                        id: 'rings-count',
                     }}
                 >
                     {optionsArr.map((num, i) => {
@@ -57,7 +57,7 @@ const CircleInputs: FC = () => {
                 </NativeSelect>
             </FormControl>
             {inputs.map((item, i) => (
-                <MyTextInput
+                <TextInputStandart
                     key={i}
                     label={item.label}
                     id={item.id}

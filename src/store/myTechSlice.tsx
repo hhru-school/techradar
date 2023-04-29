@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RowTech, GridTech } from '../pages/admin/MyTechnologies/MyTechDataGrid/MyTechDataGrid';
+import { RowTech, GridTech } from '../pages/admin/MyTechnologies/myTechDataGrid/MyTechDataGrid';
 import { initialState } from './mock';
 
 export const MyTechSlice = createSlice({
-    name: 'meTech',
+    name: 'myTech',
     initialState,
     reducers: {
         setTechCreateModalOpen: (state, action: PayloadAction<boolean>) => {

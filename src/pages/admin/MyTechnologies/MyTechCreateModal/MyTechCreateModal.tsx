@@ -1,9 +1,10 @@
 import { FC, useCallback } from 'react';
-import { Box, Button, Modal, Typography, TextField } from '@mui/material';
-import { Formik, FormikHelpers, Form, useField } from 'formik';
+import { Box, Button, Modal, Typography } from '@mui/material';
+import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { styleModal } from '../../../../components/AuthFormModal/AuthFormModal';
+import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { createNewTech, setTechCreateModalOpen } from '../../../../store/myTechSlice';
 
@@ -14,22 +15,6 @@ export interface ValuesTechModal {
     lastVersion: string;
     comment: string;
 }
-
-type PropsInput = {
-    label: string;
-    placeholder: string;
-    name: string;
-};
-
-const MyTextInput = (props: PropsInput) => {
-    const [field, meta] = useField(props);
-    return (
-        <>
-            <TextField {...props} {...field} sx={{ marginTop: '20px' }} variant="outlined" id="outlined-basic" />
-            {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
-        </>
-    );
-};
 
 const validSchema = Yup.object({
     techName: Yup.string().required('Обязательное поле!'),
@@ -73,19 +58,31 @@ const MyTechCreateModal: FC = () => {
                 >
                     {({ isSubmitting }) => (
                         <Form className="form auth-form">
-                            <MyTextInput label="Название" name="techName" placeholder="Введите название раздела" />
-                            <MyTextInput label="Документация" name="link" placeholder="Введите название раздела" />
-                            <MyTextInput
+                            <TextInputOutlined
+                                label="Название"
+                                name="techName"
+                                placeholder="Введите название раздела"
+                            />
+                            <TextInputOutlined
+                                label="Документация"
+                                name="link"
+                                placeholder="Введите название раздела"
+                            />
+                            <TextInputOutlined
                                 label="Актуальность"
                                 name="relevantAt"
                                 placeholder="Введите название раздела"
                             />
-                            <MyTextInput
+                            <TextInputOutlined
                                 label="Текущая версия"
                                 name="lastVersion"
                                 placeholder="Введите название раздела"
                             />
-                            <MyTextInput label="Комментарий" name="comment" placeholder="Введите название раздела" />
+                            <TextInputOutlined
+                                label="Комментарий"
+                                name="comment"
+                                placeholder="Введите название раздела"
+                            />
                             <Button
                                 disabled={isSubmitting}
                                 type="submit"

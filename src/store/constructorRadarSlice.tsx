@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
     GridRadarConstructor,
     RowRadarConstructor,
-} from '../pages/admin/RadarConstructor/RadarConstructorGrid/RadarConstructorGrid';
+} from '../pages/admin/RadarConstructor/radarConstructorGrid/RadarConstructorGrid';
 import { initialState } from './mock';
 
 export const constructorRadarSlice = createSlice({

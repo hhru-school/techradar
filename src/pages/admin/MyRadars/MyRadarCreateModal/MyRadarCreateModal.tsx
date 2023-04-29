@@ -1,38 +1,16 @@
 import { FC, useCallback } from 'react';
-import { Box, Button, Modal, Typography, TextField } from '@mui/material';
-import { Formik, FormikHelpers, Form, useField, FieldHookConfig } from 'formik';
+import { Box, Button, Modal, Typography } from '@mui/material';
+import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { styleModal } from '../../../../components/AuthFormModal/AuthFormModal';
+import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { createNewRadarSection, setRadarsCreateModalOpen } from '../../../../store/myRadarsSlice';
 
 export interface Values {
     name: string;
 }
-
-type PropsInput = {
-    label: string;
-    placeholder: string;
-};
-
-const MyTextInput = ({ ...props }) => {
-    const [field, meta] = useField<FieldHookConfig<PropsInput>>({ ...props, name: 'name' });
-    return (
-        <>
-            <TextField
-                {...props}
-                {...field}
-                sx={{ marginTop: '20px' }}
-                variant="outlined"
-                id="outlined-basic"
-                type="text"
-                name="name"
-            />
-            {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
-        </>
-    );
-};
 
 const validSchema = Yup.object({
     name: Yup.string().required('Обязательное поле!'),
@@ -68,7 +46,12 @@ const MyRadarCreateModal: FC = () => {
                 >
                     {({ isSubmitting }) => (
                         <Form className="form auth-form">
-                            <MyTextInput label="Название" placeholder="Введите название раздела" />
+                            <TextInputOutlined
+                                label="Название"
+                                type="text"
+                                name="name"
+                                placeholder="Введите название раздела"
+                            />
                             <Button
                                 disabled={isSubmitting}
                                 type="submit"
