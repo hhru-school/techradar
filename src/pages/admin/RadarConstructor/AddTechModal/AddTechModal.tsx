@@ -3,7 +3,7 @@ import { Box, Button, Modal, Typography, MenuItem, Select, FormControl, InputLab
 import { Formik, FormikHelpers, Form, useField } from 'formik';
 import * as Yup from 'yup';
 
-import { styleModal } from '../../../../components/AuthFormModal/AuthFormModal';
+import { styleModal } from '../../../../components/authFormModal/AuthFormModal';
 import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
 import { setRadarConstrTechModalOpen, updateRadarConstrTechGrid } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';

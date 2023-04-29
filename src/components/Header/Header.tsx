@@ -24,7 +24,7 @@ import {
     useAppDispatch,
     // useAppSelector
 } from '../../store/hooks';
-import AuthFormModal from '../AuthFormModal/AuthFormModal';
+import AuthFormModal from '../authFormModal/AuthFormModal';
 
 const Header: FC = () => {
     const dispatch = useAppDispatch();
