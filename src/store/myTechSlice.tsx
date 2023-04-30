@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RowTech, GridTech } from '../pages/admin/MyTechnologies/myTechDataGrid/MyTechDataGrid';
+import { RowTech, GridTech } from '../pages/admin/myTechnologies/myTechDataGrid/MyTechDataGrid';
 import { initialState } from './mock';
 
 export const MyTechSlice = createSlice({

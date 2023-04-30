@@ -4,9 +4,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ruRU } from '@mui/x-data-grid';
 
 import Header from './components/header/Header';
-import MyRadars from './pages/admin/MyRadars/MyRadars';
-import MyTechnologies from './pages/admin/MyTechnologies/MyTechnologies';
-import RadarConstructor from './pages/admin/RadarConstructor/RadarConstructor';
+import MyRadars from './pages/admin/myRadars/MyRadars';
+import MyTechnologies from './pages/admin/myTechnologies/MyTechnologies';
+import RadarConstructor from './pages/admin/radarConstructor/RadarConstructor';
 import TechRadar from './pages/techradar/TechRadar';
 
 const theme = createTheme(

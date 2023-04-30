@@ -1,6 +1,6 @@
-import { GridRadarObj } from '../pages/admin/MyRadars/myRadarsDataGrid/MyRadarsDataGrid';
-import { GridTech } from '../pages/admin/MyTechnologies/myTechDataGrid/MyTechDataGrid';
-import { GridRadarConstructor } from '../pages/admin/RadarConstructor/radarConstructorGrid/RadarConstructorGrid';
+import { GridRadarObj } from '../pages/admin/myRadars/myRadarsDataGrid/MyRadarsDataGrid';
+import { GridTech } from '../pages/admin/myTechnologies/myTechDataGrid/MyTechDataGrid';
+import { GridRadarConstructor } from '../pages/admin/radarConstructor/radarConstructorGrid/RadarConstructorGrid';
 
 type Input = { label: string; id: string; name: string; type: string; autoComplete: string };
 
