@@ -10,7 +10,7 @@ const TechRadar: FC = () => {
 
     const { data: radars, isLoading: radarsIsLoading } = useGetAllCompanyRadarsQuery(Number(companyId));
 
-    const { data: radar, isLoading: radarIsLoading, isFetching } = useGetRadarQuery(Number(radarId));
+    const { data: radar, isFetching: radarIsFetching } = useGetRadarQuery(Number(radarId));
 
     return (
         <>
@@ -20,7 +20,7 @@ const TechRadar: FC = () => {
                 radars={radars}
                 isLoading={radarsIsLoading}
             />
-            <TechRadarMain radar={radar} isLoading={radarIsLoading || isFetching} />
+            <TechRadarMain radar={radar} isLoading={radarIsFetching} />
         </>
     );
 };
