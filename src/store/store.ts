@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { companyRadarsApi, companyRadarsApi } from '../api/companyRadarsApi';
+import { companyRadarsApi } from '../api/companyRadarsApi';
 import activeBlipReducer from './activeBlipSlice';
 import activeSectorReducer from './activeSectorSlice';
 import authentificationReducer from './authentificationSlice';
