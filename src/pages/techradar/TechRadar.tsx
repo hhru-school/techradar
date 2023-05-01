@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useGetAllCompanyRadarsQuery, useGetRadarQuery } from '../../api/companyRadarsApi';
+import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
 import NavTabsContainer from './components/tab/NavTabsContainer';
 
@@ -10,7 +11,7 @@ const TechRadar: FC = () => {
 
     const { data: radars, isLoading: radarsIsLoading } = useGetAllCompanyRadarsQuery(Number(companyId));
 
-    const { data: radar, isFetching: radarIsFetching } = useGetRadarQuery(Number(radarId));
+    const { data: radar, isFetching: radarIsFetching, error: radarError } = useGetRadarQuery(Number(radarId));
 
     return (
         <>
@@ -20,7 +21,11 @@ const TechRadar: FC = () => {
                 radars={radars}
                 isLoading={radarsIsLoading}
             />
-            <TechRadarMain radar={radar} isLoading={radarIsFetching} />
+            {!radarError ? (
+                <TechRadarMain radar={radar} isLoading={radarIsFetching} />
+            ) : (
+                <ErrorMessage errorStatus={404} />
+            )}
         </>
     );
 };
