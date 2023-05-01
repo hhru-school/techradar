@@ -1,7 +1,13 @@
 import { FC } from 'react';
 
 import RadarSector from './RadarSector';
-import { defaultBlipRadius, sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
+import {
+    defaultBlipRadius,
+    defaultColorScheme,
+    defaultGap,
+    sectorNameFontSize,
+    sectorNameTextOffset,
+} from './styleConfig';
 import { Blip } from './types';
 import { getOffset, getOffsetXY } from './utils';
 
@@ -9,8 +15,8 @@ type Props = {
     sectorNames: string[];
     ringNames: string[];
     radius: number;
-    gap: number;
-    colorScheme: string[];
+    gap?: number;
+    colorScheme?: string[];
     data?: Blip[] | null;
     blipRadus?: number;
 };
@@ -19,8 +25,8 @@ const Radar: FC<Props> = ({
     ringNames,
     sectorNames,
     radius,
-    gap,
-    colorScheme,
+    gap = defaultGap,
+    colorScheme = defaultColorScheme,
     data = null,
     blipRadus: blipRadius = defaultBlipRadius,
 }) => {

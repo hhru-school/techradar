@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
 import classNames from 'classnames';
 
@@ -25,20 +25,20 @@ const RadarBlip: FC<Props> = ({ id, name, x, y, r }) => {
 
     const classes = isActive ? classNames(styles.blip, styles.blipActive) : styles.blip;
 
-    const mouseEnterHandler = () => {
+    const mouseEnterHandler = useCallback(() => {
         dispatch(setActiveBlip(id));
-    };
+    }, [dispatch, id]);
 
-    const mouseLeaveHandler = () => {
+    const mouseLeaveHandler = useCallback(() => {
         dispatch(clearActiveBlip());
-    };
+    }, [dispatch]);
 
     const onClickHandler = (event: React.SyntheticEvent) => {
         event.stopPropagation();
     };
 
     return (
-        <Tooltip key={activeId} open={isActive && !isTransforming} title={name} arrow>
+        <Tooltip key={Number(isTransforming)} open={isActive && !isTransforming} title={name} arrow>
             <g
                 className={classes}
                 onMouseEnter={mouseEnterHandler}
