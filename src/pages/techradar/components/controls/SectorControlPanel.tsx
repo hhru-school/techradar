@@ -1,12 +1,13 @@
 import { FC } from 'react';
 
+import { defaultColorScheme } from '../../../../components/radar/styleConfig';
 import SectorControlChip from './SectorControlChip';
 
 import styles from './controls.module.less';
 
-type Props = { sectorNames?: string[]; colorScheme: string[]; isLoading?: boolean };
+type Props = { sectorNames: string[]; colorScheme?: string[]; isLoading?: boolean };
 
-const SectorControlPanel: FC<Props> = ({ sectorNames, colorScheme, isLoading = false }) => {
+const SectorControlPanel: FC<Props> = ({ sectorNames, colorScheme = defaultColorScheme, isLoading = false }) => {
     const chips =
         sectorNames &&
         sectorNames.map((sectorName, i) => (

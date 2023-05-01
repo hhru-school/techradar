@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useGetAllCompanyRadarsQuery, useGetRadarQuery } from '../../api/companyRadarsApi';
+import { isFetchBaseQueryError } from '../../api/helpers';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
 import NavTabsContainer from './components/tab/NavTabsContainer';
@@ -15,16 +16,18 @@ const TechRadar: FC = () => {
 
     return (
         <>
-            <NavTabsContainer
-                radarId={Number(radarId)}
-                companyId={Number(companyId)}
-                radars={radars}
-                isLoading={radarsIsLoading}
-            />
             {!radarError ? (
-                <TechRadarMain radar={radar} isLoading={radarIsFetching} />
+                <>
+                    <NavTabsContainer
+                        radarId={Number(radarId)}
+                        companyId={Number(companyId)}
+                        radars={radars}
+                        isLoading={radarsIsLoading}
+                    />
+                    <TechRadarMain radar={radar} isLoading={radarIsFetching} />
+                </>
             ) : (
-                <ErrorMessage errorStatus={404} />
+                <ErrorMessage errorStatus={isFetchBaseQueryError(radarError) ? radarError.status : null} />
             )}
         </>
     );

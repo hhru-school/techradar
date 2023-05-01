@@ -3,6 +3,7 @@ import { Skeleton } from '@mui/material';
 
 import { FormattedRadarData } from '../../../../api/radarApiUtils';
 import Radar from '../../../../components/radar/Radar';
+import SectorControlPanel from '../controls/SectorControlPanel';
 
 import styles from './radar.module.less';
 
@@ -19,6 +20,7 @@ const RadarContainer: FC<Props> = ({ radar, isLoading = false }) => {
     return (
         <div className={styles.container}>
             <div className={styles.controlContainer}>
+                {!isLoading && radar && <SectorControlPanel sectorNames={radar.sectorNames} />}
                 {isLoading && <Skeleton variant="rectangular" sx={controlSceletonSx} />}
             </div>
             <div className={styles.radarContainer}>
