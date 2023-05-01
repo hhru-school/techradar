@@ -1,84 +1,45 @@
-import { FC, SyntheticEvent, useCallback, useMemo } from 'react';
-import { Autocomplete, AutocompleteRenderInputParams, TextField } from '@mui/material';
+import { FC, useMemo } from 'react';
 
-import { Blip } from '../../../../components/radar/types';
-import { clearActiveBlip, setActiveBlip, setOpenDescription } from '../../../../store/activeBlipSlice';
-import { setActiveSector } from '../../../../store/activeSectorSlice';
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import { FormattedRadarData } from '../../../../api/radarApiUtils';
+import { defaultColorScheme } from '../../../../components/radar/styleConfig';
+import { useAppSelector } from '../../../../store/hooks';
+import LegendSearch from './LegendSearch';
 import LegendSectorGroup from './LegendSectorGroup';
 
 import styles from './legend.module.less';
 
-type Props = { blips: Blip[]; ringNames: string[]; sectorNames: string[]; colorScheme: string[] };
+type Props = { radar: FormattedRadarData; colorScheme?: string[] };
 
-const suggestsHight = 150;
+const suggestsHeight = 150;
 
-const getOptionLabel = (blip: Blip) => blip.name;
-const groupBy = (blip: Blip) => blip.sectorName;
-const autoCompleteSx = { width: 300 };
-const renderInput = (params: AutocompleteRenderInputParams) => (
-    <TextField {...params} label="Search" variant="standard" />
-);
-const listBoxProps = {
-    style: {
-        maxHeight: suggestsHight,
-    },
-};
-
-const Legend: FC<Props> = ({ blips, ringNames, sectorNames, colorScheme }) => {
+const Legend: FC<Props> = ({ radar, colorScheme = defaultColorScheme }) => {
     const hoveredSector = useAppSelector((state) => state.activeSector.hoveredSectorName);
     const activeSector = useAppSelector((state) => state.activeSector.activeSectorName);
 
-    const dispatch = useAppDispatch();
-
-    const sectorGroups = sectorNames.map((sectorName, i) => {
+    const sectorGroups = radar.sectorNames.map((sectorName, i) => {
         if (activeSector && activeSector !== sectorName) return null;
         return (
             <LegendSectorGroup
                 key={sectorName}
-                blips={blips.filter((blip) => blip.sectorName === sectorName)}
+                blips={radar.blips.filter((blip) => blip.sectorName === sectorName)}
                 sectorName={sectorName}
-                ringNames={ringNames}
+                ringNames={radar.ringNames}
                 color={colorScheme[i]}
                 opacity={hoveredSector && hoveredSector !== sectorName ? 0.2 : 1}
             />
         );
     });
 
-    const onChangeHandler = useCallback(
-        (event: SyntheticEvent, value: Blip | null) => {
-            if (value) {
-                dispatch(clearActiveBlip());
-                dispatch(setActiveSector(value.sectorName));
-                dispatch(setActiveBlip(value.id));
-                dispatch(setOpenDescription(true));
-            }
-        },
-        [dispatch]
-    );
-
     const isActiveSector = Boolean(activeSector);
 
     const legendContainerStyle = useMemo(
-        () => ({ marginTop: isActiveSector ? suggestsHight + 30 : 0 }),
+        () => ({ marginTop: isActiveSector ? suggestsHeight + 30 : 0 }),
         [isActiveSector]
     );
 
     return (
         <div>
-            <Autocomplete
-                clearOnBlur
-                disabled={blips.length === 0}
-                disablePortal
-                id="search"
-                options={blips}
-                getOptionLabel={getOptionLabel}
-                groupBy={groupBy}
-                onChange={onChangeHandler}
-                sx={autoCompleteSx}
-                renderInput={renderInput}
-                ListboxProps={listBoxProps}
-            />
+            <LegendSearch blips={radar.blips} />
             <div className={styles.legendContainer} style={legendContainerStyle}>
                 {sectorGroups}
             </div>

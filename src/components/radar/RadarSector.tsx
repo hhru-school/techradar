@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import * as d3 from 'd3-color';
 
 import {
@@ -53,56 +53,63 @@ const RadarSector: FC<Props> = ({
         dispatch(setIsTransforming(false));
     };
 
-    const transform =
-        activeSector && activeSector === sectorName
-            ? getTransform(startAngle, endAngle, radius + gap / 2)
-            : { x: 0, y: 0, scale: 1 };
+    const transform = useMemo(
+        () =>
+            activeSector && activeSector === sectorName
+                ? getTransform(startAngle, endAngle, radius + gap / 2)
+                : { x: 0, y: 0, scale: 1 },
+        [activeSector, sectorName, startAngle, endAngle, radius, gap]
+    );
 
-    const onClickHandler = () => {
+    const onClickHandler = useCallback(() => {
         if (activeSector) {
             dispatch(clearActiveSector());
         } else {
             dispatch(setActiveSector(sectorName));
         }
-    };
+    }, [dispatch, activeSector, sectorName]);
 
-    const onMouseEnterHandler = () => {
+    const onMouseEnterHandler = useCallback(() => {
         dispatch(setHoveredSector(sectorName));
-    };
+    }, [dispatch, sectorName]);
 
-    const onMouseLeaveHandler = () => {
+    const onMouseLeaveHandler = useCallback(() => {
         dispatch(clearHoveredSector());
-    };
+    }, [dispatch]);
 
     const radiuses = getRadiusListEqualSquare(ringNames.length, radius);
 
-    const segments = radiuses.map((ring, i) => {
-        const segment: Segment = {
-            innerRadius: ring.innerRadius,
-            outerRadius: ring.outerRadius,
-            startAngle,
-            endAngle,
-        };
-        const id = `${sectorName}-${ringNames[i]}`.toLowerCase();
-        return (
-            <RadarSegment
-                id={id}
-                key={id}
-                ringName={ringNames[i]}
-                segment={segment}
-                data={data && data.filter((item) => item.ringName === ringNames[i])}
-                color={
-                    d3
-                        .color(baseColor)
-                        ?.brighter(i / 3)
-                        .toString() || ''
-                }
-                seed={seed}
-                gap={gap}
-                blipRadius={blipRadius / transform.scale}
-            />
-        );
-    });
+    const segments = useMemo(
+        () =>
+            radiuses.map((ring, i) => {
+                const segment: Segment = {
+                    innerRadius: ring.innerRadius,
+                    outerRadius: ring.outerRadius,
+                    startAngle,
+                    endAngle,
+                };
+                const id = `${sectorName}-${ringNames[i]}`.toLowerCase();
+                return (
+                    <RadarSegment
+                        id={id}
+                        key={id}
+                        ringName={ringNames[i]}
+                        segment={segment}
+                        data={data && data.filter((item) => item.ringName === ringNames[i])}
+                        color={
+                            d3
+                                .color(baseColor)
+                                ?.brighter(i / 3)
+                                .toString() || ''
+                        }
+                        seed={seed}
+                        gap={gap}
+                        blipRadius={blipRadius / transform.scale}
+                    />
+                );
+            }),
+        [radiuses, blipRadius, ringNames, baseColor, startAngle, endAngle, transform, gap, data, seed, sectorName]
+    );
 
     return (
         <g
