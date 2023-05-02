@@ -12,7 +12,7 @@ type Props = {
     isLoading?: boolean;
 };
 
-const controlSceletonSx = { height: 32, width: 400, borderRadius: 16 };
+const controlSkeletonSx = { height: 32, width: 400, borderRadius: 16 };
 
 const radius = 250;
 
@@ -21,7 +21,7 @@ const RadarContainer: FC<Props> = ({ radar, isLoading = false }) => {
         <div className={styles.container}>
             <div className={styles.controlContainer}>
                 {!isLoading && radar && <SectorControlPanel sectorNames={radar.sectorNames} />}
-                {isLoading && <Skeleton variant="rectangular" sx={controlSceletonSx} />}
+                {isLoading && <Skeleton variant="rectangular" sx={controlSkeletonSx} />}
             </div>
             <div className={styles.radarContainer}>
                 {!isLoading && radar && (

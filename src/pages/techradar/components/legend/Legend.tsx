@@ -16,19 +16,23 @@ const Legend: FC<Props> = ({ radar, colorScheme = defaultColorScheme }) => {
     const hoveredSector = useAppSelector((state) => state.activeSector.hoveredSectorName);
     const activeSector = useAppSelector((state) => state.activeSector.activeSectorName);
 
-    const sectorGroups = radar.sectorNames.map((sectorName, i) => {
-        if (activeSector && activeSector !== sectorName) return null;
-        return (
-            <LegendSectorGroup
-                key={sectorName}
-                blips={radar.blips.filter((blip) => blip.sectorName === sectorName)}
-                sectorName={sectorName}
-                ringNames={radar.ringNames}
-                color={colorScheme[i]}
-                opacity={hoveredSector && hoveredSector !== sectorName ? 0.2 : 1}
-            />
-        );
-    });
+    const sectorGroups = useMemo(
+        () =>
+            radar.sectorNames.map((sectorName, i) => {
+                if (activeSector && activeSector !== sectorName) return null;
+                return (
+                    <LegendSectorGroup
+                        key={sectorName}
+                        blips={radar.blips.filter((blip) => blip.sectorName === sectorName)}
+                        sectorName={sectorName}
+                        ringNames={radar.ringNames}
+                        color={colorScheme[i]}
+                        opacity={hoveredSector && hoveredSector !== sectorName ? 0.2 : 1}
+                    />
+                );
+            }),
+        [radar, hoveredSector, activeSector, colorScheme]
+    );
 
     const isActiveSector = Boolean(activeSector);
 

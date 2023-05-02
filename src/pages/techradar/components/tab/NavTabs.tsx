@@ -23,8 +23,7 @@ const NavTabs: FC<Props> = ({ radarId, companyId, radars }) => {
 
     const tabs = useMemo(
         () =>
-            radars &&
-            radars.map((radar) => (
+            radars?.map((radar) => (
                 <Tab
                     key={radar.id}
                     label={radar.name}

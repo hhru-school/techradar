@@ -14,21 +14,19 @@ const TechRadar: FC = () => {
 
     const { data: radar, isFetching: radarIsFetching, error: radarError } = useGetRadarQuery(Number(radarId));
 
+    if (radarError) {
+        return <ErrorMessage errorStatus={isFetchBaseQueryError(radarError) ? radarError.status : null} />;
+    }
+
     return (
         <>
-            {!radarError ? (
-                <>
-                    <NavTabsContainer
-                        radarId={Number(radarId)}
-                        companyId={Number(companyId)}
-                        radars={radars}
-                        isLoading={radarsIsLoading}
-                    />
-                    <TechRadarMain radar={radar} isLoading={radarIsFetching} />
-                </>
-            ) : (
-                <ErrorMessage errorStatus={isFetchBaseQueryError(radarError) ? radarError.status : null} />
-            )}
+            <NavTabsContainer
+                radarId={Number(radarId)}
+                companyId={Number(companyId)}
+                radars={radars}
+                isLoading={radarsIsLoading}
+            />
+            <TechRadarMain radar={radar} isLoading={radarIsFetching} />
         </>
     );
 };
