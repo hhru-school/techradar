@@ -16,14 +16,14 @@ import {
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { setAuthFormData, setAuthFormOpen } from '../../store/authentificationSlice';
+import { setAuthFormData, setAuthFormOpen } from '../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import TextInputOutlined from '../textInputOutlined/TextInputOutlined';
 
 import './AuthFormModal.less';
 
 export interface Values {
-    email: string;
+    user: string;
     password: string;
 }
 
@@ -74,7 +74,7 @@ const MyPassInput = ({ label, ...props }: InputProps) => {
 };
 
 const validSchema = Yup.object({
-    email: Yup.string().email('Неправильный email адрес').required('Обязательное поле!'),
+    user: Yup.string().email('Неправильный email адрес').required('Обязательное поле!'),
     password: Yup.string().min(2, 'Минимум 2 символа для заполнения').required('Обязательное поле!'),
 });
 
@@ -92,7 +92,7 @@ export const styleModal = {
 
 const slots = { backdrop: Backdrop };
 const initialValues = {
-    email: '',
+    user: '',
     password: '',
 };
 const slotProps = {
@@ -103,7 +103,7 @@ const slotProps = {
 
 const AuthFormModal: FC = () => {
     const dispatch = useAppDispatch();
-    const showAuthentificationForm = useAppSelector((state) => state.authentification.showAuthentificationForm);
+    const showAuthForm = useAppSelector((state) => state.auth.showAuthForm);
 
     const handleClose = useCallback(() => {
         dispatch(setAuthFormOpen(false));
@@ -113,13 +113,13 @@ const AuthFormModal: FC = () => {
         <Modal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
-            open={showAuthentificationForm}
+            open={showAuthForm}
             onClose={handleClose}
             closeAfterTransition
             slots={slots}
             slotProps={slotProps}
         >
-            <Fade in={showAuthentificationForm}>
+            <Fade in={showAuthForm}>
                 <Box sx={styleModal}>
                     <Typography id="transition-modal-title" variant="h6" component="h2">
                         Вход в учетную запись TechRadar
@@ -134,7 +134,7 @@ const AuthFormModal: FC = () => {
                         }}
                     >
                         <Form className="form auth-form">
-                            <TextInputOutlined label="Email" id="email" name="email" type="email" autoComplete="off" />
+                            <TextInputOutlined label="Email" id="user" name="user" type="email" autoComplete="off" />
                             <MyPassInput label="Пароль" id="password" name="password" autoComplete="off" />
                             <Button type="submit" variant="contained" color="success" sx={{ marginTop: '20px' }}>
                                 Войти
