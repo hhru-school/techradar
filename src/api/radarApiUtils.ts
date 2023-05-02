@@ -1,4 +1,4 @@
-import { Blip } from '../../components/radar/types';
+import { Blip } from '../components/radar/types';
 
 export interface DataQuadrant {
     id: number;
@@ -20,7 +20,7 @@ export interface DataBlip {
     ringId: number;
 }
 
-export interface ApiData {
+export interface ApiRadarData {
     id: number;
     name: string;
     quadrants: DataQuadrant[];
@@ -28,13 +28,13 @@ export interface ApiData {
     blips: DataBlip[];
 }
 
-export interface FormattedData {
+export interface FormattedRadarData {
     blips: Blip[];
     sectorNames: string[];
     ringNames: string[];
 }
 
-export const formatApiData = (apiData: ApiData): FormattedData => {
+export const formatApiData = (apiData: ApiRadarData): FormattedRadarData => {
     const sectorNames = apiData.quadrants
         .sort((quadrant1, quadrant2) => quadrant1.position - quadrant2.position)
         .map((quadrant) => quadrant.name);
@@ -72,34 +72,6 @@ export const formatApiData = (apiData: ApiData): FormattedData => {
     return {
         sectorNames,
         ringNames,
-
         blips: sortedBlips,
     };
 };
-
-// Все радары компании:
-// http://localhost:8080/api/radars?companyId=1
-// Конкретный радар:
-// http://localhost:8080/api/radars/1
-
-async function getData(url: string): Promise<unknown> {
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            mode: 'cors',
-        },
-    }).then((res) => {
-        if (!res.ok) {
-            console.error(res);
-            throw new Error(res.statusText);
-        }
-        return res;
-    });
-    return response.json();
-}
-
-export async function loadRadar(id: string): Promise<ApiData> {
-    const data = await getData(`/api/radars/${id}`);
-    return data as ApiData;
-}

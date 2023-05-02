@@ -1,53 +1,32 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Radar from '../../components/radar/Radar';
-import { defaultColorScheme, defaultGap } from '../../components/radar/styleConfig';
-import { FormattedData, formatApiData, loadRadar } from './api';
-import SectorControlPanel from './components/controls/SectorControlPanel';
-import Legend from './components/legend/Legend';
-
-import styles from './radar.module.less';
+import { useGetAllCompanyRadarsQuery, useGetRadarQuery } from '../../api/companyRadarsApi';
+import { isFetchBaseQueryError } from '../../api/helpers';
+import ErrorMessage from '../../components/error/ErrorMessage';
+import TechRadarMain from './components/main/TechRadarMain';
+import NavTabsContainer from './components/tab/NavTabsContainer';
 
 const TechRadar: FC = () => {
-    const { radar } = useParams();
+    const { companyId, radarId } = useParams();
 
-    const [data, setData] = useState<FormattedData | null>(null);
+    const { data: radars, isLoading: radarsIsLoading } = useGetAllCompanyRadarsQuery(Number(companyId));
 
-    useEffect(() => {
-        if (radar)
-            loadRadar(radar)
-                .then((apiData) => {
-                    setData(formatApiData(apiData));
-                })
-                .catch(() => console.error);
-    }, [radar]);
+    const { data: radar, isFetching: radarIsFetching, error: radarError } = useGetRadarQuery(Number(radarId));
+
+    if (radarError) {
+        return <ErrorMessage errorStatus={isFetchBaseQueryError(radarError) ? radarError.status : null} />;
+    }
 
     return (
         <>
-            {data && (
-                <div className={styles.mainContainer}>
-                    <div className={styles.radarContainer}>
-                        <SectorControlPanel sectorNames={data.sectorNames} colorScheme={defaultColorScheme} />
-                        <Radar
-                            sectorNames={data.sectorNames}
-                            ringNames={data.ringNames}
-                            radius={300}
-                            gap={defaultGap}
-                            colorScheme={defaultColorScheme}
-                            data={data.blips}
-                        />
-                    </div>
-                    <div>
-                        <Legend
-                            blips={data.blips}
-                            ringNames={data.ringNames}
-                            sectorNames={data.sectorNames}
-                            colorScheme={defaultColorScheme}
-                        />
-                    </div>
-                </div>
-            )}
+            <NavTabsContainer
+                radarId={Number(radarId)}
+                companyId={Number(companyId)}
+                radars={radars}
+                isLoading={radarsIsLoading}
+            />
+            <TechRadarMain radar={radar} isLoading={radarIsFetching} />
         </>
     );
 };

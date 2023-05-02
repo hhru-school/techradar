@@ -1,4 +1,4 @@
-import { ApiData, DataBlip, DataQuadrant, DataRing } from '../../pages/techradar/api';
+import { ApiRadarData, DataBlip, DataQuadrant, DataRing } from '../../api/radarApiUtils';
 import { Blip } from './types';
 
 /*  Пример тестовых данных, приходящих с бека:
@@ -140,7 +140,7 @@ const getBlips = (numOfBlips: number): DataBlip[] => {
     return blips;
 };
 
-export const generateApiData = (numOfBlips: number): ApiData => {
+export const generateApiData = (numOfBlips: number): ApiRadarData => {
     return {
         id: random(0, random(0, 10000)),
         name: randomWord(8),

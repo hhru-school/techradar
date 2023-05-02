@@ -19,7 +19,7 @@ export const defaultRadarRadius = 300;
 export const defaultColorScheme = colors;
 
 export const textOffsetY = 2;
-export const sectorNameFontSize = 20;
+export const sectorNameFontSize = 16;
 export const sectorNameTextOffset = 15;
 
-export const defaultBlipRadius = 8;
+export const defaultBlipRadius = 7;
