@@ -34,3 +34,8 @@ export interface Transform {
     y: number;
     scale: number;
 }
+
+export enum RadarComponentVariant {
+    Demonstrative,
+    Editable,
+}

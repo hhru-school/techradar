@@ -24,7 +24,6 @@ export const companyRadarsApi = createApi({
         getRadar: builder.query<FormattedRadarData, number>({
             query: (radarId) => `/${radarId}`,
             transformResponse: (rawResult: ApiRadarData) => formatApiData(rawResult),
-            // transformErrorResponse: (response: { status: string | number }) => response.status,
         }),
     }),
 });
