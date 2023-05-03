@@ -1,6 +1,7 @@
+import { Blip } from '../components/radar/types';
 import { GridRadarObj } from '../pages/admin/myRadars/myRadarsDataGrid/MyRadarsDataGrid';
 import { GridTech } from '../pages/admin/myTechnologies/myTechDataGrid/MyTechDataGrid';
-import { GridRadarConstructor } from '../pages/admin/radarConstructor/radarConstructorGrid/RadarConstructorGrid';
+// import { GridRadarConstructor } from '../pages/admin/radarConstructor/radarConstructorGrid/RadarConstructorGrid';
 
 type Input = { label: string; id: string; name: string; type: string; autoComplete: string };
 
@@ -21,7 +22,7 @@ interface State {
     authentificationFormData: AuthFormInputs;
     techGrid: GridTech;
     radarGrid: GridRadarObj;
-    radarConstructorGrid: GridRadarConstructor;
+    // radarConstructorGrid: GridRadarConstructor;
     countRingInputs: number;
     countSectorInputs: number;
     showAuthentificationForm: boolean;
@@ -30,6 +31,7 @@ interface State {
     showRadarConstrTechModal: boolean;
     ringNames: string[];
     sectorNames: string[];
+    blips: Blip[];
 }
 
 export const initialState: State = {
@@ -102,26 +104,26 @@ export const initialState: State = {
             comment: 'Только без фанатизма и вложенных &, их сложнее грепать.',
         },
     ],
-    radarConstructorGrid: [
-        {
-            id: 1,
-            techName: 'babel',
-            ring: 1,
-            sector: 2,
-        },
-        {
-            id: 2,
-            techName: 'react',
-            ring: 3,
-            sector: 4,
-        },
-        {
-            id: 3,
-            techName: 'JS',
-            ring: 2,
-            sector: 4,
-        },
-    ],
+    // radarConstructorGrid: [
+    //     {
+    //         id: 1,
+    //         techName: 'babel',
+    //         ringName: 1,
+    //         sector: 2,
+    //     },
+    //     {
+    //         id: 2,
+    //         techName: 'react',
+    //         ringName: 3,
+    //         sector: 4,
+    //     },
+    //     {
+    //         id: 3,
+    //         techName: 'JS',
+    //         ringName: 2,
+    //         sector: 4,
+    //     },
+    // ],
     radarGrid: {
         android: [
             {
@@ -203,4 +205,5 @@ export const initialState: State = {
     countSectorInputs: defaultSectorNumber,
     ringNames: defaultRingsNames,
     sectorNames: defaultSectorNames,
+    blips: [],
 };

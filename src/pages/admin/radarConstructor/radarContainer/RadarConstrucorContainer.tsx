@@ -11,6 +11,7 @@ const RadarConstructorContainer: FC = () => {
     const sectorsNumber = useAppSelector((state) => state.constructorRadar.countSectorInputs);
     const sectorNames = useAppSelector((state) => state.constructorRadar.sectorNames);
     const ringNames = useAppSelector((state) => state.constructorRadar.ringNames);
+    const blips = useAppSelector((state) => state.constructorRadar.blips);
 
     return (
         <div className={styles.xxx}>
@@ -18,6 +19,7 @@ const RadarConstructorContainer: FC = () => {
                 sectorNames={sectorNames.slice(0, sectorsNumber)}
                 ringNames={ringNames.slice(0, ringsNumber)}
                 radius={250}
+                data={blips}
                 variant={RadarComponentVariant.Editable}
             />
         </div>

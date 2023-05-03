@@ -26,7 +26,7 @@ export interface Blip {
     name: string;
     ringName: string;
     sectorName: string;
-    description: string;
+    description: string | null;
 }
 
 export interface Transform {
