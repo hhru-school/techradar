@@ -6,6 +6,11 @@ type Input = { label: string; id: string; name: string; type: string; autoComple
 
 type ConstructorInputs = Array<Input>;
 
+const defaultRingsNames = ['1st', '2nd', '3rd', '4th', '5th', '6th'];
+const defaultSectorNames = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth'];
+const defaultRingNumber = 4;
+const defaultSectorNumber = 4;
+
 export interface AuthFormInputs {
     email: string | null;
     password: string | null;
@@ -23,6 +28,8 @@ interface State {
     showRadarsCreateModal: boolean;
     showTechCreateModal: boolean;
     showRadarConstrTechModal: boolean;
+    ringNames: string[];
+    sectorNames: string[];
 }
 
 export const initialState: State = {
@@ -192,6 +199,8 @@ export const initialState: State = {
     showRadarsCreateModal: false,
     showTechCreateModal: false,
     showRadarConstrTechModal: false,
-    countRingInputs: 4,
-    countSectorInputs: 4,
+    countRingInputs: defaultRingNumber,
+    countSectorInputs: defaultSectorNumber,
+    ringNames: defaultRingsNames,
+    sectorNames: defaultSectorNames,
 };

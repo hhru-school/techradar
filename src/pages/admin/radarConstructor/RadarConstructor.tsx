@@ -22,7 +22,7 @@ import AddTechModal from './addTechModal/AddTechModal';
 import RadarConstructorGrid from './radarConstructorGrid/RadarConstructorGrid';
 import RadarConstructorContainer from './radarContainer/RadarConstrucorContainer';
 import RadarPublishBtn from './radarPublishBtn/RadarPublishBtn';
-import RingInputs from './ringInputs/ringInputs';
+import RingInputs from './ringInputs/RingInputs';
 import SectorInputs from './sectorInputs/SectorInputs';
 
 import './RadarConstructor.less';
