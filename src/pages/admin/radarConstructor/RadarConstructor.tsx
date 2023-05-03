@@ -20,6 +20,7 @@ import { setRadarConstrTechModalOpen } from '../../../store/constructorRadarSlic
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import AddTechModal from './addTechModal/AddTechModal';
 import RadarConstructorGrid from './radarConstructorGrid/RadarConstructorGrid';
+import RadarConstructorContainer from './radarContainer/RadarConstrucorContainer';
 import RadarPublishBtn from './radarPublishBtn/RadarPublishBtn';
 import CircleInputs from './ringInputs/ringInputs';
 import SectorInputs from './sectorInputs/SectorInputs';
@@ -114,7 +115,6 @@ const RadarConstructor: FC = () => {
                 validationSchema={formikValid}
                 onSubmit={(values: Values, { setSubmitting }: FormikHelpers<Values>) => {
                     setTimeout(() => {
-                        // console.log(values);
                         setSubmitting(false);
                     }, 500);
                 }}
@@ -149,7 +149,7 @@ const RadarConstructor: FC = () => {
                     </Grid>
                     <Grid container>
                         <Grid item sm={8}>
-                            {/* РАДАР СУВАТЬ СЮДА */}
+                            <RadarConstructorContainer />
                         </Grid>
                         <Grid
                             item

@@ -64,9 +64,6 @@ const RadarSector: FC<Props> = ({
 }) => {
     const endAngle = startAngle + sweepAngle;
 
-    // const hoveredSector = useAppSelector((state) => state.activeSector.hoveredSectorName);
-    // const activeSector = useAppSelector((state) => state.activeSector.activeSectorName);
-
     const selectActiveSector = useMemo(makeSelectActiveSector, []);
     const activeSector = useAppSelector((state) => selectActiveSector(state, variant));
 
@@ -144,16 +141,17 @@ const RadarSector: FC<Props> = ({
         [radiuses, blipRadius, ringNames, baseColor, startAngle, endAngle, transform, gap, data, seed, sectorName]
     );
 
+    const classes = variant === RadarComponentVariant.Demonstrative ? styles.sectorDemonstrative : styles.sectorDefault;
+
     return (
         <g
             onClick={onClickHandler}
             onMouseEnter={onMouseEnterHandler}
             onMouseLeave={onMouseLeaveHandler}
-            className={styles.animated}
+            className={classes}
             transform={`translate(${transform.x} ${transform.y}) scale(${transform.scale})`}
             opacity={hoveredSector && hoveredSector !== sectorName ? 0.5 : 1}
             display={activeSector && activeSector !== sectorName ? 'none' : 'auto'}
-            cursor="pointer"
             onTransitionEnd={transitionEndHandler}
         >
             <path
