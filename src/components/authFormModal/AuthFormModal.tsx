@@ -16,7 +16,12 @@ import {
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { setAuthFormData, setAuthFormOpen } from '../../store/authSlice';
+import { useLoginMutation } from '../../api/authApi';
+import {
+    // setAuthFormData,
+    setAuthFormOpen,
+    setCredentials,
+} from '../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import TextInputOutlined from '../textInputOutlined/TextInputOutlined';
 
@@ -104,6 +109,7 @@ const slotProps = {
 const AuthFormModal: FC = () => {
     const dispatch = useAppDispatch();
     const showAuthForm = useAppSelector((state) => state.auth.showAuthForm);
+    const [login] = useLoginMutation();
 
     const handleClose = useCallback(() => {
         dispatch(setAuthFormOpen(false));
@@ -127,14 +133,17 @@ const AuthFormModal: FC = () => {
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validSchema}
-                        onSubmit={(values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-                            dispatch(setAuthFormData(values));
+                        onSubmit={async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+                            // dispatch(setAuthFormData(values));
                             dispatch(setAuthFormOpen(false));
+                            // console.log(values);
+                            const user = await login(values).unwrap();
+                            dispatch(setCredentials(user));
                             setSubmitting(false);
                         }}
                     >
                         <Form className="form auth-form">
-                            <TextInputOutlined label="Email" id="user" name="user" type="email" autoComplete="off" />
+                            <TextInputOutlined label="Email" id="user" name="user" type="text" autoComplete="off" />
                             <MyPassInput label="Пароль" id="password" name="password" autoComplete="off" />
                             <Button type="submit" variant="contained" color="success" sx={{ marginTop: '20px' }}>
                                 Войти
