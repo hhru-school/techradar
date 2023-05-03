@@ -16,8 +16,8 @@ export const constructorRadarSlice = createSlice({
         updateRadarConstrGrid: (state, action: PayloadAction<GridRadarConstructor>) => {
             state.radarConstructorGrid = action.payload;
         },
-        updateCircleCount: (state, action: PayloadAction<number>) => {
-            state.countCircleInputs = action.payload;
+        updateRingCount: (state, action: PayloadAction<number>) => {
+            state.countRingInputs = action.payload;
         },
         updateSectorCount: (state, action: PayloadAction<number>) => {
             state.countSectorInputs = action.payload;
@@ -30,7 +30,7 @@ export const constructorRadarSlice = createSlice({
 
 export const {
     updateRadarConstrGrid,
-    updateCircleCount,
+    updateRingCount,
     updateSectorCount,
     setRadarConstrTechModalOpen,
     updateRadarConstrTechGrid,

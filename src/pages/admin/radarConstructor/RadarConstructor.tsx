@@ -22,7 +22,7 @@ import AddTechModal from './addTechModal/AddTechModal';
 import RadarConstructorGrid from './radarConstructorGrid/RadarConstructorGrid';
 import RadarConstructorContainer from './radarContainer/RadarConstrucorContainer';
 import RadarPublishBtn from './radarPublishBtn/RadarPublishBtn';
-import CircleInputs from './ringInputs/ringInputs';
+import RingInputs from './ringInputs/ringInputs';
 import SectorInputs from './sectorInputs/SectorInputs';
 
 import './RadarConstructor.less';
@@ -171,7 +171,7 @@ const RadarConstructor: FC = () => {
                                             <Typography>Кольца и секторы</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails sx={{ display: 'flex', flexDirection: 'row' }}>
-                                            <CircleInputs />
+                                            <RingInputs />
                                             <SectorInputs />
                                         </AccordionDetails>
                                     </Accordion>

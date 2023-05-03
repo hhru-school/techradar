@@ -2,21 +2,21 @@ import { FC, useMemo } from 'react';
 import { FormControl, InputLabel, List, NativeSelect, Typography } from '@mui/material';
 
 import { TextInputStandart } from '../../../../components/textInputStandart/TextInputStandart';
-import { updateCircleCount } from '../../../../store/constructorRadarSlice';
+import { updateRingCount } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 
 const optionsArr = [1, 2, 3, 4, 5, 6];
 
-const CircleInputs: FC = () => {
+const RingInputs: FC = () => {
     const dispatch = useAppDispatch();
-    const countRings = useAppSelector((state) => state.constructorRadar.countCircleInputs);
+    const countRings = useAppSelector((state) => state.constructorRadar.countRingInputs);
 
     const inputs = useMemo(
         () =>
             new Array(countRings).fill({}).map((_, index) => ({
                 label: `Кольцо ${index + 1}`,
-                id: `name-Circle-${index + 1}`,
-                name: `nameCircle${index + 1}`,
+                id: `ringName-${index + 1}`,
+                name: `ringName${index + 1}`,
                 type: 'text',
                 autoComplete: 'on',
             })),
@@ -40,7 +40,7 @@ const CircleInputs: FC = () => {
                     Количество колец
                 </InputLabel>
                 <NativeSelect
-                    onChange={(e) => dispatch(updateCircleCount(+e.target.value))}
+                    onChange={(e) => dispatch(updateRingCount(+e.target.value))}
                     defaultValue={4}
                     inputProps={{
                         name: 'rings-count',
@@ -70,4 +70,4 @@ const CircleInputs: FC = () => {
     );
 };
 
-export default CircleInputs;
+export default RingInputs;

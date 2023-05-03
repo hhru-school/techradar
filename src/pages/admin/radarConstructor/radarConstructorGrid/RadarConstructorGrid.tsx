@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 export interface RowRadarConstructor {
     id: number | string;
     techName: string;
-    Circle: number;
+    ring: number;
     sector: number;
 }
 export type GridRadarConstructor = Array<RowRadarConstructor>;
@@ -26,7 +26,7 @@ const RadarConstructorGrid: FC = () => {
     const dispatch = useAppDispatch();
     const rows = useAppSelector((state) => state.constructorRadar.radarConstructorGrid);
     const countSectors = useAppSelector((state) => state.constructorRadar.countSectorInputs);
-    const countRings = useAppSelector((state) => state.constructorRadar.countCircleInputs);
+    const countRings = useAppSelector((state) => state.constructorRadar.countRingInputs);
 
     const deleteRow = useCallback(
         (id: GridRowId) => {

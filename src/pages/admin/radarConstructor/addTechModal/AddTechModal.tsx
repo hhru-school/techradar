@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 
 type AddTechModalData = {
     techName: string;
-    Circle: number;
+    ring: number;
     sector: number;
 };
 
@@ -45,7 +45,7 @@ const AddTechModal: FC = () => {
     const dispatch = useAppDispatch();
     const showRadarConstrTechModal = useAppSelector((state) => state.constructorRadar.showRadarConstrTechModal);
     const countSectors = useAppSelector((state) => state.constructorRadar.countSectorInputs);
-    const countRings = useAppSelector((state) => state.constructorRadar.countCircleInputs);
+    const countRings = useAppSelector((state) => state.constructorRadar.countRingInputs);
 
     const handleClose = useCallback(() => dispatch(setRadarConstrTechModalOpen(false)), [dispatch]);
 
@@ -63,7 +63,7 @@ const AddTechModal: FC = () => {
                 <Formik
                     initialValues={{
                         techName: '',
-                        Circle: 1,
+                        ring: 1,
                         sector: 1,
                     }}
                     validationSchema={validSchema}
@@ -76,7 +76,7 @@ const AddTechModal: FC = () => {
                     {({ isSubmitting }) => (
                         <Form className="form auth-form">
                             <TextInputOutlined label="Название" name="techName" placeholder="Введите название" />
-                            <MySelectInput label="Кольцо" name="Circle" countItems={countRings} />
+                            <MySelectInput label="Кольцо" name="ring" countItems={countRings} />
                             <MySelectInput label="Сектор" name="sector" countItems={countSectors} />
                             <Button
                                 disabled={isSubmitting}

@@ -5,6 +5,8 @@ import { RadarComponentVariant } from '../../../../components/radar/types';
 
 import styles from './radarConstructorContainer.module.less';
 
+// const defaultRingNames = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth'];
+
 const RadarConstructorContainer: FC = () => {
     return (
         <div className={styles.xxx}>
