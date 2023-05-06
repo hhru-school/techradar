@@ -16,14 +16,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
-import { setAuthFormOpen, setAuthFormData } from '../../store/authSlice';
+import { setAuthFormOpen } from '../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AuthFormModal from '../authFormModal/AuthFormModal';
 
 const Header: FC = () => {
     const dispatch = useAppDispatch();
-    const authFormData = useAppSelector((state) => state.auth.authFormData);
-
+    const user = useAppSelector((state) => state.auth.user);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const open = Boolean(anchorEl);
@@ -34,7 +33,6 @@ const Header: FC = () => {
 
     const handleClose = () => {
         setAnchorEl(null);
-        dispatch(setAuthFormData({ user: null, password: null }));
     };
 
     return (
@@ -58,7 +56,7 @@ const Header: FC = () => {
                             }}
                         >
                             <Tooltip title="Account settings">
-                                {authFormData.user === null ? (
+                                {user === null ? (
                                     <IconButton
                                         onClick={() => dispatch(setAuthFormOpen(true))}
                                         size="small"
@@ -75,7 +73,7 @@ const Header: FC = () => {
                                         aria-haspopup="true"
                                         aria-expanded={open ? 'true' : undefined}
                                     >
-                                        <Avatar>{authFormData.user[0]}</Avatar>
+                                        <Avatar>{user[0]}</Avatar>
                                     </IconButton>
                                 )}
                             </Tooltip>

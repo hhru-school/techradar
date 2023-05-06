@@ -6,6 +6,7 @@ import {
     Button,
     Fade,
     FormControl,
+    FormHelperText,
     IconButton,
     InputAdornment,
     InputLabel,
@@ -16,11 +17,10 @@ import {
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { useLoginMutation } from '../../api/authApi';
+// import { useLoginMutation, useLoginUserMutation } from '../../api/authApi';
 import {
-    // setAuthFormData,
     setAuthFormOpen,
-    setCredentials,
+    // setCredentials
 } from '../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import TextInputOutlined from '../textInputOutlined/TextInputOutlined';
@@ -69,17 +69,13 @@ const MyPassInput = ({ label, ...props }: InputProps) => {
                 }
                 label={label}
             />
-            {hasError ? (
-                <p className="MuiFormHelperText-root MuiFormHelperText-sizeMedium MuiFormHelperText-contained error">
-                    {meta.error}
-                </p>
-            ) : null}
+            {hasError ? <FormHelperText id="helper-text">{meta.error}</FormHelperText> : null}
         </FormControl>
     );
 };
 
 const validSchema = Yup.object({
-    user: Yup.string().email('Неправильный email адрес').required('Обязательное поле!'),
+    user: Yup.string().required('Обязательное поле!'),
     password: Yup.string().min(2, 'Минимум 2 символа для заполнения').required('Обязательное поле!'),
 });
 
@@ -109,7 +105,6 @@ const slotProps = {
 const AuthFormModal: FC = () => {
     const dispatch = useAppDispatch();
     const showAuthForm = useAppSelector((state) => state.auth.showAuthForm);
-    const [login] = useLoginMutation();
 
     const handleClose = useCallback(() => {
         dispatch(setAuthFormOpen(false));
@@ -133,14 +128,14 @@ const AuthFormModal: FC = () => {
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validSchema}
-                        onSubmit={async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-                            // dispatch(setAuthFormData(values));
-                            dispatch(setAuthFormOpen(false));
-                            // console.log(values);
-                            const user = await login(values).unwrap();
-                            dispatch(setCredentials(user));
-                            setSubmitting(false);
-                        }}
+                        onSubmit={
+                            // async
+                            (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+                                dispatch(setAuthFormOpen(false));
+                                // await loginUser(values);
+                                setSubmitting(false);
+                            }
+                        }
                     >
                         <Form className="form auth-form">
                             <TextInputOutlined label="Email" id="user" name="user" type="text" autoComplete="off" />

@@ -1,20 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface AuthFormInputs {
-    user: string | null;
-    password: string | null;
-}
+import { RootState } from './store';
 
 interface AuthState {
     showAuthForm: boolean;
-    authFormData: AuthFormInputs;
     user: string | null;
     password: string | null;
     token: string | null;
 }
 
 const initAuthState: AuthState = {
-    authFormData: { user: null, password: null },
     showAuthForm: false,
     user: null,
     password: null,
@@ -28,16 +23,23 @@ export const authSlice = createSlice({
         setAuthFormOpen: (state, action: PayloadAction<boolean>) => {
             state.showAuthForm = action.payload;
         },
-        setAuthFormData: (state, action: PayloadAction<AuthFormInputs>) => {
-            state.authFormData = action.payload;
-        },
-        setCredentials: (state, { payload: { user, token } }: PayloadAction<{ user: string; token: string }>) => {
+        setCredentials: (
+            state,
+            { payload: { user, token } }: PayloadAction<{ user: string | null; token: string | null }>
+        ) => {
             state.user = user;
             state.token = token;
+        },
+        logOut: (state) => {
+            state.user = null;
+            state.token = null;
         },
     },
 });
 
-export const { setAuthFormOpen, setAuthFormData, setCredentials } = authSlice.actions;
+export const { setAuthFormOpen, setCredentials, logOut } = authSlice.actions;
 
 export default authSlice.reducer;
+
+export const selectCurrentUser = (state: RootState): string | null => state.auth.user;
+export const selectCurrentToken = (state: RootState): string | null => state.auth.token;

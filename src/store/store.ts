@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { authApi } from '../api/authApi';
+// import { authApi } from '../api/authApi';
 import { companyRadarsApi } from '../api/companyRadarsApi';
 import activeBlipReducer from './activeBlipSlice';
 import activeSectorReducer from './activeSectorSlice';
@@ -19,13 +19,16 @@ const rootReducer = combineReducers({
     myTech: myTechReducer,
     auth: authReducer,
     [companyRadarsApi.reducerPath]: companyRadarsApi.reducer,
-    [authApi.reducerPath]: authApi.reducer,
+    // [authApi.reducerPath]: authApi.reducer,
 });
 
 export const store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({}).concat([authApi.middleware, companyRadarsApi.middleware]),
+        getDefaultMiddleware({}).concat([
+            // authApi.middleware,
+            companyRadarsApi.middleware,
+        ]),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
