@@ -22,6 +22,7 @@ export enum OnDropEvent {
     Delete = 'delete',
     Add = 'add',
     Move = 'move',
+    NotAllowed = 'notAllowed',
 }
 
 interface EditRadarState {
@@ -31,6 +32,8 @@ interface EditRadarState {
     activeSegment: Segment | null;
     blips: Blip[];
     onDropEvent: OnDropEvent | null;
+    isCreating: boolean;
+    showCreateBlipModal: boolean;
 }
 
 const initialState: EditRadarState = {
@@ -40,6 +43,8 @@ const initialState: EditRadarState = {
     activeSegment: null,
     blips: generateData(4),
     onDropEvent: null,
+    isCreating: false,
+    showCreateBlipModal: false,
 };
 
 const getBlipById = (state: EditRadarState, id: number): Blip | null => {
@@ -66,7 +71,9 @@ export const editRadarSlice = createSlice({
 
         setActiveSegment: (state, action: PayloadAction<Segment>) => {
             state.activeSegment = action.payload;
-            if (state.blip) {
+            if (state.isCreating) {
+                state.onDropEvent = OnDropEvent.Add;
+            } else if (state.blip) {
                 if (
                     state.blip.ringName !== state.activeSegment.ringName ||
                     state.blip.sectorName !== state.activeSegment.sectorName
@@ -83,12 +90,22 @@ export const editRadarSlice = createSlice({
             if (state.blip) {
                 state.onDropEvent = OnDropEvent.Delete;
             }
+            if (state.isCreating) {
+                state.onDropEvent = OnDropEvent.NotAllowed;
+            }
         },
 
         setDraggingBlip: (state, action: PayloadAction<EditingBlipAsset>) => {
             state.blipAsset = action.payload;
             state.blip = getBlipById(state, action.payload.id);
             state.isDragging = true;
+        },
+
+        setIsCreating: (state) => {
+            state.isCreating = true;
+            if (!state.activeSegment) {
+                state.onDropEvent = OnDropEvent.NotAllowed;
+            }
         },
 
         drop: (state) => {
@@ -103,14 +120,25 @@ export const editRadarSlice = createSlice({
                     }
                 }
             }
+
+            if (state.isCreating && state.onDropEvent === OnDropEvent.Add) {
+                state.showCreateBlipModal = true;
+            }
+
             state.onDropEvent = null;
             state.blipAsset = null;
             state.blip = null;
             state.isDragging = false;
+            state.isCreating = false;
+        },
+
+        closeCreateBlipModal: (state) => {
+            state.showCreateBlipModal = false;
         },
     },
 });
 
-export const { setIsDragging, setActiveSegment, clearActiveSegment, setDraggingBlip, drop } = editRadarSlice.actions;
+export const { setIsDragging, setActiveSegment, clearActiveSegment, setDraggingBlip, drop, setIsCreating } =
+    editRadarSlice.actions;
 
 export default editRadarSlice.reducer;

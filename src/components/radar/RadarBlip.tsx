@@ -1,10 +1,10 @@
 import { FC, MouseEvent, memo, useCallback, useMemo } from 'react';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
 
+import { mouseUpHandler } from '../../pages/constructor/utils';
 import { clearActiveBlip, setActiveBlip } from '../../store/activeBlipSlice';
-import { drop, setDraggingBlip } from '../../store/editRadarSlice';
+import { setDraggingBlip } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { store } from '../../store/store';
 import { RadarComponentVariant } from './types';
 
 import styles from './blip.module.less';
@@ -16,11 +16,6 @@ type Props = {
     x: number;
     y: number;
     variant?: RadarComponentVariant;
-};
-
-const mouseUpHandler = () => {
-    store.dispatch(drop());
-    document.removeEventListener('mosedown', mouseUpHandler);
 };
 
 const RadarBlip: FC<Props> = ({ id, name, x, y, r, variant = RadarComponentVariant.Demonstrative }) => {
