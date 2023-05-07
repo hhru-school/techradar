@@ -9,8 +9,12 @@
     transform: translate(15px, 15px);
 }
 
-.wrapper,
-.wrapper * {
+.wrapper {
+    position: relative;
+}
+
+.wrapperDrag,
+.wrapperDrag * {
     cursor: grabbing;
 }
 
@@ -18,8 +22,4 @@
     position: relative;
     top: 0;
     left: 0;
-}
-
-.generator {
-    background-color: yellow;
 }

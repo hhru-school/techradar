@@ -1,10 +1,12 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
+import classNames from 'classnames';
 
 import Radar from '../../../components/radar/Radar';
 import RadarBlip from '../../../components/radar/RadarBlip';
 import { sectorNames, ringNames } from '../../../components/radar/testData';
 import { RadarComponentVariant } from '../../../components/radar/types';
 import { useAppSelector } from '../../../store/hooks';
+import BlipGenerator from './BlipGenerator';
 import Cursor from './Cursor';
 
 import styles from './wrapper.module.less';
@@ -16,12 +18,15 @@ const DnDWrapper: FC = () => {
     const blipAsset = useAppSelector((state) => state.editRadar.blipAsset);
     const onDropEvent = useAppSelector((state) => state.editRadar.onDropEvent);
 
+    const ref = useRef<HTMLDivElement>(null);
+    const bbox = ref.current?.getBoundingClientRect();
+
     const [position, setPosition] = useState<Position | null>(null);
 
     const mouseMoveHandler = (event: React.MouseEvent) => {
-        if (blipAsset) {
-            const x = event.clientX - blipAsset.offsetX;
-            const y = event.clientY - blipAsset.offsetY;
+        if (blipAsset && bbox) {
+            const x = event.clientX - blipAsset.offsetX - bbox.left;
+            const y = event.clientY - blipAsset.offsetY - bbox.top;
             setPosition({ x, y });
         }
     };
@@ -35,7 +40,12 @@ const DnDWrapper: FC = () => {
     const cursor = onDropEvent;
 
     return (
-        <div onMouseMove={mouseMoveHandler} className={blipAsset ? styles.wrapper : ''}>
+        <div
+            onMouseMove={mouseMoveHandler}
+            className={blipAsset ? classNames(styles.wrapper, styles.wrapperDrag) : styles.wrapper}
+            ref={ref}
+        >
+            <BlipGenerator />
             <Radar
                 sectorNames={sectorNames}
                 ringNames={ringNames}

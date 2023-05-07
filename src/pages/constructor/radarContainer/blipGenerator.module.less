@@ -1,0 +1,22 @@
+@generator-size: 50px;
+
+.generator {
+    background-color: rgb(245, 222, 13);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+    top: 20px;
+    left: 20px;
+    position: absolute;
+    width: @generator-size;
+    height: @generator-size;
+    border-radius: calc(@generator-size / 2);
+    box-shadow: 2px 3px 3px rgba(71, 71, 71, 0.493);
+    cursor: grab;
+
+    &:hover {
+        transform: scale(1.2);
+    }
+}
