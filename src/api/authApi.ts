@@ -60,9 +60,10 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
             const release = await mutex.acquire();
 
             try {
+                // console.log('sending refresh token');
                 // send refresh token to get new access token
                 const refreshResult = await baseQuery('/refresh', api, extraOptions);
-
+                // console.log(refreshResult);
                 if (refreshResult?.data) {
                     // store the new token
 
