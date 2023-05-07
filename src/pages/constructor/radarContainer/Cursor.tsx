@@ -1,38 +1,33 @@
 import { FC } from 'react';
 
+import { OnDropEvent } from '../../../store/editRadarSlice';
 import { ReactComponent as Can } from '../icons/can.svg';
 import { ReactComponent as Move } from '../icons/move.svg';
 
 import styles from './wrapper.module.less';
 
-export enum CursorType {
-    Delete = 'delete',
-    Add = 'add',
-    Move = 'move',
-}
-
 type Props = {
-    type: CursorType;
+    onDropEvent: OnDropEvent | null;
     x?: number;
     y?: number;
 };
 
 const param = { width: '20px', height: '20px', pointerEvents: 'none' };
 
-const Cursor: FC<Props> = ({ type, x = 0, y = 0 }) => {
+const Cursor: FC<Props> = ({ onDropEvent, x = 0, y = 0 }) => {
     let svg;
-    switch (type) {
-        case CursorType.Delete: {
+    switch (onDropEvent) {
+        case OnDropEvent.Delete: {
             svg = <Can {...param} />;
             break;
         }
-        case CursorType.Move: {
+        case OnDropEvent.Move: {
             svg = <Move {...param} />;
             break;
         }
 
         default: {
-            svg = null;
+            return null;
         }
     }
 

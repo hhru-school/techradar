@@ -9,35 +9,51 @@ interface Segment {
     ringName: string;
 }
 
-interface EditingBlipGeometry {
+interface EditingBlipAsset {
     id: number;
     x: number;
     y: number;
+    offsetX: number;
+    offsetY: number;
     r: number;
 }
 
-type EditingBlipData = EditingBlipGeometry & Blip;
+export enum OnDropEvent {
+    Delete = 'delete',
+    Add = 'add',
+    Move = 'move',
+}
 
 interface EditRadarState {
     isDragging: boolean;
-    editingBlip: Blip | null;
-    editingBlipData: EditingBlipData | null;
-    editingBlipGeometry: EditingBlipGeometry | null;
+    blip: Blip | null;
+    blipAsset: EditingBlipAsset | null;
     activeSegment: Segment | null;
     blips: Blip[];
+    onDropEvent: OnDropEvent | null;
 }
 
 const initialState: EditRadarState = {
     isDragging: false,
-    editingBlip: null,
-    editingBlipData: null,
+    blip: null,
+    blipAsset: null,
     activeSegment: null,
-    editingBlipGeometry: null,
-    blips: generateData(10),
+    blips: generateData(4),
+    onDropEvent: null,
 };
 
-const getBlip = (state: EditRadarState): Blip | null => {
-    return state.blips.find((blip) => blip.id === state.editingBlipGeometry?.id) || null;
+const getBlipById = (state: EditRadarState, id: number): Blip | null => {
+    return state.blips.find((blip) => blip.id === id) || null;
+};
+
+const removeBlipById = (state: EditRadarState, id: number) => {
+    state.blips = state.blips.filter((blip) => blip.id !== id);
+};
+
+const moveBlipTosegment = (state: EditRadarState, blip: Blip, segment: Segment | null) => {
+    if (!segment) return;
+    removeBlipById(state, blip.id);
+    state.blips.push({ ...blip, ringName: segment.ringName, sectorName: segment.sectorName });
 };
 
 export const editRadarSlice = createSlice({
@@ -50,36 +66,51 @@ export const editRadarSlice = createSlice({
 
         setActiveSegment: (state, action: PayloadAction<Segment>) => {
             state.activeSegment = action.payload;
+            if (state.blip) {
+                if (
+                    state.blip.ringName !== state.activeSegment.ringName ||
+                    state.blip.sectorName !== state.activeSegment.sectorName
+                ) {
+                    state.onDropEvent = OnDropEvent.Move;
+                } else {
+                    state.onDropEvent = null;
+                }
+            }
         },
 
         clearActiveSegment: (state) => {
             state.activeSegment = null;
+            if (state.blip) {
+                state.onDropEvent = OnDropEvent.Delete;
+            }
         },
 
-        setDraggingBlip: (state, action: PayloadAction<EditingBlipGeometry>) => {
-            state.editingBlipGeometry = action.payload;
-            state.editingBlip = getBlip(state);
+        setDraggingBlip: (state, action: PayloadAction<EditingBlipAsset>) => {
+            state.blipAsset = action.payload;
+            state.blip = getBlipById(state, action.payload.id);
             state.isDragging = true;
         },
 
-        dropBlipToSegment: (state, action: PayloadAction<Segment | null>) => {
-            const blip = state.blips.find((blip) => blip.id === state.editingBlipGeometry?.id);
-
-            if (state.editingBlipGeometry && blip) {
-                state.blips = state.blips.filter((blip) => blip.id !== state.editingBlipGeometry?.id);
-
-                if (action.payload) {
-                    state.blips.push({ ...blip, ...action.payload });
+        drop: (state) => {
+            if (state.blip) {
+                switch (state.onDropEvent) {
+                    case OnDropEvent.Move: {
+                        moveBlipTosegment(state, state.blip, state.activeSegment);
+                        break;
+                    }
+                    case OnDropEvent.Delete: {
+                        removeBlipById(state, state.blip.id);
+                    }
                 }
             }
-            state.editingBlipGeometry = null;
-            state.editingBlip = null;
+            state.onDropEvent = null;
+            state.blipAsset = null;
+            state.blip = null;
             state.isDragging = false;
         },
     },
 });
 
-export const { setIsDragging, setActiveSegment, clearActiveSegment, setDraggingBlip, dropBlipToSegment } =
-    editRadarSlice.actions;
+export const { setIsDragging, setActiveSegment, clearActiveSegment, setDraggingBlip, drop } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;

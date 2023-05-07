@@ -2,7 +2,7 @@ import { FC, MouseEvent, memo, useCallback, useMemo } from 'react';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
 
 import { clearActiveBlip, setActiveBlip } from '../../store/activeBlipSlice';
-import { dropBlipToSegment, setDraggingBlip } from '../../store/editRadarSlice';
+import { drop, setDraggingBlip } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { store } from '../../store/store';
 import { RadarComponentVariant } from './types';
@@ -19,9 +19,7 @@ type Props = {
 };
 
 const mouseUpHandler = () => {
-    const segment = store.getState().editRadar.activeSegment;
-    store.dispatch(dropBlipToSegment(segment));
-    store.dispatch(clearActiveBlip());
+    store.dispatch(drop());
     document.removeEventListener('mosedown', mouseUpHandler);
 };
 
@@ -45,27 +43,6 @@ const RadarBlip: FC<Props> = ({ id, name, x, y, r, variant = RadarComponentVaria
     const onClickHandler = (event: React.SyntheticEvent) => {
         event.stopPropagation();
     };
-    // Drag'n'Drop logic
-
-    const isDragging = useAppSelector((state) => state.editRadar.isDragging);
-    const draggingId = useAppSelector((state) => state.editRadar.editingBlipGeometry?.id);
-
-    const mouseDownHandler = useCallback(
-        (event: MouseEvent) => {
-            event.preventDefault();
-            if (variant === RadarComponentVariant.Editable) {
-                const bbox = (event.target as HTMLElement).getBoundingClientRect();
-                const x = event.clientX - bbox.left;
-                const y = event.clientY - bbox.top;
-
-                dispatch(setDraggingBlip({ x, y, r, id }));
-                document.addEventListener('mouseup', mouseUpHandler);
-            }
-        },
-        [variant, r, id, dispatch]
-    );
-
-    // /end of Drag'n'Drop logic
 
     let blipClasses = '';
 
@@ -81,6 +58,29 @@ const RadarBlip: FC<Props> = ({ id, name, x, y, r, variant = RadarComponentVaria
     const blipTextClasses = isActive ? styles.blipTextActive : styles.blipText;
 
     const strokeWidth = r / 8;
+
+    // Drag'n'Drop logic
+
+    const isDragging = useAppSelector((state) => state.editRadar.isDragging);
+    const draggingId = useAppSelector((state) => state.editRadar.blipAsset?.id);
+
+    const mouseDownHandler = useCallback(
+        (event: MouseEvent) => {
+            event.preventDefault();
+            if (variant === RadarComponentVariant.Editable) {
+                const bbox = (event.target as HTMLElement).getBoundingClientRect();
+                const x = event.clientX;
+                const y = event.clientY;
+                const offsetX = x - bbox.left;
+                const offsetY = y - bbox.top;
+                dispatch(setDraggingBlip({ x, y, offsetX, offsetY, r, id }));
+                document.addEventListener('mouseup', mouseUpHandler);
+            }
+        },
+        [variant, r, id, dispatch]
+    );
+
+    // end of Drag'n'Drop logic
 
     const blip = useMemo(
         () => (

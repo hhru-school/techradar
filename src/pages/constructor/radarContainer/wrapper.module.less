@@ -1,4 +1,4 @@
-.draggable {
+.ghost {
     position: absolute;
     z-index: 50;
     pointer-events: none;
@@ -9,6 +9,17 @@
     transform: translate(15px, 15px);
 }
 
+.wrapper,
 .wrapper * {
-    cursor: grabbing !important;
+    cursor: grabbing;
+}
+
+.layout {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.generator {
+    background-color: yellow;
 }
