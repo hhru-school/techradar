@@ -1,4 +1,4 @@
-import { FC, memo, useMemo, useState } from 'react';
+import { FC, memo, useMemo } from 'react';
 
 import { clearActiveSegment, setActiveSegment } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -67,23 +67,24 @@ const RadarSegment: FC<Props> = ({
     // //DnDLogic
 
     const dispatch = useAppDispatch();
-    const [isActive, setIsActive] = useState(false);
+    const isActive = useAppSelector(
+        (state) =>
+            state.editRadar.activeSegment?.ringName === ringName &&
+            state.editRadar.activeSegment?.sectorName === sectorName
+    );
     const isDragging = useAppSelector((state) => state.editRadar.isDragging);
 
     const onMouseEnterHandler = () => {
-        if (variant === RadarComponentVariant.Editable) {
-            setIsActive(true);
+        if (variant === RadarComponentVariant.Editable && isDragging) {
             dispatch(setActiveSegment({ ringName, sectorName }));
         }
     };
 
     const onMouseLeaveHandler = () => {
-        if (variant === RadarComponentVariant.Editable) {
-            setIsActive(false);
+        if (variant === RadarComponentVariant.Editable && isDragging) {
             dispatch(clearActiveSegment());
         }
     };
-
     // ///////////////////
 
     let opacity = 1;

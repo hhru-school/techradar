@@ -35,7 +35,7 @@ interface EditRadarState {
     onDropEvent: OnDropEvent | null;
     isCreating: boolean;
     showCreateBlipModal: boolean;
-
+    showMoveBlipModal: boolean;
     sectorNames: string[];
     ringNames: string[];
 }
@@ -49,6 +49,7 @@ const initialState: EditRadarState = {
     onDropEvent: null,
     isCreating: false,
     showCreateBlipModal: false,
+    showMoveBlipModal: false,
     // mock
     sectorNames,
     ringNames,
@@ -119,7 +120,8 @@ export const editRadarSlice = createSlice({
             if (state.blip) {
                 switch (state.onDropEvent) {
                     case OnDropEvent.Move: {
-                        moveBlipTosegment(state, state.blip, state.activeSegment);
+                        state.showMoveBlipModal = true;
+
                         break;
                     }
                     case OnDropEvent.Delete: {
@@ -134,7 +136,7 @@ export const editRadarSlice = createSlice({
 
             state.onDropEvent = null;
             state.blipAsset = null;
-            state.blip = null;
+            // state.blip = null;
             state.isDragging = false;
             state.isCreating = false;
         },
@@ -143,10 +145,24 @@ export const editRadarSlice = createSlice({
             state.showCreateBlipModal = false;
         },
 
+        closeMoveBlipModal: (state) => {
+            state.showMoveBlipModal = false;
+        },
+
         addNewBlip: (state, action: PayloadAction<Blip>) => {
             const maxId = Math.max(...state.blips.map((blip) => blip.id));
             state.blips.push({ ...action.payload, id: maxId + 1 });
             state.showCreateBlipModal = false;
+            state.activeSegment = null;
+        },
+
+        moveBlip: (state) => {
+            if (state.blip) {
+                moveBlipTosegment(state, state.blip, state.activeSegment);
+            }
+            state.blip = null;
+            state.showMoveBlipModal = false;
+            state.activeSegment = null;
         },
     },
 });
@@ -159,7 +175,9 @@ export const {
     drop,
     setIsCreating,
     closeCreateBlipModal,
+    closeMoveBlipModal,
     addNewBlip,
+    moveBlip,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;
