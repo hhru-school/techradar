@@ -11,6 +11,7 @@ import styles from './blip.module.less';
 
 type Props = {
     id: number;
+    label?: string;
     name: string;
     r: number;
     x: number;
@@ -18,7 +19,7 @@ type Props = {
     variant?: RadarComponentVariant;
 };
 
-const RadarBlip: FC<Props> = ({ id, name, x, y, r, variant = RadarComponentVariant.Demonstrative }) => {
+const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarComponentVariant.Demonstrative }) => {
     const activeId = useAppSelector((state) => state.activeBlip.id);
 
     const isTransforming = useAppSelector((state) => state.activeSector.isTransforming);
@@ -97,12 +98,13 @@ const RadarBlip: FC<Props> = ({ id, name, x, y, r, variant = RadarComponentVaria
                     dominantBaseline="middle"
                     className={blipTextClasses}
                 >
-                    {id}
+                    {label || id}
                 </text>
             </g>
         ),
         [
             id,
+            label,
             x,
             y,
             r,

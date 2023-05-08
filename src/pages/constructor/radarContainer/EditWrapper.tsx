@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import Radar from '../../../components/radar/Radar';
 import RadarBlip from '../../../components/radar/RadarBlip';
 import { defaultBlipRadius } from '../../../components/radar/styleConfig';
-import { sectorNames, ringNames } from '../../../components/radar/testData';
 import { RadarComponentVariant } from '../../../components/radar/types';
 import { setDraggingBlip, setIsCreating } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -16,7 +15,10 @@ import styles from './wrapper.module.less';
 
 type Position = { x: number; y: number };
 
-const DnDWrapper: FC = () => {
+const EditWrapper: FC = () => {
+    const sectorNames = useAppSelector((state) => state.editRadar.sectorNames);
+    const ringNames = useAppSelector((state) => state.editRadar.ringNames);
+
     const data = useAppSelector((state) => state.editRadar.blips);
     const blipAsset = useAppSelector((state) => state.editRadar.blipAsset);
     const onDropEvent = useAppSelector((state) => state.editRadar.onDropEvent);
@@ -42,7 +44,7 @@ const DnDWrapper: FC = () => {
             const r = defaultBlipRadius;
             const x = event.clientX - bbox.left;
             const y = event.clientY - bbox.top;
-            dispatch(setDraggingBlip({ id: 100, r, x, y, offsetX: r / 2, offsetY: r / 2 }));
+            dispatch(setDraggingBlip({ id: -1, label: '+', r, x, y, offsetX: r / 2, offsetY: r / 2 }));
             dispatch(setIsCreating());
             document.addEventListener('mouseup', mouseUpHandler);
             setPosition({ x, y });
@@ -81,7 +83,14 @@ const DnDWrapper: FC = () => {
                     }}
                 >
                     <svg width={blipAsset.r * 2} height={blipAsset.r * 2} pointerEvents="none">
-                        <RadarBlip id={blipAsset.id} name={'mock'} r={blipAsset.r} x={blipAsset.r} y={blipAsset.r} />
+                        <RadarBlip
+                            id={blipAsset.id}
+                            label={blipAsset.label}
+                            name={'mock'}
+                            r={blipAsset.r}
+                            x={blipAsset.r}
+                            y={blipAsset.r}
+                        />
                     </svg>
                 </div>
             )}
@@ -91,4 +100,4 @@ const DnDWrapper: FC = () => {
     );
 };
 
-export default DnDWrapper;
+export default EditWrapper;

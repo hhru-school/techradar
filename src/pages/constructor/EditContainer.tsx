@@ -1,13 +1,9 @@
 import { FC } from 'react';
 
-import DnDWrapper from './radarContainer/DnDWrapper';
+import EditWrapper from './radarContainer/EditWrapper';
 
 const EditContainer: FC = () => {
-    return (
-        <>
-            <DnDWrapper />
-        </>
-    );
+    return <EditWrapper />;
 };
 
 export default EditContainer;

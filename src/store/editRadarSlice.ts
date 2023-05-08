@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { generateData } from '../components/radar/testData';
+import { generateData, sectorNames, ringNames } from '../components/radar/testData';
 import { Blip } from '../components/radar/types';
 
 interface Segment {
@@ -11,6 +11,7 @@ interface Segment {
 
 interface EditingBlipAsset {
     id: number;
+    label?: string;
     x: number;
     y: number;
     offsetX: number;
@@ -34,6 +35,9 @@ interface EditRadarState {
     onDropEvent: OnDropEvent | null;
     isCreating: boolean;
     showCreateBlipModal: boolean;
+
+    sectorNames: string[];
+    ringNames: string[];
 }
 
 const initialState: EditRadarState = {
@@ -45,6 +49,9 @@ const initialState: EditRadarState = {
     onDropEvent: null,
     isCreating: false,
     showCreateBlipModal: false,
+    // mock
+    sectorNames,
+    ringNames,
 };
 
 const getBlipById = (state: EditRadarState, id: number): Blip | null => {
@@ -135,10 +142,24 @@ export const editRadarSlice = createSlice({
         closeCreateBlipModal: (state) => {
             state.showCreateBlipModal = false;
         },
+
+        addNewBlip: (state, action: PayloadAction<Blip>) => {
+            const maxId = Math.max(...state.blips.map((blip) => blip.id));
+            state.blips.push({ ...action.payload, id: maxId + 1 });
+            state.showCreateBlipModal = false;
+        },
     },
 });
 
-export const { setIsDragging, setActiveSegment, clearActiveSegment, setDraggingBlip, drop, setIsCreating } =
-    editRadarSlice.actions;
+export const {
+    setIsDragging,
+    setActiveSegment,
+    clearActiveSegment,
+    setDraggingBlip,
+    drop,
+    setIsCreating,
+    closeCreateBlipModal,
+    addNewBlip,
+} = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;

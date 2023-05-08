@@ -1,8 +1,10 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Button, Modal } from '@mui/material';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
+import { addNewBlip, closeCreateBlipModal } from '../../../store/editRadarSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import ModalSelectField from './ModalSelectField';
 import ModalTextField from './ModalTextField';
 
@@ -18,9 +20,18 @@ const validationSchema = Yup.object({
     name: Yup.string().trim().min(2, 'min').required('Mandatory field'),
 });
 
-const mock = ['aaa', 'bbb', 'ccc'];
-
 const ModalCreateBlip: FC<Props> = ({ open }) => {
+    const sectorNames = useAppSelector((state) => state.editRadar.sectorNames);
+    const ringNames = useAppSelector((state) => state.editRadar.ringNames);
+
+    const activeSegment = useAppSelector((state) => state.editRadar.activeSegment);
+
+    const dispatch = useAppDispatch();
+
+    const cancelBtnClickHandler = useCallback(() => {
+        dispatch(closeCreateBlipModal());
+    }, [dispatch]);
+
     return (
         <Modal open={open}>
             <div className={styles.modal}>
@@ -28,25 +39,32 @@ const ModalCreateBlip: FC<Props> = ({ open }) => {
                 <Formik
                     initialValues={{
                         name: '',
-                        sectorName: mock[1],
-                        ringName: mock[0],
+                        sectorName: activeSegment?.sectorName || '',
+                        ringName: activeSegment?.ringName || '',
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values, { setSubmitting }) => {
-                        setTimeout(() => {
-                            setSubmitting(false);
-                        }, 1000);
+                        dispatch(
+                            addNewBlip({
+                                id: -1,
+                                name: values.name,
+                                ringName: values.ringName,
+                                sectorName: values.sectorName,
+                                description: null,
+                            })
+                        );
+                        setSubmitting(false);
                     }}
                 >
                     <Form>
                         <ModalTextField label={'Technology name'} name={'name'} />
-                        <ModalSelectField label={'Sector name'} name={'sectorName'} values={mock} />
-                        <ModalSelectField label={'Ring name'} name={'ringName'} values={mock} />
+                        <ModalSelectField label={'Sector name'} name={'sectorName'} values={sectorNames} />
+                        <ModalSelectField label={'Ring name'} name={'ringName'} values={ringNames} />
                         <div className={styles.buttonContainer}>
                             <Button sx={btnSx} color="success" variant="contained" type="submit">
                                 Add
                             </Button>
-                            <Button sx={btnSx} variant="outlined">
+                            <Button sx={btnSx} variant="outlined" onClick={cancelBtnClickHandler}>
                                 Cancel
                             </Button>
                         </div>
