@@ -226,8 +226,10 @@ export const editRadarSlice = createSlice({
         },
 
         setShowEditIcon: (state, action: PayloadAction<boolean>) => {
-            state.eventSuggest = action.payload ? EventSuggest.EditText : null;
-            state.showEditIcon = action.payload;
+            if (!state.isDragging) {
+                state.eventSuggest = action.payload ? EventSuggest.EditText : null;
+                state.showEditIcon = action.payload;
+            }
         },
     },
 });
