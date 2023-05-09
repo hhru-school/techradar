@@ -1,5 +1,6 @@
 import { FC, useState, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import Logout from '@mui/icons-material/Logout';
 import RadarIcon from '@mui/icons-material/Radar';
@@ -20,9 +21,38 @@ import { setAuthFormOpen } from '../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AuthFormModal from '../authFormModal/AuthFormModal';
 
+const PaperProps = {
+    elevation: 0,
+    sx: {
+        overflow: 'visible',
+        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+        mt: 1.5,
+        '& .MuiAvatar-root': {
+            width: 32,
+            height: 32,
+            ml: -0.5,
+            mr: 1,
+        },
+        '&:before': {
+            content: '""',
+            display: 'block',
+            position: 'absolute',
+            top: 0,
+            right: 14,
+            width: 10,
+            height: 10,
+            bgcolor: 'background.paper',
+            transform: 'translateY(-50%) rotate(45deg)',
+            zIndex: 0,
+        },
+    },
+};
+
 const Header: FC = () => {
     const dispatch = useAppDispatch();
     const user = useAppSelector((state) => state.auth.user);
+    const token = useAppSelector((state) => state.auth.token);
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const open = Boolean(anchorEl);
@@ -56,15 +86,7 @@ const Header: FC = () => {
                             }}
                         >
                             <Tooltip title="Account settings">
-                                {user === null ? (
-                                    <IconButton
-                                        onClick={() => dispatch(setAuthFormOpen(true))}
-                                        size="small"
-                                        sx={{ ml: 2 }}
-                                    >
-                                        <Avatar src="/broken-image.jpg" />
-                                    </IconButton>
-                                ) : (
+                                {token && user ? (
                                     <IconButton
                                         onClick={handleClick}
                                         size="small"
@@ -75,6 +97,14 @@ const Header: FC = () => {
                                     >
                                         <Avatar>{user[0]}</Avatar>
                                     </IconButton>
+                                ) : (
+                                    <IconButton
+                                        onClick={() => dispatch(setAuthFormOpen(true))}
+                                        size="small"
+                                        sx={{ ml: 2 }}
+                                    >
+                                        <AccountCircleIcon sx={{ color: 'white', fontSize: 49 }} />
+                                    </IconButton>
                                 )}
                             </Tooltip>
                         </Box>
@@ -84,36 +114,11 @@ const Header: FC = () => {
                             open={open}
                             onClose={handleClose}
                             onClick={handleClose}
-                            PaperProps={{
-                                elevation: 0,
-                                sx: {
-                                    overflow: 'visible',
-                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                    mt: 1.5,
-                                    '& .MuiAvatar-root': {
-                                        width: 32,
-                                        height: 32,
-                                        ml: -0.5,
-                                        mr: 1,
-                                    },
-                                    '&:before': {
-                                        content: '""',
-                                        display: 'block',
-                                        position: 'absolute',
-                                        top: 0,
-                                        right: 14,
-                                        width: 10,
-                                        height: 10,
-                                        bgcolor: 'background.paper',
-                                        transform: 'translateY(-50%) rotate(45deg)',
-                                        zIndex: 0,
-                                    },
-                                },
-                            }}
+                            PaperProps={PaperProps}
                             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                         >
-                            <Link to="/my-radars/grid/android">
+                            <Link to="/my-radars">
                                 <MenuItem onClick={handleClose}>
                                     <ListItemIcon>
                                         <RadarIcon fontSize="small" />

@@ -11,9 +11,9 @@ interface AuthState {
 
 const initAuthState: AuthState = {
     showAuthForm: false,
-    user: null,
+    user: 'null',
     password: null,
-    token: null,
+    token: 'null',
 };
 
 export const authSlice = createSlice({

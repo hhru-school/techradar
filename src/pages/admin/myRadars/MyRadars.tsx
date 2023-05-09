@@ -29,7 +29,7 @@ const MyRadar: FC = () => {
 
     return (
         <Container maxWidth="xl">
-            <Box>
+            <Box sx={{ display: 'flex' }}>
                 <Tabs
                     sx={{ display: 'flex', alignItems: 'center', height: '48px' }}
                     value={value}
@@ -52,20 +52,15 @@ const MyRadar: FC = () => {
                             />
                         );
                     })}
-                    <Button
-                        onClick={handleClick}
-                        variant="outlined"
-                        color="secondary"
-                        sx={{ height: '25px', mt: '11px' }}
-                    >
-                        +
-                    </Button>
                 </Tabs>
+                <Button onClick={handleClick} variant="outlined" color="secondary" sx={{ height: '25px', mt: '11px' }}>
+                    +
+                </Button>
             </Box>
             <Typography variant="h5" sx={{ textAlign: 'left', margin: '15px 0 0 40px' }}>
                 Радары
             </Typography>
-            <Link to={'radar-constructor'}>
+            <Link to={'/radar-constructor'}>
                 <Button variant="outlined" color="secondary" sx={{ textAlign: 'left', margin: '15px 0 15px 40px' }}>
                     Новый радар +
                 </Button>

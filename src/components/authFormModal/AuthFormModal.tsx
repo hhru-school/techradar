@@ -17,11 +17,8 @@ import {
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-// import { useLoginMutation, useLoginUserMutation } from '../../api/authApi';
-import {
-    setAuthFormOpen,
-    // setCredentials
-} from '../../store/authSlice';
+import { useLoginMutation } from '../../store/authApiSlice';
+import { setAuthFormOpen, setCredentials } from '../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import TextInputOutlined from '../textInputOutlined/TextInputOutlined';
 
@@ -38,6 +35,7 @@ type InputProps = {
     id?: string;
     type?: string;
     autoComplete: string;
+    disabled?: boolean;
 };
 
 const MyPassInput = ({ label, ...props }: InputProps) => {
@@ -110,6 +108,8 @@ const AuthFormModal: FC = () => {
         dispatch(setAuthFormOpen(false));
     }, [dispatch]);
 
+    const [login, { isLoading }] = useLoginMutation();
+
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -128,19 +128,39 @@ const AuthFormModal: FC = () => {
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validSchema}
-                        onSubmit={
-                            // async
-                            (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-                                dispatch(setAuthFormOpen(false));
-                                // await loginUser(values);
-                                setSubmitting(false);
-                            }
-                        }
+                        onSubmit={async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+                            await login(values)
+                                .unwrap()
+                                .then((userData) => {
+                                    dispatch(setCredentials(userData as { user: string; token: string }));
+                                    dispatch(setAuthFormOpen(false));
+                                    setSubmitting(false);
+                                });
+                        }}
                     >
                         <Form className="form auth-form">
-                            <TextInputOutlined label="Email" id="user" name="user" type="text" autoComplete="off" />
-                            <MyPassInput label="Пароль" id="password" name="password" autoComplete="off" />
-                            <Button type="submit" variant="contained" color="success" sx={{ marginTop: '20px' }}>
+                            <TextInputOutlined
+                                label="Email"
+                                id="user"
+                                name="user"
+                                type="text"
+                                autoComplete="off"
+                                disabled={isLoading}
+                            />
+                            <MyPassInput
+                                label="Пароль"
+                                id="password"
+                                name="password"
+                                autoComplete="off"
+                                disabled={isLoading}
+                            />
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="success"
+                                sx={{ marginTop: '20px' }}
+                                disabled={isLoading}
+                            >
                                 Войти
                             </Button>
                         </Form>

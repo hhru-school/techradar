@@ -9,6 +9,7 @@ type InputProps = {
     type?: string;
     autoComplete?: string;
     placeholder?: string;
+    disabled?: boolean;
 };
 
 const TextInputOutlined = ({ ...props }: InputProps): ReactElement => {

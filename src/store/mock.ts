@@ -7,7 +7,6 @@ type Input = { label: string; id: string; name: string; type: string; autoComple
 
 type ConstructorInputs = Array<Input>;
 
-<<<<<<< HEAD
 const defaultRingsNames = ['1st', '2nd', '3rd', '4th', '5th', '6th'];
 const defaultSectorNames = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth'];
 const defaultRingNumber = 4;
@@ -18,8 +17,6 @@ export interface AuthFormInputs {
     password: string | null;
 }
 
-=======
->>>>>>> 1e6f14e (rename slice, add auth api)
 interface State {
     techContructorInputs: ConstructorInputs;
     techGrid: GridTech;
