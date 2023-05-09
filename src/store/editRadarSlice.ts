@@ -24,6 +24,7 @@ export enum EventSuggest {
     Add = 'add',
     Move = 'move',
     NotAllowed = 'notAllowed',
+    EditText = 'editText',
 }
 
 interface EditRadarState {
@@ -43,6 +44,7 @@ interface EditRadarState {
     editingRingName: string | null;
     sectorNames: string[];
     ringNames: string[];
+    showEditIcon: boolean;
 }
 
 const initialState: EditRadarState = {
@@ -62,7 +64,9 @@ const initialState: EditRadarState = {
     // mock
     sectorNames,
     ringNames,
+    //
     showEditRingNameModal: false,
+    showEditIcon: false,
 };
 
 const getBlipById = (state: EditRadarState, id: number): Blip | null => {
@@ -220,6 +224,11 @@ export const editRadarSlice = createSlice({
             }
             state.showEditRingNameModal = false;
         },
+
+        setShowEditIcon: (state, action: PayloadAction<boolean>) => {
+            state.eventSuggest = action.payload ? EventSuggest.EditText : null;
+            state.showEditIcon = action.payload;
+        },
     },
 });
 
@@ -242,6 +251,7 @@ export const {
     openEditRingNameModal,
     closeEditRingNameModal,
     renameRing,
+    setShowEditIcon,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;

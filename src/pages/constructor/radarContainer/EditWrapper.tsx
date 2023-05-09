@@ -22,6 +22,7 @@ const EditWrapper: FC = () => {
     const data = useAppSelector((state) => state.editRadar.blips);
     const blipAsset = useAppSelector((state) => state.editRadar.blipAsset);
     const onDropEvent = useAppSelector((state) => state.editRadar.eventSuggest);
+    const showEditIcon = useAppSelector((state) => state.editRadar.showEditIcon);
 
     const dispatch = useAppDispatch();
 
@@ -32,9 +33,13 @@ const EditWrapper: FC = () => {
     const [position, setPosition] = useState<Position | null>(null);
 
     const mouseMoveHandler = (event: React.MouseEvent) => {
-        if (blipAsset && bbox) {
-            const x = event.clientX - blipAsset.offsetX - bbox.left;
-            const y = event.clientY - blipAsset.offsetY - bbox.top;
+        if (bbox) {
+            let x = event.clientX - bbox.left;
+            let y = event.clientY - bbox.top;
+            if (blipAsset) {
+                x -= blipAsset.offsetX;
+                y -= blipAsset.offsetY;
+            }
             setPosition({ x, y });
         }
     };
@@ -53,10 +58,10 @@ const EditWrapper: FC = () => {
 
     useEffect(() => {
         setBbox(ref.current?.getBoundingClientRect());
-        if (!blipAsset) {
+        if (!blipAsset || !showEditIcon) {
             setPosition(null);
         }
-    }, [blipAsset]);
+    }, [blipAsset, showEditIcon]);
 
     const cursor = onDropEvent;
 

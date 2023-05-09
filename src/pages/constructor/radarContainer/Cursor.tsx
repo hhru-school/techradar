@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
 
 import { EventSuggest } from '../../../store/editRadarSlice';
 import { ReactComponent as Add } from '../icons/add.svg';
@@ -35,6 +36,11 @@ const Cursor: FC<Props> = ({ onDropEvent, x = 0, y = 0 }) => {
 
         case EventSuggest.NotAllowed: {
             svg = <NotAllowed {...param} />;
+            break;
+        }
+
+        case EventSuggest.EditText: {
+            svg = <EditIcon />;
             break;
         }
 

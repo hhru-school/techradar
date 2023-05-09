@@ -9,6 +9,12 @@
     user-select: none;
 }
 
+.ringNameActive {
+    .ringName;
+    fill: @active-color;
+    cursor: pointer;
+}
+
 .sectorName {
     user-select: none;
     fill: @label-color;
@@ -16,9 +22,11 @@
     font-family: sans-serif;
     text-anchor: middle;
     cursor: pointer;
-    &:hover {
-        fill: @active-color;
-    }
+}
+
+.sectorNameActive {
+    .sectorName;
+    fill: @active-color;
 }
 
 .segment {

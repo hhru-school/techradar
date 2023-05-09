@@ -25,7 +25,6 @@ export const TextInputStandart = ({ label, id, onChange, ...props }: InputProps)
                 inputProps={{
                     'aria-label': 'radar-input',
                 }}
-                onChange={onChange}
             />
             <FormHelperText id="helper-text">{meta.error}</FormHelperText>
         </FormControl>

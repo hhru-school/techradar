@@ -12,7 +12,7 @@ const RadarConstructorContainer: FC = () => {
     const blips = useAppSelector((state) => state.constructorRadar.blips);
 
     return (
-        <div className={styles.xxx}>
+        <div className={styles.container}>
             <Radar
                 sectorNames={sectorNames}
                 ringNames={ringNames}

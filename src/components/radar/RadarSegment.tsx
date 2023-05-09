@@ -3,7 +3,7 @@ import { FC, memo, useMemo } from 'react';
 import { clearActiveSegment, setActiveSegment } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import RadarBlip from './RadarBlip';
-import RadarSegmentLabel from './RadarSegmentLabel';
+import RadarRingLabel from './RadarRingLabel';
 import packEntries from './packEngine';
 import { Blip, Entry, RadarComponentVariant, Segment } from './types';
 import { getRandomPoint, translateSegmentToD3 } from './utils';
@@ -103,7 +103,7 @@ const RadarSegment: FC<Props> = ({
 
             {blips}
 
-            {gap && <RadarSegmentLabel x={x} y={y} segment={segment} ringName={ringName} variant={variant} />}
+            {gap && <RadarRingLabel x={x} y={y} segment={segment} ringName={ringName} variant={variant} />}
         </g>
     );
 };

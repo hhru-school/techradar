@@ -8,12 +8,11 @@ import {
     setHoveredSector,
     setIsTransforming,
 } from '../../store/activeSectorSlice';
-import { openEditSectorNameModal } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import RadarSectorLabel from './RadarSectorLabel';
 import RadarSegment from './RadarSegment';
-import { sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
 import { Blip, RadarComponentVariant, Segment } from './types';
-import { buildArc, getRadiusListEqualSquare, getTransform } from './utils';
+import { getRadiusListEqualSquare, getTransform } from './utils';
 
 import styles from './radar.module.less';
 
@@ -34,20 +33,6 @@ type Props = {
 
 const defaultTransform = { x: 0, y: 0, scale: 1 };
 
-// const makeSelectActiveSector = () =>
-//     createSelector(
-//         (state: RootState) => state.activeSector.activeSectorName,
-//         (_: unknown, variant: RadarComponentVariant) => variant,
-//         (activeSectorName, variant) => (variant === RadarComponentVariant.Demonstrative ? activeSectorName : null)
-//     );
-
-// const makeHoveredSector = () =>
-//     createSelector(
-//         (state: RootState) => state.activeSector.hoveredSectorName,
-//         (_: unknown, variant: RadarComponentVariant) => variant,
-//         (hoveredSectorName, variant) => (variant === RadarComponentVariant.Demonstrative ? hoveredSectorName : null)
-//     );
-
 const RadarSector: FC<Props> = ({
     sectorName,
     ringNames,
@@ -61,13 +46,9 @@ const RadarSector: FC<Props> = ({
     gap = 0,
     variant = RadarComponentVariant.Demonstrative,
 }) => {
+    const isDemonsrtative = variant === RadarComponentVariant.Demonstrative;
+
     const endAngle = startAngle + sweepAngle;
-
-    // const selectActiveSector = useMemo(makeSelectActiveSector, []);
-    // const activeSector = useAppSelector((state) => selectActiveSector(state, variant));
-
-    // const selectHoveredSector = useMemo(makeHoveredSector, []);
-    // const hoveredSector = useAppSelector((state) => selectHoveredSector(state, variant));
 
     const activeSector = useAppSelector((state) => state.activeSector.activeSectorName);
     const hoveredSector = useAppSelector((state) => state.activeSector.hoveredSectorName);
@@ -79,35 +60,35 @@ const RadarSector: FC<Props> = ({
     }, [dispatch]);
 
     const transform = useMemo(() => {
-        if (variant === RadarComponentVariant.Demonstrative) {
+        if (isDemonsrtative) {
             return activeSector && activeSector === sectorName
                 ? getTransform(startAngle, endAngle, radius + gap / 2)
                 : defaultTransform;
         }
         return defaultTransform;
-    }, [activeSector, sectorName, startAngle, endAngle, radius, gap, variant]);
+    }, [activeSector, sectorName, startAngle, endAngle, radius, gap, isDemonsrtative]);
 
     const onClickHandler = useCallback(() => {
-        if (variant === RadarComponentVariant.Demonstrative) {
+        if (isDemonsrtative) {
             if (activeSector) {
                 dispatch(clearActiveSector());
             } else {
                 dispatch(setActiveSector(sectorName));
             }
         }
-    }, [dispatch, activeSector, sectorName, variant]);
+    }, [dispatch, activeSector, sectorName, isDemonsrtative]);
 
     const onMouseEnterHandler = useCallback(() => {
-        if (variant === RadarComponentVariant.Demonstrative) {
+        if (isDemonsrtative) {
             dispatch(setHoveredSector(sectorName));
         }
-    }, [dispatch, sectorName, variant]);
+    }, [dispatch, sectorName, isDemonsrtative]);
 
     const onMouseLeaveHandler = useCallback(() => {
-        if (variant === RadarComponentVariant.Demonstrative) {
+        if (isDemonsrtative) {
             dispatch(clearHoveredSector());
         }
-    }, [dispatch, variant]);
+    }, [dispatch, isDemonsrtative]);
 
     const radiuses = useMemo(() => getRadiusListEqualSquare(ringNames.length, radius), [ringNames, radius]);
 
@@ -158,13 +139,7 @@ const RadarSector: FC<Props> = ({
         ]
     );
 
-    const classes = variant === RadarComponentVariant.Demonstrative ? styles.sectorDemonstrative : styles.sectorDefault;
-
-    // /Editable logic
-    const doubleClickHandler = () => {
-        dispatch(openEditSectorNameModal(sectorName));
-    };
-    // ////////////////
+    const classes = isDemonsrtative ? styles.sectorDemonstrative : styles.sectorDefault;
 
     return (
         <g
@@ -177,21 +152,13 @@ const RadarSector: FC<Props> = ({
             display={activeSector && activeSector !== sectorName ? 'none' : 'auto'}
             onTransitionEnd={transitionEndHandler}
         >
-            <path
-                id={`curve-${sectorName}`}
-                fill="transparent"
-                d={buildArc(startAngle, startAngle + sweepAngle, radius)}
+            <RadarSectorLabel
+                sectorName={sectorName}
+                startAngle={startAngle}
+                sweepAngle={sweepAngle}
+                radius={radius}
+                variant={variant}
             />
-            <text fontSize={sectorNameFontSize} onDoubleClick={RadarComponentVariant.Editable && doubleClickHandler}>
-                <textPath
-                    xlinkHref={`#curve-${sectorName}`}
-                    dominantBaseline="middle"
-                    className={styles.sectorName}
-                    startOffset="50%"
-                >
-                    <tspan dy={-sectorNameTextOffset}>{sectorName}</tspan>
-                </textPath>
-            </text>
             {segments}
         </g>
     );
