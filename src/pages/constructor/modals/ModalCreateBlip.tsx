@@ -17,7 +17,7 @@ type Props = {
 const btnSx = { width: 140 };
 
 const validationSchema = Yup.object({
-    name: Yup.string().trim().min(2, 'min').required('Mandatory field'),
+    name: Yup.string().trim().required('Mandatory field'),
 });
 
 const ModalCreateBlip: FC<Props> = ({ open }) => {

@@ -109,6 +109,7 @@ const RadarSegment: FC<Props> = ({
 
             {gap && (
                 <text
+                    // cursor={variant === RadarComponentVariant.Editable ? 'pointer' : 'auto'}
                     className={styles.ringName}
                     textAnchor="middle"
                     dominantBaseline="middle"

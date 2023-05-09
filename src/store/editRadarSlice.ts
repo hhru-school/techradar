@@ -36,6 +36,10 @@ interface EditRadarState {
     isCreating: boolean;
     showCreateBlipModal: boolean;
     showMoveBlipModal: boolean;
+    showEditSectorNameModal: boolean;
+    showEditRingNameModal: boolean;
+    editingSectorName: string | null;
+    editingRingName: string | null;
     sectorNames: string[];
     ringNames: string[];
 }
@@ -50,9 +54,13 @@ const initialState: EditRadarState = {
     isCreating: false,
     showCreateBlipModal: false,
     showMoveBlipModal: false,
+    showEditSectorNameModal: false,
+    editingSectorName: null,
+    editingRingName: null,
     // mock
     sectorNames,
     ringNames,
+    showEditRingNameModal: false,
 };
 
 const getBlipById = (state: EditRadarState, id: number): Blip | null => {
@@ -67,6 +75,10 @@ const moveBlipTosegment = (state: EditRadarState, blip: Blip, segment: Segment |
     if (!segment) return;
     removeBlipById(state, blip.id);
     state.blips.push({ ...blip, ringName: segment.ringName, sectorName: segment.sectorName });
+};
+
+const renameItemByName = (arr: string[], oldName: string, newName: string) => {
+    arr[arr.indexOf(oldName)] = newName;
 };
 
 export const editRadarSlice = createSlice({
@@ -164,6 +176,38 @@ export const editRadarSlice = createSlice({
             state.showMoveBlipModal = false;
             state.activeSegment = null;
         },
+
+        openEditSectorNameModal: (state, action: PayloadAction<string>) => {
+            state.showEditSectorNameModal = true;
+            state.editingSectorName = action.payload;
+        },
+
+        closeEditSectorNameModal: (state) => {
+            state.showEditSectorNameModal = false;
+        },
+
+        renameSector: (state, action: PayloadAction<string>) => {
+            if (state.editingSectorName) {
+                renameItemByName(state.sectorNames, state.editingSectorName, action.payload);
+            }
+            state.showEditSectorNameModal = false;
+        },
+
+        openEditRingNameModal: (state, action: PayloadAction<string>) => {
+            state.showEditRingNameModal = true;
+            state.editingRingName = action.payload;
+        },
+
+        closeEditRingNameModal: (state) => {
+            state.showEditRingNameModal = false;
+        },
+
+        renameRing: (state, action: PayloadAction<string>) => {
+            if (state.editingRingName) {
+                renameItemByName(state.sectorNames, state.editingRingName, action.payload);
+            }
+            state.showEditRingNameModal = false;
+        },
     },
 });
 
@@ -176,8 +220,14 @@ export const {
     setIsCreating,
     closeCreateBlipModal,
     closeMoveBlipModal,
+    closeEditSectorNameModal,
+    openEditSectorNameModal,
     addNewBlip,
     moveBlip,
+    renameSector,
+    openEditRingNameModal,
+    closeEditRingNameModal,
+    renameRing,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;

@@ -8,6 +8,7 @@ import {
     setHoveredSector,
     setIsTransforming,
 } from '../../store/activeSectorSlice';
+import { openEditSectorNameModal } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import RadarSegment from './RadarSegment';
 import { sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
@@ -159,6 +160,12 @@ const RadarSector: FC<Props> = ({
 
     const classes = variant === RadarComponentVariant.Demonstrative ? styles.sectorDemonstrative : styles.sectorDefault;
 
+    // /Editable logic
+    const doubleClickHandler = () => {
+        dispatch(openEditSectorNameModal(sectorName));
+    };
+    // ////////////////
+
     return (
         <g
             onClick={onClickHandler}
@@ -175,7 +182,7 @@ const RadarSector: FC<Props> = ({
                 fill="transparent"
                 d={buildArc(startAngle, startAngle + sweepAngle, radius)}
             />
-            <text fontSize={sectorNameFontSize}>
+            <text fontSize={sectorNameFontSize} onDoubleClick={RadarComponentVariant.Editable && doubleClickHandler}>
                 <textPath
                     xlinkHref={`#curve-${sectorName}`}
                     dominantBaseline="middle"
