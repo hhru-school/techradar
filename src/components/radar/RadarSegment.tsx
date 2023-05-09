@@ -3,9 +3,10 @@ import { FC, memo, useMemo } from 'react';
 import { clearActiveSegment, setActiveSegment } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import RadarBlip from './RadarBlip';
+import RadarSegmentLabel from './RadarSegmentLabel';
 import packEntries from './packEngine';
 import { Blip, Entry, RadarComponentVariant, Segment } from './types';
-import { convertRadToDeg, getRandomPoint, translateSegmentToD3 } from './utils';
+import { getRandomPoint, translateSegmentToD3 } from './utils';
 
 import styles from './radar.module.less';
 
@@ -20,11 +21,6 @@ type Props = {
     data?: Blip[] | null;
     seed?: number;
     variant?: RadarComponentVariant;
-};
-
-const textRotation = (rotationAngle: number): number => {
-    const d = convertRadToDeg(rotationAngle);
-    return d > 90 && d <= 270 ? 180 : 0;
 };
 
 const RadarSegment: FC<Props> = ({
@@ -107,21 +103,7 @@ const RadarSegment: FC<Props> = ({
 
             {blips}
 
-            {gap && (
-                <text
-                    // cursor={variant === RadarComponentVariant.Editable ? 'pointer' : 'auto'}
-                    className={styles.ringName}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    x={x}
-                    y={y}
-                    transform={`rotate(${-convertRadToDeg(segment.startAngle)}  0 0) rotate(${textRotation(
-                        segment.startAngle
-                    )} ${x} ${y})`}
-                >
-                    {ringName}
-                </text>
-            )}
+            {gap && <RadarSegmentLabel x={x} y={y} segment={segment} ringName={ringName} variant={variant} />}
         </g>
     );
 };

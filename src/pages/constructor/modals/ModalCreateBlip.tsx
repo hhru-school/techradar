@@ -10,17 +10,13 @@ import ModalTextField from './ModalTextField';
 
 import styles from './modal.module.less';
 
-type Props = {
-    open: boolean;
-};
-
 const btnSx = { width: 140 };
 
 const validationSchema = Yup.object({
     name: Yup.string().trim().required('Mandatory field'),
 });
 
-const ModalCreateBlip: FC<Props> = ({ open }) => {
+const ModalCreateBlip: FC = () => {
     const sectorNames = useAppSelector((state) => state.editRadar.sectorNames);
     const ringNames = useAppSelector((state) => state.editRadar.ringNames);
 
@@ -33,7 +29,7 @@ const ModalCreateBlip: FC<Props> = ({ open }) => {
     }, [dispatch]);
 
     return (
-        <Modal open={open}>
+        <Modal open={true}>
             <div className={styles.modal}>
                 <h3 className={styles.header}>Add new technology</h3>
                 <Formik
@@ -56,19 +52,27 @@ const ModalCreateBlip: FC<Props> = ({ open }) => {
                         setSubmitting(false);
                     }}
                 >
-                    <Form>
-                        <ModalTextField label={'Technology name'} name={'name'} />
-                        <ModalSelectField label={'Sector name'} name={'sectorName'} values={sectorNames} />
-                        <ModalSelectField label={'Ring name'} name={'ringName'} values={ringNames} />
-                        <div className={styles.buttonContainer}>
-                            <Button sx={btnSx} color="success" variant="contained" type="submit">
-                                Add
-                            </Button>
-                            <Button sx={btnSx} variant="outlined" onClick={cancelBtnClickHandler}>
-                                Cancel
-                            </Button>
-                        </div>
-                    </Form>
+                    {({ isValid, dirty }) => (
+                        <Form>
+                            <ModalTextField label={'Technology name'} name={'name'} />
+                            <ModalSelectField label={'Sector name'} name={'sectorName'} values={sectorNames} />
+                            <ModalSelectField label={'Ring name'} name={'ringName'} values={ringNames} />
+                            <div className={styles.buttonContainer}>
+                                <Button
+                                    sx={btnSx}
+                                    color="success"
+                                    variant="contained"
+                                    type="submit"
+                                    disabled={!isValid || !dirty}
+                                >
+                                    Add
+                                </Button>
+                                <Button sx={btnSx} variant="outlined" onClick={cancelBtnClickHandler}>
+                                    Cancel
+                                </Button>
+                            </div>
+                        </Form>
+                    )}
                 </Formik>
             </div>
         </Modal>

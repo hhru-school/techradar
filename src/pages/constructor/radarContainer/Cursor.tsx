@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { OnDropEvent } from '../../../store/editRadarSlice';
+import { EventSuggest } from '../../../store/editRadarSlice';
 import { ReactComponent as Add } from '../icons/add.svg';
 import { ReactComponent as Can } from '../icons/can.svg';
 import { ReactComponent as Move } from '../icons/move.svg';
@@ -9,7 +9,7 @@ import { ReactComponent as NotAllowed } from '../icons/notAllowed.svg';
 import styles from './wrapper.module.less';
 
 type Props = {
-    onDropEvent: OnDropEvent | null;
+    onDropEvent: EventSuggest | null;
     x?: number;
     y?: number;
 };
@@ -19,21 +19,21 @@ const param = { width: '20px', height: '20px', pointerEvents: 'none' };
 const Cursor: FC<Props> = ({ onDropEvent, x = 0, y = 0 }) => {
     let svg;
     switch (onDropEvent) {
-        case OnDropEvent.Delete: {
+        case EventSuggest.Delete: {
             svg = <Can {...param} />;
             break;
         }
-        case OnDropEvent.Move: {
+        case EventSuggest.Move: {
             svg = <Move {...param} />;
             break;
         }
 
-        case OnDropEvent.Add: {
+        case EventSuggest.Add: {
             svg = <Add {...param} />;
             break;
         }
 
-        case OnDropEvent.NotAllowed: {
+        case EventSuggest.NotAllowed: {
             svg = <NotAllowed {...param} />;
             break;
         }

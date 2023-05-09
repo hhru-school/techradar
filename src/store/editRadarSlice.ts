@@ -19,7 +19,7 @@ interface EditingBlipAsset {
     r: number;
 }
 
-export enum OnDropEvent {
+export enum EventSuggest {
     Delete = 'delete',
     Add = 'add',
     Move = 'move',
@@ -32,10 +32,11 @@ interface EditRadarState {
     blipAsset: EditingBlipAsset | null;
     activeSegment: Segment | null;
     blips: Blip[];
-    onDropEvent: OnDropEvent | null;
+    eventSuggest: EventSuggest | null;
     isCreating: boolean;
     showCreateBlipModal: boolean;
     showMoveBlipModal: boolean;
+    showDeleteBlipModal: boolean;
     showEditSectorNameModal: boolean;
     showEditRingNameModal: boolean;
     editingSectorName: string | null;
@@ -50,10 +51,11 @@ const initialState: EditRadarState = {
     blipAsset: null,
     activeSegment: null,
     blips: generateData(4),
-    onDropEvent: null,
+    eventSuggest: null,
     isCreating: false,
     showCreateBlipModal: false,
     showMoveBlipModal: false,
+    showDeleteBlipModal: false,
     showEditSectorNameModal: false,
     editingSectorName: null,
     editingRingName: null,
@@ -92,15 +94,15 @@ export const editRadarSlice = createSlice({
         setActiveSegment: (state, action: PayloadAction<Segment>) => {
             state.activeSegment = action.payload;
             if (state.isCreating) {
-                state.onDropEvent = OnDropEvent.Add;
+                state.eventSuggest = EventSuggest.Add;
             } else if (state.blip) {
                 if (
                     state.blip.ringName !== state.activeSegment.ringName ||
                     state.blip.sectorName !== state.activeSegment.sectorName
                 ) {
-                    state.onDropEvent = OnDropEvent.Move;
+                    state.eventSuggest = EventSuggest.Move;
                 } else {
-                    state.onDropEvent = null;
+                    state.eventSuggest = null;
                 }
             }
         },
@@ -108,10 +110,10 @@ export const editRadarSlice = createSlice({
         clearActiveSegment: (state) => {
             state.activeSegment = null;
             if (state.blip) {
-                state.onDropEvent = OnDropEvent.Delete;
+                state.eventSuggest = EventSuggest.Delete;
             }
             if (state.isCreating) {
-                state.onDropEvent = OnDropEvent.NotAllowed;
+                state.eventSuggest = EventSuggest.NotAllowed;
             }
         },
 
@@ -124,31 +126,30 @@ export const editRadarSlice = createSlice({
         setIsCreating: (state) => {
             state.isCreating = true;
             if (!state.activeSegment) {
-                state.onDropEvent = OnDropEvent.NotAllowed;
+                state.eventSuggest = EventSuggest.NotAllowed;
             }
         },
 
         drop: (state) => {
             if (state.blip) {
-                switch (state.onDropEvent) {
-                    case OnDropEvent.Move: {
+                switch (state.eventSuggest) {
+                    case EventSuggest.Move: {
                         state.showMoveBlipModal = true;
 
                         break;
                     }
-                    case OnDropEvent.Delete: {
-                        removeBlipById(state, state.blip.id);
+                    case EventSuggest.Delete: {
+                        state.showDeleteBlipModal = true;
                     }
                 }
             }
 
-            if (state.isCreating && state.onDropEvent === OnDropEvent.Add) {
+            if (state.isCreating && state.eventSuggest === EventSuggest.Add) {
                 state.showCreateBlipModal = true;
             }
 
-            state.onDropEvent = null;
+            state.eventSuggest = null;
             state.blipAsset = null;
-            // state.blip = null;
             state.isDragging = false;
             state.isCreating = false;
         },
@@ -159,6 +160,10 @@ export const editRadarSlice = createSlice({
 
         closeMoveBlipModal: (state) => {
             state.showMoveBlipModal = false;
+        },
+
+        closeDeleteBlipModal: (state) => {
+            state.showDeleteBlipModal = false;
         },
 
         addNewBlip: (state, action: PayloadAction<Blip>) => {
@@ -175,6 +180,13 @@ export const editRadarSlice = createSlice({
             state.blip = null;
             state.showMoveBlipModal = false;
             state.activeSegment = null;
+        },
+
+        deleteBlip: (state) => {
+            if (state.blip) {
+                removeBlipById(state, state.blip.id);
+            }
+            state.showDeleteBlipModal = false;
         },
 
         openEditSectorNameModal: (state, action: PayloadAction<string>) => {
@@ -204,7 +216,7 @@ export const editRadarSlice = createSlice({
 
         renameRing: (state, action: PayloadAction<string>) => {
             if (state.editingRingName) {
-                renameItemByName(state.sectorNames, state.editingRingName, action.payload);
+                renameItemByName(state.ringNames, state.editingRingName, action.payload);
             }
             state.showEditRingNameModal = false;
         },
@@ -220,10 +232,12 @@ export const {
     setIsCreating,
     closeCreateBlipModal,
     closeMoveBlipModal,
+    closeDeleteBlipModal,
     closeEditSectorNameModal,
     openEditSectorNameModal,
     addNewBlip,
     moveBlip,
+    deleteBlip,
     renameSector,
     openEditRingNameModal,
     closeEditRingNameModal,

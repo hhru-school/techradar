@@ -21,7 +21,7 @@ const EditWrapper: FC = () => {
 
     const data = useAppSelector((state) => state.editRadar.blips);
     const blipAsset = useAppSelector((state) => state.editRadar.blipAsset);
-    const onDropEvent = useAppSelector((state) => state.editRadar.onDropEvent);
+    const onDropEvent = useAppSelector((state) => state.editRadar.eventSuggest);
 
     const dispatch = useAppDispatch();
 
