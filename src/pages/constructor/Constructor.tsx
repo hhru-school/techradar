@@ -2,8 +2,8 @@ import { FC } from 'react';
 
 import { useAppSelector } from '../../store/hooks';
 import EditContainer from './EditContainer';
-import EditPanel from './editPanel/EditPanel';
 import ModalEditSectorName from './modals/ModaEditSectorName';
+import ModalAddNewSector from './modals/ModalAddNewSector';
 import ModalCreateBlip from './modals/ModalCreateBlip';
 import ModalDeleteBlip from './modals/ModalDeleteBlip';
 import ModalDeleteRing from './modals/ModalDeleteRing';
@@ -19,6 +19,7 @@ const Constructor: FC = () => {
     const showDeleteBlipModal = useAppSelector((state) => state.editRadar.showDeleteBlipModal);
     const showDeleteSectorModal = useAppSelector((state) => state.editRadar.showDeleteSectorModal);
     const showDeleteRingModal = useAppSelector((state) => state.editRadar.showDeleteRingModal);
+    const showAddNewSectorModal = useAppSelector((state) => state.editRadar.showAddNewSectorModal);
 
     return (
         <>
@@ -29,8 +30,7 @@ const Constructor: FC = () => {
             {showDeleteBlipModal && <ModalDeleteBlip />}
             {showDeleteSectorModal && <ModalDeleteSector />}
             {showDeleteRingModal && <ModalDeleteRing />}
-
-            <EditPanel />
+            {showAddNewSectorModal && <ModalAddNewSector />}
             <EditContainer />
         </>
     );

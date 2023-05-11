@@ -6,11 +6,12 @@ import styles from './radarNameEditor.module.less';
 
 const RadarNameContainer: FC = () => {
     return (
-        <div className={styles.container}>
-            <div>
+        <div>
+            <div className={styles.headerLabel}>Radar name</div>
+            <div className={styles.headerContainer}>
                 <h2 className={styles.header}>Hello World!</h2>
+                <EditButton />
             </div>
-            <EditButton />
         </div>
     );
 };

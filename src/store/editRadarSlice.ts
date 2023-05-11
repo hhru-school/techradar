@@ -42,6 +42,8 @@ interface EditRadarState {
     showDeleteSectorModal: boolean;
     showEditRingNameModal: boolean;
     showDeleteRingModal: boolean;
+    showAddNewSectorModal: boolean;
+    showAddNewRingModal: boolean;
     editingSectorName: string | null;
     editingRingName: string | null;
     sectorNames: string[];
@@ -66,6 +68,8 @@ const initialState: EditRadarState = {
     showDeleteRingModal: false,
     editingSectorName: null,
     editingRingName: null,
+    showAddNewSectorModal: false,
+    showAddNewRingModal: false,
     // mock
     sectorNames,
     ringNames,
@@ -276,6 +280,32 @@ export const editRadarSlice = createSlice({
                 state.showEditIcon = action.payload;
             }
         },
+
+        openAddNewSectorModal: (state) => {
+            state.showAddNewSectorModal = true;
+        },
+
+        openAddNewRingModal: (state) => {
+            state.showAddNewRingModal = true;
+        },
+
+        closeAddNewSectorModal: (state) => {
+            state.showAddNewSectorModal = false;
+        },
+
+        closeAddNewRingModal: (state) => {
+            state.showAddNewSectorModal = false;
+        },
+
+        addNewSector: (state, action: PayloadAction<string>) => {
+            state.sectorNames.push(action.payload);
+            state.showAddNewSectorModal = false;
+        },
+
+        addNewRing: (state, action: PayloadAction<string>) => {
+            state.ringNames.push(action.payload);
+            state.showAddNewSectorModal = false;
+        },
     },
 });
 
@@ -305,6 +335,10 @@ export const {
     renameRing,
     deleteRing,
     setShowEditIcon,
+    openAddNewSectorModal,
+    closeAddNewSectorModal,
+    openAddNewRingModal,
+    addNewSector,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;
