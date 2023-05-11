@@ -39,7 +39,9 @@ interface EditRadarState {
     showMoveBlipModal: boolean;
     showDeleteBlipModal: boolean;
     showEditSectorNameModal: boolean;
+    showDeleteSectorModal: boolean;
     showEditRingNameModal: boolean;
+    showDeleteRingModal: boolean;
     editingSectorName: string | null;
     editingRingName: string | null;
     sectorNames: string[];
@@ -59,13 +61,16 @@ const initialState: EditRadarState = {
     showMoveBlipModal: false,
     showDeleteBlipModal: false,
     showEditSectorNameModal: false,
+    showDeleteSectorModal: false,
+    showEditRingNameModal: false,
+    showDeleteRingModal: false,
     editingSectorName: null,
     editingRingName: null,
     // mock
     sectorNames,
     ringNames,
     //
-    showEditRingNameModal: false,
+
     showEditIcon: false,
 };
 
@@ -202,9 +207,24 @@ export const editRadarSlice = createSlice({
             state.showEditSectorNameModal = false;
         },
 
+        openDeleteSectorModal: (state, action: PayloadAction<string>) => {
+            state.editingSectorName = action.payload;
+            state.showDeleteSectorModal = true;
+        },
+
+        closeDeleteSectorModal: (state) => {
+            state.showDeleteSectorModal = false;
+        },
+
         renameSector: (state, action: PayloadAction<string>) => {
             if (state.editingSectorName) {
+                const oldName = state.editingSectorName;
                 renameItemByName(state.sectorNames, state.editingSectorName, action.payload);
+                state.blips = [
+                    ...state.blips.map((blip) =>
+                        blip.sectorName === oldName ? { ...blip, sectorName: action.payload } : blip
+                    ),
+                ];
             }
             state.showEditSectorNameModal = false;
         },
@@ -212,6 +232,7 @@ export const editRadarSlice = createSlice({
         deleteSector: (state, action: PayloadAction<string>) => {
             state.blips = state.blips.filter((blip) => blip.sectorName !== action.payload);
             state.sectorNames = state.sectorNames.filter((name) => name !== action.payload);
+            state.showDeleteSectorModal = false;
         },
 
         openEditRingNameModal: (state, action: PayloadAction<string>) => {
@@ -225,13 +246,28 @@ export const editRadarSlice = createSlice({
 
         renameRing: (state, action: PayloadAction<string>) => {
             if (state.editingRingName) {
+                const oldName = state.editingRingName;
                 renameItemByName(state.ringNames, state.editingRingName, action.payload);
+                state.blips = [
+                    ...state.blips.map((blip) =>
+                        blip.ringName === oldName ? { ...blip, ringName: action.payload } : blip
+                    ),
+                ];
             }
             state.showEditRingNameModal = false;
         },
 
         deleteRing: (state, action: PayloadAction<string>) => {
             state.ringNames = state.ringNames.filter((name) => name !== action.payload);
+        },
+
+        openDeleteRingModal: (state, action: PayloadAction<string>) => {
+            state.editingRingName = action.payload;
+            state.showDeleteRingModal = true;
+        },
+
+        closeDeleteRingModal: (state) => {
+            state.showDeleteRingModal = false;
         },
 
         setShowEditIcon: (state, action: PayloadAction<boolean>) => {
@@ -253,8 +289,10 @@ export const {
     closeCreateBlipModal,
     closeMoveBlipModal,
     closeDeleteBlipModal,
-    closeEditSectorNameModal,
     openEditSectorNameModal,
+    closeEditSectorNameModal,
+    openDeleteSectorModal,
+    closeDeleteSectorModal,
     addNewBlip,
     moveBlip,
     deleteBlip,
@@ -262,6 +300,8 @@ export const {
     deleteSector,
     openEditRingNameModal,
     closeEditRingNameModal,
+    openDeleteRingModal,
+    closeDeleteRingModal,
     renameRing,
     deleteRing,
     setShowEditIcon,

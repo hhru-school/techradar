@@ -2,7 +2,12 @@ import { FC } from 'react';
 import AdjustOutlinedIcon from '@mui/icons-material/AdjustOutlined';
 import DataUsageIcon from '@mui/icons-material/DataUsage';
 
-import { deleteRing, deleteSector, renameRing, renameSector } from '../../../store/editRadarSlice';
+import {
+    deleteRing,
+    openDeleteSectorModal,
+    openEditRingNameModal,
+    openEditSectorNameModal,
+} from '../../../store/editRadarSlice';
 import { useAppSelector } from '../../../store/hooks';
 import EditItemsDropDown from './EditItemsDropDown';
 import RadarNameContainer from './RadarNameContainer';
@@ -20,14 +25,14 @@ const EditPanel: FC = () => {
                 label="Sectors"
                 buttonIcon={<DataUsageIcon />}
                 itemNames={sectorNames}
-                editBtnActionCreator={renameSector}
-                deleteBtnActionCreator={deleteSector}
+                editBtnActionCreator={openEditSectorNameModal}
+                deleteBtnActionCreator={openDeleteSectorModal}
             />
             <EditItemsDropDown
                 label="Rings"
                 buttonIcon={<AdjustOutlinedIcon />}
                 itemNames={ringNames}
-                editBtnActionCreator={renameRing}
+                editBtnActionCreator={openEditRingNameModal}
                 deleteBtnActionCreator={deleteRing}
             />
         </div>

@@ -32,9 +32,11 @@ const EditItemsDropDown: FC<Props> = ({
         () =>
             itemNames.map((name) => (
                 <EditMenuItem
+                    key={name}
                     name={name}
                     deleteBtnActionCreator={deleteBtnActionCreator}
                     editBtnActionCreator={editBtnActionCreator}
+                    isOnlyItem={itemNames.length === 1}
                 />
             )),
         [itemNames, deleteBtnActionCreator, editBtnActionCreator]

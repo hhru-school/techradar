@@ -9,9 +9,10 @@ type Props = {
     name: string;
     deleteBtnActionCreator: ActionCreatorWithPayload<string>;
     editBtnActionCreator: ActionCreatorWithPayload<string>;
+    isOnlyItem: boolean;
 };
 
-const EditMenuItem: FC<Props> = ({ name, deleteBtnActionCreator, editBtnActionCreator }) => {
+const EditMenuItem: FC<Props> = ({ name, deleteBtnActionCreator, editBtnActionCreator, isOnlyItem }) => {
     const dispatch = useAppDispatch();
 
     const editClickHandler = () => {
@@ -27,9 +28,11 @@ const EditMenuItem: FC<Props> = ({ name, deleteBtnActionCreator, editBtnActionCr
             <IconButton onClick={editClickHandler}>
                 <Edit />
             </IconButton>
-            <IconButton onClick={deleteClickHandler}>
-                <Delete />
-            </IconButton>
+            {!isOnlyItem && (
+                <IconButton onClick={deleteClickHandler}>
+                    <Delete />
+                </IconButton>
+            )}
             {name}
         </MenuItem>
     );

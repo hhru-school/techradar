@@ -6,6 +6,8 @@ import EditPanel from './editPanel/EditPanel';
 import ModalEditSectorName from './modals/ModaEditSectorName';
 import ModalCreateBlip from './modals/ModalCreateBlip';
 import ModalDeleteBlip from './modals/ModalDeleteBlip';
+import ModalDeleteRing from './modals/ModalDeleteRing';
+import ModalDeleteSector from './modals/ModalDeleteSector';
 import ModalEditRingName from './modals/ModalEditRingName';
 import ModalMoveBlip from './modals/ModalMoveBlip';
 
@@ -15,6 +17,8 @@ const Constructor: FC = () => {
     const showEditSectorNameModal = useAppSelector((state) => state.editRadar.showEditSectorNameModal);
     const showEditRingNameModal = useAppSelector((state) => state.editRadar.showEditRingNameModal);
     const showDeleteBlipModal = useAppSelector((state) => state.editRadar.showDeleteBlipModal);
+    const showDeleteSectorModal = useAppSelector((state) => state.editRadar.showDeleteSectorModal);
+    const showDeleteRingModal = useAppSelector((state) => state.editRadar.showDeleteRingModal);
 
     return (
         <>
@@ -23,6 +27,9 @@ const Constructor: FC = () => {
             {showEditSectorNameModal && <ModalEditSectorName />}
             {showEditRingNameModal && <ModalEditRingName />}
             {showDeleteBlipModal && <ModalDeleteBlip />}
+            {showDeleteSectorModal && <ModalDeleteSector />}
+            {showDeleteRingModal && <ModalDeleteRing />}
+
             <EditPanel />
             <EditContainer />
         </>
