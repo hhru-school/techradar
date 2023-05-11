@@ -3,7 +3,7 @@ import { TextField } from '@mui/material';
 import { useField } from 'formik';
 
 type Props = {
-    label: string;
+    label?: string;
     name: string;
 };
 

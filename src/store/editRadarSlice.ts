@@ -209,6 +209,11 @@ export const editRadarSlice = createSlice({
             state.showEditSectorNameModal = false;
         },
 
+        deleteSector: (state, action: PayloadAction<string>) => {
+            state.blips = state.blips.filter((blip) => blip.sectorName !== action.payload);
+            state.sectorNames = state.sectorNames.filter((name) => name !== action.payload);
+        },
+
         openEditRingNameModal: (state, action: PayloadAction<string>) => {
             state.showEditRingNameModal = true;
             state.editingRingName = action.payload;
@@ -223,6 +228,10 @@ export const editRadarSlice = createSlice({
                 renameItemByName(state.ringNames, state.editingRingName, action.payload);
             }
             state.showEditRingNameModal = false;
+        },
+
+        deleteRing: (state, action: PayloadAction<string>) => {
+            state.ringNames = state.ringNames.filter((name) => name !== action.payload);
         },
 
         setShowEditIcon: (state, action: PayloadAction<boolean>) => {
@@ -250,9 +259,11 @@ export const {
     moveBlip,
     deleteBlip,
     renameSector,
+    deleteSector,
     openEditRingNameModal,
     closeEditRingNameModal,
     renameRing,
+    deleteRing,
     setShowEditIcon,
 } = editRadarSlice.actions;
 

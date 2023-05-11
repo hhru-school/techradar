@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { useAppSelector } from '../../store/hooks';
 import EditContainer from './EditContainer';
+import EditPanel from './editPanel/EditPanel';
 import ModalEditSectorName from './modals/ModaEditSectorName';
 import ModalCreateBlip from './modals/ModalCreateBlip';
 import ModalDeleteBlip from './modals/ModalDeleteBlip';
@@ -22,6 +23,7 @@ const Constructor: FC = () => {
             {showEditSectorNameModal && <ModalEditSectorName />}
             {showEditRingNameModal && <ModalEditRingName />}
             {showDeleteBlipModal && <ModalDeleteBlip />}
+            <EditPanel />
             <EditContainer />
         </>
     );
