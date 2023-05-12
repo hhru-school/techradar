@@ -23,7 +23,7 @@ const btnSx = { width: 140 };
 
 const getValidationSchema = (values: string[]) =>
     Yup.object({
-        name: Yup.string().trim().notOneOf(values, 'Value already exist').required('Mandatory field'),
+        name: Yup.string().trim().notOneOf(values, 'Значение уже существует').required('Обязательное поле'),
     });
 
 const ModalEditName: FC<Props> = ({
@@ -67,10 +67,10 @@ const ModalEditName: FC<Props> = ({
                                     type="submit"
                                     disabled={!dirty || !isValid}
                                 >
-                                    Apply
+                                    Принять
                                 </Button>
                                 <Button sx={btnSx} variant="outlined" onClick={cancelBtnHandler}>
-                                    Cancel
+                                    Отмена
                                 </Button>
                             </div>
                         </Form>

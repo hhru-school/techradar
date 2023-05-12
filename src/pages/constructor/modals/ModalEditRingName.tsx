@@ -12,8 +12,8 @@ const ModalEditRingName: FC = () => {
             open={true}
             name={currentName || ''}
             names={ringNames}
-            header={'Edit ring name'}
-            inputLabel={'Ring name'}
+            header={'Изменить название кольца'}
+            inputLabel={'Название кольца'}
             cancelBtnActionCreator={closeEditRingNameModal}
             submitBtnActionCreator={renameRing}
         ></ModalRename>

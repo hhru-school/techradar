@@ -32,7 +32,9 @@ const RadarRingLabel: FC<Props> = ({ x, y, segment, ringName, variant = RadarCom
 
     const [isActive, setIsActive] = useState(false);
 
-    const classes = isActive ? classNames(styles.ringName, styles.ringNameActive) : styles.ringName;
+    const classes = classNames(styles.ringName, {
+        [styles.ringNameActive]: isActive,
+    });
 
     const mouseEnterHandler = useCallback(() => {
         setIsActive(true);

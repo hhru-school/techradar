@@ -1,5 +1,6 @@
 import { FC, MouseEvent, memo, useCallback, useMemo } from 'react';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
+import classNames from 'classnames';
 
 import { mouseUpHandler } from '../../pages/constructor/utils';
 import { clearActiveBlip, setActiveBlip } from '../../store/activeBlipSlice';
@@ -40,22 +41,22 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarCompone
         event.stopPropagation();
     };
 
-    let blipClasses = '';
+    const blipClasses = classNames({
+        [styles.blipDemonsrative]: variant === RadarComponentVariant.Demonstrative,
+        [styles.blipEditable]: variant === RadarComponentVariant.Editable,
+    });
 
-    if (variant === RadarComponentVariant.Demonstrative) {
-        blipClasses = styles.blipDemonsrative;
-    }
+    const blipFieldClasses = classNames({
+        [styles.blipFieldActive]: isActive,
+        [styles.blipField]: !isActive,
+    });
 
-    if (variant === RadarComponentVariant.Editable) {
-        blipClasses = styles.blipEditable;
-    }
-
-    const blipFieldClasses = isActive ? styles.blipFieldActive : styles.blipField;
-    const blipTextClasses = isActive ? styles.blipTextActive : styles.blipText;
+    const blipTextClasses = classNames({
+        [styles.blipTextActive]: isActive,
+        [styles.blipText]: !isActive,
+    });
 
     const strokeWidth = r / 8;
-
-    // Drag'n'Drop logic
 
     const isDragging = useAppSelector((state) => state.editRadar.isDragging);
     const draggingId = useAppSelector((state) => state.editRadar.blipAsset?.id);
@@ -75,8 +76,6 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarCompone
         },
         [variant, r, id, dispatch]
     );
-
-    // end of Drag'n'Drop logic
 
     const blip = useMemo(
         () => (

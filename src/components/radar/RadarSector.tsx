@@ -1,4 +1,5 @@
 import { FC, useCallback, useMemo } from 'react';
+import classNames from 'classnames';
 import * as d3 from 'd3-color';
 
 import {
@@ -139,7 +140,10 @@ const RadarSector: FC<Props> = ({
         ]
     );
 
-    const classes = isDemonsrtative ? styles.sectorDemonstrative : styles.sectorDefault;
+    const classes = classNames({
+        [styles.sectorDemonstrative]: isDemonsrtative,
+        [styles.sectorDefault]: !isDemonsrtative,
+    });
 
     return (
         <g

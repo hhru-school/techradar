@@ -9,7 +9,7 @@ const ModalDeleteSector: FC = () => {
 
     const message = (
         <div>
-            Are you sure you want to delete sector <span>{currentName}</span>?
+            Действительно удалить сектор <span>{currentName}</span>?
         </div>
     );
 
@@ -18,9 +18,9 @@ const ModalDeleteSector: FC = () => {
             itemName={currentName}
             closeBtnActionCreator={closeDeleteSectorModal}
             deleteBtnActionCreator={deleteSector}
-            header="Delete sector"
+            header="Удаление сектора"
             message={message}
-            warningMessage="This action will delete all technologies which belong in this sector from current radar!"
+            warningMessage="Это действие удалит все технологии принадлежащие сектору с радара!"
         />
     );
 };

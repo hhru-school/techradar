@@ -25,15 +25,15 @@ const ModalDeleteBlip: FC = () => {
         <Modal open={true}>
             <div className={styles.modal}>
                 <h3 className={styles.header}>
-                    Delete technology <span>{blip?.name}</span>
+                    Удаление технологии <span>{blip?.name}</span>
                 </h3>
-                <div className={styles.message}>Do&nbsp;you really want to delete this technology?</div>
+                <div className={styles.message}>Вы&nbsp;действительно хотите удалить технологию?</div>
                 <div className={styles.buttonContainer}>
                     <Button sx={btnSx} color="error" variant="contained" onClick={confirmBtnClickHandler} type="button">
-                        Delete
+                        Удалить
                     </Button>
                     <Button sx={btnSx} variant="outlined" onClick={cancelBtnClickHandler} type="button">
-                        Cancel
+                        Отмена
                     </Button>
                 </div>
             </div>

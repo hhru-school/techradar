@@ -11,6 +11,8 @@ import ModalDeleteSector from './modals/ModalDeleteSector';
 import ModalEditRingName from './modals/ModalEditRingName';
 import ModalMoveBlip from './modals/ModalMoveBlip';
 
+import styles from './constructor.module.less';
+
 const Constructor: FC = () => {
     const showCreateBlipModal = useAppSelector((state) => state.editRadar.showCreateBlipModal);
     const showMoveBlipRadar = useAppSelector((state) => state.editRadar.showMoveBlipModal);
@@ -31,7 +33,9 @@ const Constructor: FC = () => {
             {showDeleteSectorModal && <ModalDeleteSector />}
             {showDeleteRingModal && <ModalDeleteRing />}
             {showAddNewSectorModal && <ModalAddNewSector />}
-            <EditContainer />
+            <div className={styles.layout}>
+                <EditContainer />
+            </div>
         </>
     );
 };

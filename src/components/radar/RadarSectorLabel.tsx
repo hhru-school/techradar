@@ -34,7 +34,9 @@ const RadarSectorLabel: FC<Props> = ({
 
     const [isActive, setIsActive] = useState(false);
 
-    const classes = isActive ? classNames(styles.sectorName, styles.sectorNameActive) : styles.sectorName;
+    const classes = classNames(styles.sectorName, {
+        [styles.sectorNameActive]: isActive,
+    });
 
     const mouseEnterHandler = useCallback(() => {
         if (isEditable) {

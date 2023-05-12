@@ -9,7 +9,7 @@ const ModalDeleteRing: FC = () => {
 
     const message = (
         <div>
-            Are you sure you want to delete ring <span>{currentName}</span>?
+            Действительно удалить кольцо <span>{currentName}</span>?
         </div>
     );
 

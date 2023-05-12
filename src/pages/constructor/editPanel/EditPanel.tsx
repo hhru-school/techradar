@@ -37,7 +37,7 @@ const EditPanel: FC = () => {
             </div>
             <div className={styles.lower}>
                 <EditItemsDropDown
-                    label="Sectors"
+                    label="Секторы"
                     buttonIcon={<DataUsageIcon />}
                     itemNames={sectorNames}
                     editBtnActionCreator={openEditSectorNameModal}
@@ -45,7 +45,7 @@ const EditPanel: FC = () => {
                     addItemActionCreator={openAddNewSectorModal}
                 />
                 <EditItemsDropDown
-                    label="Rings"
+                    label="Кольца"
                     buttonIcon={<AdjustOutlinedIcon />}
                     itemNames={ringNames}
                     editBtnActionCreator={openEditRingNameModal}

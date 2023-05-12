@@ -13,7 +13,7 @@ import styles from './modal.module.less';
 const btnSx = { width: 140 };
 
 const validationSchema = Yup.object({
-    name: Yup.string().trim().required('Mandatory field'),
+    name: Yup.string().trim().required('Обязательное поле'),
 });
 
 const ModalCreateBlip: FC = () => {
@@ -31,7 +31,7 @@ const ModalCreateBlip: FC = () => {
     return (
         <Modal open={true}>
             <div className={styles.modal}>
-                <h3 className={styles.header}>Add new technology</h3>
+                <h3 className={styles.header}>Создать технологию</h3>
                 <Formik
                     initialValues={{
                         name: '',
@@ -54,9 +54,9 @@ const ModalCreateBlip: FC = () => {
                 >
                     {({ isValid, dirty }) => (
                         <Form>
-                            <ModalTextField label={'Technology name'} name={'name'} />
-                            <ModalSelectField label={'Sector name'} name={'sectorName'} values={sectorNames} />
-                            <ModalSelectField label={'Ring name'} name={'ringName'} values={ringNames} />
+                            <ModalTextField label={'Технология'} name={'name'} />
+                            <ModalSelectField label={'Сектор'} name={'sectorName'} values={sectorNames} />
+                            <ModalSelectField label={'Кольцо'} name={'ringName'} values={ringNames} />
                             <div className={styles.buttonContainer}>
                                 <Button
                                     sx={btnSx}
@@ -65,10 +65,10 @@ const ModalCreateBlip: FC = () => {
                                     type="submit"
                                     disabled={!isValid || !dirty}
                                 >
-                                    Add
+                                    Создать
                                 </Button>
                                 <Button sx={btnSx} variant="outlined" onClick={cancelBtnClickHandler}>
-                                    Cancel
+                                    Отмена
                                 </Button>
                             </div>
                         </Form>

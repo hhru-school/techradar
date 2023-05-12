@@ -26,11 +26,11 @@ const ModalMoveBlip: FC = () => {
         <Modal open={true}>
             <div className={styles.modal}>
                 <h3 className={styles.header}>
-                    Move technology <span>{blip?.name}</span>
+                    Перемещение технологии <span>{blip?.name}</span>
                 </h3>
                 <div className={styles.message}>
-                    Do&nbsp;you really want move technology&nbsp;to <span>{activeSegment?.ringName}</span> ring&nbsp;of{' '}
-                    <span>{activeSegment?.sectorName}</span> sector?
+                    Действительно переместить тенологию в кольцо <span>{activeSegment?.ringName}</span> сектора{' '}
+                    <span>{activeSegment?.sectorName}</span>?
                 </div>
                 <div className={styles.buttonContainer}>
                     <Button
@@ -40,10 +40,10 @@ const ModalMoveBlip: FC = () => {
                         onClick={confirmBtnClickHandler}
                         type="button"
                     >
-                        Confirm
+                        Принять
                     </Button>
                     <Button sx={btnSx} variant="outlined" onClick={cancelBtnClickHandler} type="button">
-                        Cancel
+                        Отмена
                     </Button>
                 </div>
             </div>

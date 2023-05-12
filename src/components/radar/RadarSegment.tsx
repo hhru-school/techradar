@@ -60,8 +60,6 @@ const RadarSegment: FC<Props> = ({
     const x = segment.innerRadius + (segment.outerRadius - segment.innerRadius) / 2;
     const y = gap / 2;
 
-    // //DnDLogic
-
     const dispatch = useAppDispatch();
     const isActive = useAppSelector(
         (state) =>
@@ -81,7 +79,6 @@ const RadarSegment: FC<Props> = ({
             dispatch(clearActiveSegment());
         }
     };
-    // ///////////////////
 
     let opacity = 1;
 

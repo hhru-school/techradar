@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Add } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
 import classNames from 'classnames';
 
@@ -28,13 +29,15 @@ const tooltipProps = {
 const BlipGenerator: FC<Props> = ({ onMouseDown }) => {
     const isCreating = useAppSelector((state) => state.editRadar.isCreating);
 
-    const classes = classNames(
-        isCreating ? classNames(styles.generator, styles.inactive) : classNames(styles.generator, styles.active)
-    );
+    const classes = classNames(styles.generator, {
+        [styles.inactive]: isCreating,
+        [styles.active]: !isCreating,
+    });
 
     const component = (
         <div className={classes} onDrag={dragHandler} onMouseDown={onMouseDown}>
-            {isCreating ? 'Drop on place' : '+'}
+            {isCreating && 'Drop on place'}
+            {!isCreating && <Add />}
         </div>
     );
 
