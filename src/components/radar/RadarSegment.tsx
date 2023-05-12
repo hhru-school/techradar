@@ -23,6 +23,13 @@ type Props = {
     variant?: RadarComponentVariant;
 };
 
+const getOpacity = (isEditable: boolean, isDragging: boolean, isActive: boolean) => {
+    if (isEditable && isDragging) {
+        return isActive ? 1 : 0.3;
+    }
+    return 1;
+};
+
 const RadarSegment: FC<Props> = ({
     id,
     segment,
@@ -68,6 +75,8 @@ const RadarSegment: FC<Props> = ({
     );
     const isDragging = useAppSelector((state) => state.editRadar.isDragging);
 
+    const isEditable = variant === RadarComponentVariant.Editable;
+
     const onMouseEnterHandler = () => {
         if (variant === RadarComponentVariant.Editable && isDragging) {
             dispatch(setActiveSegment({ ringName, sectorName }));
@@ -75,16 +84,12 @@ const RadarSegment: FC<Props> = ({
     };
 
     const onMouseLeaveHandler = () => {
-        if (variant === RadarComponentVariant.Editable && isDragging) {
+        if (isEditable && isDragging) {
             dispatch(clearActiveSegment());
         }
     };
 
-    let opacity = 1;
-
-    if (variant === RadarComponentVariant.Editable && isDragging) {
-        opacity = isActive ? 1 : 0.3;
-    }
+    const opacity = getOpacity(isEditable, isDragging, isActive);
 
     return (
         <g>

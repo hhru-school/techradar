@@ -21,6 +21,9 @@ type Props = {
     variant?: RadarComponentVariant;
 };
 
+const getTransform = (startAngle: number, x: number, y: number) =>
+    `rotate(${-convertRadToDeg(startAngle)}  0 0) rotate(${textRotation(startAngle)} ${x} ${y})`;
+
 const RadarRingLabel: FC<Props> = ({ x, y, segment, ringName, variant = RadarComponentVariant.Demonstrative }) => {
     const isEditable = variant === RadarComponentVariant.Editable;
 
@@ -56,9 +59,7 @@ const RadarRingLabel: FC<Props> = ({ x, y, segment, ringName, variant = RadarCom
             dominantBaseline="middle"
             x={x}
             y={y}
-            transform={`rotate(${-convertRadToDeg(segment.startAngle)}  0 0) rotate(${textRotation(
-                segment.startAngle
-            )} ${x} ${y})`}
+            transform={getTransform(segment.startAngle, x, y)}
         >
             {ringName}
         </text>
