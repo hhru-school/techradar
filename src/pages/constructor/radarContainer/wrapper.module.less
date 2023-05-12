@@ -1,0 +1,25 @@
+.ghost {
+    position: absolute;
+    z-index: 50;
+    pointer-events: none;
+}
+
+.cursor {
+    position: absolute;
+    transform: translate(15px, 15px);
+}
+
+.wrapper {
+    position: relative;
+}
+
+.wrapperDrag,
+.wrapperDrag * {
+    cursor: grabbing;
+}
+
+.layout {
+    position: relative;
+    top: 0;
+    left: 0;
+}

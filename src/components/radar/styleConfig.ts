@@ -22,4 +22,4 @@ export const textOffsetY = 2;
 export const sectorNameFontSize = 16;
 export const sectorNameTextOffset = 15;
 
-export const defaultBlipRadius = 7;
+export const defaultBlipRadius = 8;

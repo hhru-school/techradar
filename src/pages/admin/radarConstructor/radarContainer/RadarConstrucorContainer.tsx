@@ -7,17 +7,15 @@ import { useAppSelector } from '../../../../store/hooks';
 import styles from './radarConstructorContainer.module.less';
 
 const RadarConstructorContainer: FC = () => {
-    const ringsNumber = useAppSelector((state) => state.constructorRadar.countRingInputs);
-    const sectorsNumber = useAppSelector((state) => state.constructorRadar.countSectorInputs);
     const sectorNames = useAppSelector((state) => state.constructorRadar.sectorNames);
     const ringNames = useAppSelector((state) => state.constructorRadar.ringNames);
     const blips = useAppSelector((state) => state.constructorRadar.blips);
 
     return (
-        <div className={styles.xxx}>
+        <div className={styles.container}>
             <Radar
-                sectorNames={sectorNames.slice(0, sectorsNumber)}
-                ringNames={ringNames.slice(0, ringsNumber)}
+                sectorNames={sectorNames}
+                ringNames={ringNames}
                 radius={250}
                 data={blips}
                 variant={RadarComponentVariant.Editable}

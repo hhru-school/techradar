@@ -104,26 +104,7 @@ export const initialState: State = {
             comment: 'Только без фанатизма и вложенных &, их сложнее грепать.',
         },
     ],
-    // radarConstructorGrid: [
-    //     {
-    //         id: 1,
-    //         techName: 'babel',
-    //         ringName: 1,
-    //         sector: 2,
-    //     },
-    //     {
-    //         id: 2,
-    //         techName: 'react',
-    //         ringName: 3,
-    //         sector: 4,
-    //     },
-    //     {
-    //         id: 3,
-    //         techName: 'JS',
-    //         ringName: 2,
-    //         sector: 4,
-    //     },
-    // ],
+
     radarGrid: {
         android: [
             {
@@ -203,7 +184,7 @@ export const initialState: State = {
     showRadarConstrTechModal: false,
     countRingInputs: defaultRingNumber,
     countSectorInputs: defaultSectorNumber,
-    ringNames: defaultRingsNames,
-    sectorNames: defaultSectorNames,
+    ringNames: defaultRingsNames.slice(0, defaultRingNumber),
+    sectorNames: defaultSectorNames.slice(0, defaultSectorNumber),
     blips: [],
 };
