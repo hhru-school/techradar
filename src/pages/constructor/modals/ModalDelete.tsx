@@ -43,10 +43,10 @@ const ModalDelete: FC<Props> = ({
                 {warningMessage && <Alert severity="error">{warningMessage}</Alert>}
                 <div className={styles.buttonContainer}>
                     <Button sx={btnSx} color="error" variant="contained" onClick={confirmBtnClickHandler} type="button">
-                        Delete
+                        Удалить
                     </Button>
                     <Button sx={btnSx} variant="outlined" onClick={cancelBtnClickHandler} type="button">
-                        Cancel
+                        Отмена
                     </Button>
                 </div>
             </div>

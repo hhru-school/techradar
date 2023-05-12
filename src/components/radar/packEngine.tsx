@@ -30,7 +30,7 @@ function packEntries(entries: Entry[], segment: Segment): Node[] {
     /*
     Количество циклов и идея: https://github.com/backstage/backstage/blob/master/plugins/tech-radar/src/components/Radar/utils.ts
     
-    Согласно документациии https://github.com/d3/d3-force: 
+    Согласно документации https://github.com/d3/d3-force: 
 
     # simulation.alpha([alpha])
     Alpha is roughly analogous to temperature in simulated annealing.
