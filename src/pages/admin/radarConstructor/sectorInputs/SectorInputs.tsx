@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react';
 import { FormControl, InputLabel, List, NativeSelect, Typography } from '@mui/material';
 
 import { TextInputStandart } from '../../../../components/textInputStandart/TextInputStandart';
-import { updateSectorCount } from '../../../../store/constructorRadarSlice';
+import { updateSectorCount, updateSectorNames } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 
 const optionsArr = [1, 2, 3, 4, 5, 6];
@@ -13,14 +13,19 @@ const SectorInputs: FC = () => {
 
     const inputs = useMemo(
         () =>
-            new Array(countSectors).fill({}).map((_, index) => ({
-                label: `Сектор ${index + 1}`,
-                id: `name-sector-${index + 1}`,
-                name: `nameSector${index + 1}`,
-                type: 'text',
-                autoComplete: 'on',
-            })),
-        [countSectors]
+            new Array(countSectors).fill(null).map((_, index) => (
+                <TextInputStandart
+                    key={index}
+                    label={`Сектор ${index + 1}`}
+                    id={`sectorName-${index + 1}`}
+                    name={`sectorName-${index + 1}`}
+                    type={'text'}
+                    onChange={(e) => {
+                        dispatch(updateSectorNames({ id: index, value: e.target.value.trim() }));
+                    }}
+                />
+            )),
+        [countSectors, dispatch]
     );
 
     return (
@@ -56,18 +61,7 @@ const SectorInputs: FC = () => {
                     })}
                 </NativeSelect>
             </FormControl>
-            {inputs.map((item, i) => {
-                return (
-                    <TextInputStandart
-                        key={i}
-                        label={item.label}
-                        id={item.id}
-                        name={item.name}
-                        type={item.type}
-                        autoComplete={item.autoComplete}
-                    />
-                );
-            })}
+            {inputs}
         </List>
     );
 };

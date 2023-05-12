@@ -7,10 +7,11 @@ export interface InputProps {
     name: string;
     id?: string;
     type: string;
-    autoComplete: string;
+    autoComplete?: string;
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-export const TextInputStandart = ({ label, id, ...props }: InputProps): ReactElement => {
+export const TextInputStandart = ({ label, id, onChange, ...props }: InputProps): ReactElement => {
     const [field, meta] = useField(props);
 
     return (

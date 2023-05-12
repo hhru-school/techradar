@@ -20,8 +20,9 @@ import { setRadarConstrTechModalOpen } from '../../../store/constructorRadarSlic
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import AddTechModal from './addTechModal/AddTechModal';
 import RadarConstructorGrid from './radarConstructorGrid/RadarConstructorGrid';
+import RadarConstructorContainer from './radarContainer/RadarConstrucorContainer';
 import RadarPublishBtn from './radarPublishBtn/RadarPublishBtn';
-import CircleInputs from './ringInputs/ringInputs';
+import RingInputs from './ringInputs/RingInputs';
 import SectorInputs from './sectorInputs/SectorInputs';
 
 import './RadarConstructor.less';
@@ -114,7 +115,6 @@ const RadarConstructor: FC = () => {
                 validationSchema={formikValid}
                 onSubmit={(values: Values, { setSubmitting }: FormikHelpers<Values>) => {
                     setTimeout(() => {
-                        // console.log(values);
                         setSubmitting(false);
                     }, 500);
                 }}
@@ -149,7 +149,7 @@ const RadarConstructor: FC = () => {
                     </Grid>
                     <Grid container>
                         <Grid item sm={8}>
-                            {/* РАДАР СУВАТЬ СЮДА */}
+                            <RadarConstructorContainer />
                         </Grid>
                         <Grid
                             item
@@ -171,7 +171,7 @@ const RadarConstructor: FC = () => {
                                             <Typography>Кольца и секторы</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails sx={{ display: 'flex', flexDirection: 'row' }}>
-                                            <CircleInputs />
+                                            <RingInputs />
                                             <SectorInputs />
                                         </AccordionDetails>
                                     </Accordion>

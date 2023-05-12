@@ -8,7 +8,7 @@ import {
     sectorNameFontSize,
     sectorNameTextOffset,
 } from './styleConfig';
-import { Blip } from './types';
+import { Blip, RadarComponentVariant } from './types';
 import { getOffset, getOffsetXY } from './utils';
 
 type Props = {
@@ -19,6 +19,7 @@ type Props = {
     colorScheme?: string[];
     data?: Blip[] | null;
     blipRadus?: number;
+    variant?: RadarComponentVariant;
 };
 
 const Radar: FC<Props> = ({
@@ -29,6 +30,7 @@ const Radar: FC<Props> = ({
     colorScheme = defaultColorScheme,
     data = null,
     blipRadus: blipRadius = defaultBlipRadius,
+    variant = RadarComponentVariant.Demonstrative,
 }) => {
     const sweepAngle = (2 * Math.PI) / sectorNames.length;
     const ofst = getOffset(gap, sweepAngle);
@@ -53,6 +55,7 @@ const Radar: FC<Props> = ({
                     gap={gap}
                     svgRadius={svgRadius}
                     blipRadius={blipRadius}
+                    variant={variant}
                 />
             </g>
         );
@@ -62,10 +65,12 @@ const Radar: FC<Props> = ({
     });
 
     return (
-        <svg viewBox={`0 0 ${svgRadius * 2} ${svgRadius * 2}`} width={svgRadius * 2} height={svgRadius * 2}>
-            {sectors}
-            Sorry, your browser does not support inline SVG.
-        </svg>
+        <>
+            <svg viewBox={`0 0 ${svgRadius * 2} ${svgRadius * 2}`} width={svgRadius * 2} height={svgRadius * 2}>
+                {sectors}
+                Sorry, your browser does not support inline SVG.
+            </svg>
+        </>
     );
 };
 

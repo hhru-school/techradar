@@ -1,4 +1,5 @@
 import { FC, useCallback, useMemo } from 'react';
+import classNames from 'classnames';
 import * as d3 from 'd3-color';
 
 import {
@@ -9,10 +10,10 @@ import {
     setIsTransforming,
 } from '../../store/activeSectorSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import RadarSectorLabel from './RadarSectorLabel';
 import RadarSegment from './RadarSegment';
-import { sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
-import { Blip, Segment } from './types';
-import { buildArc, getRadiusListEqualSquare, getTransform } from './utils';
+import { Blip, RadarComponentVariant, Segment } from './types';
+import { getRadiusListEqualSquare, getTransform } from './utils';
 
 import styles from './radar.module.less';
 
@@ -28,7 +29,10 @@ type Props = {
     gap?: number;
     data?: Blip[] | null;
     seed?: number;
+    variant: RadarComponentVariant;
 };
+
+const defaultTransform = { x: 0, y: 0, scale: 1 };
 
 const RadarSector: FC<Props> = ({
     sectorName,
@@ -41,43 +45,53 @@ const RadarSector: FC<Props> = ({
     data = null,
     seed = 0,
     gap = 0,
+    variant = RadarComponentVariant.Demonstrative,
 }) => {
+    const isDemonsrtative = variant === RadarComponentVariant.Demonstrative;
+
     const endAngle = startAngle + sweepAngle;
 
-    const hoveredSector = useAppSelector((state) => state.activeSector.hoveredSectorName);
     const activeSector = useAppSelector((state) => state.activeSector.activeSectorName);
+    const hoveredSector = useAppSelector((state) => state.activeSector.hoveredSectorName);
 
     const dispatch = useAppDispatch();
 
-    const transitionEndHandler = () => {
+    const transitionEndHandler = useCallback(() => {
         dispatch(setIsTransforming(false));
-    };
-
-    const transform = useMemo(
-        () =>
-            activeSector && activeSector === sectorName
-                ? getTransform(startAngle, endAngle, radius + gap / 2)
-                : { x: 0, y: 0, scale: 1 },
-        [activeSector, sectorName, startAngle, endAngle, radius, gap]
-    );
-
-    const onClickHandler = useCallback(() => {
-        if (activeSector) {
-            dispatch(clearActiveSector());
-        } else {
-            dispatch(setActiveSector(sectorName));
-        }
-    }, [dispatch, activeSector, sectorName]);
-
-    const onMouseEnterHandler = useCallback(() => {
-        dispatch(setHoveredSector(sectorName));
-    }, [dispatch, sectorName]);
-
-    const onMouseLeaveHandler = useCallback(() => {
-        dispatch(clearHoveredSector());
     }, [dispatch]);
 
-    const radiuses = getRadiusListEqualSquare(ringNames.length, radius);
+    const transform = useMemo(() => {
+        if (isDemonsrtative) {
+            return activeSector && activeSector === sectorName
+                ? getTransform(startAngle, endAngle, radius + gap / 2)
+                : defaultTransform;
+        }
+        return defaultTransform;
+    }, [activeSector, sectorName, startAngle, endAngle, radius, gap, isDemonsrtative]);
+
+    const onClickHandler = useCallback(() => {
+        if (isDemonsrtative) {
+            if (activeSector) {
+                dispatch(clearActiveSector());
+            } else {
+                dispatch(setActiveSector(sectorName));
+            }
+        }
+    }, [dispatch, activeSector, sectorName, isDemonsrtative]);
+
+    const onMouseEnterHandler = useCallback(() => {
+        if (isDemonsrtative) {
+            dispatch(setHoveredSector(sectorName));
+        }
+    }, [dispatch, sectorName, isDemonsrtative]);
+
+    const onMouseLeaveHandler = useCallback(() => {
+        if (isDemonsrtative) {
+            dispatch(clearHoveredSector());
+        }
+    }, [dispatch, isDemonsrtative]);
+
+    const radiuses = useMemo(() => getRadiusListEqualSquare(ringNames.length, radius), [ringNames, radius]);
 
     const segments = useMemo(
         () =>
@@ -94,6 +108,7 @@ const RadarSector: FC<Props> = ({
                         id={id}
                         key={id}
                         ringName={ringNames[i]}
+                        sectorName={sectorName}
                         segment={segment}
                         data={data && data.filter((item) => item.ringName === ringNames[i])}
                         color={
@@ -105,39 +120,49 @@ const RadarSector: FC<Props> = ({
                         seed={seed}
                         gap={gap}
                         blipRadius={blipRadius / transform.scale}
+                        variant={variant}
                     />
                 );
             }),
-        [radiuses, blipRadius, ringNames, baseColor, startAngle, endAngle, transform, gap, data, seed, sectorName]
+        [
+            radiuses,
+            blipRadius,
+            ringNames,
+            baseColor,
+            startAngle,
+            endAngle,
+            transform,
+            gap,
+            data,
+            seed,
+            sectorName,
+            variant,
+        ]
     );
+
+    const classes = classNames({
+        [styles.sectorDemonstrative]: isDemonsrtative,
+        [styles.sectorDefault]: !isDemonsrtative,
+    });
 
     return (
         <g
             onClick={onClickHandler}
             onMouseEnter={onMouseEnterHandler}
             onMouseLeave={onMouseLeaveHandler}
-            className={styles.animated}
+            className={classes}
             transform={`translate(${transform.x} ${transform.y}) scale(${transform.scale})`}
             opacity={hoveredSector && hoveredSector !== sectorName ? 0.5 : 1}
             display={activeSector && activeSector !== sectorName ? 'none' : 'auto'}
-            cursor="pointer"
             onTransitionEnd={transitionEndHandler}
         >
-            <path
-                id={`curve-${sectorName}`}
-                fill="transparent"
-                d={buildArc(startAngle, startAngle + sweepAngle, radius)}
+            <RadarSectorLabel
+                sectorName={sectorName}
+                startAngle={startAngle}
+                sweepAngle={sweepAngle}
+                radius={radius}
+                variant={variant}
             />
-            <text fontSize={sectorNameFontSize}>
-                <textPath
-                    xlinkHref={`#curve-${sectorName}`}
-                    dominantBaseline="middle"
-                    className={styles.sectorName}
-                    startOffset="50%"
-                >
-                    <tspan dy={-sectorNameTextOffset}>{sectorName}</tspan>
-                </textPath>
-            </text>
             {segments}
         </g>
     );

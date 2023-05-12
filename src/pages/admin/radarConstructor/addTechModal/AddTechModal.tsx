@@ -1,51 +1,34 @@
 import { FC, useCallback } from 'react';
-import { Box, Button, Modal, Typography, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
-import { Formik, FormikHelpers, Form, useField } from 'formik';
+import { Box, Button, Modal, Typography } from '@mui/material';
+import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { styleModal } from '../../../../components/authFormModal/AuthFormModal';
 import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
-import { setRadarConstrTechModalOpen, updateRadarConstrTechGrid } from '../../../../store/constructorRadarSlice';
+import { addNewBlip, setRadarConstrTechModalOpen } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import AddTechModalSelectInput from './AddTechModalSelectInput';
 
-type AddTechModalData = {
-    techName: string;
-    Circle: number;
-    sector: number;
-};
-
-type PropsSelectInput = {
-    label: string;
-    countItems: number;
+export interface AddTechModalData {
     name: string;
-};
+    ringName: string;
+    sectorName: string;
+}
 
-const MySelectInput = ({ label, countItems, ...props }: PropsSelectInput) => {
-    const [field, meta] = useField(props);
-    return (
-        <FormControl sx={{ marginTop: '20px' }}>
-            <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-            <Select {...props} {...field} labelId="demo-simple-select-label" id="demo-simple-select" label={label}>
-                {new Array(countItems).fill({}).map((_, i) => (
-                    <MenuItem value={i + 1}>{i + 1}</MenuItem>
-                ))}
-            </Select>
-            {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
-        </FormControl>
-    );
-};
+const message = 'Обязательное поле!';
 
 const validSchema = Yup.object({
-    techName: Yup.string().required('Обязательное поле!'),
-    Circle: Yup.number().required('Обязательное поле!'),
-    sector: Yup.number().required('Обязательное поле!'),
+    name: Yup.string().required(message),
+    ringName: Yup.string().required(message),
+    sectorName: Yup.string().required(message),
 });
 
 const AddTechModal: FC = () => {
     const dispatch = useAppDispatch();
     const showRadarConstrTechModal = useAppSelector((state) => state.constructorRadar.showRadarConstrTechModal);
-    const countSectors = useAppSelector((state) => state.constructorRadar.countSectorInputs);
-    const countRings = useAppSelector((state) => state.constructorRadar.countCircleInputs);
+
+    const ringNames = useAppSelector((state) => state.constructorRadar.ringNames);
+    const sectorNames = useAppSelector((state) => state.constructorRadar.sectorNames);
 
     const handleClose = useCallback(() => dispatch(setRadarConstrTechModalOpen(false)), [dispatch]);
 
@@ -62,22 +45,27 @@ const AddTechModal: FC = () => {
                 </Typography>
                 <Formik
                     initialValues={{
-                        techName: '',
-                        Circle: 1,
-                        sector: 1,
+                        name: '',
+                        ringName: ringNames[0],
+                        sectorName: sectorNames[0],
                     }}
                     validationSchema={validSchema}
                     onSubmit={(values: AddTechModalData, { setSubmitting }: FormikHelpers<AddTechModalData>) => {
-                        dispatch(updateRadarConstrTechGrid({ id: values.techName, ...values }));
-                        dispatch(setRadarConstrTechModalOpen(false));
                         setSubmitting(false);
+                        dispatch(addNewBlip(values));
+                        dispatch(setRadarConstrTechModalOpen(false));
                     }}
                 >
                     {({ isSubmitting }) => (
                         <Form className="form auth-form">
-                            <TextInputOutlined label="Название" name="techName" placeholder="Введите название" />
-                            <MySelectInput label="Кольцо" name="Circle" countItems={countRings} />
-                            <MySelectInput label="Сектор" name="sector" countItems={countSectors} />
+                            <TextInputOutlined label="Название" name="name" placeholder="Введите название" />
+                            <AddTechModalSelectInput id="ring" label={'Кольцо'} items={ringNames} name="ringName" />
+                            <AddTechModalSelectInput
+                                id="sector"
+                                label={'Сектор'}
+                                items={sectorNames}
+                                name="sectorName"
+                            />
                             <Button
                                 disabled={isSubmitting}
                                 type="submit"

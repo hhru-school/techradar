@@ -7,6 +7,7 @@ import Header from './components/header/Header';
 import MyRadars from './pages/admin/myRadars/MyRadars';
 import MyTechnologies from './pages/admin/myTechnologies/MyTechnologies';
 import RadarConstructor from './pages/admin/radarConstructor/RadarConstructor';
+import Constructor from './pages/constructor/Constructor';
 import TechRadar from './pages/techradar/TechRadar';
 
 const theme = createTheme(
@@ -15,6 +16,7 @@ const theme = createTheme(
             primary: {
                 main: '#363636',
             },
+
             secondary: {
                 main: '#63539F',
             },
@@ -40,7 +42,7 @@ const App: FC = () => {
                     <Route path=":companyId/:radarId" element={<TechRadar />} />
                 </Route>
                 <Route path="/my-radars/*" element={<MyRadars />} />
-
+                <Route path="/constructor" element={<Constructor />} />
                 <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
                 <Route path="/my-tech" element={<MyTechnologies />} />
             </Routes>

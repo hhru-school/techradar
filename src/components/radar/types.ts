@@ -26,11 +26,16 @@ export interface Blip {
     name: string;
     ringName: string;
     sectorName: string;
-    description: string;
+    description: string | null;
 }
 
 export interface Transform {
     x: number;
     y: number;
     scale: number;
+}
+
+export enum RadarComponentVariant {
+    Demonstrative,
+    Editable,
 }

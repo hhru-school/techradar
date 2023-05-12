@@ -3,6 +3,7 @@ import { Skeleton } from '@mui/material';
 
 import { FormattedRadarData } from '../../../../api/radarApiUtils';
 import Radar from '../../../../components/radar/Radar';
+import { RadarComponentVariant } from '../../../../components/radar/types';
 import SectorControlPanel from '../controls/SectorControlPanel';
 
 import styles from './radar.module.less';
@@ -30,6 +31,7 @@ const RadarContainer: FC<Props> = ({ radar, isLoading = false }) => {
                         ringNames={radar.ringNames}
                         data={radar.blips}
                         radius={radius}
+                        variant={RadarComponentVariant.Demonstrative}
                     />
                 )}
                 {isLoading && <Skeleton variant="circular" width={2 * radius} height={2 * radius} />}

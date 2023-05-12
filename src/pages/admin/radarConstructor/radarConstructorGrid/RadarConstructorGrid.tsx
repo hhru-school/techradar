@@ -3,16 +3,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Box } from '@mui/material';
 import { DataGrid, GridColDef, ruRU, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 
-import { updateRadarConstrGrid } from '../../../../store/constructorRadarSlice';
+import { updateBlips } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-
-export interface RowRadarConstructor {
-    id: number | string;
-    techName: string;
-    Circle: number;
-    sector: number;
-}
-export type GridRadarConstructor = Array<RowRadarConstructor>;
 
 const initialState = {
     pagination: {
@@ -24,53 +16,41 @@ const initialState = {
 
 const RadarConstructorGrid: FC = () => {
     const dispatch = useAppDispatch();
-    const rows = useAppSelector((state) => state.constructorRadar.radarConstructorGrid);
-    const countSectors = useAppSelector((state) => state.constructorRadar.countSectorInputs);
-    const countRings = useAppSelector((state) => state.constructorRadar.countCircleInputs);
+    const sectorNames = useAppSelector((state) => state.constructorRadar.sectorNames);
+    const ringNames = useAppSelector((state) => state.constructorRadar.ringNames);
+    const blips = useAppSelector((state) => state.constructorRadar.blips);
 
     const deleteRow = useCallback(
         (id: GridRowId) => {
-            dispatch(updateRadarConstrGrid(rows.filter((row) => row.id !== id)));
+            dispatch(updateBlips(blips.filter((blip) => blip.id !== id)));
         },
-        [rows, dispatch]
+        [blips, dispatch]
     );
-
-    const counter = (count: number): Array<number> => {
-        const arr = [];
-        for (let i = 1; i < count + 1; i++) {
-            arr.push(i);
-        }
-        return arr;
-    };
 
     const columns = useMemo<GridColDef[]>(
         () => [
             {
-                field: 'techName',
+                field: 'name',
                 headerName: 'Название',
                 type: 'string',
                 width: 150,
                 editable: true,
             },
             {
-                field: 'Circle',
+                field: 'ringName',
                 headerName: 'Кольцо',
                 type: 'singleSelect',
                 width: 100,
                 editable: true,
-                valueOptions: () => {
-                    return counter(countRings);
-                },
+                valueOptions: () => ringNames,
             },
             {
-                field: 'sector',
+                field: 'sectorName',
                 headerName: 'Сектор',
                 type: 'singleSelect',
                 width: 100,
                 editable: true,
-                valueOptions: () => {
-                    return counter(countSectors);
-                },
+                valueOptions: () => sectorNames,
             },
             {
                 field: 'actions',
@@ -81,13 +61,13 @@ const RadarConstructorGrid: FC = () => {
                 ],
             },
         ],
-        [deleteRow, countRings, countSectors]
+        [deleteRow, ringNames, sectorNames]
     );
 
     return (
         <Box sx={{ width: '100%', height: 'calc(100vh - 274px)' }}>
             <DataGrid
-                rows={rows}
+                rows={blips}
                 columns={columns}
                 initialState={initialState}
                 pageSizeOptions={[5]}

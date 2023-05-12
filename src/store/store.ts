@@ -5,12 +5,14 @@ import activeBlipReducer from './activeBlipSlice';
 import activeSectorReducer from './activeSectorSlice';
 import authentificationReducer from './authentificationSlice';
 import constructorRadarReducer from './constructorRadarSlice';
+import editRadarReducer from './editRadarSlice';
 import myRadarsReducer from './myRadarsSlice';
 import myTechReducer from './myTechSlice';
 
 const rootReducer = combineReducers({
     activeBlip: activeBlipReducer,
     activeSector: activeSectorReducer,
+    editRadar: editRadarReducer,
     constructorRadar: constructorRadarReducer,
     myRadars: myRadarsReducer,
     myTech: myTechReducer,

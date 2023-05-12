@@ -1,10 +1,16 @@
+import { Blip } from '../components/radar/types';
 import { GridRadarObj } from '../pages/admin/myRadars/myRadarsDataGrid/MyRadarsDataGrid';
 import { GridTech } from '../pages/admin/myTechnologies/myTechDataGrid/MyTechDataGrid';
-import { GridRadarConstructor } from '../pages/admin/radarConstructor/radarConstructorGrid/RadarConstructorGrid';
+// import { GridRadarConstructor } from '../pages/admin/radarConstructor/radarConstructorGrid/RadarConstructorGrid';
 
 type Input = { label: string; id: string; name: string; type: string; autoComplete: string };
 
 type ConstructorInputs = Array<Input>;
+
+const defaultRingsNames = ['1st', '2nd', '3rd', '4th', '5th', '6th'];
+const defaultSectorNames = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth'];
+const defaultRingNumber = 4;
+const defaultSectorNumber = 4;
 
 export interface AuthFormInputs {
     email: string | null;
@@ -16,13 +22,16 @@ interface State {
     authentificationFormData: AuthFormInputs;
     techGrid: GridTech;
     radarGrid: GridRadarObj;
-    radarConstructorGrid: GridRadarConstructor;
-    countCircleInputs: number;
+    // radarConstructorGrid: GridRadarConstructor;
+    countRingInputs: number;
     countSectorInputs: number;
     showAuthentificationForm: boolean;
     showRadarsCreateModal: boolean;
     showTechCreateModal: boolean;
     showRadarConstrTechModal: boolean;
+    ringNames: string[];
+    sectorNames: string[];
+    blips: Blip[];
 }
 
 export const initialState: State = {
@@ -95,26 +104,7 @@ export const initialState: State = {
             comment: 'Только без фанатизма и вложенных &, их сложнее грепать.',
         },
     ],
-    radarConstructorGrid: [
-        {
-            id: 1,
-            techName: 'babel',
-            Circle: 1,
-            sector: 2,
-        },
-        {
-            id: 2,
-            techName: 'react',
-            Circle: 3,
-            sector: 4,
-        },
-        {
-            id: 3,
-            techName: 'JS',
-            Circle: 2,
-            sector: 4,
-        },
-    ],
+
     radarGrid: {
         android: [
             {
@@ -192,6 +182,9 @@ export const initialState: State = {
     showRadarsCreateModal: false,
     showTechCreateModal: false,
     showRadarConstrTechModal: false,
-    countCircleInputs: 4,
-    countSectorInputs: 4,
+    countRingInputs: defaultRingNumber,
+    countSectorInputs: defaultSectorNumber,
+    ringNames: defaultRingsNames.slice(0, defaultRingNumber),
+    sectorNames: defaultSectorNames.slice(0, defaultSectorNumber),
+    blips: [],
 };
