@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import { useAppSelector } from '../../store/hooks';
+import Legend from '../techradar/components/legend/Legend';
 import EditContainer from './EditContainer';
 import ModalEditSectorName from './modals/ModaEditSectorName';
 import ModalAddNewSector from './modals/ModalAddNewSector';
@@ -23,6 +24,12 @@ const Constructor: FC = () => {
     const showDeleteRingModal = useAppSelector((state) => state.editRadar.showDeleteRingModal);
     const showAddNewSectorModal = useAppSelector((state) => state.editRadar.showAddNewSectorModal);
 
+    const sectorNames = useAppSelector((state) => state.editRadar.sectorNames);
+    const ringNames = useAppSelector((state) => state.editRadar.ringNames);
+    const blips = useAppSelector((state) => state.editRadar.blips);
+
+    const radar = useMemo(() => ({ sectorNames, ringNames, blips }), [sectorNames, ringNames, blips]);
+
     return (
         <>
             {showCreateBlipModal && <ModalCreateBlip />}
@@ -34,7 +41,8 @@ const Constructor: FC = () => {
             {showDeleteRingModal && <ModalDeleteRing />}
             {showAddNewSectorModal && <ModalAddNewSector />}
             <div className={styles.layout}>
-                <EditContainer />
+                <EditContainer radar={radar} />
+                <Legend radar={radar} />
             </div>
         </>
     );

@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { Publish, Save } from '@mui/icons-material';
-import AdjustOutlinedIcon from '@mui/icons-material/AdjustOutlined';
-import DataUsageIcon from '@mui/icons-material/DataUsage';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { IconButton } from '@mui/material';
 
 import {
@@ -38,7 +37,7 @@ const EditPanel: FC = () => {
             <div className={styles.lower}>
                 <EditItemsDropDown
                     label="Секторы"
-                    buttonIcon={<DataUsageIcon />}
+                    buttonIcon={<ArrowDropDownIcon />}
                     itemNames={sectorNames}
                     editBtnActionCreator={openEditSectorNameModal}
                     deleteBtnActionCreator={openDeleteSectorModal}
@@ -46,7 +45,7 @@ const EditPanel: FC = () => {
                 />
                 <EditItemsDropDown
                     label="Кольца"
-                    buttonIcon={<AdjustOutlinedIcon />}
+                    buttonIcon={<ArrowDropDownIcon />}
                     itemNames={ringNames}
                     editBtnActionCreator={openEditRingNameModal}
                     deleteBtnActionCreator={deleteRing}

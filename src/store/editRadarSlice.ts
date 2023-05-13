@@ -56,7 +56,6 @@ const initialState: EditRadarState = {
     blip: null,
     blipAsset: null,
     activeSegment: null,
-    blips: generateData(4),
     eventSuggest: null,
     isCreating: false,
     showCreateBlipModal: false,
@@ -73,6 +72,7 @@ const initialState: EditRadarState = {
     // mock
     sectorNames,
     ringNames,
+    blips: generateData(4),
     //
 
     showEditIcon: false,
