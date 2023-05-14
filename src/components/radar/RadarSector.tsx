@@ -34,6 +34,11 @@ type Props = {
 
 const defaultTransform = { x: 0, y: 0, scale: 1 };
 
+const getDisplay = (activeSector: string | null, sectorName: string, variant: RadarComponentVariant) => {
+    if (variant === RadarComponentVariant.Editable) return 'auto';
+    return activeSector && activeSector !== sectorName ? 'none' : 'auto';
+};
+
 const RadarSector: FC<Props> = ({
     sectorName,
     ringNames,
@@ -153,7 +158,7 @@ const RadarSector: FC<Props> = ({
             className={classes}
             transform={`translate(${transform.x} ${transform.y}) scale(${transform.scale})`}
             opacity={hoveredSector && hoveredSector !== sectorName ? 0.5 : 1}
-            display={activeSector && activeSector !== sectorName ? 'none' : 'auto'}
+            display={getDisplay(activeSector, sectorName, variant)}
             onTransitionEnd={transitionEndHandler}
         >
             <RadarSectorLabel

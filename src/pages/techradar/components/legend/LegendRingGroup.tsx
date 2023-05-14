@@ -1,15 +1,17 @@
 import { FC } from 'react';
 
-import { Blip } from '../../../../components/radar/types';
+import { Blip, RadarComponentVariant } from '../../../../components/radar/types';
 import LegendItem from './LegendItem';
 
 import styles from './legend.module.less';
 
-type Props = { blips: Blip[]; ringName: string };
+type Props = { blips: Blip[]; ringName: string; variant?: RadarComponentVariant };
 
-const LegendRingGroup: FC<Props> = ({ blips, ringName }) => {
+const LegendRingGroup: FC<Props> = ({ blips, ringName, variant = RadarComponentVariant.Demonstrative }) => {
     const list = blips.map((blip) => {
-        return <LegendItem key={blip.id} id={blip.id} name={blip.name} description={blip.description} />;
+        return (
+            <LegendItem key={blip.id} id={blip.id} name={blip.name} description={blip.description} variant={variant} />
+        );
     });
 
     return (

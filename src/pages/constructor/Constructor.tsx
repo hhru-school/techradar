@@ -1,5 +1,6 @@
 import { FC, useMemo } from 'react';
 
+import { RadarComponentVariant } from '../../components/radar/types';
 import { useAppSelector } from '../../store/hooks';
 import Legend from '../techradar/components/legend/Legend';
 import EditContainer from './EditContainer';
@@ -42,7 +43,7 @@ const Constructor: FC = () => {
             {showAddNewSectorModal && <ModalAddNewSector />}
             <div className={styles.layout}>
                 <EditContainer radar={radar} />
-                <Legend radar={radar} />
+                <Legend radar={radar} variant={RadarComponentVariant.Editable} />
             </div>
         </>
     );

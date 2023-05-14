@@ -28,6 +28,8 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarCompone
     const dispatch = useAppDispatch();
 
     const isActive = activeId === id;
+    const isDemonsrtative = variant === RadarComponentVariant.Demonstrative;
+    const isEditable = variant === RadarComponentVariant.Editable;
 
     const mouseEnterHandler = useCallback(() => {
         dispatch(setActiveBlip(id));
@@ -42,8 +44,8 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarCompone
     };
 
     const blipClasses = classNames({
-        [styles.blipDemonsrative]: variant === RadarComponentVariant.Demonstrative,
-        [styles.blipEditable]: variant === RadarComponentVariant.Editable,
+        [styles.blipDemonsrative]: isDemonsrtative,
+        [styles.blipEditable]: isEditable,
     });
 
     const blipFieldClasses = classNames({
@@ -119,12 +121,12 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarCompone
         ]
     );
 
-    if (isTransforming || isDragging) {
+    if ((isTransforming && isDemonsrtative) || isDragging) {
         return blip;
     }
 
     return (
-        <Tooltip key={Number(isTransforming)} open={isActive && !isTransforming} title={name} arrow>
+        <Tooltip key={isDemonsrtative ? Number(isTransforming) : undefined} open={isActive} title={name} arrow>
             {blip}
         </Tooltip>
     );

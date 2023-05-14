@@ -1,18 +1,40 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
-import { Blip } from '../../../../components/radar/types';
+import { Blip, RadarComponentVariant } from '../../../../components/radar/types';
 import LegendRingGroup from './LegendRingGroup';
 
 import styles from './legend.module.less';
 
-type Props = { blips: Blip[]; sectorName: string; ringNames: string[]; color: string; opacity: number };
+type Props = {
+    blips: Blip[];
+    sectorName: string;
+    ringNames: string[];
+    color: string;
+    opacity: number;
+    variant?: RadarComponentVariant;
+};
 
-const LegendSectorGroup: FC<Props> = ({ blips, sectorName, ringNames, color, opacity }) => {
-    const ringGroups = ringNames.map((ringName) => (
-        <li key={ringName}>
-            <LegendRingGroup blips={blips.filter((blip) => blip.ringName === ringName)} ringName={ringName} />
-        </li>
-    ));
+const LegendSectorGroup: FC<Props> = ({
+    blips,
+    sectorName,
+    ringNames,
+    color,
+    opacity,
+    variant = RadarComponentVariant.Demonstrative,
+}) => {
+    const ringGroups = useMemo(
+        () =>
+            ringNames.map((ringName) => (
+                <li key={ringName}>
+                    <LegendRingGroup
+                        blips={blips.filter((blip) => blip.ringName === ringName)}
+                        ringName={ringName}
+                        variant={variant}
+                    />
+                </li>
+            )),
+        [blips, variant, ringNames]
+    );
 
     return (
         <div className={styles.sectorGroupContainer} style={{ opacity }}>
