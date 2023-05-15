@@ -18,13 +18,13 @@ import * as Yup from 'yup';
 
 import { setRadarConstrTechModalOpen } from '../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import SideBar from '../components/sideBar/SideBar';
 import AddTechModal from './addTechModal/AddTechModal';
 import RadarConstructorGrid from './radarConstructorGrid/RadarConstructorGrid';
 import RadarConstructorContainer from './radarContainer/RadarConstrucorContainer';
 import RadarPublishBtn from './radarPublishBtn/RadarPublishBtn';
 import RingInputs from './ringInputs/RingInputs';
 import SectorInputs from './sectorInputs/SectorInputs';
-import SideBar from './sideBar/SideBar';
 
 import './RadarConstructor.less';
 
