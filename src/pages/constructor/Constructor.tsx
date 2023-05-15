@@ -1,8 +1,6 @@
 import { FC, useMemo } from 'react';
 
-import { RadarComponentVariant } from '../../components/radar/types';
 import { useAppSelector } from '../../store/hooks';
-import Legend from '../techradar/components/legend/Legend';
 import EditContainer from './EditContainer';
 import ModalEditSectorName from './modals/ModaEditSectorName';
 import ModalAddNewSector from './modals/ModalAddNewSector';
@@ -12,6 +10,7 @@ import ModalDeleteRing from './modals/ModalDeleteRing';
 import ModalDeleteSector from './modals/ModalDeleteSector';
 import ModalEditRingName from './modals/ModalEditRingName';
 import ModalMoveBlip from './modals/ModalMoveBlip';
+import TableContainer from './table/TableContainer';
 
 import styles from './constructor.module.less';
 
@@ -43,7 +42,7 @@ const Constructor: FC = () => {
             {showAddNewSectorModal && <ModalAddNewSector />}
             <div className={styles.layout}>
                 <EditContainer radar={radar} />
-                <Legend radar={radar} variant={RadarComponentVariant.Editable} />
+                <TableContainer radar={radar} />
             </div>
         </>
     );
