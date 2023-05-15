@@ -1,5 +1,6 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import { Add } from '@mui/icons-material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { ActionCreatorWithPayload, ActionCreatorWithoutPayload } from '@reduxjs/toolkit';
 
@@ -9,7 +10,6 @@ import EditMenuItem from './EditMenuItem';
 type Props = {
     itemNames: string[];
     label: string;
-    buttonIcon?: React.ReactNode;
     deleteBtnActionCreator: ActionCreatorWithPayload<string>;
     editBtnActionCreator: ActionCreatorWithPayload<string>;
     addItemActionCreator: ActionCreatorWithoutPayload;
@@ -20,7 +20,6 @@ const btnSx = { width: 130 };
 const EditItemsDropDown: FC<Props> = ({
     itemNames,
     label,
-    buttonIcon,
     deleteBtnActionCreator,
     editBtnActionCreator,
     addItemActionCreator,
@@ -63,7 +62,7 @@ const EditItemsDropDown: FC<Props> = ({
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
                 variant="outlined"
-                endIcon={buttonIcon}
+                endIcon={<ArrowDropDownIcon />}
                 sx={btnSx}
             >
                 {label}

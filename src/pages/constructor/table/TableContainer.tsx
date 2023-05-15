@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import { FormattedRadarData } from '../../../api/radarApiUtils';
 import { RadarComponentVariant } from '../../../components/radar/types';
 import Legend from '../../techradar/components/legend/Legend';
+import Table from './Table';
 import ViewModeControl from './ViewModeControl';
 
 import styles from './tableContainer.module.less';
@@ -30,6 +31,7 @@ const TableContainer: FC<Props> = ({ radar }) => {
                 <ViewModeControl mode={viewMode} changeHandler={modeChangeHandler} />
             </div>
             {viewMode === 'legend' && <Legend radar={radar} variant={RadarComponentVariant.Editable} />}
+            {viewMode === 'table' && <Table radar={radar} />}
         </div>
     );
 };

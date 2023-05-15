@@ -2,6 +2,7 @@ import { FC, useMemo } from 'react';
 
 import { useAppSelector } from '../../store/hooks';
 import EditContainer from './EditContainer';
+import MainEditPanel from './editPanel/MainEditPanel';
 import ModalEditSectorName from './modals/ModaEditSectorName';
 import ModalAddNewSector from './modals/ModalAddNewSector';
 import ModalCreateBlip from './modals/ModalCreateBlip';
@@ -43,7 +44,8 @@ const Constructor: FC = () => {
             {showDeleteSectorModal && <ModalDeleteSector />}
             {showDeleteRingModal && <ModalDeleteRing />}
             {showAddNewSectorModal && <ModalAddNewSector />}
-            <div className={styles.layout}>
+            <MainEditPanel />
+            <div className={styles.main}>
                 <EditContainer radar={radar} />
                 <TableContainer radar={radar} />
             </div>

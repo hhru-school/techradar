@@ -28,6 +28,8 @@ export enum EventSuggest {
 }
 
 interface EditRadarState {
+    radarName: string;
+    radarVersion: string;
     isDragging: boolean;
     blip: Blip | null;
     blipAsset: EditingBlipAsset | null;
@@ -53,6 +55,9 @@ interface EditRadarState {
 }
 
 const initialState: EditRadarState = {
+    radarName: 'My-new-radar',
+    radarVersion: 'Q1-2024',
+
     isDragging: false,
     blip: null,
     blipAsset: null,
