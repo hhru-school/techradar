@@ -4,16 +4,18 @@ import { RootState } from './store';
 
 interface AuthState {
     showAuthForm: boolean;
-    user: string | null;
+    username: string | null;
     password: string | null;
-    token: string | null;
+    tokenAccess: string | null;
+    refreshToken: string | null;
 }
 
 const initAuthState: AuthState = {
     showAuthForm: false,
-    user: 'null',
+    username: null,
     password: null,
-    token: 'null',
+    tokenAccess: null,
+    refreshToken: null,
 };
 
 export const authSlice = createSlice({
@@ -25,14 +27,18 @@ export const authSlice = createSlice({
         },
         setCredentials: (
             state,
-            { payload: { user, token } }: PayloadAction<{ user: string | null; token: string | null }>
+            {
+                payload: { username, tokenAccess, refreshToken },
+            }: PayloadAction<{ username: string | null; tokenAccess: string | null; refreshToken: string | null }>
         ) => {
-            state.user = user;
-            state.token = token;
+            state.username = username;
+            state.tokenAccess = tokenAccess;
+            state.refreshToken = refreshToken;
         },
         logOut: (state) => {
-            state.user = null;
-            state.token = null;
+            state.username = null;
+            state.tokenAccess = null;
+            state.refreshToken = null;
         },
     },
 });
@@ -41,5 +47,6 @@ export const { setAuthFormOpen, setCredentials, logOut } = authSlice.actions;
 
 export default authSlice.reducer;
 
-export const selectCurrentUser = (state: RootState): string | null => state.auth.user;
-export const selectCurrentToken = (state: RootState): string | null => state.auth.token;
+export const selectCurrentUser = (state: RootState): string | null => state.auth.username;
+export const selectCurrentAccessToken = (state: RootState): string | null => state.auth.tokenAccess;
+export const selectCurrentRefreshToken = (state: RootState): string | null => state.auth.refreshToken;

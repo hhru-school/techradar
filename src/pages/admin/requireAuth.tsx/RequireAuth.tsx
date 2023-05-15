@@ -7,9 +7,9 @@ import MyTechnologies from '../myTechnologies/MyTechnologies';
 import RadarConstructor from '../radarConstructor/RadarConstructor';
 
 const RequireAuth: FC = () => {
-    const token = useAppSelector((state) => state.auth.token);
+    const tokenAccess = useAppSelector((state) => state.auth.tokenAccess);
 
-    const content = token ? (
+    const content = tokenAccess ? (
         <Routes>
             <Route path="/my-radars/*" element={<MyRadars />} />
             <Route path="radar-constructor" element={<RadarConstructor />} />

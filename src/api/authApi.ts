@@ -9,28 +9,36 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { Mutex } from 'async-mutex';
 
-import { setCredentials, logOut } from '../store/authSlice';
+import {
+    // setCredentials,
+    logOut,
+    // , setCredentials,
+} from '../store/authSlice';
 import { RootState } from '../store/store';
 
 export interface UserResponse {
-    user: string;
-    token: string;
+    // eslint-disable-next-line camelcase
+    type_token: string;
+    // eslint-disable-next-line camelcase
+    access_token: string;
+    // eslint-disable-next-line camelcase
+    refresh_token: string;
 }
 
 export interface LoginRequest {
-    user: string;
+    username: string;
     password: string;
 }
 // create a new mutex
 const mutex = new Mutex();
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'http:/localhost:3500',
+    baseUrl: '/api/auth',
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
-        const token = (getState() as RootState).auth.token;
-        if (token) {
-            headers.set('authorization', `Bearer ${token}`);
+        const refreshToken = (getState() as RootState).auth.refreshToken;
+        if (refreshToken) {
+            headers.set('authorization', `Bearer ${refreshToken}`);
         }
         return headers;
     },
@@ -63,11 +71,19 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
                 // console.log('sending refresh token');
                 // send refresh token to get new access token
                 const refreshResult = await baseQuery('/refresh', api, extraOptions);
+
                 // console.log(refreshResult);
                 if (refreshResult?.data) {
                     // store the new token
+                    // const username: string = api.getState().auth.username;
 
-                    api.dispatch(setCredentials(refreshResult.data as { user: string; token: string }));
+                    // api.dispatch(
+                    //     setCredentials({
+                    //         username,
+                    //         tokenAccess: refreshResult.data.access_token,
+                    //         refreshToken: refreshResult.data.refresh_token,
+                    //     })
+                    // );
 
                     // retry the original query with new access token
                     result = await baseQuery(args, api, extraOptions);

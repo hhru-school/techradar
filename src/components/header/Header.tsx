@@ -17,7 +17,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
-import { setAuthFormOpen } from '../../store/authSlice';
+import { logOut, setAuthFormOpen } from '../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AuthFormModal from '../authFormModal/AuthFormModal';
 
@@ -50,8 +50,8 @@ const PaperProps = {
 
 const Header: FC = () => {
     const dispatch = useAppDispatch();
-    const user = useAppSelector((state) => state.auth.user);
-    const token = useAppSelector((state) => state.auth.token);
+    const username = useAppSelector((state) => state.auth.username);
+    const tokenAccess = useAppSelector((state) => state.auth.tokenAccess);
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -63,6 +63,7 @@ const Header: FC = () => {
 
     const handleClose = () => {
         setAnchorEl(null);
+        dispatch(logOut());
     };
 
     return (
@@ -86,7 +87,7 @@ const Header: FC = () => {
                             }}
                         >
                             <Tooltip title="Account settings">
-                                {token && user ? (
+                                {tokenAccess && username ? (
                                     <IconButton
                                         onClick={handleClick}
                                         size="small"
@@ -95,7 +96,7 @@ const Header: FC = () => {
                                         aria-haspopup="true"
                                         aria-expanded={open ? 'true' : undefined}
                                     >
-                                        <Avatar>{user[0]}</Avatar>
+                                        <Avatar>{username[0]}</Avatar>
                                     </IconButton>
                                 ) : (
                                     <IconButton

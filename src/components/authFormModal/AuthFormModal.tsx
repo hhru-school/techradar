@@ -1,4 +1,5 @@
 import { FC, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
     Backdrop,
@@ -10,6 +11,7 @@ import {
     IconButton,
     InputAdornment,
     InputLabel,
+    Link,
     Modal,
     OutlinedInput,
     Typography,
@@ -17,6 +19,7 @@ import {
 import { Formik, Form, useField, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
+import { UserResponse } from '../../api/authApi';
 import { useLoginMutation } from '../../store/authApiSlice';
 import { setAuthFormOpen, setCredentials } from '../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -25,7 +28,7 @@ import TextInputOutlined from '../textInputOutlined/TextInputOutlined';
 import './AuthFormModal.less';
 
 export interface Values {
-    user: string;
+    username: string;
     password: string;
 }
 
@@ -73,7 +76,7 @@ const MyPassInput = ({ label, ...props }: InputProps) => {
 };
 
 const validSchema = Yup.object({
-    user: Yup.string().required('Обязательное поле!'),
+    username: Yup.string().required('Обязательное поле!'),
     password: Yup.string().min(2, 'Минимум 2 символа для заполнения').required('Обязательное поле!'),
 });
 
@@ -91,7 +94,7 @@ export const styleModal = {
 
 const slots = { backdrop: Backdrop };
 const initialValues = {
-    user: '',
+    username: '',
     password: '',
 };
 const slotProps = {
@@ -101,6 +104,7 @@ const slotProps = {
 };
 
 const AuthFormModal: FC = () => {
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const showAuthForm = useAppSelector((state) => state.auth.showAuthForm);
 
@@ -131,10 +135,17 @@ const AuthFormModal: FC = () => {
                         onSubmit={async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
                             await login(values)
                                 .unwrap()
-                                .then((userData) => {
-                                    dispatch(setCredentials(userData as { user: string; token: string }));
+                                .then((credentials: UserResponse) => {
+                                    dispatch(
+                                        setCredentials({
+                                            username: values.username,
+                                            tokenAccess: credentials.access_token,
+                                            refreshToken: credentials.refresh_token,
+                                        })
+                                    );
                                     dispatch(setAuthFormOpen(false));
                                     setSubmitting(false);
+                                    navigate('/my-radars');
                                 });
                         }}
                     >
@@ -142,9 +153,9 @@ const AuthFormModal: FC = () => {
                             <TextInputOutlined
                                 label="Email"
                                 id="user"
-                                name="user"
+                                name="username"
                                 type="text"
-                                autoComplete="off"
+                                autoComplete="on"
                                 disabled={isLoading}
                             />
                             <MyPassInput
@@ -163,6 +174,7 @@ const AuthFormModal: FC = () => {
                             >
                                 Войти
                             </Button>
+                            <Link sx={{ textAlign: 'center', mt: 3, cursor: 'pointer' }}>Зарегистрироваться</Link>
                         </Form>
                     </Formik>
                 </Box>
