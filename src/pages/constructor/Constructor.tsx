@@ -8,6 +8,7 @@ import ModalCreateBlip from './modals/ModalCreateBlip';
 import ModalDeleteBlip from './modals/ModalDeleteBlip';
 import ModalDeleteRing from './modals/ModalDeleteRing';
 import ModalDeleteSector from './modals/ModalDeleteSector';
+import ModalEditBlip from './modals/ModalEditBlip';
 import ModalEditRingName from './modals/ModalEditRingName';
 import ModalMoveBlip from './modals/ModalMoveBlip';
 import TableContainer from './table/TableContainer';
@@ -16,6 +17,7 @@ import styles from './constructor.module.less';
 
 const Constructor: FC = () => {
     const showCreateBlipModal = useAppSelector((state) => state.editRadar.showCreateBlipModal);
+    const showEditBlipModal = useAppSelector((state) => state.editRadar.showEditBlipModal);
     const showMoveBlipRadar = useAppSelector((state) => state.editRadar.showMoveBlipModal);
     const showEditSectorNameModal = useAppSelector((state) => state.editRadar.showEditSectorNameModal);
     const showEditRingNameModal = useAppSelector((state) => state.editRadar.showEditRingNameModal);
@@ -33,6 +35,7 @@ const Constructor: FC = () => {
     return (
         <>
             {showCreateBlipModal && <ModalCreateBlip />}
+            {showEditBlipModal && <ModalEditBlip />}
             {showMoveBlipRadar && <ModalMoveBlip />}
             {showEditSectorNameModal && <ModalEditSectorName />}
             {showEditRingNameModal && <ModalEditRingName />}

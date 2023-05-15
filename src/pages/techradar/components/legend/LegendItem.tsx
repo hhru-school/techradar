@@ -59,7 +59,7 @@ const LegendItem: FC<Props> = ({ id, name, description, variant = RadarComponent
                     open={open && activeId === id}
                     active={activeId === id}
                 />
-                {isEditable && openEditMenu && <LegendItemEditMenu />}
+                {isEditable && openEditMenu && <LegendItemEditMenu id={id} />}
             </li>
         </>
     );
