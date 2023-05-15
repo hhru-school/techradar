@@ -130,13 +130,23 @@ const RadarConstructor: FC = () => {
                             justifyContent: 'center',
                         }}
                     >
-                        <Grid item sm={6} sx={{ padding: '15px 0 0 0' }}>
+                        <Grid
+                            item
+                            sm={6}
+                            sx={{
+                                padding: '15px 0 0 0',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}
+                        >
                             <ElementNameInput
                                 name="radarName"
                                 id="radarName"
                                 label="Название радара"
                                 placeholder="Введите название радара"
                             />
+                            <SideBar />
                         </Grid>
                         <Grid item sm={4}>
                             <RadarPublishBtn />
@@ -193,7 +203,6 @@ const RadarConstructor: FC = () => {
                 </Form>
             </Formik>
             {showRadarConstrTechModal && <AddTechModal />}
-            <SideBar />
         </Container>
     );
 };

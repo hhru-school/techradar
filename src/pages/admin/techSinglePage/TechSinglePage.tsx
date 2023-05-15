@@ -22,9 +22,22 @@ const TechSinglePage: FC = () => {
 
     return (
         <Container maxWidth="xl">
-            <Typography variant="h5" sx={{ textAlign: 'left', margin: '15px 0 15px 40px' }}>
-                Название технологии
-            </Typography>
+            <Box sx={{ display: 'flex' }}>
+                <input></input>
+                <Typography variant="h5" sx={{ textAlign: 'left', margin: '15px 0 15px 40px' }}>
+                    Название технологии
+                </Typography>
+                <Button
+                    variant="text"
+                    sx={{ margin: '0 25px' }}
+                    onClick={() => {
+                        setTextAboutReadOnly(!textAboutReadOnly);
+                    }}
+                >
+                    <EditIcon id="editTextAboutTech" color={textAboutReadOnly ? 'primary' : 'error'} />
+                    {textAboutReadOnly ? null : <Typography>Нажмите для сохранения</Typography>}
+                </Button>
+            </Box>
             <Divider />
             <Grid container spacing={2} sx={{ mt: '5px' }}>
                 <Grid
@@ -81,60 +94,6 @@ const TechSinglePage: FC = () => {
                         maxRows={10}
                         sx={{ width: '100%' }}
                     />
-                    <Grid container>
-                        <Grid item xs={6}>
-                            <Typography variant="h6">Есть в радарах:</Typography>
-                            <Box
-                                sx={{
-                                    boxSizing: 'border-box',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    width: '98%',
-                                    bgcolor: 'background.paper',
-                                    position: 'relative',
-                                    overflow: 'auto',
-                                    maxHeight: '20vh',
-                                    borderRadius: '5px',
-                                    padding: '15px 15px',
-                                    border: '1px solid',
-                                    borderColor: 'rgba(0, 0, 0, 0.23)',
-                                }}
-                            >
-                                {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => (
-                                    <Button key={index} variant="contained" color="primary" sx={{ mb: 1 }}>
-                                        Frontend
-                                    </Button>
-                                ))}
-                            </Box>
-                        </Grid>
-                        <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'end' }}>
-                            <Box sx={{ width: '98%' }}>
-                                <Typography variant="h6">Отказались от использования:</Typography>
-                                <Box
-                                    sx={{
-                                        boxSizing: 'border-box',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        width: '100%',
-                                        bgcolor: 'background.paper',
-                                        position: 'relative',
-                                        overflow: 'auto',
-                                        maxHeight: '20vh',
-                                        borderRadius: '5px',
-                                        padding: '15px 15px',
-                                        border: '1px solid',
-                                        borderColor: 'rgba(0, 0, 0, 0.23)',
-                                    }}
-                                >
-                                    {[1, 1].map((_, index) => (
-                                        <Button key={index} variant="contained" color="primary" sx={{ mb: 1 }}>
-                                            Backend
-                                        </Button>
-                                    ))}
-                                </Box>
-                            </Box>
-                        </Grid>
-                    </Grid>
                 </Grid>
                 <Grid
                     item

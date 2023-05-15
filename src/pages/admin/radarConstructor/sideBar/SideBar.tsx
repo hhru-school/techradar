@@ -1,5 +1,7 @@
 import { FC, useState, Fragment } from 'react';
-import { Typography, Box, Button, Divider, Drawer, Grid } from '@mui/material';
+import { Typography, Box, Button, Drawer, Grid, TextField } from '@mui/material';
+
+import SideBarItem from './sideBarItem/SideBarItem';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
@@ -34,14 +36,8 @@ const SideBar: FC = () => {
         setState({ ...state, [anchor]: open });
     };
 
-    const list = (anchor: Anchor) => (
-        <Box
-            sx={{ width: '250px', padding: '20px' }}
-            role="presentation"
-            onClick={toggleDrawer(anchor, false)}
-            onKeyDown={toggleDrawer(anchor, false)}
-        >
-            <Divider />
+    const list = () => (
+        <Box sx={{ width: '250px', padding: '0 16px' }} role="presentation">
             <Grid container spacing={2} sx={{ mt: '5px' }}>
                 <Grid
                     item
@@ -50,21 +46,20 @@ const SideBar: FC = () => {
                         maxHeight: '95vh',
                     }}
                 >
-                    <Typography variant="h5" sx={{ textAlign: 'center' }}>
-                        Лог изменений
+                    <Typography variant="h5" sx={{ textAlign: 'center', marginBottom: '5px' }}>
+                        Лог событий
                     </Typography>
+                    <TextField
+                        sx={{ width: '100%' }}
+                        size={'small'}
+                        id="outlined-basic"
+                        label="Поиск"
+                        variant="outlined"
+                        placeholder="Искать по логу..."
+                    />
                     <Box sx={boxStyle}>
                         {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => (
-                            <Box key={index} sx={{ borderBottom: '1px solid', marginBottom: '10px' }}>
-                                <Typography>
-                                    <strong>
-                                        11/04/2023 <br />
-                                        20:22
-                                    </strong>
-                                    <br />
-                                    Добавил преимущество, изменил ссылку на доку
-                                </Typography>
-                            </Box>
+                            <SideBarItem key={index} />
                         ))}
                     </Box>
                 </Grid>
@@ -75,10 +70,12 @@ const SideBar: FC = () => {
     return (
         <div>
             <Fragment>
-                <Button onClick={toggleDrawer('right', true)}>ИСТОРИЯ И КОММЕНТАРИИ</Button>
+                <Button onClick={toggleDrawer('right', true)} variant="contained" color={'primary'}>
+                    Лог событий
+                </Button>
 
                 <Drawer anchor={'right'} open={state.right} onClose={toggleDrawer('right', false)}>
-                    {list('right')}
+                    {list()}
                 </Drawer>
             </Fragment>
         </div>
