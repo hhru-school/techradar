@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import PreviewIcon from '@mui/icons-material/Preview';
-import { Box, Button, Popover, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Popover, Typography } from '@mui/material';
 
 const ShowRadarBtn: FC = () => {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -42,17 +42,15 @@ const ShowRadarBtn: FC = () => {
                 onClose={handlePopoverClose}
                 disableRestoreFocus
             >
-                <Typography sx={{ p: 1 }}>Смотреть радар</Typography>
+                <Typography variant={'body2'} sx={{ p: 1 }}>
+                    Смотреть радар
+                </Typography>
             </Popover>
         </Box>
     );
 };
 
-const SideBarItem: FC = () => {
-    const [overflow, setOverflow] = useState<'hidden' | 'visible'>('hidden');
-
-    const onClickItemHandler = () => (overflow === 'hidden' ? setOverflow('visible') : setOverflow('hidden'));
-
+const LogListItem: FC = () => {
     return (
         <Box
             sx={{
@@ -75,29 +73,33 @@ const SideBarItem: FC = () => {
                 </Typography>
             </Box>
 
-            <Typography
-                align={'left'}
-                paragraph
-                variant={'body2'}
-                textTransform={'none'}
-                overflow={overflow}
-                margin={0}
-                sx={overflow === 'hidden' ? { height: '50px' } : { minHeight: '50px' }}
-            >
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatum neque excepturi quia corrupti
-                aliquam delectus reiciendis architecto dolore unde pariatur odio officia hic molestiae alias explicabo,
-                recusandae, consequatur saepe? Nulla.Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptatum neque excepturi quia corrupti aliquam delectus reiciendis architecto dolore unde pariatur
-                odio officia hic molestiae alias explicabo, recusandae, consequatur saepe? Nulla.Lorem, ipsum dolor sit
-                amet consectetur adipisicing elit. Voluptatum neque excepturi quia corrupti aliquam delectus reiciendis
-                architecto dolore unde pariatur odio officia hic molestiae alias explicabo, recusandae, consequatur
-                saepe? Nulla.
-            </Typography>
-            <Button sx={{ width: '100%' }} variant="contained" onClick={onClickItemHandler} size={'small'}>
-                {overflow === 'hidden' ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
-            </Button>
+            <Accordion sx={{ minHeight: '30px' }}>
+                <AccordionSummary
+                    expandIcon={<ArrowDropDownIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    sx={{ minHeight: '50px' }}
+                >
+                    <Typography
+                        align="center"
+                        variant="body2"
+                        sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}
+                    >
+                        эксперимент
+                        <ArrowRightAltIcon />
+                        <ArrowRightAltIcon />
+                        используется
+                    </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <Typography>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
+                        amet blandit leo lobortis eget.
+                    </Typography>
+                </AccordionDetails>
+            </Accordion>
         </Box>
     );
 };
 
-export default SideBarItem;
+export default LogListItem;

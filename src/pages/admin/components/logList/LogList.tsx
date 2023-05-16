@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Box, Typography, TextField } from '@mui/material';
 
-import SideBarItem from '../sideBar/sideBarItem/SideBarItem';
+import LogListItem from './logListItem/LogListItem';
 
 const boxStyle = {
     boxSizing: 'border-box',
@@ -36,7 +36,7 @@ const LogList: FC<LogProps> = ({ boxWidth }) => {
             />
             <Box sx={boxStyle}>
                 {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => (
-                    <SideBarItem key={index} />
+                    <LogListItem key={index} />
                 ))}
             </Box>
         </Box>
