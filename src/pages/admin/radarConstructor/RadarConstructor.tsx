@@ -24,6 +24,7 @@ import RadarConstructorContainer from './radarContainer/RadarConstrucorContainer
 import RadarPublishBtn from './radarPublishBtn/RadarPublishBtn';
 import RingInputs from './ringInputs/RingInputs';
 import SectorInputs from './sectorInputs/SectorInputs';
+import SideBar from './sideBar/SideBar';
 
 import './RadarConstructor.less';
 
@@ -46,7 +47,7 @@ type RadarInput = {
     placeholder: string;
 };
 
-const RadarNameInput = ({ label, id, ...props }: RadarInput): ReactElement => {
+const ElementNameInput = ({ label, id, ...props }: RadarInput): ReactElement => {
     const [field, meta] = useField(props);
     const [editNameReadOnly, setEditNameReadOnly] = useState<boolean>(true);
 
@@ -71,7 +72,6 @@ const RadarNameInput = ({ label, id, ...props }: RadarInput): ReactElement => {
                         </label>
                     ),
                 }}
-                placeholder="Введите название радара"
             />
             <FormHelperText id="helper-text">{meta.error}</FormHelperText>
         </Box>
@@ -131,7 +131,7 @@ const RadarConstructor: FC = () => {
                         }}
                     >
                         <Grid item sm={6} sx={{ padding: '15px 0 0 0' }}>
-                            <RadarNameInput
+                            <ElementNameInput
                                 name="radarName"
                                 id="radarName"
                                 label="Название радара"
@@ -193,6 +193,7 @@ const RadarConstructor: FC = () => {
                 </Form>
             </Formik>
             {showRadarConstrTechModal && <AddTechModal />}
+            <SideBar />
         </Container>
     );
 };

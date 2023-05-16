@@ -7,7 +7,11 @@ import Header from './components/header/Header';
 import MyRadars from './pages/admin/myRadars/MyRadars';
 import MyTechnologies from './pages/admin/myTechnologies/MyTechnologies';
 import RadarConstructor from './pages/admin/radarConstructor/RadarConstructor';
+<<<<<<< HEAD
 import Constructor from './pages/constructor/Constructor';
+=======
+import TechSinglePage from './pages/admin/techSinglePage/TechSinglePage';
+>>>>>>> 131f11e (add SideBar, TechSinglePage)
 import TechRadar from './pages/techradar/TechRadar';
 
 const theme = createTheme(
@@ -42,7 +46,11 @@ const App: FC = () => {
                     <Route path=":companyId/:radarId" element={<TechRadar />} />
                 </Route>
                 <Route path="/my-radars/*" element={<MyRadars />} />
+<<<<<<< HEAD
                 <Route path="/constructor" element={<Constructor />} />
+=======
+                <Route path="/single" element={<TechSinglePage />} />
+>>>>>>> 131f11e (add SideBar, TechSinglePage)
                 <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
                 <Route path="/my-tech" element={<MyTechnologies />} />
             </Routes>
