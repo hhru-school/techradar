@@ -1,11 +1,25 @@
 import { FC, useState } from 'react';
+import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Button, Container, Divider, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, Divider, Grid, Popover, TextField, Typography } from '@mui/material';
 
 import LogList from '../components/logList/LogList';
 
 const TechSinglePage: FC = () => {
     const [textAboutReadOnly, setTextAboutReadOnly] = useState<boolean>(true);
+
+    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
 
     return (
         <Container maxWidth="xl">
@@ -13,16 +27,23 @@ const TechSinglePage: FC = () => {
                 <Typography variant="h5" sx={{ textAlign: 'left', margin: '15px 0 15px 40px' }}>
                     Название технологии
                 </Typography>
-                <Button
-                    variant="text"
-                    sx={{ margin: '0 25px' }}
-                    onClick={() => {
-                        setTextAboutReadOnly(!textAboutReadOnly);
-                    }}
-                >
-                    <EditIcon id="editTextAboutTech" color={textAboutReadOnly ? 'primary' : 'error'} />
-                    {textAboutReadOnly ? null : <Typography>Нажмите для сохранения</Typography>}
+                <Button variant="text" sx={{ margin: '0 25px' }} aria-describedby={id} onClick={handleClick}>
+                    <EditIcon id="editTextAboutTech" color={!anchorEl ? 'primary' : 'error'} />
                 </Button>
+                <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    sx={{ mt: '3px' }}
+                >
+                    <TextField placeholder="Введите новое название" variant="outlined" />
+                    <DoneIcon sx={{ padding: '12px 0', cursor: 'pointer' }} />
+                </Popover>
             </Box>
             <Divider />
             <Grid container spacing={2} sx={{ mt: '5px' }}>
@@ -43,8 +64,10 @@ const TechSinglePage: FC = () => {
                                 setTextAboutReadOnly(!textAboutReadOnly);
                             }}
                         >
-                            <EditIcon id="editTextAboutTech" color={textAboutReadOnly ? 'primary' : 'error'} />
-                            {textAboutReadOnly ? null : <Typography>Нажмите для сохранения</Typography>}
+                            <EditIcon color={textAboutReadOnly ? 'primary' : 'error'} />
+                            {textAboutReadOnly ? null : (
+                                <Typography sx={{ ml: '3px' }}>Нажмите для сохранения</Typography>
+                            )}
                         </Button>
                     </Box>
 

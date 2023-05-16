@@ -29,7 +29,6 @@ const LogList: FC<LogProps> = ({ boxWidth }) => {
             <TextField
                 sx={{ width: '100%' }}
                 size={'small'}
-                id="outlined-basic"
                 label="Поиск"
                 variant="outlined"
                 placeholder="Искать по логу..."
