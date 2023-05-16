@@ -1,0 +1,50 @@
+@import '../../../styles/colors.less';
+
+@item-max-width: 130px;
+
+.item {
+    font-size: 12px;
+}
+.itemActive {
+    background-color: black;
+    color: white;
+}
+
+.itemEditMenu {
+    position: absolute;
+    top: 0;
+    left: @item-max-width;
+    padding: 5px;
+    display: flex;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 0 10px gray;
+    z-index: 50;
+}
+
+.itemList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sectorContainer {
+    margin: 20px 0;
+}
+
+.sectorContainerList {
+    display: flex;
+}
+
+.sectorName {
+    margin: 5px;
+}
+
+.ringContainer {
+    width: @item-max-width;
+}
+
+.ringName {
+    margin: 3px;
+    color: @label-color;
+}

@@ -2,8 +2,7 @@ import { FC, memo, useState } from 'react';
 import { Button } from '@mui/material';
 
 import { FormattedRadarData } from '../../../api/radarApiUtils';
-import { RadarComponentVariant } from '../../../components/radar/types';
-import Legend from '../../techradar/components/legend/Legend';
+import EditableLegend from '../legend/EditableLegend';
 import Table from './Table';
 import ViewModeControl from './ViewModeControl';
 
@@ -30,7 +29,7 @@ const TableContainer: FC<Props> = ({ radar }) => {
                 </Button>
                 <ViewModeControl mode={viewMode} changeHandler={modeChangeHandler} />
             </div>
-            {viewMode === 'legend' && <Legend radar={radar} variant={RadarComponentVariant.Editable} />}
+            {viewMode === 'legend' && <EditableLegend radar={radar} />}
             {viewMode === 'table' && <Table radar={radar} />}
         </div>
     );

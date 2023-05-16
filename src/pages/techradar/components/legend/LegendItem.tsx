@@ -1,10 +1,8 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
-import { RadarComponentVariant } from '../../../../components/radar/types';
 import { clearActiveBlip, setActiveBlip, setOpenDescription } from '../../../../store/activeBlipSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import DropDown from './DropDown';
-import LegendItemEditMenu from './LegendItemEditMenu';
 
 import styles from './legend.module.less';
 
@@ -12,14 +10,11 @@ type Props = {
     id: number;
     name: string;
     description: string | null;
-    variant?: RadarComponentVariant;
 };
 
-const LegendItem: FC<Props> = ({ id, name, description, variant = RadarComponentVariant.Demonstrative }) => {
+const LegendItem: FC<Props> = ({ id, name, description }) => {
     const activeId = useAppSelector((state) => state.activeBlip.id);
     const open = useAppSelector((state) => state.activeBlip.openDescription);
-
-    const isEditable = variant === RadarComponentVariant.Editable;
 
     const dispatch = useAppDispatch();
 
@@ -28,20 +23,11 @@ const LegendItem: FC<Props> = ({ id, name, description, variant = RadarComponent
         dispatch(setOpenDescription(!open));
     };
 
-    const [openEditMenu, setOpenEditMenu] = useState(false);
-
     const onMouseEnterHandler = () => {
         dispatch(setActiveBlip(id));
-
-        if (isEditable) {
-            setOpenEditMenu(true);
-        }
     };
 
     const onMouseLeaveHandler = () => {
-        if (isEditable) {
-            setOpenEditMenu(false);
-        }
         dispatch(clearActiveBlip());
     };
 
@@ -59,7 +45,6 @@ const LegendItem: FC<Props> = ({ id, name, description, variant = RadarComponent
                     open={open && activeId === id}
                     active={activeId === id}
                 />
-                {isEditable && openEditMenu && <LegendItemEditMenu id={id} />}
             </li>
         </>
     );

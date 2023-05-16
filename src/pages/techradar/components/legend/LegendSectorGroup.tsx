@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 
-import { Blip, RadarComponentVariant } from '../../../../components/radar/types';
+import { Blip } from '../../../../components/radar/types';
 import LegendRingGroup from './LegendRingGroup';
 
 import styles from './legend.module.less';
@@ -11,29 +11,17 @@ type Props = {
     ringNames: string[];
     color: string;
     opacity: number;
-    variant?: RadarComponentVariant;
 };
 
-const LegendSectorGroup: FC<Props> = ({
-    blips,
-    sectorName,
-    ringNames,
-    color,
-    opacity,
-    variant = RadarComponentVariant.Demonstrative,
-}) => {
+const LegendSectorGroup: FC<Props> = ({ blips, sectorName, ringNames, color, opacity }) => {
     const ringGroups = useMemo(
         () =>
             ringNames.map((ringName) => (
                 <li key={ringName}>
-                    <LegendRingGroup
-                        blips={blips.filter((blip) => blip.ringName === ringName)}
-                        ringName={ringName}
-                        variant={variant}
-                    />
+                    <LegendRingGroup blips={blips.filter((blip) => blip.ringName === ringName)} ringName={ringName} />
                 </li>
             )),
-        [blips, variant, ringNames]
+        [blips, ringNames]
     );
 
     return (

@@ -2,8 +2,8 @@ import { FC, useCallback } from 'react';
 import { Delete, Edit } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
-import { openDeleteBlipModal, openEditBlipModal } from '../../../../store/editRadarSlice';
-import { useAppDispatch } from '../../../../store/hooks';
+import { openDeleteBlipModal, openEditBlipModal } from '../../../store/editRadarSlice';
+import { useAppDispatch } from '../../../store/hooks';
 
 import styles from './legend.module.less';
 
