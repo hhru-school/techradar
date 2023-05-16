@@ -47,14 +47,7 @@ const TechSinglePage: FC = () => {
             </Box>
             <Divider />
             <Grid container spacing={2} sx={{ mt: '5px' }}>
-                <Grid
-                    item
-                    xs={12}
-                    md={6}
-                    sx={{
-                        maxHeight: '85vh',
-                    }}
-                >
+                <Grid item xs={12} md={6}>
                     <Box sx={{ display: 'flex', justifyContent: 'start' }}>
                         <Typography variant="h5">О технологии</Typography>
                         <Button
@@ -104,15 +97,8 @@ const TechSinglePage: FC = () => {
                         sx={{ width: '100%' }}
                     />
                 </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    md={6}
-                    sx={{
-                        maxHeight: '80vh',
-                    }}
-                >
-                    <LogList boxWidth="100%" />
+                <Grid item xs={12} md={6}>
+                    <LogList boxWidth="100%" boxMaxHeight="72vh" />
                 </Grid>
             </Grid>
         </Container>

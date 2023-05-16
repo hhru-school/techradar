@@ -29,7 +29,7 @@ const SideBar: FC = () => {
                 </Button>
 
                 <Drawer anchor={'right'} open={state.right} onClose={toggleDrawer('right', false)}>
-                    <LogList boxWidth="250px" />
+                    <LogList boxWidth="250px" boxMaxHeight="88vh" />
                 </Drawer>
             </Fragment>
         </div>
