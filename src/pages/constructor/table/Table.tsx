@@ -1,42 +1,86 @@
 import { FC, memo, useMemo } from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowParams, useGridApiRef } from '@mui/x-data-grid';
 
 import { FormattedRadarData } from '../../../api/radarApiUtils';
+import { clearActiveBlip, setActiveBlip } from '../../../store/activeBlipSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+
+import styles from './tableContainer.module.less';
 
 type Props = {
     radar: FormattedRadarData;
 };
 
+const gridSx = {
+    '.MuiDataGrid-columnHeaderTitle': {
+        fontWeight: 'bold !important',
+    },
+};
+
 const Table: FC<Props> = ({ radar }) => {
     const rows = radar.blips;
 
+    const apiRef = useGridApiRef();
+
+    const activeId = useAppSelector((state) => state.activeBlip.id);
+
+    const dispatch = useAppDispatch();
+
+    const handleMouseEnter = (event: React.MouseEvent) => {
+        const id = Number(event.currentTarget.getAttribute('data-id'));
+        dispatch(setActiveBlip(id));
+    };
+
+    const handleMouseLeave = () => {
+        dispatch(clearActiveBlip());
+    };
+
     const columns: GridColDef[] = useMemo(
         () => [
-            { field: 'name', headerName: 'Технология', type: 'string', width: 180, editable: true },
+            {
+                field: 'name',
+                headerName: 'Технология',
+                type: 'string',
+                width: 120,
+                headerClassName: styles.tableHeader,
+            },
             {
                 field: 'sectorName',
                 headerName: 'Сектор',
-                type: 'singleSelect',
                 width: 180,
-                editable: true,
                 valueOptions: radar.sectorNames,
+                headerClassName: styles.tableHeader,
             },
             {
                 field: 'ringName',
                 headerName: 'Кольцо',
-                type: 'singleSelect',
+
                 width: 180,
-                editable: true,
-                valueOptions: radar.ringNames,
+
+                headerClassName: styles.tableHeader,
             },
         ],
         [radar]
     );
 
     return (
-        <div>
-            <DataGrid rows={rows} columns={columns} />
-        </div>
+        <DataGrid
+            className={styles.table}
+            isRowSelectable={() => false}
+            apiRef={apiRef}
+            sx={gridSx}
+            columns={columns}
+            getRowClassName={(params: GridRowParams) =>
+                params.id === activeId ? styles.tableRowActive : styles.tableRow
+            }
+            rows={rows}
+            slotProps={{
+                row: {
+                    onMouseEnter: handleMouseEnter,
+                    onMouseLeave: handleMouseLeave,
+                },
+            }}
+        />
     );
 };
 
