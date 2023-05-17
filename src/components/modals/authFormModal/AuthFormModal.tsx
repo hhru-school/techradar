@@ -1,29 +1,15 @@
-import { FC, useState, useCallback } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import {
-    Backdrop,
-    Box,
-    Button,
-    Fade,
-    FormControl,
-    FormHelperText,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    Link,
-    Modal,
-    OutlinedInput,
-    Typography,
-} from '@mui/material';
-import { Formik, Form, useField, FormikHelpers } from 'formik';
+import { Alert, Backdrop, Box, Button, Fade, Link, Modal, Typography } from '@mui/material';
+import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { UserResponse } from '../../api/authApi';
-import { useLoginMutation } from '../../store/authApiSlice';
-import { setAuthFormOpen, setCredentials } from '../../store/authSlice';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import TextInputOutlined from '../textInputOutlined/TextInputOutlined';
+import { UserResponse } from '../../../api/authApi';
+import { useLoginMutation } from '../../../store/authApiSlice';
+import { setAuthFormOpen, setRegistrFormOpen, setCredentials } from '../../../store/authSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import TextInputOutlined from '../../textInputOutlined/TextInputOutlined';
+import PassInput from '../components/PassInput/PassInput';
 
 import './AuthFormModal.less';
 
@@ -32,51 +18,8 @@ export interface Values {
     password: string;
 }
 
-type InputProps = {
-    label: string;
-    name: string;
-    id?: string;
-    type?: string;
-    autoComplete: string;
-    disabled?: boolean;
-};
-
-const MyPassInput = ({ label, ...props }: InputProps) => {
-    const [showPassword, setShowPassword] = useState(false);
-
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-    const [field, meta] = useField(props);
-
-    const hasError = Boolean(meta.touched && meta.error);
-
-    return (
-        <FormControl variant="outlined" sx={{ marginTop: '20px' }} error={!!hasError}>
-            <InputLabel htmlFor={props.id}>{label}</InputLabel>
-            <OutlinedInput
-                {...field}
-                {...props}
-                type={showPassword ? 'text' : 'password'}
-                endAdornment={
-                    <InputAdornment position="end">
-                        <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            edge="end"
-                        >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                    </InputAdornment>
-                }
-                label={label}
-            />
-            {hasError ? <FormHelperText id="helper-text">{meta.error}</FormHelperText> : null}
-        </FormControl>
-    );
-};
-
 const validSchema = Yup.object({
-    username: Yup.string().required('Обязательное поле!'),
+    username: Yup.string().email('Введите валидный email').required('Обязательное поле!'),
     password: Yup.string().min(2, 'Минимум 2 символа для заполнения').required('Обязательное поле!'),
 });
 
@@ -107,9 +50,16 @@ const AuthFormModal: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const showAuthForm = useAppSelector((state) => state.auth.showAuthForm);
+    const refreshToken = useAppSelector((state) => state.auth.refreshToken);
+    const [errorClient, setErrorClient] = useState<boolean>(false);
 
     const handleClose = useCallback(() => {
         dispatch(setAuthFormOpen(false));
+    }, [dispatch]);
+
+    const handleRegistr = useCallback(() => {
+        dispatch(setAuthFormOpen(false));
+        dispatch(setRegistrFormOpen(true));
     }, [dispatch]);
 
     const [login, { isLoading }] = useLoginMutation();
@@ -126,7 +76,7 @@ const AuthFormModal: FC = () => {
         >
             <Fade in={showAuthForm}>
                 <Box sx={styleModal}>
-                    <Typography id="transition-modal-title" variant="h6" component="h2">
+                    <Typography variant="h6" component="h2">
                         Вход в учетную запись TechRadar
                     </Typography>
                     <Formik
@@ -143,10 +93,23 @@ const AuthFormModal: FC = () => {
                                             refreshToken: credentials.refresh_token,
                                         })
                                     );
-                                    dispatch(setAuthFormOpen(false));
-                                    setSubmitting(false);
-                                    navigate('/my-radars');
-                                });
+                                    setTimeout(() => {
+                                        dispatch(setAuthFormOpen(false));
+                                        setSubmitting(false);
+                                        navigate('/my-radars');
+                                    }, 2000);
+                                })
+                                .catch(
+                                    (res: {
+                                        data: { message: string; status: string; timestamp: string };
+                                        status: number;
+                                    }) => {
+                                        switch (res.status) {
+                                            case 403:
+                                                setErrorClient(true);
+                                        }
+                                    }
+                                );
                         }}
                     >
                         <Form className="form auth-form">
@@ -158,7 +121,7 @@ const AuthFormModal: FC = () => {
                                 autoComplete="on"
                                 disabled={isLoading}
                             />
-                            <MyPassInput
+                            <PassInput
                                 label="Пароль"
                                 id="password"
                                 name="password"
@@ -174,7 +137,17 @@ const AuthFormModal: FC = () => {
                             >
                                 Войти
                             </Button>
-                            <Link sx={{ textAlign: 'center', mt: 3, cursor: 'pointer' }}>Зарегистрироваться</Link>
+                            {errorClient && (
+                                <Alert severity="warning">
+                                    Неправильный email или пароль, <br />
+                                    попробуйте еще раз или зарегистрируйтесь
+                                </Alert>
+                            )}
+                            {refreshToken && <Alert severity="success">Вы успешно авторизованы!</Alert>}
+                            {/* <Alert severity="error">Ошибка сервера! Попробуйте зайти позже...</Alert> */}
+                            <Link sx={{ textAlign: 'center', mt: 3, cursor: 'pointer' }} onClick={handleRegistr}>
+                                Зарегистрироваться
+                            </Link>
                         </Form>
                     </Formik>
                 </Box>

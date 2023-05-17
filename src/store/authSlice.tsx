@@ -4,6 +4,7 @@ import { RootState } from './store';
 
 interface AuthState {
     showAuthForm: boolean;
+    showRegistrForm: boolean;
     username: string | null;
     password: string | null;
     tokenAccess: string | null;
@@ -12,6 +13,7 @@ interface AuthState {
 
 const initAuthState: AuthState = {
     showAuthForm: false,
+    showRegistrForm: false,
     username: null,
     password: null,
     tokenAccess: null,
@@ -24,6 +26,9 @@ export const authSlice = createSlice({
     reducers: {
         setAuthFormOpen: (state, action: PayloadAction<boolean>) => {
             state.showAuthForm = action.payload;
+        },
+        setRegistrFormOpen: (state, action: PayloadAction<boolean>) => {
+            state.showRegistrForm = action.payload;
         },
         setCredentials: (
             state,
@@ -43,7 +48,7 @@ export const authSlice = createSlice({
     },
 });
 
-export const { setAuthFormOpen, setCredentials, logOut } = authSlice.actions;
+export const { setAuthFormOpen, setCredentials, logOut, setRegistrFormOpen } = authSlice.actions;
 
 export default authSlice.reducer;
 

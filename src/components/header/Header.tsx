@@ -19,7 +19,7 @@ import Typography from '@mui/material/Typography';
 
 import { logOut, setAuthFormOpen } from '../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import AuthFormModal from '../authFormModal/AuthFormModal';
+import AuthFormModal from '../modals/authFormModal/AuthFormModal';
 
 const PaperProps = {
     elevation: 0,

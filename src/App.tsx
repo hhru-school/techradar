@@ -5,12 +5,16 @@ import { ruRU } from '@mui/x-data-grid';
 
 import Header from './components/header/Header';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import MyRadars from './pages/admin/myRadars/MyRadars';
 import MyTechnologies from './pages/admin/myTechnologies/MyTechnologies';
 import RadarConstructor from './pages/admin/radarConstructor/RadarConstructor';
 import TechSinglePage from './pages/admin/techSinglePage/TechSinglePage';
 import Constructor from './pages/constructor/Constructor';
 =======
+=======
+import RegistrationFormModal from './components/modals/registrationFormModal/RegistrationFormModal';
+>>>>>>> ed4a96e (add registration modal)
 import RequireAuth from './pages/admin/requireAuth.tsx/RequireAuth';
 >>>>>>> fc6899b (fix tab bag, add RequireAuth)
 import TechRadar from './pages/techradar/TechRadar';
@@ -56,6 +60,7 @@ const App: FC = () => {
 >>>>>>> fc6899b (fix tab bag, add RequireAuth)
             </Routes>
             <RequireAuth />
+            <RegistrationFormModal />
         </ThemeProvider>
     );
 };

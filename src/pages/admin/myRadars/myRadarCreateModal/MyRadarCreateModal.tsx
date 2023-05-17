@@ -3,7 +3,7 @@ import { Box, Button, Modal, Typography } from '@mui/material';
 import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 
-import { styleModal } from '../../../../components/authFormModal/AuthFormModal';
+import { styleModal } from '../../../../components/modals/authFormModal/AuthFormModal';
 import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { createNewRadarSection, setRadarsCreateModalOpen } from '../../../../store/myRadarsSlice';
