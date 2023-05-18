@@ -19,6 +19,12 @@ interface EditingBlipAsset {
     r: number;
 }
 
+interface MoveBlipAsset {
+    id: number;
+    sectorName: string;
+    ringName: string;
+}
+
 export enum EventSuggest {
     Delete = 'delete',
     Add = 'add',
@@ -79,7 +85,7 @@ const initialState: EditRadarState = {
     // mock
     sectorNames,
     ringNames,
-    blips: generateData(4),
+    blips: generateData(50),
     //
 
     showEditIcon: false,
@@ -160,7 +166,6 @@ export const editRadarSlice = createSlice({
                 switch (state.eventSuggest) {
                     case EventSuggest.Move: {
                         state.showMoveBlipModal = true;
-
                         break;
                     }
                     case EventSuggest.Delete: {
@@ -190,6 +195,12 @@ export const editRadarSlice = createSlice({
 
         closeCreateBlipModal: (state) => {
             state.showCreateBlipModal = false;
+        },
+
+        openMoveBlipModal: (state, action: PayloadAction<MoveBlipAsset>) => {
+            state.blip = getBlipById(state, action.payload.id);
+            state.activeSegment = { sectorName: action.payload.sectorName, ringName: action.payload.ringName };
+            state.showMoveBlipModal = true;
         },
 
         closeMoveBlipModal: (state) => {
@@ -350,6 +361,7 @@ export const {
     openEditBlipModal,
     closeEditBlipModal,
     closeCreateBlipModal,
+    openMoveBlipModal,
     closeMoveBlipModal,
     openDeleteBlipModal,
     closeDeleteBlipModal,

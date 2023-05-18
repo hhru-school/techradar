@@ -19,9 +19,17 @@ const EditableLegendSectorContainer: FC<Props> = ({ sectorName, ringNames, blips
             ringNames.map((ringName) => {
                 const ringBlips = blips.filter((blip) => blip.ringName === ringName);
                 if (isSearching && ringBlips.length === 0) return null;
-                return <EditableLegendRingContainer key={ringName} ringName={ringName} blips={ringBlips} />;
+                return (
+                    <EditableLegendRingContainer
+                        key={ringName}
+                        sectorName={sectorName}
+                        ringName={ringName}
+                        blips={ringBlips}
+                        isSearching={isSearching}
+                    />
+                );
             }),
-        [ringNames, blips, isSearching]
+        [ringNames, sectorName, blips, isSearching]
     );
 
     return (

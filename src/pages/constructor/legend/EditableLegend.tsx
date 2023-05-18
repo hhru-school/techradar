@@ -11,7 +11,7 @@ type Props = {
 
 const getMatchingBlips = (query: string, blips: Blip[]) => {
     const transform = (value: string) => {
-        const regex = /[^a-z0-9]/g;
+        const regex = /[^a-z0-9a-я]/g;
         return value.trim().toLowerCase().replace(regex, '');
     };
     query = transform(query);

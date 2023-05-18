@@ -37,14 +37,33 @@
 }
 
 .sectorName {
-    margin: 5px;
+    margin: 2px;
+    font-size: 16px;
+    opacity: 0.5;
 }
 
 .ringContainer {
     width: @item-max-width;
+    padding: 3px;
+}
+
+.ringContainerIsOver {
+    background-color: rgb(175, 222, 255);
+    opacity: 0.5;
+    transform: scale(1.2);
+    outline: dashed 1px rgb(84, 162, 218);
+    box-shadow: 3px 3px 3px rgba(106, 106, 106, 0.3);
 }
 
 .ringName {
-    margin: 3px;
     color: @label-color;
+    margin: 3px 0;
+    font-size: 14px;
+}
+
+.main {
+    max-height: 500px;
+    overflow: auto;
+    scroll-behavior: smooth;
+    margin-top: 10px;
 }

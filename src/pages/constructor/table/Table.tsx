@@ -1,8 +1,10 @@
-import { FC, memo, useMemo } from 'react';
-import { DataGrid, GridColDef, GridRowParams, useGridApiRef } from '@mui/x-data-grid';
+import { FC, memo, useCallback, useMemo } from 'react';
+import { Delete, Edit } from '@mui/icons-material';
+import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, GridRowParams, useGridApiRef } from '@mui/x-data-grid';
 
 import { FormattedRadarData } from '../../../api/radarApiUtils';
 import { clearActiveBlip, setActiveBlip } from '../../../store/activeBlipSlice';
+import { openDeleteBlipModal, openEditBlipModal } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
 import styles from './tableContainer.module.less';
@@ -11,7 +13,13 @@ type Props = {
     radar: FormattedRadarData;
 };
 
+const nameColumnWidth = 120;
+const sectorColumnWidth = 190;
+const ringNameWidth = 120;
+const tableWidth = 520;
+
 const gridSx = {
+    width: tableWidth,
     '.MuiDataGrid-columnHeaderTitle': {
         fontWeight: 'bold !important',
     },
@@ -26,14 +34,31 @@ const Table: FC<Props> = ({ radar }) => {
 
     const dispatch = useAppDispatch();
 
-    const handleMouseEnter = (event: React.MouseEvent) => {
-        const id = Number(event.currentTarget.getAttribute('data-id'));
-        dispatch(setActiveBlip(id));
-    };
+    const handleMouseEnter = useCallback(
+        (event: React.MouseEvent) => {
+            const id = Number(event.currentTarget.getAttribute('data-id'));
+            dispatch(setActiveBlip(id));
+        },
+        [dispatch]
+    );
 
-    const handleMouseLeave = () => {
+    const handleMouseLeave = useCallback(() => {
         dispatch(clearActiveBlip());
-    };
+    }, [dispatch]);
+
+    const deleteBtnHandler = useCallback(
+        (id: GridRowId) => () => {
+            dispatch(openDeleteBlipModal(id as number));
+        },
+        [dispatch]
+    );
+
+    const editBtnHandler = useCallback(
+        (id: GridRowId) => () => {
+            dispatch(openEditBlipModal(id as number));
+        },
+        [dispatch]
+    );
 
     const columns: GridColDef[] = useMemo(
         () => [
@@ -41,13 +66,13 @@ const Table: FC<Props> = ({ radar }) => {
                 field: 'name',
                 headerName: 'Технология',
                 type: 'string',
-                width: 120,
+                width: nameColumnWidth,
                 headerClassName: styles.tableHeader,
             },
             {
                 field: 'sectorName',
                 headerName: 'Сектор',
-                width: 180,
+                width: sectorColumnWidth,
                 valueOptions: radar.sectorNames,
                 headerClassName: styles.tableHeader,
             },
@@ -55,12 +80,22 @@ const Table: FC<Props> = ({ radar }) => {
                 field: 'ringName',
                 headerName: 'Кольцо',
 
-                width: 180,
+                width: ringNameWidth,
 
                 headerClassName: styles.tableHeader,
             },
+            {
+                field: 'actions',
+                type: 'actions',
+                width: tableWidth - nameColumnWidth - sectorColumnWidth - ringNameWidth - 20,
+                cellClassName: 'actions',
+                getActions: (params) => [
+                    <GridActionsCellItem icon={<Edit />} label="Edit" onClick={editBtnHandler(params.id)} />,
+                    <GridActionsCellItem icon={<Delete />} label="Delete" onClick={deleteBtnHandler(params.id)} />,
+                ],
+            },
         ],
-        [radar]
+        [radar, deleteBtnHandler, editBtnHandler]
     );
 
     return (

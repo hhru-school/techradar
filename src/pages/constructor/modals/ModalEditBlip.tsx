@@ -37,6 +37,7 @@ const ModalEditBlip: FC = () => {
                         name: blip?.name || '',
                         sectorName: blip?.sectorName || '',
                         ringName: blip?.ringName || '',
+                        description: blip?.description || '',
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values, { setSubmitting }) => {
@@ -57,6 +58,7 @@ const ModalEditBlip: FC = () => {
                             <ModalTextField label={'Технология'} name={'name'} />
                             <ModalSelectField label={'Сектор'} name={'sectorName'} values={sectorNames} />
                             <ModalSelectField label={'Кольцо'} name={'ringName'} values={ringNames} />
+                            <ModalTextField label={'Комментарий'} name={'description'} multiline={true} />
                             <div className={styles.buttonContainer}>
                                 <Button
                                     sx={btnSx}

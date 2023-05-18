@@ -21,10 +21,6 @@ type Props = {
 };
 
 const EditWrapper: FC<Props> = ({ radar }) => {
-    // const sectorNames = useAppSelector((state) => state.editRadar.sectorNames);
-    // const ringNames = useAppSelector((state) => state.editRadar.ringNames);
-    // const data = useAppSelector((state) => state.editRadar.blips);
-
     const sectorNames = radar.sectorNames;
     const ringNames = radar.ringNames;
     const data = radar.blips;

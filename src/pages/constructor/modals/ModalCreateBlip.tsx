@@ -37,6 +37,7 @@ const ModalCreateBlip: FC = () => {
                         name: '',
                         sectorName: activeSegment?.sectorName || '',
                         ringName: activeSegment?.ringName || '',
+                        description: '',
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values, { setSubmitting }) => {
@@ -46,7 +47,7 @@ const ModalCreateBlip: FC = () => {
                                 name: values.name,
                                 ringName: values.ringName,
                                 sectorName: values.sectorName,
-                                description: null,
+                                description: values.description,
                             })
                         );
                         setSubmitting(false);
@@ -57,6 +58,7 @@ const ModalCreateBlip: FC = () => {
                             <ModalTextField label={'Технология'} name={'name'} />
                             <ModalSelectField label={'Сектор'} name={'sectorName'} values={sectorNames} />
                             <ModalSelectField label={'Кольцо'} name={'ringName'} values={ringNames} />
+                            <ModalTextField label={'Комментарий'} name={'description'} multiline={true} />
                             <div className={styles.buttonContainer}>
                                 <Button
                                     sx={btnSx}
