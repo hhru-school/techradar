@@ -37,7 +37,7 @@ const EditableLegend: FC<Props> = ({ radar }) => {
         [setSearchValue, setIsSearching]
     );
 
-    const blurHandler = useCallback(() => {
+    const clearHandler = useCallback(() => {
         setIsSearching(false);
         setSearchValue('');
     }, [setIsSearching, setSearchValue]);
@@ -52,7 +52,7 @@ const EditableLegend: FC<Props> = ({ radar }) => {
 
     return (
         <div>
-            <SearchField onChange={changeHandler} onBlur={blurHandler} value={searchValue} />
+            <SearchField onChange={changeHandler} clear={clearHandler} value={searchValue} />
             <EditableLegendMain
                 ringNames={radar.ringNames}
                 sectorNames={radar.sectorNames}
