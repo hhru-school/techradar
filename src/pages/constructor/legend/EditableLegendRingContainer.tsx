@@ -41,7 +41,8 @@ const EditableLegendRingContainer: FC<Props> = ({ sectorName, ringName, blips, i
     return (
         <div className={containerClasses} ref={dropRef}>
             <h4 className={styles.ringName}>{ringName}</h4>
-            <ul className={styles.itemList}>{items}</ul>
+            {items.length > 0 && <ul className={styles.itemList}>{items}</ul>}
+            {items.length === 0 && <div className={styles.emptyContainer}>Пусто</div>}
         </div>
     );
 };

@@ -4,6 +4,7 @@
 
 .item {
     font-size: 12px;
+    position: relative;
 }
 .itemActive {
     background-color: black;
@@ -62,8 +63,17 @@
 }
 
 .main {
-    max-height: 500px;
+    max-height: 450px;
     overflow: auto;
     scroll-behavior: smooth;
     margin-top: 10px;
+}
+
+.emptyContainer {
+    height: 90%;
+    width: 100%;
+    display: flex;
+    font-size: 12px;
+    align-items: center;
+    color: rgb(185, 185, 185);
 }

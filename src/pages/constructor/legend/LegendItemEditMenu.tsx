@@ -9,6 +9,10 @@ import styles from './legend.module.less';
 
 type Props = { id: number };
 
+const mouseDownHandler = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+};
+
 const LegendItemEditMenu: FC<Props> = ({ id }) => {
     const dispatch = useAppDispatch();
 
@@ -29,7 +33,7 @@ const LegendItemEditMenu: FC<Props> = ({ id }) => {
     );
 
     return (
-        <div className={styles.itemEditMenu}>
+        <div className={styles.itemEditMenu} onMouseDown={mouseDownHandler}>
             <IconButton onClick={editClickHandler}>
                 <Edit />
             </IconButton>

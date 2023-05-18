@@ -1,7 +1,6 @@
 import { FC, useCallback } from 'react';
 import { Button, Modal } from '@mui/material';
 import { Form, Formik } from 'formik';
-import * as Yup from 'yup';
 
 import { closeEditBlipModal, editBlip } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -11,10 +10,6 @@ import ModalTextField from './ModalTextField';
 import styles from './modal.module.less';
 
 const btnSx = { width: 140 };
-
-const validationSchema = Yup.object({
-    name: Yup.string().trim().required('Обязательное поле'),
-});
 
 const ModalEditBlip: FC = () => {
     const sectorNames = useAppSelector((state) => state.editRadar.sectorNames);
@@ -31,23 +26,24 @@ const ModalEditBlip: FC = () => {
     return (
         <Modal open={true}>
             <div className={styles.modal}>
-                <h3 className={styles.header}>Редактировать технологию</h3>
+                <h3 className={styles.header}>
+                    Редактирование технологии <br />
+                    <span>{blip?.name}</span>
+                </h3>
                 <Formik
                     initialValues={{
-                        name: blip?.name || '',
                         sectorName: blip?.sectorName || '',
                         ringName: blip?.ringName || '',
                         description: blip?.description || '',
                     }}
-                    validationSchema={validationSchema}
                     onSubmit={(values, { setSubmitting }) => {
                         dispatch(
                             editBlip({
                                 id: blip?.id || -1,
-                                name: values.name,
+                                name: blip?.name || '',
                                 ringName: values.ringName,
                                 sectorName: values.sectorName,
-                                description: null,
+                                description: values.description || null,
                             })
                         );
                         setSubmitting(false);
@@ -55,7 +51,6 @@ const ModalEditBlip: FC = () => {
                 >
                     {({ isValid, dirty }) => (
                         <Form>
-                            <ModalTextField label={'Технология'} name={'name'} />
                             <ModalSelectField label={'Сектор'} name={'sectorName'} values={sectorNames} />
                             <ModalSelectField label={'Кольцо'} name={'ringName'} values={ringNames} />
                             <ModalTextField label={'Комментарий'} name={'description'} multiline={true} />
