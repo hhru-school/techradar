@@ -9,11 +9,7 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { Mutex } from 'async-mutex';
 
-import {
-    // setCredentials,
-    logOut,
-    // , setCredentials,
-} from '../store/authSlice';
+import { logOut, setCredentials } from '../store/authSlice';
 import { RootState } from '../store/store';
 
 export interface UserResponse {
@@ -29,6 +25,13 @@ export interface LoginRequest {
     username: string;
     password: string;
 }
+
+export interface ServerResponse {
+    username: string | null;
+    tokenAccess: string | null;
+    refreshToken: string | null;
+}
+
 // create a new mutex
 const mutex = new Mutex();
 
@@ -68,26 +71,25 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
             const release = await mutex.acquire();
 
             try {
-                // console.log('sending refresh token');
                 // send refresh token to get new access token
                 const refreshResult = await baseQuery('/refresh', api, extraOptions);
 
-                // console.log(refreshResult);
                 if (refreshResult?.data) {
                     // store the new token
-                    // const username: string = api.getState().auth.username;
+                    const username: string | null = (api.getState() as RootState).auth.username;
 
-                    // api.dispatch(
-                    //     setCredentials({
-                    //         username,
-                    //         tokenAccess: refreshResult.data.access_token,
-                    //         refreshToken: refreshResult.data.refresh_token,
-                    //     })
-                    // );
+                    api.dispatch(
+                        setCredentials({
+                            username,
+                            tokenAccess: (refreshResult.data as UserResponse).access_token,
+                            refreshToken: (refreshResult.data as UserResponse).refresh_token,
+                        })
+                    );
 
                     // retry the original query with new access token
                     result = await baseQuery(args, api, extraOptions);
                 } else {
+                    await baseQuery('/logout', api, extraOptions);
                     api.dispatch(logOut());
                 }
             } finally {

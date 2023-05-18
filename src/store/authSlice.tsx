@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { ServerResponse } from '../api/authApi';
 import { RootState } from './store';
 
 interface AuthState {
@@ -32,9 +33,7 @@ export const authSlice = createSlice({
         },
         setCredentials: (
             state,
-            {
-                payload: { username, tokenAccess, refreshToken },
-            }: PayloadAction<{ username: string | null; tokenAccess: string | null; refreshToken: string | null }>
+            { payload: { username, tokenAccess, refreshToken } }: PayloadAction<ServerResponse>
         ) => {
             state.username = username;
             state.tokenAccess = tokenAccess;
