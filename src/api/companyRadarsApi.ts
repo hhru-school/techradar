@@ -1,53 +1,29 @@
-import { GridRowId } from '@mui/x-data-grid';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-// import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { apiSlice } from './authApi';
-import { ApiRadarData, FormattedRadarData, formatApiData } from './radarApiUtils';
+import { RootState } from '../store/store';
+import {
+    ApiRadarData,
+    CreateRadarApiData,
+    CreateRadarApiDataResponse,
+    CreateRadarVersionDataApi,
+    CreateRadarVersionDataApiResponse,
+    FormattedRadarData,
+    formatApiData,
+} from './radarApiUtils';
 
-// const baseUrl = '/api';
+const baseUrl = '/api/';
 
 export interface RadarApi {
     id: number;
     name: string;
 }
 
-export type RadarVersionData = Array<{
-    id: number;
-    name: string;
-    release: boolean;
-    radarId: number;
-    blipEventId: number;
-    creationTime: string;
-    lastChangeTime: string;
-}>;
-
-// export const companyRadarsApi = createApi({
-//     reducerPath: 'companyRadarsApi',
-//     baseQuery: fetchBaseQuery({ baseUrl }),
-// 	tagTypes: ['VersionsList'],
-//     endpoints: (builder) => ({
-//         getAllCompanyRadars: builder.query<RadarApi[], number>({
-//             query: (companyId) => `/radars?company-id=${companyId}`,
-//         }),
-//         getRadar: builder.query<FormattedRadarData, number>({
-//             query: (radarId) => `/radars/${radarId}`,
-//             transformResponse: (rawResult: ApiRadarData) => formatApiData(rawResult),
-//         }),
-//         getRadarVersions: builder.query<RadarVersionData, number>({
-//             query: (radarId) => ({
-//                 url: `/radar-versions?radar-id=${radarId}`,
-//             }),
-//             providesTags: ['VersionsList'],
-//         }),
-//         deleteRadarVersions: builder.mutation<RadarVersionData, GridRowId>({
-//             query: (versionId) => ({
-//                 url: `/radar-versions/${versionId}`,
-//                 method: 'DELETE',
-//             }),
-//             invalidatesTags: ['VersionsList'],
-//         }),
-//     }),
-// });
+// Все радары компании:
+// http://localhost:8080/api/radars?companyId=1
+// Конкретный радар:
+// http://localhost:8080/api/radars/1
+// создание радара за один раз: /api/containers
+// Создать новую версию для радара POST на /api/radar_versions
 
 export const authApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -71,6 +47,33 @@ export const authApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['VersionsList'],
         }),
+
+        saveNewRadar: builder.mutation<CreateRadarVersionDataApiResponse, CreateRadarApiData>({
+            async queryFn(radarData, { getState }, _options, fetchBaseQuery) {
+                const radarResponse = await fetchBaseQuery({
+                    url: 'containers',
+                    method: 'POST',
+                    body: radarData,
+                });
+                if (radarResponse.error) return { error: radarResponse.error };
+                const radar = radarResponse.data as CreateRadarApiDataResponse;
+                const versionRequestBody: CreateRadarVersionDataApi = {
+                    name: (getState() as RootState).editRadar.radarVersion,
+                    release: false,
+                    radarId: radar.radarId,
+                    blipEventId: radar.blipEventId,
+                };
+                const result = await fetchBaseQuery({
+                    url: 'radar_versions',
+                    method: 'POST',
+                    body: versionRequestBody,
+                });
+
+                if (result.error) return { error: result.error };
+
+                return { data: result.data as CreateRadarVersionDataApiResponse };
+            },
+        }),
     }),
 });
 
@@ -80,6 +83,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 //     useGetRadarVersionsQuery,
 //     useDeleteRadarVersionsMutation,
 // } = companyRadarsApi;
+export const { useGetAllCompanyRadarsQuery, useGetRadarQuery, useSaveNewRadarMutation } = companyRadarsApi;
 
 export const {
     useGetAllCompanyRadarsQuery,
