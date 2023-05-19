@@ -63,13 +63,8 @@ export interface CreateRadarApiData {
 }
 
 export interface RadarApiDataResponse {
-    blipEventId: number | null;
-    radar: {
-        id: number;
-        name: string;
-        authorId: number;
-        companyId: number;
-    };
+    blipEventId: number;
+    radarId: number;
     quadrants: {
         id: number;
         name: string;

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 
-import { useGetAllCompanyRadarsQuery, useGetRadarByVersionIdQuery } from '../../api/companyRadarsApi';
+import { useGetAllCompanyRadarsQuery, useGetAllRadarVersionsQuery, useGetRadarQuery } from '../../api/companyRadarsApi';
 import { isFetchBaseQueryError } from '../../api/helpers';
 // import { RadarVersionDataApi } from '../../api/radarApiUtils';
 import ErrorMessage from '../../components/error/ErrorMessage';
@@ -33,11 +33,13 @@ const TechRadar: FC = () => {
 
     // const { data: radarVersions } = useGetAllRadarVersionsQuery(radarId);
 
+    const { data: radarVersions } = useGetAllRadarVersionsQuery(Number(radarId));
+
     const {
         data: radar,
         isFetching: radarIsFetching,
         error: radarError,
-    } = useGetRadarByVersionIdQuery(versionId ?? skipToken);
+    } = useGetRadarQuery(Number(radarId), { skip: !radarVersions });
 
     if (radarError) {
         return <ErrorMessage errorStatus={isFetchBaseQueryError(radarError) ? radarError.status : null} />;
