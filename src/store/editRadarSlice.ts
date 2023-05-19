@@ -85,7 +85,7 @@ const initialState: EditRadarState = {
     // mock
     sectorNames,
     ringNames,
-    blips: generateData(50),
+    blips: generateData(2),
     //
 
     showEditIcon: false,

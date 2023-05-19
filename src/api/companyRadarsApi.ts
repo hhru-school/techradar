@@ -6,6 +6,8 @@ import { ApiRadarData, FormattedRadarData, formatApiData } from './radarApiUtils
 
 // const baseUrl = '/api';
 
+const baseUrl = '/api/';
+
 export interface RadarApi {
     id: number;
     name: string;
