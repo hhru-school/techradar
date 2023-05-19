@@ -61,7 +61,7 @@ export interface CreateRadarApiData {
     }[];
 }
 
-export interface CreateRadarApiDataResponse {
+export interface RadarApiDataResponse {
     blipEventId: number;
     radarId: number;
     quadrants: {
