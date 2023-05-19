@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import { setShowSaveRadarDialog } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import EditCredetialContainer from '../editPanel/EditCredetionalContainer';
+import { useCurrentRadar } from '../hooks';
 
 import styles from './mainEditPanel.module.less';
 

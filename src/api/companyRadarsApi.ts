@@ -18,6 +18,7 @@ import {
 } from './radarApiUtils';
 
 const baseUrl = '/api/';
+const baseUrl = '/api/';
 
 const getQuadrantId = (state: EditRadarState, sectorName: string): number => {
     if (!state.sectors) return -1;
@@ -153,3 +154,4 @@ export const {
     useAddNewBlipToRadarMutation,
     useSaveNewRadarMutation,
 } = companyRadarsApi;
+export const { useGetAllCompanyRadarsQuery, useGetRadarQuery, useSaveNewRadarMutation } = companyRadarsApi;
