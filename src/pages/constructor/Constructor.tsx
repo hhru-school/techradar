@@ -1,8 +1,9 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 
 import { useAppSelector } from '../../store/hooks';
 import EditContainer from './EditContainer';
 import MainEditPanel from './editPanel/MainEditPanel';
+import { useCurrentRadar } from './hooks';
 import ModalEditSectorName from './modals/ModaEditSectorName';
 import ModalAddNewSector from './modals/ModalAddNewSector';
 import ModalCreateBlip from './modals/ModalCreateBlip';
@@ -27,11 +28,7 @@ const Constructor: FC = () => {
     const showDeleteRingModal = useAppSelector((state) => state.editRadar.showDeleteRingModal);
     const showAddNewSectorModal = useAppSelector((state) => state.editRadar.showAddNewSectorModal);
 
-    const sectorNames = useAppSelector((state) => state.editRadar.sectorNames);
-    const ringNames = useAppSelector((state) => state.editRadar.ringNames);
-    const blips = useAppSelector((state) => state.editRadar.blips);
-
-    const radar = useMemo(() => ({ sectorNames, ringNames, blips }), [sectorNames, ringNames, blips]);
+    const radar = useCurrentRadar();
 
     return (
         <>

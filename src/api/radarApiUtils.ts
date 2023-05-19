@@ -34,6 +34,67 @@ export interface FormattedRadarData {
     ringNames: string[];
 }
 
+export interface CreateRadarData extends FormattedRadarData {
+    name: string;
+    companyId: number;
+    authorId: number;
+}
+
+export interface CreateRadarApiData {
+    radar: {
+        name: string;
+        companyId: number;
+        authorId: number;
+    };
+    quadrants: { name: string; position: number }[];
+
+    rings: { name: string; position: number }[];
+    blips: {
+        name: string;
+        description: string;
+        quadrant: {
+            name: string;
+        };
+        ring: {
+            name: string;
+        };
+    }[];
+}
+
+export interface CreateRadarApiDataResponse {
+    blipEventId: number;
+    radarId: number;
+    quadrants: {
+        id: number;
+        name: string;
+        position: number;
+        radarId: number;
+    }[];
+    rings: {
+        id: number;
+        name: string;
+        position: number;
+        radarId: number;
+    }[];
+    blips: {
+        id: number;
+        name: string;
+        description: string;
+        radarId: number;
+    }[];
+}
+
+export interface CreateRadarVersionDataApi {
+    name: string;
+    release: boolean;
+    radarId: number;
+    blipEventId: number;
+}
+
+export interface CreateRadarVersionDataApiResponse extends CreateRadarVersionDataApi {
+    id: number;
+}
+
 export const formatApiData = (apiData: ApiRadarData): FormattedRadarData => {
     const sectorNames = apiData.quadrants
         .sort((quadrant1, quadrant2) => quadrant1.position - quadrant2.position)
@@ -73,5 +134,30 @@ export const formatApiData = (apiData: ApiRadarData): FormattedRadarData => {
         sectorNames,
         ringNames,
         blips: sortedBlips,
+    };
+};
+
+export const formatCreateRadarData = (radar: CreateRadarData): CreateRadarApiData => {
+    const quadrants = radar.sectorNames.map((name, i) => ({ name, position: i + 1 }));
+    const rings = radar.ringNames.map((name, i) => ({ name, position: i + 1 }));
+    const blips = radar.blips.map((blip) => ({
+        name: blip.name,
+        description: blip.description || '',
+        quadrant: {
+            name: blip.sectorName,
+        },
+        ring: {
+            name: blip.ringName,
+        },
+    }));
+    return {
+        radar: {
+            name: radar.name,
+            companyId: radar.companyId,
+            authorId: radar.authorId,
+        },
+        quadrants,
+        rings,
+        blips,
     };
 };
