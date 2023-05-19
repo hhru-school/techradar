@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useGetAllCompanyRadarsQuery, useGetRadarQuery } from '../../api/companyRadarsApi';
+import { useGetAllCompanyRadarsQuery, useGetAllRadarVersionsQuery, useGetRadarQuery } from '../../api/companyRadarsApi';
 import { isFetchBaseQueryError } from '../../api/helpers';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
@@ -12,7 +12,13 @@ const TechRadar: FC = () => {
 
     const { data: radars, isLoading: radarsIsLoading } = useGetAllCompanyRadarsQuery(Number(companyId));
 
-    const { data: radar, isFetching: radarIsFetching, error: radarError } = useGetRadarQuery(Number(radarId));
+    const { data: radarVersions } = useGetAllRadarVersionsQuery(Number(radarId));
+
+    const {
+        data: radar,
+        isFetching: radarIsFetching,
+        error: radarError,
+    } = useGetRadarQuery(Number(radarId), { skip: !radarVersions });
 
     if (radarError) {
         return <ErrorMessage errorStatus={isFetchBaseQueryError(radarError) ? radarError.status : null} />;
