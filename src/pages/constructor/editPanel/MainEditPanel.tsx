@@ -8,19 +8,13 @@ import EditCredetialContainer from '../editPanel/EditCredetionalContainer';
 import styles from './mainEditPanel.module.less';
 
 const MainEditPanel: FC = () => {
+    const dispatch = useAppDispatch();
+
     const radarName = useAppSelector((state) => state.editRadar.radarName);
     const radarVersion = useAppSelector((state) => state.editRadar.radarVersion);
 
-    // const radar = useCurrentRadar();
-
-    const dispatch = useAppDispatch();
-
-    // const [saveRadar, { data }] = useSaveNewRadarMutation();
-
     const saveBtnClickHandler = () => {
         dispatch(setShowSaveRadarDialog(true));
-        // const newRadar = formatCreateRadarData({ ...radar, authorId: 1, companyId: 1, name: radarName });
-        // await saveRadar(newRadar);
     };
 
     return (
