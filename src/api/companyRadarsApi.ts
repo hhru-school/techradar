@@ -40,6 +40,16 @@ const getRingId = (state: EditRadarState, ringName: string): number => {
     return state.rings.find((ring) => ring.name === ringName)?.id || -1;
 };
 
+const getQuadrantId = (state: EditRadarState, sectorName: string): number => {
+    if (!state.sectors) return -1;
+    return state.sectors.find((sector) => sector.name === sectorName)?.id || -1;
+};
+
+const getRingId = (state: EditRadarState, ringName: string): number => {
+    if (!state.rings) return -1;
+    return state.rings.find((ring) => ring.name === ringName)?.id || -1;
+};
+
 export interface RadarApi {
     id: number;
     name: string;
