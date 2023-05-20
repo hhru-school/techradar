@@ -1,48 +1,74 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import PreviewIcon from '@mui/icons-material/Preview';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Popover, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Popover, PopoverOrigin, Typography } from '@mui/material';
+
+const styles = {
+    showRadarBtnBox: { cursor: 'pointer', width: '24px', display: 'flex' },
+    popoverText: { p: 1 },
+    logListItemBox: {
+        marginBottom: '5px',
+        minWidth: '100px',
+        padding: '6px 10px',
+        borderRadius: '4px',
+        backgroundColor: '#363636',
+        color: 'white',
+        position: 'relative',
+    },
+    logListItemHeader: { display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' },
+    headerBtnAndText: { display: 'flex' },
+    accordion: { minHeight: '30px' },
+    accordionSummary: { minHeight: '50px' },
+    logText: { display: 'flex', alignItems: 'center', flexWrap: 'wrap' },
+    popover: {
+        pointerEvents: 'none',
+    },
+};
+
+const anchorOrigin: PopoverOrigin = {
+    vertical: 'bottom',
+    horizontal: 'left',
+};
+
+const transformOrigin: PopoverOrigin = {
+    vertical: 'top',
+    horizontal: 'left',
+};
 
 const ShowRadarBtn: FC = () => {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-    const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+    const handlePopoverOpen = useCallback((event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
-    };
+    }, []);
 
-    const handlePopoverClose = () => {
+    const handlePopoverClose = useCallback(() => {
         setAnchorEl(null);
-    };
+    }, []);
 
     const open = Boolean(anchorEl);
+    const ariaOwns: string | undefined = useMemo(() => (open ? 'mouse-over-popover' : undefined), [open]);
+
     return (
         <Box
             onMouseEnter={handlePopoverOpen}
             onMouseLeave={handlePopoverClose}
-            aria-owns={open ? 'mouse-over-popover' : undefined}
-            sx={{ cursor: 'pointer', width: '24px', display: 'flex' }}
+            aria-owns={ariaOwns}
+            sx={styles.showRadarBtnBox}
         >
             <PreviewIcon />
             <Popover
                 id="mouse-over-popover"
-                sx={{
-                    pointerEvents: 'none',
-                }}
+                sx={styles.popover}
                 open={open}
                 anchorEl={anchorEl}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
+                anchorOrigin={anchorOrigin}
+                transformOrigin={transformOrigin}
                 onClose={handlePopoverClose}
                 disableRestoreFocus
             >
-                <Typography variant={'body2'} sx={{ p: 1 }}>
+                <Typography variant={'body2'} sx={styles.popoverText}>
                     Смотреть радар
                 </Typography>
             </Popover>
@@ -52,19 +78,9 @@ const ShowRadarBtn: FC = () => {
 
 const LogListItem: FC = () => {
     return (
-        <Box
-            sx={{
-                marginBottom: '5px',
-                minWidth: '100px',
-                padding: '6px 10px',
-                borderRadius: '4px',
-                backgroundColor: '#363636',
-                color: 'white',
-                position: 'relative',
-            }}
-        >
-            <Box sx={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
-                <Box sx={{ display: 'flex' }}>
+        <Box sx={styles.logListItemBox}>
+            <Box sx={styles.logListItemHeader}>
+                <Box sx={styles.headerBtnAndText}>
                     <ShowRadarBtn />
                     <Typography align={'right'}>11/04/2023 20:22</Typography>
                 </Box>
@@ -73,18 +89,14 @@ const LogListItem: FC = () => {
                 </Typography>
             </Box>
 
-            <Accordion sx={{ minHeight: '30px' }}>
+            <Accordion sx={styles.accordion}>
                 <AccordionSummary
                     expandIcon={<ArrowDropDownIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
-                    sx={{ minHeight: '50px' }}
+                    sx={styles.accordionSummary}
                 >
-                    <Typography
-                        align="center"
-                        variant="body2"
-                        sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}
-                    >
+                    <Typography align="center" variant="body2" sx={styles.logText}>
                         эксперимент
                         <ArrowRightAltIcon />
                         <ArrowRightAltIcon />
