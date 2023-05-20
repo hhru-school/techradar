@@ -6,7 +6,7 @@ import {
     CreateRadarApiData,
     RadarApiDataResponse,
     CreateRadarVersionDataApi,
-    CreateRadarVersionDataApiResponse,
+    RadarVersionDataApi,
     FormattedRadarData,
     formatApiData,
 } from './radarApiUtils';
@@ -28,6 +28,7 @@ export interface RadarApi {
 // Получить все версии радара: GET на api/radar_versions?radarId=1
 // Получение радара определенной версии (по blipEventId): GET на api/containers?blipEventId=77
 // Получить лог радара: GET на api/blip_events/radar_log?blipEventId=78
+// Получение радара определенной версии (по radarVersionId): GET на api/containers?radarVersionId=3
 
 export const companyRadarsApi = createApi({
     reducerPath: 'companyRadarsApi',
@@ -42,11 +43,16 @@ export const companyRadarsApi = createApi({
             transformResponse: (rawResult: ApiRadarData) => formatApiData(rawResult),
         }),
 
-        getAllRadarVersions: builder.query<CreateRadarVersionDataApiResponse[], number>({
+        getRadarByVersionId: builder.query<FormattedRadarData, number>({
+            query: (radarVersionId) => `/containers?radarVersionId=${radarVersionId}`,
+            transformResponse: (rawResult: ApiRadarData) => formatApiData(rawResult),
+        }),
+
+        getAllRadarVersions: builder.query<RadarVersionDataApi[], number>({
             query: (radarId) => `radar_versions?radarId=${radarId}`,
         }),
 
-        saveNewRadar: builder.mutation<CreateRadarVersionDataApiResponse, CreateRadarApiData>({
+        saveNewRadar: builder.mutation<RadarVersionDataApi, CreateRadarApiData>({
             async queryFn(radarData, { getState }, _options, fetchBaseQuery) {
                 const radarResponse = await fetchBaseQuery({
                     url: 'containers',
@@ -70,11 +76,16 @@ export const companyRadarsApi = createApi({
 
                 if (result.error) return { error: result.error };
 
-                return { data: result.data as CreateRadarVersionDataApiResponse };
+                return { data: result.data as RadarVersionDataApi };
             },
         }),
     }),
 });
 
-export const { useGetAllCompanyRadarsQuery, useGetRadarQuery, useGetAllRadarVersionsQuery, useSaveNewRadarMutation } =
-    companyRadarsApi;
+export const {
+    useGetAllCompanyRadarsQuery,
+    useGetRadarQuery,
+    useGetRadarByVersionIdQuery,
+    useGetAllRadarVersionsQuery,
+    useSaveNewRadarMutation,
+} = companyRadarsApi;
