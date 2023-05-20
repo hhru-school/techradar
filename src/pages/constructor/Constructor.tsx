@@ -13,7 +13,7 @@ import ModalDeleteSector from './modals/ModalDeleteSector';
 import ModalEditBlip from './modals/ModalEditBlip';
 import ModalEditRingName from './modals/ModalEditRingName';
 import ModalMoveBlip from './modals/ModalMoveBlip';
-import ModalSaveDialog from './modals/ModalSaveDialog';
+import ModalSaveDialog from './modals/save/ModalSaveDialog';
 import TableContainer from './table/TableContainer';
 
 import styles from './constructor.module.less';
