@@ -1,5 +1,5 @@
 import { FC, useCallback, useRef } from 'react';
-import { Button } from '@mui/material';
+import { Button, LinearProgress } from '@mui/material';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -10,8 +10,9 @@ import SaveRadarFormObserver from './SaveRadarFormObserver';
 
 import styles from '../modal.module.less';
 
-const btnSx = { width: 140 };
-
+const style = {
+    btnSx: { width: 140 },
+};
 const validationSchema = Yup.object({
     name: Yup.string().trim().required('Обязательное поле'),
     version: Yup.string().trim().required('Обязательное поле'),
@@ -58,28 +59,35 @@ const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
             >
                 {({ isValid }) => {
                     return (
-                        <Form>
-                            <ModalTextField label={'Название радара'} name={'name'} />
-
-                            <ModalTextField label={'Версия'} name={'version'} />
-                            <div className={styles.buttonContainer}>
-                                <Button sx={btnSx} variant="contained" type="submit" disabled={!isValid || isLoading}>
-                                    Сохранить
-                                </Button>
-                                <Button
-                                    sx={btnSx}
-                                    variant="outlined"
-                                    onClick={cancelBtnClickHandler}
-                                    disabled={isLoading}
-                                >
-                                    Отмена
-                                </Button>
-                            </div>
-                            <SaveRadarFormObserver />
-                        </Form>
+                        <>
+                            <Form>
+                                <ModalTextField label={'Название радара'} name={'name'} disabled={isLoading} />
+                                <ModalTextField label={'Версия'} name={'version'} disabled={isLoading} />
+                                <div className={styles.buttonContainer}>
+                                    <Button
+                                        sx={style.btnSx}
+                                        variant="contained"
+                                        type="submit"
+                                        disabled={!isValid || isLoading}
+                                    >
+                                        Сохранить
+                                    </Button>
+                                    <Button
+                                        sx={style.btnSx}
+                                        variant="outlined"
+                                        onClick={cancelBtnClickHandler}
+                                        disabled={isLoading}
+                                    >
+                                        Отмена
+                                    </Button>
+                                </div>
+                                <SaveRadarFormObserver />
+                            </Form>
+                        </>
                     );
                 }}
             </Formik>
+            {isLoading && <LinearProgress className={styles.bar} />}
         </>
     );
 };

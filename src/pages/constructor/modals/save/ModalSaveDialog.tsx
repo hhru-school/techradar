@@ -26,7 +26,14 @@ const ModalSaveDialog: FC = () => {
         <Modal open={true}>
             <div className={styles.modal}>
                 {!isSuccess && <SaveDialogForm submitHandler={submitHandler} isLoading={isLoading} />}
-                {isSuccess && data && <SuccessDialog radarName={radarName} radarVersion={radarVersion} />}
+                {isSuccess && data && (
+                    <SuccessDialog
+                        radarName={radarName}
+                        radarVersion={radarVersion}
+                        radarId={data.radarId}
+                        companyId={1}
+                    />
+                )}
             </div>
         </Modal>
     );
