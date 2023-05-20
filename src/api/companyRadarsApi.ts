@@ -34,6 +34,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getAllCompanyRadars: builder.query<RadarApi[], number>({
             query: (companyId) => `/radars?company-id=${companyId}`,
+            query: (companyId) => `/radars?companyId=${companyId}`,
         }),
 
         getRadar: builder.query<FormattedRadarData, number>({
