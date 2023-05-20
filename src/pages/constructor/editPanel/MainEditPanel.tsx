@@ -1,11 +1,9 @@
 import { FC } from 'react';
 import { Button } from '@mui/material';
 
-import { useSaveNewRadarMutation } from '../../../api/companyRadarsApi';
-import { formatCreateRadarData } from '../../../api/radarApiUtils';
-import { useAppSelector } from '../../../store/hooks';
+import { setShowSaveRadarDialog } from '../../../store/editRadarSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import EditCredetialContainer from '../editPanel/EditCredetionalContainer';
-import { useCurrentRadar } from '../hooks';
 
 import styles from './mainEditPanel.module.less';
 
@@ -13,13 +11,16 @@ const MainEditPanel: FC = () => {
     const radarName = useAppSelector((state) => state.editRadar.radarName);
     const radarVersion = useAppSelector((state) => state.editRadar.radarVersion);
 
-    const radar = useCurrentRadar();
+    // const radar = useCurrentRadar();
 
-    const [saveRadar] = useSaveNewRadarMutation();
+    const dispatch = useAppDispatch();
 
-    const saveBtnClickHandler = async () => {
-        const newRadar = formatCreateRadarData({ ...radar, authorId: 1, companyId: 1, name: radarName });
-        await saveRadar(newRadar);
+    // const [saveRadar, { data }] = useSaveNewRadarMutation();
+
+    const saveBtnClickHandler = () => {
+        dispatch(setShowSaveRadarDialog(true));
+        // const newRadar = formatCreateRadarData({ ...radar, authorId: 1, companyId: 1, name: radarName });
+        // await saveRadar(newRadar);
     };
 
     return (
