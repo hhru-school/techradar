@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
+import ErrorMessage from '../../../components/error/ErrorMessage';
 import { useAppSelector } from '../../../store/hooks';
 import MyRadars from '../myRadars/MyRadars';
-import MyTechnologies from '../myTechnologies/MyTechnologies';
 import RadarConstructor from '../radarConstructor/RadarConstructor';
 
 const RequireAuth: FC = () => {
@@ -13,9 +13,10 @@ const RequireAuth: FC = () => {
         <Routes>
             <Route path="/my-radars/*" element={<MyRadars />} />
             <Route path="radar-constructor" element={<RadarConstructor />} />
-            <Route path="/my-tech" element={<MyTechnologies />} />
         </Routes>
-    ) : null;
+    ) : (
+        <ErrorMessage errorStatus={401} />
+    );
 
     return content;
 };

@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ruRU } from '@mui/x-data-grid';
 
 import Header from './components/header/Header';
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 import MyRadars from './pages/admin/myRadars/MyRadars';
@@ -15,9 +16,13 @@ import Constructor from './pages/constructor/Constructor';
 =======
 import RegistrationFormModal from './components/modals/registrationFormModal/RegistrationFormModal';
 >>>>>>> ed4a96e (add registration modal)
+=======
+>>>>>>> e922e7d (arr error page and fix header)
 import RequireAuth from './pages/admin/requireAuth.tsx/RequireAuth';
 >>>>>>> fc6899b (fix tab bag, add RequireAuth)
 import TechRadar from './pages/techradar/TechRadar';
+import { setCredentials } from './store/authSlice';
+import { useAppDispatch } from './store/hooks';
 
 const theme = createTheme(
     {
@@ -43,6 +48,24 @@ const theme = createTheme(
 );
 
 const App: FC = () => {
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (
+            localStorage.getItem('username') &&
+            localStorage.getItem('tokenAccess') &&
+            localStorage.getItem('refreshToken')
+        ) {
+            dispatch(
+                setCredentials({
+                    username: localStorage.getItem('username'),
+                    tokenAccess: localStorage.getItem('tokenAccess'),
+                    refreshToken: localStorage.getItem('refreshToken'),
+                })
+            );
+        }
+    }, [dispatch]);
+
     return (
         <ThemeProvider theme={theme}>
             <Header />
@@ -60,7 +83,6 @@ const App: FC = () => {
 >>>>>>> fc6899b (fix tab bag, add RequireAuth)
             </Routes>
             <RequireAuth />
-            <RegistrationFormModal />
         </ThemeProvider>
     );
 };

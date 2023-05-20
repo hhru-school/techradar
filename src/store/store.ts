@@ -8,7 +8,6 @@ import authReducer from './authSlice';
 import constructorRadarReducer from './constructorRadarSlice';
 import editRadarReducer from './editRadarSlice';
 import myRadarsReducer from './myRadarsSlice';
-import myTechReducer from './myTechSlice';
 
 const rootReducer = combineReducers({
     activeBlip: activeBlipReducer,
@@ -16,7 +15,6 @@ const rootReducer = combineReducers({
     editRadar: editRadarReducer,
     constructorRadar: constructorRadarReducer,
     myRadars: myRadarsReducer,
-    myTech: myTechReducer,
     auth: authReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
     [companyRadarsApi.reducerPath]: companyRadarsApi.reducer,

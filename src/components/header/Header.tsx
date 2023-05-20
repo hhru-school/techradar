@@ -1,7 +1,6 @@
 import { FC, useState, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ConstructionIcon from '@mui/icons-material/Construction';
 import Logout from '@mui/icons-material/Logout';
 import RadarIcon from '@mui/icons-material/Radar';
 import AppBar from '@mui/material/AppBar';
@@ -20,6 +19,7 @@ import Typography from '@mui/material/Typography';
 import { logOut, setAuthFormOpen } from '../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AuthFormModal from '../modals/authFormModal/AuthFormModal';
+import RegistrationFormModal from '../modals/registrationFormModal/RegistrationFormModal';
 
 const PaperProps = {
     elevation: 0,
@@ -62,6 +62,10 @@ const Header: FC = () => {
     };
 
     const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleUnauthorization = () => {
         setAnchorEl(null);
         dispatch(logOut());
     };
@@ -127,16 +131,8 @@ const Header: FC = () => {
                                     Мои радары
                                 </MenuItem>
                             </Link>
-                            <Link to="/my-tech">
-                                <MenuItem onClick={handleClose}>
-                                    <ListItemIcon>
-                                        <ConstructionIcon fontSize="small" />
-                                    </ListItemIcon>
-                                    Мои технологии
-                                </MenuItem>
-                            </Link>
                             <Divider />
-                            <MenuItem onClick={handleClose}>
+                            <MenuItem onClick={handleUnauthorization}>
                                 <ListItemIcon>
                                     <Logout fontSize="small" />
                                 </ListItemIcon>
@@ -146,7 +142,7 @@ const Header: FC = () => {
                     </Toolbar>
                 </Container>
             </AppBar>
-
+            <RegistrationFormModal />
             <AuthFormModal />
         </>
     );
