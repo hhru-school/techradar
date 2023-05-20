@@ -79,6 +79,7 @@ export const companyRadarsApi = createApi({
                     method: 'POST',
                     body: radarData,
                 });
+
                 if (radarResponse.error) return { error: radarResponse.error };
                 const radar = radarResponse.data as RadarApiDataResponse;
                 const versionRequestBody: CreateRadarVersionDataApi = {

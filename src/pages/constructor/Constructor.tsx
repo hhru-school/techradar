@@ -13,6 +13,7 @@ import ModalDeleteSector from './modals/ModalDeleteSector';
 import ModalEditBlip from './modals/ModalEditBlip';
 import ModalEditRingName from './modals/ModalEditRingName';
 import ModalMoveBlip from './modals/ModalMoveBlip';
+import ModalSaveDialog from './modals/ModalSaveDialog';
 import TableContainer from './table/TableContainer';
 
 import styles from './constructor.module.less';
@@ -27,6 +28,7 @@ const Constructor: FC = () => {
     const showDeleteSectorModal = useAppSelector((state) => state.editRadar.showDeleteSectorModal);
     const showDeleteRingModal = useAppSelector((state) => state.editRadar.showDeleteRingModal);
     const showAddNewSectorModal = useAppSelector((state) => state.editRadar.showAddNewSectorModal);
+    const showSaveRadarDialog = useAppSelector((state) => state.editRadar.showSaveRadarDialog);
 
     const radar = useCurrentRadar();
 
@@ -41,6 +43,7 @@ const Constructor: FC = () => {
             {showDeleteSectorModal && <ModalDeleteSector />}
             {showDeleteRingModal && <ModalDeleteRing />}
             {showAddNewSectorModal && <ModalAddNewSector />}
+            {showSaveRadarDialog && <ModalSaveDialog />}
             <MainEditPanel />
             <div className={styles.main}>
                 <EditContainer radar={radar} />
