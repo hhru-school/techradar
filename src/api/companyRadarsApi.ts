@@ -35,7 +35,7 @@ export const companyRadarsApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl }),
     endpoints: (builder) => ({
         getAllCompanyRadars: builder.query<RadarApi[], number>({
-            query: (companyId) => `?companyId=${companyId}`,
+            query: (companyId) => `/radars?companyId=${companyId}`,
         }),
 
         getRadar: builder.query<FormattedRadarData, number>({
