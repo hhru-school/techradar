@@ -36,37 +36,11 @@ export const companyRadarsApi = createApi({
         getAllCompanyRadars: builder.query<RadarApi[], number>({
             query: (companyId) => `?companyId=${companyId}`,
         }),
-        // getRadar: builder.query<FormattedRadarData, number>({
-        //     query: (radarId) => `/${radarId}`,
-        //     transformResponse: (rawResult: ApiRadarData) => formatApiData(rawResult),
-        // }),
 
         getRadar: builder.query<FormattedRadarData, number>({
             query: (blipEventId) => `/containers?blipEventId=${blipEventId}`,
             transformResponse: (rawResult: ApiRadarData) => formatApiData(rawResult),
         }),
-
-        // getRadar: builder.query<FormattedRadarData, number>({
-        //     query: (radarId) => `/${radarId}`,
-        //      transformResponse: (rawResult: ApiRadarData) => formatApiData(rawResult),
-        //  }),
-
-        // getRadar: builder.query<FormattedRadarData, RadarQueryParams>({
-        //     async queryFn(arg, _api, _options, fetchBaseQuery) {
-        //         if (arg.blipEventId) {
-        //             const radar = await fetchBaseQuery(`/containers?blipEventId=${arg.blipEventId}`);
-        //             if (radar.error) return { error: radar.error as FetchBaseQueryError };
-        //             return radar.data as FormattedRadarData;
-        //         }
-
-        //         const radarVersions = await fetchBaseQuery({
-        //             url: `/${arg.radarId}`,
-        //             method: 'GET',
-        //         });
-        //         if (radarVersions.error) return { error: radarVersions.error };
-
-        //     },
-        // }),
 
         getAllRadarVersions: builder.query<CreateRadarVersionDataApiResponse[], number>({
             query: (radarId) => `radar_versions?radarId=${radarId}`,
