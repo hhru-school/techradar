@@ -6,11 +6,12 @@ type Props = {
     label?: string;
     name: string;
     multiline?: boolean;
+    disabled?: boolean;
 };
 
 const sx = { width: 300, my: '8px' };
 
-const ModalTextField: FC<Props> = ({ label, name, multiline = false }) => {
+const ModalTextField: FC<Props> = ({ label, name, multiline = false, disabled = false }) => {
     const [field, meta] = useField(name);
     const helperText = meta.touched && meta.error ? meta.error : null;
 
@@ -24,6 +25,7 @@ const ModalTextField: FC<Props> = ({ label, name, multiline = false }) => {
             sx={sx}
             multiline={multiline}
             rows={4}
+            disabled={disabled}
         ></TextField>
     );
 };

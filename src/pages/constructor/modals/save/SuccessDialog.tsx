@@ -1,12 +1,28 @@
-import { FC } from 'react';
-import { Alert, AlertTitle } from '@mui/material';
+import { FC, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowForward, Edit } from '@mui/icons-material';
+import { Alert, AlertTitle, Button, Stack } from '@mui/material';
+
+import { buildRadarUrl } from '../../../../api/radarApiUtils';
 
 type Props = {
     radarName: string;
     radarVersion: string;
+    radarId: number;
+    companyId: number;
 };
 
-const SuccessDialog: FC<Props> = ({ radarName, radarVersion }) => {
+const style = {
+    stack: { mt: 4 },
+};
+
+const SuccessDialog: FC<Props> = ({ radarName, radarVersion, radarId }) => {
+    const navigate = useNavigate();
+
+    const linkBtnHandler = useCallback(() => {
+        navigate(buildRadarUrl(1, radarId, radarVersion), { replace: true });
+    }, [navigate, radarId, radarVersion]);
+
     return (
         <>
             <Alert severity="success">
@@ -16,6 +32,20 @@ const SuccessDialog: FC<Props> = ({ radarName, radarVersion }) => {
                 <br />
                 успешно сохранён.
             </Alert>
+            <Stack spacing={2} sx={style.stack}>
+                <Button
+                    fullWidth={true}
+                    endIcon={<ArrowForward />}
+                    variant="contained"
+                    color="secondary"
+                    onClick={linkBtnHandler}
+                >
+                    К просмотру радара
+                </Button>
+                <Button fullWidth={true} startIcon={<Edit />} variant="outlined">
+                    Редактировать радар
+                </Button>
+            </Stack>
         </>
     );
 };

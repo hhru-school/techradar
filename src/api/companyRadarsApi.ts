@@ -11,7 +11,7 @@ import {
     CreateRadarApiData,
     RadarApiDataResponse,
     CreateRadarVersionDataApi,
-    CreateRadarVersionDataApiResponse,
+    RadarVersionDataApi,
     FormattedRadarData,
     formatApiData,
 } from './radarApiUtils';
@@ -76,7 +76,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
             query: (radarId) => `radar_versions?radarId=${radarId}`,
         }),
 
-        saveNewRadar: builder.mutation<CreateRadarVersionDataApiResponse, CreateRadarApiData>({
+        saveNewRadar: builder.mutation<RadarVersionDataApi, CreateRadarApiData>({
             async queryFn(radarData, { getState }, _options, fetchBaseQuery) {
                 const radarResponse = await fetchBaseQuery({
                     url: 'containers',
@@ -100,7 +100,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
                 if (result.error) return { error: result.error };
 
-                return { data: result.data as CreateRadarVersionDataApiResponse };
+                return { data: result.data as RadarVersionDataApi };
             },
         getRadarVersions: builder.query<RadarVersionData, number>({
             query: (radarId) => ({
