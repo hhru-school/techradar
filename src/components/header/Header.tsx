@@ -1,5 +1,5 @@
 import { FC, useState, MouseEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Logout from '@mui/icons-material/Logout';
 import RadarIcon from '@mui/icons-material/Radar';
@@ -50,6 +50,7 @@ const PaperProps = {
 
 const Header: FC = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const username = useAppSelector((state) => state.auth.username);
     const tokenAccess = useAppSelector((state) => state.auth.tokenAccess);
 
@@ -68,6 +69,7 @@ const Header: FC = () => {
     const handleUnauthorization = () => {
         setAnchorEl(null);
         dispatch(logOut());
+        navigate('/');
     };
 
     return (
@@ -123,7 +125,7 @@ const Header: FC = () => {
                             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                         >
-                            <Link to="/my-radars">
+                            <Link to="/admin/my-radars">
                                 <MenuItem onClick={handleClose}>
                                     <ListItemIcon>
                                         <RadarIcon fontSize="small" />

@@ -38,9 +38,9 @@ export const authSlice = createSlice({
             state.username = username;
             state.tokenAccess = tokenAccess;
             state.refreshToken = refreshToken;
-            if (typeof username === 'string' && typeof refreshToken === 'string' && typeof refreshToken === 'string') {
+            if (typeof username === 'string' && typeof tokenAccess === 'string' && typeof refreshToken === 'string') {
                 localStorage.setItem('username', username);
-                localStorage.setItem('tokenAccess', refreshToken);
+                localStorage.setItem('tokenAccess', tokenAccess);
                 localStorage.setItem('refreshToken', refreshToken);
             }
         },

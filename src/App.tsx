@@ -7,6 +7,7 @@ import Header from './components/header/Header';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import MyRadars from './pages/admin/myRadars/MyRadars';
 import MyTechnologies from './pages/admin/myTechnologies/MyTechnologies';
 import RadarConstructor from './pages/admin/radarConstructor/RadarConstructor';
@@ -18,6 +19,9 @@ import RegistrationFormModal from './components/modals/registrationFormModal/Reg
 >>>>>>> ed4a96e (add registration modal)
 =======
 >>>>>>> e922e7d (arr error page and fix header)
+=======
+import Radar from './components/radar/Radar';
+>>>>>>> af17009 (fix authSlice)
 import RequireAuth from './pages/admin/requireAuth.tsx/RequireAuth';
 >>>>>>> fc6899b (fix tab bag, add RequireAuth)
 import TechRadar from './pages/techradar/TechRadar';
@@ -70,9 +74,11 @@ const App: FC = () => {
         <ThemeProvider theme={theme}>
             <Header />
             <Routes>
+                <Route path="/" element={<Radar sectorNames={['2323']} ringNames={['2323']} radius={360} />} />
                 <Route path="/techradar">
                     <Route path=":companyId/:radarId" element={<TechRadar />} />
                 </Route>
+<<<<<<< HEAD
 <<<<<<< HEAD
                 <Route path="/my-radars/*" element={<MyRadars />} />
                 <Route path="/constructor" element={<Constructor />} />
@@ -81,8 +87,10 @@ const App: FC = () => {
                 <Route path="/my-tech" element={<MyTechnologies />} />
 =======
 >>>>>>> fc6899b (fix tab bag, add RequireAuth)
+=======
+                <Route path="/admin/*" element={<RequireAuth />} />
+>>>>>>> af17009 (fix authSlice)
             </Routes>
-            <RequireAuth />
         </ThemeProvider>
     );
 };

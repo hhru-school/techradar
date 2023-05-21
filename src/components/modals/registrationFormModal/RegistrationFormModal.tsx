@@ -1,12 +1,11 @@
-import { FC, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FC, useCallback, useState } from 'react';
 import { Alert, Backdrop, Box, Button, Fade, Modal, Typography } from '@mui/material';
 import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { UserResponse } from '../../../api/authApi';
+import { ErrorResponse } from '../../../api/authApi';
 import { useRegistrMutation } from '../../../store/authApiSlice';
-import { setAuthFormOpen, setCredentials, setRegistrFormOpen } from '../../../store/authSlice';
+import { setAuthFormOpen, setRegistrFormOpen } from '../../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import TextInputOutlined from '../../textInputOutlined/TextInputOutlined';
 import PassInput from '../components/PassInput/PassInput';
@@ -14,12 +13,17 @@ import PassInput from '../components/PassInput/PassInput';
 export interface Values {
     username: string;
     password: string;
+    confirmPassword: string;
+}
+
+export interface RegistrResponse {
+    message: string;
 }
 
 const validSchema = Yup.object({
     username: Yup.string().required('Обязательное поле!'),
     password: Yup.string().min(3, 'Минимум 3 символа для заполнения').required('Обязательное поле!'),
-    confirm: Yup.string()
+    confirmPassword: Yup.string()
         .min(3, 'Минимум 3 символа для заполнения')
         .required('Обязательное поле!')
         .oneOf([Yup.ref('password')], 'Пароли должны совпадать!'),
@@ -41,6 +45,7 @@ const slots = { backdrop: Backdrop };
 const initialValues = {
     username: '',
     password: '',
+    confirmPassword: '',
 };
 const slotProps = {
     backdrop: {
@@ -49,9 +54,10 @@ const slotProps = {
 };
 
 const RegistrationFormModal: FC = () => {
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const showRegistrForm = useAppSelector((state) => state.auth.showRegistrForm);
+    const [message, setMessage] = useState<string | null>(null);
+    const [errMessage, setErrMessage] = useState<string | null>(null);
 
     const handleClose = useCallback(() => {
         dispatch(setRegistrFormOpen(false));
@@ -80,18 +86,19 @@ const RegistrationFormModal: FC = () => {
                         onSubmit={async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
                             await registr(values)
                                 .unwrap()
-                                .then((credentials: UserResponse) => {
-                                    dispatch(
-                                        setCredentials({
-                                            username: values.username,
-                                            tokenAccess: credentials.access_token,
-                                            refreshToken: credentials.refresh_token,
-                                        })
-                                    );
-                                    dispatch(setAuthFormOpen(false));
-                                    setSubmitting(false);
-                                    navigate('/my-radars');
-                                });
+                                .then((res: RegistrResponse) => {
+                                    setErrMessage(null);
+                                    setMessage(res.message);
+
+                                    setTimeout(() => {
+                                        setSubmitting(false);
+                                        dispatch(setRegistrFormOpen(false));
+                                        dispatch(setAuthFormOpen(true));
+                                        setMessage(null);
+                                        setErrMessage(null);
+                                    }, 3000);
+                                })
+                                .catch((err: ErrorResponse) => setErrMessage(err.data.message));
                         }}
                     >
                         <Form className="form auth-form">
@@ -106,7 +113,7 @@ const RegistrationFormModal: FC = () => {
                             <PassInput label="Введите пароль" name="password" autoComplete="off" disabled={isLoading} />
                             <PassInput
                                 label="Повторите пароль"
-                                name="confirm"
+                                name="confirmPassword"
                                 autoComplete="off"
                                 disabled={isLoading}
                             />
@@ -119,8 +126,8 @@ const RegistrationFormModal: FC = () => {
                             >
                                 Зарегистрироваться
                             </Button>
-                            <Alert severity="success">Вы успешно зарегистрированы!</Alert>
-                            <Alert severity="error">Ошибка! Попробуйте зайти позже...</Alert>
+                            {message && <Alert severity="success">{message}</Alert>}
+                            {errMessage && <Alert severity="error">{errMessage}</Alert>}
                         </Form>
                     </Formik>
                 </Box>

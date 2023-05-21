@@ -1,11 +1,7 @@
 import { Blip } from '../components/radar/types';
 import { GridRadarObj } from '../pages/admin/myRadars/myRadarsDataGrid/MyRadarsDataGrid';
-<<<<<<< HEAD
 import { GridTech } from '../pages/admin/myTechnologies/myTechDataGrid/MyTechDataGrid';
-// import { GridRadarConstructor } from '../pages/admin/radarConstructor/radarConstructorGrid/RadarConstructorGrid';
-=======
 import { GridRadarConstructor } from '../pages/admin/radarConstructor/radarConstructorGrid/RadarConstructorGrid';
->>>>>>> e922e7d (arr error page and fix header)
 
 type Input = { label: string; id: string; name: string; type: string; autoComplete: string };
 
@@ -80,7 +76,6 @@ export const initialState: State = {
             autoComplete: 'off',
         },
     ],
-<<<<<<< HEAD
     techGrid: [
         {
             id: 1,
@@ -106,7 +101,6 @@ export const initialState: State = {
         },
     ],
 
-=======
     radarConstructorGrid: [
         {
             id: 1,
@@ -127,7 +121,6 @@ export const initialState: State = {
             sector: 4,
         },
     ],
->>>>>>> e922e7d (arr error page and fix header)
     radarGrid: {
         android: [
             {

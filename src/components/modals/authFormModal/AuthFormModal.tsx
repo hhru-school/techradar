@@ -4,7 +4,7 @@ import { Alert, Backdrop, Box, Button, Fade, Link, Modal, Typography } from '@mu
 import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { UserResponse } from '../../../api/authApi';
+import { ErrorResponse, UserResponse } from '../../../api/authApi';
 import { useLoginMutation } from '../../../store/authApiSlice';
 import { setAuthFormOpen, setRegistrFormOpen, setCredentials } from '../../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -12,6 +12,11 @@ import TextInputOutlined from '../../textInputOutlined/TextInputOutlined';
 import PassInput from '../components/PassInput/PassInput';
 
 import './AuthFormModal.less';
+
+const styles = {
+    btnSuccess: { marginTop: '20px' },
+    linkRegistr: { textAlign: 'center', mt: 3, cursor: 'pointer' },
+};
 
 export interface Values {
     username: string;
@@ -50,11 +55,13 @@ const AuthFormModal: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const showAuthForm = useAppSelector((state) => state.auth.showAuthForm);
-    const refreshToken = useAppSelector((state) => state.auth.refreshToken);
-    const [errorClient, setErrorClient] = useState<boolean>(false);
+    const [message, setMessage] = useState<string | null>(null);
+    const [errMessage, setErrMessage] = useState<string | null>(null);
 
     const handleClose = useCallback(() => {
         dispatch(setAuthFormOpen(false));
+        setErrMessage(null);
+        setMessage(null);
     }, [dispatch]);
 
     const handleRegistr = useCallback(() => {
@@ -63,6 +70,34 @@ const AuthFormModal: FC = () => {
     }, [dispatch]);
 
     const [login, { isLoading }] = useLoginMutation();
+
+    const onSubmitHandler = useCallback(
+        async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+            await login(values)
+                .unwrap()
+                .then((credentials: UserResponse) => {
+                    setErrMessage(null);
+                    setMessage('Вы успешно авторизированы!');
+                    dispatch(
+                        setCredentials({
+                            username: values.username,
+                            tokenAccess: credentials.access_token,
+                            refreshToken: credentials.refresh_token,
+                        })
+                    );
+                    setTimeout(() => {
+                        dispatch(setAuthFormOpen(false));
+                        setSubmitting(false);
+                        navigate('/admin/my-radars');
+                        setMessage(null);
+                    }, 3000);
+                })
+                .catch((err: ErrorResponse) => {
+                    setErrMessage(err.data.message);
+                });
+        },
+        [dispatch, login, navigate]
+    );
 
     return (
         <Modal
@@ -79,39 +114,7 @@ const AuthFormModal: FC = () => {
                     <Typography variant="h6" component="h2">
                         Вход в учетную запись TechRadar
                     </Typography>
-                    <Formik
-                        initialValues={initialValues}
-                        validationSchema={validSchema}
-                        onSubmit={async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-                            await login(values)
-                                .unwrap()
-                                .then((credentials: UserResponse) => {
-                                    dispatch(
-                                        setCredentials({
-                                            username: values.username,
-                                            tokenAccess: credentials.access_token,
-                                            refreshToken: credentials.refresh_token,
-                                        })
-                                    );
-                                    setTimeout(() => {
-                                        dispatch(setAuthFormOpen(false));
-                                        setSubmitting(false);
-                                        navigate('/my-radars');
-                                    }, 2000);
-                                })
-                                .catch(
-                                    (res: {
-                                        data: { message: string; status: string; timestamp: string };
-                                        status: number;
-                                    }) => {
-                                        switch (res.status) {
-                                            case 403:
-                                                setErrorClient(true);
-                                        }
-                                    }
-                                );
-                        }}
-                    >
+                    <Formik initialValues={initialValues} validationSchema={validSchema} onSubmit={onSubmitHandler}>
                         <Form className="form auth-form">
                             <TextInputOutlined
                                 label="Email"
@@ -132,20 +135,14 @@ const AuthFormModal: FC = () => {
                                 type="submit"
                                 variant="contained"
                                 color="success"
-                                sx={{ marginTop: '20px' }}
+                                sx={styles.btnSuccess}
                                 disabled={isLoading}
                             >
                                 Войти
                             </Button>
-                            {errorClient && (
-                                <Alert severity="warning">
-                                    Неправильный email или пароль, <br />
-                                    попробуйте еще раз или зарегистрируйтесь
-                                </Alert>
-                            )}
-                            {refreshToken && <Alert severity="success">Вы успешно авторизованы!</Alert>}
-                            {/* <Alert severity="error">Ошибка сервера! Попробуйте зайти позже...</Alert> */}
-                            <Link sx={{ textAlign: 'center', mt: 3, cursor: 'pointer' }} onClick={handleRegistr}>
+                            {message && <Alert severity="success">{message}</Alert>}
+                            {errMessage && <Alert severity="error">{errMessage}</Alert>}
+                            <Link sx={styles.linkRegistr} onClick={handleRegistr}>
                                 Зарегистрироваться
                             </Link>
                         </Form>

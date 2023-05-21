@@ -12,7 +12,7 @@ const RequireAuth: FC = () => {
     const content = tokenAccess ? (
         <Routes>
             <Route path="/my-radars/*" element={<MyRadars />} />
-            <Route path="radar-constructor" element={<RadarConstructor />} />
+            <Route path="/radar-constructor" element={<RadarConstructor />} />
         </Routes>
     ) : (
         <ErrorMessage errorStatus={401} />
