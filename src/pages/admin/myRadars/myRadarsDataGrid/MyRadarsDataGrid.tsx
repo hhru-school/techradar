@@ -4,7 +4,12 @@ import { Link } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { DataGrid, GridColDef, ruRU, GridRenderCellParams } from '@mui/x-data-grid';
 
+// import { useGetRadarVersionsQuery } from '../../../../api/radarApi';
 import { useAppSelector } from '../../../../store/hooks';
+
+const styles = {
+    box: { height: 'calc(100vh - 240px)', width: '100%' },
+};
 
 type RowRadar = {
     id: number;
@@ -71,6 +76,7 @@ const initialState = {
 const MyRadarsDataGrid: FC = () => {
     const rows = useAppSelector((state) => state.myRadars.radarGrid);
     const { rowsId } = useParams();
+    // const { data: radarVersions } = useGetRadarVersionsQuery(1);
 
     const gridRows = useMemo(
         () =>
@@ -89,7 +95,7 @@ const MyRadarsDataGrid: FC = () => {
     );
 
     return (
-        <Box sx={{ height: 'calc(100vh - 240px)', width: '100%' }}>
+        <Box sx={styles.box}>
             <DataGrid
                 rows={gridRows}
                 columns={columns}
