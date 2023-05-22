@@ -1,0 +1,79 @@
+@import '../../../styles/colors.less';
+
+@item-max-width: 130px;
+
+.item {
+    font-size: 12px;
+    position: relative;
+}
+.itemActive {
+    background-color: black;
+    color: white;
+}
+
+.itemEditMenu {
+    position: absolute;
+    top: 0;
+    left: @item-max-width;
+    padding: 5px;
+    display: flex;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 0 10px gray;
+    z-index: 50;
+}
+
+.itemList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sectorContainer {
+    margin: 20px 0;
+}
+
+.sectorContainerList {
+    display: flex;
+}
+
+.sectorName {
+    margin: 2px;
+    font-size: 16px;
+    opacity: 0.5;
+}
+
+.ringContainer {
+    width: @item-max-width;
+    padding: 3px;
+}
+
+.ringContainerIsOver {
+    background-color: rgb(175, 222, 255);
+    opacity: 0.5;
+    transform: scale(1.2);
+    outline: dashed 1px rgb(84, 162, 218);
+    box-shadow: 3px 3px 3px rgba(106, 106, 106, 0.3);
+}
+
+.ringName {
+    color: @label-color;
+    margin: 3px 0;
+    font-size: 14px;
+}
+
+.main {
+    height: 450px;
+    overflow: auto;
+    scroll-behavior: smooth;
+    margin-top: 10px;
+}
+
+.emptyContainer {
+    height: 90%;
+    width: 100%;
+    display: flex;
+    font-size: 12px;
+    align-items: center;
+    color: rgb(185, 185, 185);
+}

@@ -4,6 +4,8 @@ import { clearActiveBlip, setActiveBlip, setOpenDescription } from '../../../../
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import DropDown from './DropDown';
 
+import styles from './legend.module.less';
+
 type Props = {
     id: number;
     name: string;
@@ -30,14 +32,21 @@ const LegendItem: FC<Props> = ({ id, name, description }) => {
     };
 
     return (
-        <li onClick={onClickHandler} onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-            <DropDown
-                title={`${id}. ${name}`}
-                details={description}
-                open={open && activeId === id}
-                active={activeId === id}
-            />
-        </li>
+        <>
+            <li
+                onClick={onClickHandler}
+                onMouseEnter={onMouseEnterHandler}
+                onMouseLeave={onMouseLeaveHandler}
+                className={styles.item}
+            >
+                <DropDown
+                    title={`${id}. ${name}`}
+                    details={description}
+                    open={open && activeId === id}
+                    active={activeId === id}
+                />
+            </li>
+        </>
     );
 };
 

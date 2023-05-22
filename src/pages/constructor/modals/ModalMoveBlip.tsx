@@ -29,7 +29,7 @@ const ModalMoveBlip: FC = () => {
                     Перемещение технологии <span>{blip?.name}</span>
                 </h3>
                 <div className={styles.message}>
-                    Действительно переместить тенологию в кольцо <span>{activeSegment?.ringName}</span> сектора{' '}
+                    Действительно переместить технологию в кольцо <span>{activeSegment?.ringName}</span> сектора{' '}
                     <span>{activeSegment?.sectorName}</span>?
                 </div>
                 <div className={styles.buttonContainer}>

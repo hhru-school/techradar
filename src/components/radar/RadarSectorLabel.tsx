@@ -28,7 +28,7 @@ const RadarSectorLabel: FC<Props> = ({
 
     const dispatch = useAppDispatch();
 
-    const doubleClickHandler = () => {
+    const clickHandler = () => {
         dispatch(openEditSectorNameModal(sectorName));
     };
 
@@ -61,7 +61,7 @@ const RadarSectorLabel: FC<Props> = ({
             />
             <text
                 fontSize={sectorNameFontSize}
-                onDoubleClick={isEditable ? doubleClickHandler : undefined}
+                onClick={isEditable ? clickHandler : undefined}
                 onMouseEnter={mouseEnterHandler}
                 onMouseLeave={mouseLeaveHandler}
             >

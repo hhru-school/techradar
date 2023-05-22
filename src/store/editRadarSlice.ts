@@ -19,6 +19,12 @@ interface EditingBlipAsset {
     r: number;
 }
 
+interface MoveBlipAsset {
+    id: number;
+    sectorName: string;
+    ringName: string;
+}
+
 export enum EventSuggest {
     Delete = 'delete',
     Add = 'add',
@@ -28,6 +34,8 @@ export enum EventSuggest {
 }
 
 interface EditRadarState {
+    radarName: string;
+    radarVersion: string;
     isDragging: boolean;
     blip: Blip | null;
     blipAsset: EditingBlipAsset | null;
@@ -36,6 +44,7 @@ interface EditRadarState {
     eventSuggest: EventSuggest | null;
     isCreating: boolean;
     showCreateBlipModal: boolean;
+    showEditBlipModal: boolean;
     showMoveBlipModal: boolean;
     showDeleteBlipModal: boolean;
     showEditSectorNameModal: boolean;
@@ -52,14 +61,17 @@ interface EditRadarState {
 }
 
 const initialState: EditRadarState = {
+    radarName: 'My-new-radar',
+    radarVersion: 'Q1-2024',
+
     isDragging: false,
     blip: null,
     blipAsset: null,
     activeSegment: null,
-    blips: generateData(4),
     eventSuggest: null,
     isCreating: false,
     showCreateBlipModal: false,
+    showEditBlipModal: false,
     showMoveBlipModal: false,
     showDeleteBlipModal: false,
     showEditSectorNameModal: false,
@@ -73,6 +85,7 @@ const initialState: EditRadarState = {
     // mock
     sectorNames,
     ringNames,
+    blips: generateData(50),
     //
 
     showEditIcon: false,
@@ -90,6 +103,11 @@ const moveBlipTosegment = (state: EditRadarState, blip: Blip, segment: Segment |
     if (!segment) return;
     removeBlipById(state, blip.id);
     state.blips.push({ ...blip, ringName: segment.ringName, sectorName: segment.sectorName });
+};
+
+const repalceBlip = (state: EditRadarState, blip: Blip) => {
+    removeBlipById(state, blip.id);
+    state.blips.push(blip);
 };
 
 const renameItemByName = (arr: string[], oldName: string, newName: string) => {
@@ -148,7 +166,6 @@ export const editRadarSlice = createSlice({
                 switch (state.eventSuggest) {
                     case EventSuggest.Move: {
                         state.showMoveBlipModal = true;
-
                         break;
                     }
                     case EventSuggest.Delete: {
@@ -167,12 +184,32 @@ export const editRadarSlice = createSlice({
             state.isCreating = false;
         },
 
+        openEditBlipModal: (state, action: PayloadAction<number>) => {
+            state.blip = getBlipById(state, action.payload);
+            state.showEditBlipModal = true;
+        },
+
+        closeEditBlipModal: (state) => {
+            state.showEditBlipModal = false;
+        },
+
         closeCreateBlipModal: (state) => {
             state.showCreateBlipModal = false;
         },
 
+        openMoveBlipModal: (state, action: PayloadAction<MoveBlipAsset>) => {
+            state.blip = getBlipById(state, action.payload.id);
+            state.activeSegment = { sectorName: action.payload.sectorName, ringName: action.payload.ringName };
+            state.showMoveBlipModal = true;
+        },
+
         closeMoveBlipModal: (state) => {
             state.showMoveBlipModal = false;
+        },
+
+        openDeleteBlipModal: (state, action: PayloadAction<number>) => {
+            state.blip = getBlipById(state, action.payload);
+            state.showDeleteBlipModal = true;
         },
 
         closeDeleteBlipModal: (state) => {
@@ -184,6 +221,11 @@ export const editRadarSlice = createSlice({
             state.blips.push({ ...action.payload, id: maxId + 1 });
             state.showCreateBlipModal = false;
             state.activeSegment = null;
+        },
+
+        editBlip: (state, action: PayloadAction<Blip>) => {
+            repalceBlip(state, action.payload);
+            state.showEditBlipModal = false;
         },
 
         moveBlip: (state) => {
@@ -316,14 +358,19 @@ export const {
     setDraggingBlip,
     drop,
     setIsCreating,
+    openEditBlipModal,
+    closeEditBlipModal,
     closeCreateBlipModal,
+    openMoveBlipModal,
     closeMoveBlipModal,
+    openDeleteBlipModal,
     closeDeleteBlipModal,
     openEditSectorNameModal,
     closeEditSectorNameModal,
     openDeleteSectorModal,
     closeDeleteSectorModal,
     addNewBlip,
+    editBlip,
     moveBlip,
     deleteBlip,
     renameSector,

@@ -1,6 +1,7 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, memo, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
+import { FormattedRadarData } from '../../../api/radarApiUtils';
 import Radar from '../../../components/radar/Radar';
 import RadarBlip from '../../../components/radar/RadarBlip';
 import { defaultBlipRadius } from '../../../components/radar/styleConfig';
@@ -15,11 +16,15 @@ import styles from './wrapper.module.less';
 
 type Position = { x: number; y: number };
 
-const EditWrapper: FC = () => {
-    const sectorNames = useAppSelector((state) => state.editRadar.sectorNames);
-    const ringNames = useAppSelector((state) => state.editRadar.ringNames);
+type Props = {
+    radar: FormattedRadarData;
+};
 
-    const data = useAppSelector((state) => state.editRadar.blips);
+const EditWrapper: FC<Props> = ({ radar }) => {
+    const sectorNames = radar.sectorNames;
+    const ringNames = radar.ringNames;
+    const data = radar.blips;
+
     const blipAsset = useAppSelector((state) => state.editRadar.blipAsset);
     const onDropEvent = useAppSelector((state) => state.editRadar.eventSuggest);
     const showEditIcon = useAppSelector((state) => state.editRadar.showEditIcon);
@@ -105,4 +110,4 @@ const EditWrapper: FC = () => {
     );
 };
 
-export default EditWrapper;
+export default memo(EditWrapper);

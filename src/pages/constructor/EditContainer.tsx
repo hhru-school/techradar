@@ -1,15 +1,20 @@
 import { FC } from 'react';
 
-import EditPanel from './editPanel/EditPanel';
+import { FormattedRadarData } from '../../api/radarApiUtils';
+import RadarBaseEditPanel from './editPanel/RadarBaseEditPanel';
 import EditWrapper from './radarContainer/EditWrapper';
 
 import styles from './editContainer.module.less';
 
-const EditContainer: FC = () => {
+type Props = {
+    radar: FormattedRadarData;
+};
+
+const EditContainer: FC<Props> = ({ radar }) => {
     return (
         <div className={styles.layout}>
-            <EditPanel />
-            <EditWrapper />
+            <RadarBaseEditPanel sectorNames={radar.sectorNames} ringNames={radar.ringNames} />
+            <EditWrapper radar={radar} />
         </div>
     );
 };

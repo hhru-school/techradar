@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, memo, useMemo } from 'react';
 
 import { FormattedRadarData } from '../../../../api/radarApiUtils';
 import { defaultColorScheme } from '../../../../components/radar/styleConfig';
@@ -51,4 +51,4 @@ const Legend: FC<Props> = ({ radar, colorScheme = defaultColorScheme }) => {
     );
 };
 
-export default Legend;
+export default memo(Legend);

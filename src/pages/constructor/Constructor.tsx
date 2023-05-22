@@ -1,20 +1,24 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import { useAppSelector } from '../../store/hooks';
 import EditContainer from './EditContainer';
+import MainEditPanel from './editPanel/MainEditPanel';
 import ModalEditSectorName from './modals/ModaEditSectorName';
 import ModalAddNewSector from './modals/ModalAddNewSector';
 import ModalCreateBlip from './modals/ModalCreateBlip';
 import ModalDeleteBlip from './modals/ModalDeleteBlip';
 import ModalDeleteRing from './modals/ModalDeleteRing';
 import ModalDeleteSector from './modals/ModalDeleteSector';
+import ModalEditBlip from './modals/ModalEditBlip';
 import ModalEditRingName from './modals/ModalEditRingName';
 import ModalMoveBlip from './modals/ModalMoveBlip';
+import TableContainer from './table/TableContainer';
 
 import styles from './constructor.module.less';
 
 const Constructor: FC = () => {
     const showCreateBlipModal = useAppSelector((state) => state.editRadar.showCreateBlipModal);
+    const showEditBlipModal = useAppSelector((state) => state.editRadar.showEditBlipModal);
     const showMoveBlipRadar = useAppSelector((state) => state.editRadar.showMoveBlipModal);
     const showEditSectorNameModal = useAppSelector((state) => state.editRadar.showEditSectorNameModal);
     const showEditRingNameModal = useAppSelector((state) => state.editRadar.showEditRingNameModal);
@@ -23,9 +27,16 @@ const Constructor: FC = () => {
     const showDeleteRingModal = useAppSelector((state) => state.editRadar.showDeleteRingModal);
     const showAddNewSectorModal = useAppSelector((state) => state.editRadar.showAddNewSectorModal);
 
+    const sectorNames = useAppSelector((state) => state.editRadar.sectorNames);
+    const ringNames = useAppSelector((state) => state.editRadar.ringNames);
+    const blips = useAppSelector((state) => state.editRadar.blips);
+
+    const radar = useMemo(() => ({ sectorNames, ringNames, blips }), [sectorNames, ringNames, blips]);
+
     return (
         <>
             {showCreateBlipModal && <ModalCreateBlip />}
+            {showEditBlipModal && <ModalEditBlip />}
             {showMoveBlipRadar && <ModalMoveBlip />}
             {showEditSectorNameModal && <ModalEditSectorName />}
             {showEditRingNameModal && <ModalEditRingName />}
@@ -33,8 +44,10 @@ const Constructor: FC = () => {
             {showDeleteSectorModal && <ModalDeleteSector />}
             {showDeleteRingModal && <ModalDeleteRing />}
             {showAddNewSectorModal && <ModalAddNewSector />}
-            <div className={styles.layout}>
-                <EditContainer />
+            <MainEditPanel />
+            <div className={styles.main}>
+                <EditContainer radar={radar} />
+                <TableContainer radar={radar} />
             </div>
         </>
     );

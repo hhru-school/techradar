@@ -154,7 +154,7 @@ export const generateData = (num: number): Blip[] => {
     const res = new Array<Blip>();
     for (let i = 0; i < num; i++) {
         res.push({
-            id: random(1, 99),
+            id: i,
             name: randomWord(10),
             ringName: ringNames[random(0, ringNames.length - 1)],
             sectorName: sectorNames[random(0, sectorNames.length - 1)],
