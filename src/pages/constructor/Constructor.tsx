@@ -18,6 +18,7 @@ const Constructor: FC<Props> = ({ mode = ConstructorMode.NewRadarCreation }) => 
         dispatch(setEditMode(mode));
     }, [dispatch, mode]);
 
+const Constructor: FC<Props> = ({ mode = 'new' }) => {
     return (
         <>
             <Modals />
