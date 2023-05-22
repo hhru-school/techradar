@@ -2,16 +2,9 @@ import { Blip } from '../components/radar/types';
 
 export const getUrl = (url: string, hostUrl = ''): string => hostUrl.concat(url);
 
-export enum SlugPrefix {
-    Company = 'company-',
-    Radar = 'radar-',
-}
-
-export const getIdFromSlug = (slug: string, prefix: SlugPrefix): number => Number(slug.replace(prefix, ''));
-
-export const buildRadarUrl = (companyId: number, radarId: number, versionName?: string): string => {
-    const version = versionName ? `?version=${versionName}` : '';
-    return `/techradar/${SlugPrefix.Company}${companyId}/${SlugPrefix.Radar}${radarId}${version}`;
+export const buildRadarUrl = (companyId: number, radarId: number, versionName: string, versionId?: number): string => {
+    const version = versionId ? `version-${versionId}-${versionName}` : 'latest';
+    return `/techradar/company-${companyId}/radar-${radarId}/${version}`;
 };
 
 export interface DataQuadrant {
