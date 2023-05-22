@@ -1,11 +1,6 @@
 import { RegistrationValues } from '../components/modals/registrationFormModal/RegistrationFormModal';
 import { LoginRequest, apiSlice } from './authApi';
 
-export interface RadarApi {
-    id: number;
-    name: string;
-}
-
 export const authApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         login: builder.mutation({
