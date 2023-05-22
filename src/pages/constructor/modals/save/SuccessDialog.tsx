@@ -9,6 +9,7 @@ type Props = {
     radarName: string;
     radarVersion: string;
     radarId: number;
+    versionId: number;
     companyId: number;
 };
 
@@ -16,12 +17,12 @@ const style = {
     stack: { mt: 4 },
 };
 
-const SuccessDialog: FC<Props> = ({ radarName, radarVersion, radarId }) => {
+const SuccessDialog: FC<Props> = ({ radarName, radarVersion, radarId, versionId, companyId }) => {
     const navigate = useNavigate();
 
     const linkBtnHandler = useCallback(() => {
-        navigate(buildRadarUrl(1, radarId, radarVersion), { replace: true });
-    }, [navigate, radarId, radarVersion]);
+        navigate(buildRadarUrl(companyId, radarId, radarVersion, versionId), { replace: true });
+    }, [navigate, radarId, radarVersion, companyId, versionId]);
 
     return (
         <>
