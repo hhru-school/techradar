@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useState, MouseEvent } from 'react';
 import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, Container, Divider, Grid, Popover, PopoverOrigin, TextField, Typography } from '@mui/material';
@@ -15,6 +15,7 @@ const styles = {
     aboutBox: { display: 'flex', justifyContent: 'start' },
     aboutBtn: { margin: '0 25px' },
     textField: { width: '100%' },
+    clickToSave: { ml: '3px' },
 };
 
 const anchorOrigin: PopoverOrigin = {
@@ -26,7 +27,7 @@ const TechSinglePage: FC = () => {
     const [textAboutReadOnly, setTextAboutReadOnly] = useState<boolean>(true);
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-    const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     }, []);
     const handleClose = useCallback(() => {
@@ -38,14 +39,13 @@ const TechSinglePage: FC = () => {
 
     const open = Boolean(anchorEl);
 
-    const id = useMemo(() => (open ? 'simple-popover' : undefined), [open]);
-    const editColor = useMemo(() => (textAboutReadOnly ? 'primary' : 'error'), [textAboutReadOnly]);
-    const iconColor = useMemo(() => (!anchorEl ? 'primary' : 'error'), [anchorEl]);
-    const clickToSaveContent = useMemo(
-        () => (textAboutReadOnly ? null : <Typography sx={{ ml: '3px' }}>Нажмите для сохранения</Typography>),
-        [textAboutReadOnly]
+    const id = open ? 'simple-popover' : undefined;
+    const editColor = textAboutReadOnly ? 'primary' : 'error';
+    const iconColor = !anchorEl ? 'primary' : 'error';
+    const clickToSaveContent = textAboutReadOnly ? null : (
+        <Typography sx={styles.clickToSave}>Нажмите для сохранения</Typography>
     );
-    const editToggle = useMemo(() => (textAboutReadOnly ? null : 'Редактирование включено'), [textAboutReadOnly]);
+    const editToggle = textAboutReadOnly ? null : 'Редактирование включено';
     const InputProps = useMemo(
         () => ({
             readOnly: textAboutReadOnly,

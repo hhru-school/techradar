@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { Button, Drawer } from '@mui/material';
 
 import LogList from '../logList/LogList';
@@ -6,16 +6,19 @@ import LogList from '../logList/LogList';
 const SideBar: FC = () => {
     const [open, setOpen] = useState(false);
 
-    const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (
-            event.type === 'keydown' &&
-            ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
-        ) {
-            return;
-        }
+    const toggleDrawer = useCallback(
+        (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+            if (
+                event.type === 'keydown' &&
+                ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
+            ) {
+                return;
+            }
 
-        setOpen(open);
-    };
+            setOpen(open);
+        },
+        []
+    );
 
     return (
         <div>

@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import PreviewIcon from '@mui/icons-material/Preview';
@@ -48,7 +48,7 @@ const ShowRadarBtn: FC = () => {
     }, []);
 
     const open = Boolean(anchorEl);
-    const ariaOwns: string | undefined = useMemo(() => (open ? 'mouse-over-popover' : undefined), [open]);
+    const ariaOwns: string | undefined = open ? 'mouse-over-popover' : undefined;
 
     return (
         <Box
