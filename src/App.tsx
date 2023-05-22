@@ -49,7 +49,7 @@ const App: FC = () => {
                 <Route path="/constructor" element={<Constructor />} />
                 <Route path="/single" element={<TechSinglePage />} />
                 <Route path="/constructor" element={<Constructor />}>
-                    <Route path=":versionSlug" element={<Constructor />} />
+                    <Route path=":versionSlug" element={<Constructor mode="edit" />} />
                 </Route>
                 <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
                 <Route path="/admin/*" element={<RequireAuth />} />
