@@ -11,6 +11,7 @@ import { isFetchBaseQueryError } from '../../api/helpers';
 // import { RadarVersionDataApi } from '../../api/radarApiUtils';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
+import SelectVersion from './components/selectMenu/SelectVersion';
 import NavTabsContainer from './components/tab/NavTabsContainer';
 
 export interface Version {
