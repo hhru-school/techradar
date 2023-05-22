@@ -10,10 +10,21 @@ import { isFetchBaseQueryError } from '../../api/helpers';
 import { RadarVersionDataApi } from '../../api/radarApiUtils';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
+import SelectVersion from './components/selectMenu/SelectVersion';
 import NavTabsContainer from './components/tab/NavTabsContainer';
+
+export interface Version {
+    id: number;
+    name: string;
+}
 
 const getLastradarVersionId = (versions: RadarVersionDataApi[]) =>
     versions.sort((versionA, versionB) => versionB.lastChangeTime.localeCompare(versionA.lastChangeTime))[0].id;
+
+const getVersionNameById = (versions: RadarVersionDataApi[], id: number): Version => {
+    const versionName = versions.find((version) => version.id === id)?.name || '';
+    return { id, name: versionName };
+};
 
 const TechRadar: FC = () => {
     const { companySlug, radarSlug, versionSlug } = useParams();
@@ -51,6 +62,14 @@ const TechRadar: FC = () => {
                 radars={radars}
                 isLoading={radarsIsLoading}
             />
+            {radarVersions && (
+                <SelectVersion
+                    versions={radarVersions}
+                    version={getVersionNameById(radarVersions, versionId)}
+                    companyId={companyId}
+                    radarId={radarId}
+                />
+            )}
             {<TechRadarMain radar={radar} isLoading={radarIsFetching} />}
         </>
     );
