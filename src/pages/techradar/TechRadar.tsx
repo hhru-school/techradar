@@ -37,13 +37,19 @@ const TechRadar: FC = () => {
 
     // const { data: radarVersions } = useGetAllRadarVersionsQuery(radarId);
 
-    const lastVersionId = radarVersions && getLastradarVersion(radarVersions).id;
+    let versionId = -1;
+
+    if (radarVersions) {
+        if (versionSlug === 'latest') {
+            versionId = getLastradarVersionId(radarVersions);
+        } else versionId = Number(versionSlug?.split('-')[1]);
+    }
 
     const {
         data: radar,
         isFetching: radarIsFetching,
         error: radarError,
-    } = useGetRadarByVersionIdQuery(Number(lastVersionId), { skip: !radarVersions });
+    } = useGetRadarByVersionIdQuery(versionId, { skip: !radarVersions });
 
     if (radarError) {
         return <ErrorMessage errorStatus={isFetchBaseQueryError(radarError) ? radarError.status : null} />;
