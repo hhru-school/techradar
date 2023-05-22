@@ -7,6 +7,7 @@ import { isFetchBaseQueryError } from '../../api/helpers';
 // import { RadarVersionDataApi } from '../../api/radarApiUtils';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
+import SelectVersion from './components/selectMenu/SelectVersion';
 import NavTabsContainer from './components/tab/NavTabsContainer';
 
 export interface Version {
@@ -21,6 +22,11 @@ export interface Version {
 //     const versionName = versions.find((version) => version.id === id)?.name || '';
 //     return { id, name: versionName };
 // };
+
+const getVersionNameById = (versions: RadarVersionDataApi[], id: number): Version => {
+    const versionName = versions.find((version) => version.id === id)?.name || '';
+    return { id, name: versionName };
+};
 
 const TechRadar: FC = () => {
     const { companySlug, radarSlug, versionSlug } = useParams();
