@@ -6,11 +6,6 @@ interface Bbox {
     bottom: number;
 }
 
-// interface ScrollOffest {
-//     value: number;
-//     position: 'top' | 'bottom';
-// }
-
 interface ActiveBlipState {
     id: number | null;
     openDescription: boolean;

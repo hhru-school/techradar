@@ -21,7 +21,7 @@ const tableWidth = 520;
 const gridSx = {
     width: tableWidth,
     '.MuiDataGrid-columnHeaderTitle': {
-        fontWeight: 'bold !important',
+        fontWeight: 'bold',
     },
 };
 
