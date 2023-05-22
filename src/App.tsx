@@ -43,7 +43,7 @@ const App: FC = () => {
                 </Route>
                 <Route path="/my-radars/*" element={<MyRadars />} />
                 <Route path="/constructor" element={<Constructor />}>
-                    <Route path=":versionSlug" element={<Constructor />} />
+                    <Route path=":versionSlug" element={<Constructor mode="edit" />} />
                 </Route>
                 <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
                 <Route path="/my-tech" element={<MyTechnologies />} />
