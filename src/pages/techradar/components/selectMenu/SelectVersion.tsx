@@ -38,7 +38,7 @@ const SelectVersion: FC<Props> = ({ versions, version, companyId, radarId }) => 
     );
 
     return (
-        <FormControl sx={{ width: 300, my: 3 }}>
+        <FormControl sx={{ width: 300, my: 2 }}>
             <InputLabel>{label}</InputLabel>
             <Select label={label} onChange={changeHandler} value={String(version.id)}>
                 {options}
