@@ -4,13 +4,28 @@ import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
 import { ErrorResponse } from '../../../api/authApi';
-import { useRegistrMutation } from '../../../store/authApiSlice';
+import { useRegistrMutation } from '../../../api/loginApi';
 import { setAuthFormOpen, setRegistrFormOpen } from '../../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import TextInputOutlined from '../../textInputOutlined/TextInputOutlined';
 import PassInput from '../components/PassInput/PassInput';
 
-export interface Values {
+const styles = {
+    boxModal: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        minWidth: 250,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    },
+    btnSuccess: { marginTop: '20px' },
+};
+
+export interface RegistrationValues {
     username: string;
     password: string;
     confirmPassword: string;
@@ -29,18 +44,6 @@ const validSchema = Yup.object({
         .oneOf([Yup.ref('password')], 'Пароли должны совпадать!'),
 });
 
-export const styleModal = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    minWidth: 250,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
-
 const slots = { backdrop: Backdrop };
 const initialValues = {
     username: '',
@@ -58,12 +61,32 @@ const RegistrationFormModal: FC = () => {
     const showRegistrForm = useAppSelector((state) => state.auth.showRegistrForm);
     const [message, setMessage] = useState<string | null>(null);
     const [errMessage, setErrMessage] = useState<string | null>(null);
+    const [registr, { isLoading }] = useRegistrMutation();
 
     const handleClose = useCallback(() => {
         dispatch(setRegistrFormOpen(false));
     }, [dispatch]);
 
-    const [registr, { isLoading }] = useRegistrMutation();
+    const onSubmitHandler = useCallback(
+        async (values: RegistrationValues, { setSubmitting }: FormikHelpers<RegistrationValues>) => {
+            await registr(values)
+                .unwrap()
+                .then((res: RegistrResponse) => {
+                    setErrMessage(null);
+                    setMessage(res.message);
+
+                    setTimeout(() => {
+                        setSubmitting(false);
+                        dispatch(setRegistrFormOpen(false));
+                        dispatch(setAuthFormOpen(true));
+                        setMessage(null);
+                        setErrMessage(null);
+                    }, 3000);
+                })
+                .catch((err: ErrorResponse) => setErrMessage(err.data.message));
+        },
+        [dispatch, registr]
+    );
 
     return (
         <Modal
@@ -76,31 +99,11 @@ const RegistrationFormModal: FC = () => {
             slotProps={slotProps}
         >
             <Fade in={showRegistrForm}>
-                <Box sx={styleModal}>
+                <Box sx={styles.boxModal}>
                     <Typography variant="h6" component="h2">
                         Регистрация учетной записи TechRadar
                     </Typography>
-                    <Formik
-                        initialValues={initialValues}
-                        validationSchema={validSchema}
-                        onSubmit={async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-                            await registr(values)
-                                .unwrap()
-                                .then((res: RegistrResponse) => {
-                                    setErrMessage(null);
-                                    setMessage(res.message);
-
-                                    setTimeout(() => {
-                                        setSubmitting(false);
-                                        dispatch(setRegistrFormOpen(false));
-                                        dispatch(setAuthFormOpen(true));
-                                        setMessage(null);
-                                        setErrMessage(null);
-                                    }, 3000);
-                                })
-                                .catch((err: ErrorResponse) => setErrMessage(err.data.message));
-                        }}
-                    >
+                    <Formik initialValues={initialValues} validationSchema={validSchema} onSubmit={onSubmitHandler}>
                         <Form className="form auth-form">
                             <TextInputOutlined
                                 label="Введите email"
@@ -121,7 +124,7 @@ const RegistrationFormModal: FC = () => {
                                 type="submit"
                                 variant="contained"
                                 color="success"
-                                sx={{ marginTop: '20px' }}
+                                sx={styles.btnSuccess}
                                 disabled={isLoading}
                             >
                                 Зарегистрироваться

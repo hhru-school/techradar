@@ -5,7 +5,7 @@ import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
 import { ErrorResponse, UserResponse } from '../../../api/authApi';
-import { useLoginMutation } from '../../../store/authApiSlice';
+import { useLoginMutation } from '../../../api/loginApi';
 import { setAuthFormOpen, setRegistrFormOpen, setCredentials } from '../../../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import TextInputOutlined from '../../textInputOutlined/TextInputOutlined';
@@ -57,6 +57,7 @@ const AuthFormModal: FC = () => {
     const showAuthForm = useAppSelector((state) => state.auth.showAuthForm);
     const [message, setMessage] = useState<string | null>(null);
     const [errMessage, setErrMessage] = useState<string | null>(null);
+    const [login, { isLoading }] = useLoginMutation();
 
     const handleClose = useCallback(() => {
         dispatch(setAuthFormOpen(false));
@@ -69,8 +70,6 @@ const AuthFormModal: FC = () => {
         dispatch(setRegistrFormOpen(true));
     }, [dispatch]);
 
-    const [login, { isLoading }] = useLoginMutation();
-
     const onSubmitHandler = useCallback(
         async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
             await login(values)
@@ -81,8 +80,8 @@ const AuthFormModal: FC = () => {
                     dispatch(
                         setCredentials({
                             username: values.username,
-                            tokenAccess: credentials.access_token,
-                            refreshToken: credentials.refresh_token,
+                            tokenAccess: credentials.accessToken,
+                            refreshToken: credentials.refreshToken,
                         })
                     );
                     setTimeout(() => {

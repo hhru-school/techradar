@@ -8,6 +8,7 @@ import Header from './components/header/Header';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import MyRadars from './pages/admin/myRadars/MyRadars';
 import MyTechnologies from './pages/admin/myTechnologies/MyTechnologies';
 import RadarConstructor from './pages/admin/radarConstructor/RadarConstructor';
@@ -22,6 +23,8 @@ import RegistrationFormModal from './components/modals/registrationFormModal/Reg
 =======
 import Radar from './components/radar/Radar';
 >>>>>>> af17009 (fix authSlice)
+=======
+>>>>>>> c8ad8d3 (fix after change in backend)
 import RequireAuth from './pages/admin/requireAuth.tsx/RequireAuth';
 >>>>>>> fc6899b (fix tab bag, add RequireAuth)
 import TechRadar from './pages/techradar/TechRadar';
@@ -74,7 +77,6 @@ const App: FC = () => {
         <ThemeProvider theme={theme}>
             <Header />
             <Routes>
-                <Route path="/" element={<Radar sectorNames={['2323']} ringNames={['2323']} radius={360} />} />
                 <Route path="/techradar">
                     <Route path=":companyId/:radarId" element={<TechRadar />} />
                 </Route>

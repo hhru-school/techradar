@@ -12,18 +12,21 @@ import { Mutex } from 'async-mutex';
 import { logOut, setCredentials } from '../store/authSlice';
 import { RootState } from '../store/store';
 
+export interface ErrorResponseData {
+    message: string;
+    status: string;
+    timestamp: string;
+}
+
 export interface ErrorResponse {
-    data: { message: string; status: string; timestamp: string };
+    data: ErrorResponseData;
     status: number;
 }
 
 export interface UserResponse {
-    // eslint-disable-next-line camelcase
-    type_token: string;
-    // eslint-disable-next-line camelcase
-    access_token: string;
-    // eslint-disable-next-line camelcase
-    refresh_token: string;
+    typeToken: string;
+    accessToken: string;
+    refreshToken: string;
 }
 
 export interface LoginRequest {
@@ -86,18 +89,15 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
     ) {
         if (!mutex.isLocked()) {
             const release = await mutex.acquire();
-
             try {
                 const refreshResult = await baseQueryRefresh('/auth/refresh', api, extraOptions);
-
                 if (refreshResult?.data) {
                     const username: string | null = (api.getState() as RootState).auth.username;
-
                     api.dispatch(
                         setCredentials({
                             username,
-                            tokenAccess: (refreshResult.data as UserResponse).access_token,
-                            refreshToken: (refreshResult.data as UserResponse).refresh_token,
+                            tokenAccess: (refreshResult.data as UserResponse).accessToken,
+                            refreshToken: (refreshResult.data as UserResponse).refreshToken,
                         })
                     );
 
@@ -120,6 +120,5 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 
 export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    endpoints: (builder) => ({}),
+    endpoints: () => ({}),
 });

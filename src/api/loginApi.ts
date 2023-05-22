@@ -1,4 +1,10 @@
-import { apiSlice } from '../api/authApi';
+import { RegistrationValues } from '../components/modals/registrationFormModal/RegistrationFormModal';
+import { LoginRequest, apiSlice } from './authApi';
+
+export interface RadarApi {
+    id: number;
+    name: string;
+}
 
 export const authApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -6,14 +12,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
             query: (credentials) => ({
                 url: '/auth/authenticate',
                 method: 'POST',
-                body: credentials as { username: string; password: string },
+                body: credentials as LoginRequest,
             }),
         }),
         registr: builder.mutation({
             query: (credentials) => ({
                 url: '/auth/register',
                 method: 'POST',
-                body: credentials as { username: string; password: string; confirmPassword: string },
+                body: credentials as RegistrationValues,
             }),
         }),
         logOut: builder.mutation({
@@ -23,13 +29,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 body: '',
             }),
         }),
-        getCompanies: builder.query({
-            query: () => ({
-                url: '/companies',
-                method: 'GET',
-            }),
-        }),
     }),
 });
 
-export const { useLoginMutation, useRegistrMutation, useLogOutMutation, useGetCompaniesQuery } = authApiSlice;
+export const { useLoginMutation, useRegistrMutation, useLogOutMutation } = authApiSlice;
