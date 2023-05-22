@@ -1,24 +1,17 @@
 import { FC } from 'react';
 
-import EditContainer from './EditContainer';
+import CreateModeConstructor from './CreateModeConstructor';
 import MainEditPanel from './editPanel/MainEditPanel';
-import { useCurrentRadar } from './hooks';
 import Modals from './modals/Modals';
-import TableContainer from './table/TableContainer';
 
-import styles from './constructor.module.less';
+type Props = { mode?: 'edit' | 'new' };
 
-const Constructor: FC = () => {
-    const radar = useCurrentRadar();
-
+const Constructor: FC<Props> = ({ mode = 'new' }) => {
     return (
         <>
             <Modals />
             <MainEditPanel />
-            <div className={styles.main}>
-                <EditContainer radar={radar} />
-                <TableContainer radar={radar} />
-            </div>
+            {mode === 'new' && <CreateModeConstructor />}
         </>
     );
 };
