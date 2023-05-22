@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import CreateModeConstructor from './CreateModeConstructor';
+import EditModeConstructor from './EditModeConstructor';
 import MainEditPanel from './editPanel/MainEditPanel';
 import Modals from './modals/Modals';
 
@@ -12,6 +13,7 @@ const Constructor: FC<Props> = ({ mode = 'new' }) => {
             <Modals />
             <MainEditPanel />
             {mode === 'new' && <CreateModeConstructor />}
+            {mode === 'edit' && <EditModeConstructor />}
         </>
     );
 };

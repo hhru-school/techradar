@@ -64,10 +64,9 @@ const App: FC = () => {
                     <Route path=":companySlug/:radarSlug/:versionSlug" element={<TechRadar />} />
                 </Route>
                 <Route path="/my-radars/*" element={<MyRadars />} />
-                <Route path="/constructor" element={<Constructor />} />
-                <Route path="/single" element={<TechSinglePage />} />
-                <Route path="/constructor" element={<Constructor />}>
-                    <Route path=":versionSlug" element={<Constructor mode="edit" />} />
+                <Route path="/constructor">
+                    <Route path="new" element={<Constructor />} />
+                    <Route path="edit/:versionSlug" element={<Constructor mode="edit" />} />
                 </Route>
                 <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
                 <Route path="/admin/*" element={<RequireAuth />} />
