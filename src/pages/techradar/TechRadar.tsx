@@ -7,31 +7,37 @@ import {
     useGetRadarByVersionIdQuery,
 } from '../../api/companyRadarsApi';
 import { isFetchBaseQueryError } from '../../api/helpers';
-import { RadarVersionDataApi, SlugPrefix, getIdFromSlug } from '../../api/radarApiUtils';
+import { RadarVersionDataApi } from '../../api/radarApiUtils';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
 import NavTabsContainer from './components/tab/NavTabsContainer';
 
-const getLastradarVersion = (versions: RadarVersionDataApi[]) =>
-    versions.sort((versionA, versionB) => versionB.lastChangeTime.localeCompare(versionA.lastChangeTime))[0];
+const getLastradarVersionId = (versions: RadarVersionDataApi[]) =>
+    versions.sort((versionA, versionB) => versionB.lastChangeTime.localeCompare(versionA.lastChangeTime))[0].id;
 
 const TechRadar: FC = () => {
-    const { companySlug, radarSlug } = useParams();
+    const { companySlug, radarSlug, versionSlug } = useParams();
 
-    const companyId = getIdFromSlug(String(companySlug), SlugPrefix.Company);
-    const radarId = getIdFromSlug(String(radarSlug), SlugPrefix.Radar);
+    const companyId = Number(companySlug?.split('-')[1]);
+    const radarId = Number(radarSlug?.split('-')[1]);
 
     const { data: radars, isLoading: radarsIsLoading } = useGetAllCompanyRadarsQuery(companyId);
 
     const { data: radarVersions } = useGetAllRadarVersionsQuery(radarId);
 
-    const lastVersionId = radarVersions && getLastradarVersion(radarVersions).id;
+    let versionId = -1;
+
+    if (radarVersions) {
+        if (versionSlug === 'latest') {
+            versionId = getLastradarVersionId(radarVersions);
+        } else versionId = Number(versionSlug?.split('-')[1]);
+    }
 
     const {
         data: radar,
         isFetching: radarIsFetching,
         error: radarError,
-    } = useGetRadarByVersionIdQuery(Number(lastVersionId), { skip: !radarVersions });
+    } = useGetRadarByVersionIdQuery(versionId, { skip: !radarVersions });
 
     if (radarError) {
         return <ErrorMessage errorStatus={isFetchBaseQueryError(radarError) ? radarError.status : null} />;
