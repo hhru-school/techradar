@@ -18,6 +18,7 @@ import * as Yup from 'yup';
 
 import { setRadarConstrTechModalOpen } from '../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import SideBar from '../components/sideBar/SideBar';
 import AddTechModal from './addTechModal/AddTechModal';
 import RadarConstructorGrid from './radarConstructorGrid/RadarConstructorGrid';
 import RadarConstructorContainer from './radarContainer/RadarConstrucorContainer';
@@ -46,7 +47,7 @@ type RadarInput = {
     placeholder: string;
 };
 
-const RadarNameInput = ({ label, id, ...props }: RadarInput): ReactElement => {
+const ElementNameInput = ({ label, id, ...props }: RadarInput): ReactElement => {
     const [field, meta] = useField(props);
     const [editNameReadOnly, setEditNameReadOnly] = useState<boolean>(true);
 
@@ -71,7 +72,6 @@ const RadarNameInput = ({ label, id, ...props }: RadarInput): ReactElement => {
                         </label>
                     ),
                 }}
-                placeholder="Введите название радара"
             />
             <FormHelperText id="helper-text">{meta.error}</FormHelperText>
         </Box>
@@ -130,13 +130,23 @@ const RadarConstructor: FC = () => {
                             justifyContent: 'center',
                         }}
                     >
-                        <Grid item sm={6} sx={{ padding: '15px 0 0 0' }}>
-                            <RadarNameInput
+                        <Grid
+                            item
+                            sm={6}
+                            sx={{
+                                padding: '15px 0 0 0',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <ElementNameInput
                                 name="radarName"
                                 id="radarName"
                                 label="Название радара"
                                 placeholder="Введите название радара"
                             />
+                            <SideBar />
                         </Grid>
                         <Grid item sm={4}>
                             <RadarPublishBtn />
