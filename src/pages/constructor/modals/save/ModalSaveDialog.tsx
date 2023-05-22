@@ -10,6 +10,9 @@ import SuccessDialog from './SuccessDialog';
 
 import styles from '../modal.module.less';
 
+// mock
+const companyId = 1;
+
 const ModalSaveDialog: FC = () => {
     const radarName = useAppSelector((state) => state.editRadar.radarName);
     const radarVersion = useAppSelector((state) => state.editRadar.radarVersion);
@@ -31,7 +34,8 @@ const ModalSaveDialog: FC = () => {
                         radarName={radarName}
                         radarVersion={radarVersion}
                         radarId={data.radarId}
-                        companyId={1}
+                        companyId={companyId}
+                        versionId={data.id}
                     />
                 )}
             </div>
