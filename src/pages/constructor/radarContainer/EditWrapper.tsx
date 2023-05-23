@@ -1,7 +1,7 @@
 import { FC, memo, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
-import { FormattedRadarData } from '../../../api/radarApiUtils';
+import { BasicRadarData } from '../../../api/radarApiUtils';
 import Radar from '../../../components/radar/Radar';
 import RadarBlip from '../../../components/radar/RadarBlip';
 import { defaultBlipRadius } from '../../../components/radar/styleConfig';
@@ -17,7 +17,7 @@ import styles from './wrapper.module.less';
 type Position = { x: number; y: number };
 
 type Props = {
-    radar: FormattedRadarData;
+    radar: BasicRadarData;
 };
 
 const EditWrapper: FC<Props> = ({ radar }) => {

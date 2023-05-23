@@ -1,8 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { generateData, sectorNames, ringNames } from '../components/radar/testData';
+import { BasicRadarData } from '../api/radarApiUtils';
 import { Blip } from '../components/radar/types';
+import {
+    defaultRadarName,
+    defaultRingNames,
+    defaultSectorNames,
+    defaultVersionName,
+} from '../pages/constructor/config';
 
 interface Segment {
     sectorName: string;
@@ -25,6 +31,13 @@ interface MoveBlipAsset {
     ringName: string;
 }
 
+interface EditRadarInitialDataset {
+    radarId: number;
+    radarName: string;
+    radarVersion: string;
+    radar: BasicRadarData;
+}
+
 export enum EventSuggest {
     Delete = 'delete',
     Add = 'add',
@@ -33,7 +46,16 @@ export enum EventSuggest {
     EditText = 'editText',
 }
 
+export enum EditMode {
+    NewRadarCreation,
+    NewVersionCreation,
+    VersionEditing,
+}
+
 interface EditRadarState {
+    blipEventId: number | null;
+    mode: EditMode;
+    radarId: number | null;
     radarName: string;
     radarVersion: string;
     isDragging: boolean;
@@ -62,9 +84,11 @@ interface EditRadarState {
 }
 
 const initialState: EditRadarState = {
-    radarName: 'My-new-radar',
-    radarVersion: 'Q1-2024',
-
+    blipEventId: null,
+    mode: EditMode.NewRadarCreation,
+    radarId: null,
+    radarName: defaultRadarName,
+    radarVersion: defaultVersionName,
     isDragging: false,
     blip: null,
     blipAsset: null,
@@ -83,14 +107,11 @@ const initialState: EditRadarState = {
     editingRingName: null,
     showAddNewSectorModal: false,
     showAddNewRingModal: false,
-    // mock
-    sectorNames,
-    ringNames,
-    blips: generateData(62),
-    //
+    sectorNames: defaultSectorNames,
+    ringNames: defaultRingNames,
+    blips: [],
 
     showSaveRadarDialog: false,
-
     showEditIcon: false,
 };
 
@@ -220,7 +241,7 @@ export const editRadarSlice = createSlice({
         },
 
         addNewBlip: (state, action: PayloadAction<Blip>) => {
-            const maxId = Math.max(...state.blips.map((blip) => blip.id));
+            const maxId = state.blips.length > 0 ? Math.max(...state.blips.map((blip) => blip.id)) : 0;
             state.blips.push({ ...action.payload, id: maxId + 1 });
             state.showCreateBlipModal = false;
             state.activeSegment = null;
@@ -355,12 +376,34 @@ export const editRadarSlice = createSlice({
         setShowSaveRadarDialog: (state, action: PayloadAction<boolean>) => {
             state.showSaveRadarDialog = action.payload;
         },
-
+        setRadarId: (state, action: PayloadAction<number>) => {
+            state.radarId = action.payload;
+        },
         setRadarName: (state, action: PayloadAction<string>) => {
             state.radarName = action.payload;
         },
         setRadarVersion: (state, action: PayloadAction<string>) => {
             state.radarVersion = action.payload;
+        },
+
+        setEditRadarParams: (state, action: PayloadAction<EditRadarInitialDataset>) => {
+            state.radarId = action.payload.radarId;
+            state.radarName = action.payload.radarName;
+            state.radarVersion = action.payload.radarVersion;
+            state.sectorNames = action.payload.radar.sectorNames;
+            state.ringNames = action.payload.radar.ringNames;
+            state.blips = action.payload.radar.blips;
+        },
+
+        setEditMode: (state, action: PayloadAction<EditMode>) => {
+            state.mode = action.payload;
+            if (action.payload === EditMode.NewVersionCreation) {
+                state.radarId = null;
+            }
+        },
+
+        setBlipEventId: (state, action: PayloadAction<number>) => {
+            state.blipEventId = action.payload;
         },
     },
 });
@@ -401,8 +444,11 @@ export const {
     openAddNewRingModal,
     addNewSector,
     setShowSaveRadarDialog,
+    setRadarId,
     setRadarName,
     setRadarVersion,
+    setEditRadarParams,
+    setEditMode,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;
