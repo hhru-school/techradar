@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { BasicRadarData } from '../api/radarApiUtils';
+import { BasicRadarData, RadarData } from '../api/radarApiUtils';
 import { Blip } from '../components/radar/types';
 import {
     defaultRadarName,
@@ -46,15 +46,18 @@ export enum EventSuggest {
     EditText = 'editText',
 }
 
-export enum EditMode {
+export enum ConstructorMode {
     NewRadarCreation,
     NewVersionCreation,
     VersionEditing,
 }
 
 interface EditRadarState {
+    isLoading: boolean;
+    hasError: boolean;
+
     blipEventId: number | null;
-    mode: EditMode;
+    mode: ConstructorMode;
     radarId: number | null;
     radarName: string;
     radarVersion: string;
@@ -84,8 +87,11 @@ interface EditRadarState {
 }
 
 const initialState: EditRadarState = {
+    isLoading: false,
+    hasError: false,
+
     blipEventId: null,
-    mode: EditMode.NewRadarCreation,
+    mode: ConstructorMode.NewRadarCreation,
     radarId: null,
     radarName: defaultRadarName,
     radarVersion: defaultVersionName,
@@ -395,15 +401,37 @@ export const editRadarSlice = createSlice({
             state.blips = action.payload.radar.blips;
         },
 
-        setEditMode: (state, action: PayloadAction<EditMode>) => {
+        setEditMode: (state, action: PayloadAction<ConstructorMode>) => {
             state.mode = action.payload;
-            if (action.payload === EditMode.NewVersionCreation) {
+            if (action.payload === ConstructorMode.NewVersionCreation) {
                 state.radarId = null;
             }
         },
 
         setBlipEventId: (state, action: PayloadAction<number>) => {
             state.blipEventId = action.payload;
+        },
+
+        setIsLoading: (state, action: PayloadAction<boolean>) => {
+            state.isLoading = action.payload;
+        },
+
+        setHasError: (state, action: PayloadAction<boolean>) => {
+            state.hasError = action.payload;
+        },
+
+        setInitialRadarAsset: (state, action: PayloadAction<RadarData>) => {
+            const radar = action.payload;
+            state.sectorNames = radar.sectorNames;
+            state.ringNames = radar.ringNames;
+            state.blips = radar.blips;
+            state.radarId = radar.id;
+            state.radarName = radar.name;
+        },
+
+        cleanUp: (state) => {
+            state.isLoading = false;
+            state.hasError = false;
         },
     },
 });
@@ -449,6 +477,10 @@ export const {
     setRadarVersion,
     setEditRadarParams,
     setEditMode,
+    setIsLoading,
+    setHasError,
+    setInitialRadarAsset,
+    cleanUp,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;

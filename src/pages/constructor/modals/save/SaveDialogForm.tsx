@@ -4,7 +4,7 @@ import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
 import {
-    EditMode,
+    ConstructorMode,
     setEditMode,
     setRadarName,
     setRadarVersion,
@@ -78,9 +78,9 @@ const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
     }
 
     useEffect(() => {
-        if (isNewRadarCreation) dispatch(setEditMode(EditMode.NewRadarCreation));
-        if (isVersionEditing) dispatch(setEditMode(EditMode.VersionEditing));
-        if (isNewVersionCreation) dispatch(setEditMode(EditMode.NewVersionCreation));
+        if (isNewRadarCreation) dispatch(setEditMode(ConstructorMode.NewRadarCreation));
+        if (isVersionEditing) dispatch(setEditMode(ConstructorMode.VersionEditing));
+        if (isNewVersionCreation) dispatch(setEditMode(ConstructorMode.NewVersionCreation));
     }, [isNewRadarCreation, isVersionEditing, isNewVersionCreation, dispatch]);
 
     return (
