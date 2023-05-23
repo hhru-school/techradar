@@ -137,3 +137,15 @@ export interface IndexBlipEventApi {
     creationTime: string;
     lastChangeTime: string;
 }
+
+export interface VersionData {
+    id: number;
+    name: string;
+    release: boolean;
+    radarId: number;
+    blipEventId: number;
+    creationTime: string | Date;
+    lastChangeTime: string | Date;
+}
+
+export type RadarVersionData = Array<VersionData>;

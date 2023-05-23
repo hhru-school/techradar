@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS radar
     creation_time    TIMESTAMP   NOT NULL,
     last_change_time TIMESTAMP   NOT NULL,
     PRIMARY KEY (radar_id),
+    UNIQUE (name, company_id),
     CONSTRAINT fk_radar_company1
         FOREIGN KEY (company_id)
             REFERENCES company (company_id)
@@ -125,6 +126,7 @@ CREATE TABLE IF NOT EXISTS blip
     quadrant_id      BIGINT       NULL,
     ring_id          BIGINT       NULL,
     PRIMARY KEY (blip_id),
+    UNIQUE (name, radar_id),
     CONSTRAINT fk_technology_radar1
         FOREIGN KEY (radar_id)
             REFERENCES radar (radar_id)

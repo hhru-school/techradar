@@ -5,13 +5,12 @@ import { ruRU } from '@mui/x-data-grid';
 
 import Header from './components/header/Header';
 import RequireAuth from './components/requireAuth.tsx/RequireAuth';
-import MyRadars from './pages/admin/myRadars/MyRadars';
 import RadarConstructor from './pages/admin/radarConstructor/RadarConstructor';
 import TechSinglePage from './pages/admin/techSinglePage/TechSinglePage';
 import Constructor from './pages/constructor/Constructor';
 import TechRadar from './pages/techradar/TechRadar';
-import { useCredentials } from './store/hooks';
 import { ConstructorMode } from './store/editRadarSlice';
+import { useCredentials } from './store/hooks';
 
 const theme = createTheme(
     {
@@ -46,7 +45,6 @@ const App: FC = () => {
                 <Route path="/techradar">
                     <Route path="company/:companySlug/radar/:radarSlug/version/:versionSlug" element={<TechRadar />} />
                 </Route>
-                <Route path="/my-radars/*" element={<MyRadars />} />
                 <Route path="/single" element={<TechSinglePage />} />
                 <Route path="/constructor">
                     <Route path="new/radar" element={<Constructor />} />

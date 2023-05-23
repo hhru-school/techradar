@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { styles } from '../../../../components/modals/authFormModal/AuthFormModal';
 import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { createNewRadarSection, setRadarsCreateModalOpen } from '../../../../store/myRadarsSlice';
+import { setRadarsCreateModalOpen } from '../../../../store/myRadarsSlice';
 
 export interface Values {
     name: string;
@@ -39,7 +39,6 @@ const MyRadarCreateModal: FC = () => {
                     }}
                     validationSchema={validSchema}
                     onSubmit={(values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-                        dispatch(createNewRadarSection(values.name));
                         dispatch(setRadarsCreateModalOpen(false));
                         setSubmitting(false);
                     }}
