@@ -32,7 +32,7 @@ const SelectVersion: FC<Props> = ({ versions, version, companyId, radarId }) => 
     const changeHandler = useCallback(
         (event: SelectChangeEvent) => {
             const version = getVersionById(versions, event.target.value) as Version;
-            navigate(buildRadarUrl(companyId, radarId, version.name, version.id), { replace: true });
+            navigate(buildRadarUrl(companyId, radarId, version.id), { replace: true });
         },
         [navigate, radarId, companyId, versions]
     );

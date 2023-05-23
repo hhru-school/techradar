@@ -21,8 +21,8 @@ const SuccessDialog: FC<Props> = ({ radarName, radarVersion, radarId, versionId,
     const navigate = useNavigate();
 
     const linkBtnHandler = useCallback(() => {
-        navigate(buildRadarUrl(companyId, radarId, radarVersion, versionId), { replace: true });
-    }, [navigate, radarId, radarVersion, companyId, versionId]);
+        navigate(buildRadarUrl(companyId, radarId, versionId), { replace: true });
+    }, [navigate, radarId, companyId, versionId]);
 
     return (
         <>
