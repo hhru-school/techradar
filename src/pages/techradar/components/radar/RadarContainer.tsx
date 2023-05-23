@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Skeleton } from '@mui/material';
 
-import { FormattedRadarData } from '../../../../api/radarApiUtils';
+import { BasicRadarData } from '../../../../api/radarApiUtils';
 import Radar from '../../../../components/radar/Radar';
 import { RadarComponentVariant } from '../../../../components/radar/types';
 import SectorControlPanel from '../controls/SectorControlPanel';
@@ -9,7 +9,7 @@ import SectorControlPanel from '../controls/SectorControlPanel';
 import styles from './radar.module.less';
 
 type Props = {
-    radar?: FormattedRadarData;
+    radar?: BasicRadarData;
     isLoading?: boolean;
 };
 

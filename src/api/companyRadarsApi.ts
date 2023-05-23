@@ -7,13 +7,15 @@ import { ApiRadarData, FormattedRadarData, formatApiData } from './radarApiUtils
 // const baseUrl = '/api';
 import { RootState } from '../store/store';
 import {
-    ApiRadarData,
     CreateRadarApiData,
     RadarApiDataResponse,
     CreateRadarVersionDataApi,
     RadarVersionDataApi,
-    FormattedRadarData,
+    BasicRadarData,
     formatApiData,
+    CreateBlipEventApi,
+    CreateBlipEventApiResponse,
+    RadarData,
 } from './radarApiUtils';
 
 const baseUrl = '/api/';
@@ -60,6 +62,14 @@ export type RadarVersionData = Array<{
 //         }),
 //     }),
 // });
+// http://localhost:3000/techradar/company/1/radar/23424323/version/23434
+
+// создание радара за один раз: /api/containers
+// Создать новую версию для радара POST на /api/radar_versions
+// Получить все версии радара: GET на api/radar_versions?radarId=1
+// Получение радара определенной версии (по blipEventId): GET на api/containers?blipEventId=77
+// Получить лог радара: GET на api/blip_events/radar_log?blipEventId=78
+// Получение радара определенной версии (по radarVersionId): GET на api/containers?radarVersionId=3
 
 export const authApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -75,6 +85,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
         getAllRadarVersions: builder.query<CreateRadarVersionDataApiResponse[], number>({
             query: (radarId) => `radar_versions?radarId=${radarId}`,
         }),
+        getRadarByVersionId: builder.query<RadarData, number>({
+            query: (radarVersionId) => `containers?radar-version-id=${radarVersionId}`,
+            transformResponse: (rawResult: RadarApiDataResponse) => formatApiData(rawResult),
+        }),
+
+        getAllRadarVersions: builder.query<RadarVersionDataApi[], number>({
+            query: (radarId) => `radar-versions/?radar-id=${radarId}`,
+        }),
 
         saveNewRadar: builder.mutation<RadarVersionDataApi, CreateRadarApiData>({
             async queryFn(radarData, { getState }, _options, fetchBaseQuery) {
@@ -85,15 +103,19 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 });
 
                 if (radarResponse.error) return { error: radarResponse.error };
-                const radar = radarResponse.data as RadarApiDataResponse;
+                const newRadar = radarResponse.data as RadarApiDataResponse;
+
+                const state = getState() as RootState;
+
                 const versionRequestBody: CreateRadarVersionDataApi = {
-                    name: (getState() as RootState).editRadar.radarVersion,
+                    name: state.editRadar.radarVersion,
                     release: false,
-                    radarId: radar.radarId,
-                    blipEventId: radar.blipEventId,
+                    radarId: newRadar.radar.id,
+                    blipEventId: Number(newRadar.blipEventId),
                 };
+
                 const result = await fetchBaseQuery({
-                    url: 'radar_versions',
+                    url: 'radar-versions',
                     method: 'POST',
                     body: versionRequestBody,
                 });
@@ -114,6 +136,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 method: 'DELETE',
             }),
             invalidatesTags: ['VersionsList'],
+        }),
+
+        createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApi>({
+            query: (body) => ({ url: `/api/blip-events`, method: 'POST', body }),
         }),
     }),
 });

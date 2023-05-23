@@ -29,8 +29,8 @@ const getVersionNameById = (versions: RadarVersionDataApi[], id: number): Versio
 const TechRadar: FC = () => {
     const { companySlug, radarSlug, versionSlug } = useParams();
 
-    const companyId = Number(companySlug?.split('-')[1]);
-    const radarId = Number(radarSlug?.split('-')[1]);
+    const companyId = Number(companySlug);
+    const radarId = Number(radarSlug);
 
     const { data: radars, isLoading: radarsIsLoading } = useGetAllCompanyRadarsQuery(companyId);
 
@@ -41,7 +41,7 @@ const TechRadar: FC = () => {
     if (radarVersions) {
         if (versionSlug === 'latest') {
             versionId = getLastradarVersionId(radarVersions);
-        } else versionId = Number(versionSlug?.split('-')[1]);
+        } else versionId = Number(versionSlug);
     }
 
     const {
