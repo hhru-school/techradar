@@ -1,12 +1,12 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 
-import { FormattedRadarData } from '../../../api/radarApiUtils';
+import { BasicRadarData } from '../../../api/radarApiUtils';
 import { Blip } from '../../../components/radar/types';
 import EditableLegendMain from './EditableLegendMain';
 import SearchField from './SearchField';
 
 type Props = {
-    radar: FormattedRadarData;
+    radar: BasicRadarData;
 };
 
 const getMatchingBlips = (query: string, blips: Blip[]) => {

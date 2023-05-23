@@ -2,46 +2,56 @@ import { Blip } from '../components/radar/types';
 
 export const getUrl = (url: string, hostUrl = ''): string => hostUrl.concat(url);
 
-export const buildRadarUrl = (companyId: number, radarId: number, versionName: string, versionId?: number): string => {
-    const version = versionId ? `version-${versionId}-${versionName}` : 'latest';
-    return `/techradar/company-${companyId}/radar-${radarId}/${version}`;
+// Пример запроса радара
+// http://localhost:3000/techradar/company/123/radar/123/version/123
+
+export const buildRadarUrl = (companyId: number, radarId: number, versionId?: number): string => {
+    const version = versionId ? `${versionId}` : 'latest';
+    return `/techradar/company/${companyId}/radar/${radarId}/version/${version}`;
 };
 
-export interface DataQuadrant {
-    id: number;
-    name: string;
-    position: number;
-}
+// export interface DataQuadrant {
+//     id: number;
+//     name: string;
+//     position: number;
+// }
 
-export interface DataRing {
-    id: number;
-    name: string;
-    position: number;
-}
+// export interface DataRing {
+//     id: number;
+//     name: string;
+//     position: number;
+// }
 
-export interface DataBlip {
-    id: number;
-    name: string;
-    description: string;
-    quadrantId: number;
-    ringId: number;
-}
+// export interface DataBlip {
+//     id: number;
+//     name: string;
+//     description: string;
+//     quadrantId: number;
+//     ringId: number;
+// }
 
-export interface ApiRadarData {
-    id: number;
-    name: string;
-    quadrants: DataQuadrant[];
-    rings: DataRing[];
-    blips: DataBlip[];
-}
+// export interface RadraDataApi {
+//     radarId: number;
+//     name: string;
+//     quadrants: DataQuadrant[];
+//     rings: DataRing[];
+//     blips: DataBlip[];
+// }
 
-export interface FormattedRadarData {
+export interface BasicRadarData {
     blips: Blip[];
     sectorNames: string[];
     ringNames: string[];
 }
 
-export interface CreateRadarData extends FormattedRadarData {
+export interface RadarData extends BasicRadarData {
+    id: number;
+    name: string;
+    companyId: number;
+    authorId: number;
+}
+
+export interface CreateRadarData extends BasicRadarData {
     name: string;
     companyId: number;
     authorId: number;
@@ -69,8 +79,13 @@ export interface CreateRadarApiData {
 }
 
 export interface RadarApiDataResponse {
-    blipEventId: number;
-    radarId: number;
+    blipEventId: number | null;
+    radar: {
+        id: number;
+        name: string;
+        authorId: number;
+        companyId: number;
+    };
     quadrants: {
         id: number;
         name: string;
@@ -87,6 +102,8 @@ export interface RadarApiDataResponse {
         id: number;
         name: string;
         description: string;
+        quadrantId: number;
+        ringId: number;
         radarId: number;
     }[];
 }
@@ -104,7 +121,24 @@ export interface RadarVersionDataApi extends CreateRadarVersionDataApi {
     lastChangeTime: string;
 }
 
-export const formatApiData = (apiData: ApiRadarData): FormattedRadarData => {
+export interface CreateBlipEventApi {
+    comment: string;
+    parentId: number;
+    blipId: number;
+    quadrantId: number;
+    ringId: number;
+    authorId: number;
+}
+
+export interface CreateBlipEventApiResponse {
+    id: number;
+    comment: string;
+    parentId: number;
+    creationTime: string;
+    lastChangeTime: string;
+}
+
+export const formatApiData = (apiData: RadarApiDataResponse): RadarData => {
     const sectorNames = apiData.quadrants
         .sort((quadrant1, quadrant2) => quadrant1.position - quadrant2.position)
         .map((quadrant) => quadrant.name);
@@ -140,6 +174,10 @@ export const formatApiData = (apiData: ApiRadarData): FormattedRadarData => {
         .map((blip, i) => ({ ...blip, id: i + 1 }));
 
     return {
+        id: apiData.radar.id,
+        name: apiData.radar.name,
+        companyId: apiData.radar.companyId,
+        authorId: apiData.radar.companyId,
         sectorNames,
         ringNames,
         blips: sortedBlips,
