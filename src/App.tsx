@@ -12,6 +12,7 @@ import Constructor from './pages/constructor/Constructor';
 import TechRadar from './pages/techradar/TechRadar';
 import { setCredentials } from './store/authSlice';
 import { useAppDispatch } from './store/hooks';
+import { ConstructorMode } from './store/editRadarSlice';
 
 const theme = createTheme(
     {
@@ -65,8 +66,15 @@ const App: FC = () => {
                 </Route>
                 <Route path="/my-radars/*" element={<MyRadars />} />
                 <Route path="/constructor">
-                    <Route path="new" element={<Constructor />} />
-                    <Route path="edit/:versionId" element={<Constructor mode="edit" />} />
+                    <Route path="new/radar" element={<Constructor />} />
+                    <Route
+                        path="edit/version/:versionId"
+                        element={<Constructor mode={ConstructorMode.VersionEditing} />}
+                    />
+                    <Route
+                        path="new/version/radar/:radarId"
+                        element={<Constructor mode={ConstructorMode.NewVersionCreation} />}
+                    />
                 </Route>
                 <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
                 <Route path="/admin/*" element={<RequireAuth />} />
