@@ -43,7 +43,7 @@ const TechRadar: FC = () => {
     if (radarVersions) {
         if (versionSlug === 'latest') {
             versionId = getLastradarVersionId(radarVersions);
-        } else versionId = Number(versionSlug?.split('-')[1]);
+        } else versionId = Number(versionSlug);
     }
 
     const {
