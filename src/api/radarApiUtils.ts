@@ -115,8 +115,17 @@ export interface CreateRadarVersionDataApi {
     blipEventId: number;
 }
 
-export interface RadarVersionDataApi extends CreateRadarVersionDataApi {
+// export interface RadarVersionDataApi extends CreateRadarVersionDataApi {
+//     id: number;
+//     creationTime: string;
+//     lastChangeTime: string;
+// }
+export interface RadarVersionApiResponse {
     id: number;
+    name: string;
+    release: boolean;
+    radarId: number;
+    blipEventId: number;
     creationTime: string;
     lastChangeTime: string;
 }
