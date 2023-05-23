@@ -2,7 +2,7 @@ import { FC, memo, useCallback, useMemo } from 'react';
 import { Delete, Edit } from '@mui/icons-material';
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, GridRowParams, useGridApiRef } from '@mui/x-data-grid';
 
-import { FormattedRadarData } from '../../../api/radarApiUtils';
+import { BasicRadarData } from '../../../api/radarApiUtils';
 import { clearActiveBlip, setActiveBlip } from '../../../store/activeBlipSlice';
 import { openDeleteBlipModal, openEditBlipModal } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import styles from './tableContainer.module.less';
 
 type Props = {
-    radar: FormattedRadarData;
+    radar: BasicRadarData;
 };
 
 const nameColumnWidth = 120;

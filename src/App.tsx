@@ -61,12 +61,12 @@ const App: FC = () => {
             <Routes>
                 <Route path="/1/1" element={<TechRadar />} />
                 <Route path="/techradar">
-                    <Route path=":companySlug/:radarSlug/:versionSlug" element={<TechRadar />} />
+                    <Route path="company/:companySlug/radar/:radarSlug/version/:versionSlug" element={<TechRadar />} />
                 </Route>
                 <Route path="/my-radars/*" element={<MyRadars />} />
                 <Route path="/constructor">
                     <Route path="new" element={<Constructor />} />
-                    <Route path="edit/:versionSlug" element={<Constructor mode="edit" />} />
+                    <Route path="edit/:versionId" element={<Constructor mode="edit" />} />
                 </Route>
                 <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
                 <Route path="/admin/*" element={<RequireAuth />} />
