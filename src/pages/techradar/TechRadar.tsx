@@ -2,16 +2,11 @@ import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 
-import {
-    useGetAllCompanyRadarsQuery,
-    useGetAllRadarVersionsQuery,
-    useGetRadarByVersionIdQuery,
-} from '../../api/companyRadarsApi';
+import { useGetAllCompanyRadarsQuery, useGetRadarByVersionIdQuery } from '../../api/companyRadarsApi';
 import { isFetchBaseQueryError } from '../../api/helpers';
 // import { RadarVersionDataApi } from '../../api/radarApiUtils';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
-import SelectVersion from './components/selectMenu/SelectVersion';
 import NavTabsContainer from './components/tab/NavTabsContainer';
 
 export interface Version {
@@ -38,19 +33,11 @@ const TechRadar: FC = () => {
 
     // const { data: radarVersions } = useGetAllRadarVersionsQuery(radarId);
 
-    let versionId = -1;
-
-    if (radarVersions) {
-        if (versionSlug === 'latest') {
-            versionId = getLastradarVersionId(radarVersions);
-        } else versionId = Number(versionSlug);
-    }
-
     const {
         data: radar,
         isFetching: radarIsFetching,
         error: radarError,
-    } = useGetRadarByVersionIdQuery(versionId, { skip: !radarVersions });
+    } = useGetRadarByVersionIdQuery(versionId ?? skipToken);
 
     if (radarError) {
         return <ErrorMessage errorStatus={isFetchBaseQueryError(radarError) ? radarError.status : null} />;
