@@ -377,7 +377,9 @@ export const editRadarSlice = createSlice({
         setShowSaveRadarDialog: (state, action: PayloadAction<boolean>) => {
             state.showSaveRadarDialog = action.payload;
         },
-
+        setRadarId: (state, action: PayloadAction<number>) => {
+            state.radarId = action.payload;
+        },
         setRadarName: (state, action: PayloadAction<string>) => {
             state.radar.name = action.payload;
         },
@@ -457,6 +459,7 @@ export const {
     openAddNewRingModal,
     addNewSector,
     setShowSaveRadarDialog,
+    setRadarId,
     setRadarName,
     setCurrentRadarVersionName,
     setEditMode,

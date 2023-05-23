@@ -190,6 +190,10 @@ export const companyRadarsApi = createApi({
                 return { data: blipEvent };
             },
         }),
+
+        createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApi>({
+            query: (body) => ({ url: `/api/blip-events`, method: 'POST', body }),
+        }),
     }),
 });
 
@@ -200,4 +204,5 @@ export const {
     useGetAllRadarVersionsQuery,
     useAddNewBlipToRadarMutation,
     useSaveNewRadarMutation,
+    useCreateBlipEventMutation,
 } = companyRadarsApi;
