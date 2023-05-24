@@ -99,6 +99,19 @@ export interface CreateRadarVersionDataApi {
     blipEventId: number;
 }
 
+export interface CreateBlipApiRequest {
+    name: string;
+    description: string;
+    radarId: number;
+}
+
+export interface CreateBlipApiResponse {
+    id: number;
+    name: string;
+    description: string;
+    radarId: number;
+}
+
 export interface CreateVersionApiRequest {
     name: string;
     release: boolean;
@@ -116,7 +129,7 @@ export interface VersionApiResponse {
     lastChangeTime: string;
 }
 
-export interface CreateBlipEventApi {
+export interface CreateBlipEventApiRequest {
     comment: string;
     parentId: number;
     blipId: number;

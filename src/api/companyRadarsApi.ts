@@ -1,16 +1,18 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+import { Blip } from '../components/radar/types';
 import { RootState } from '../store/store';
 import {
     CreateRadarApiData,
     RadarApiDataResponse,
     BasicRadarData,
     formatApiData,
-    CreateBlipEventApi,
-    CreateBlipEventApiResponse,
     RadarData,
     CreateRadarVersionDataApi,
     VersionApiResponse,
+    CreateBlipEventApiResponse,
+    CreateBlipEventApiRequest,
+    CreateBlipApiRequest,
 } from './radarApiUtils';
 
 const baseUrl = '/api/';
@@ -87,8 +89,40 @@ export const authApiSlice = apiSlice.injectEndpoints({
             },
         }),
 
-        createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApi>({
-            query: (body) => ({ url: `/api/blip-events`, method: 'POST', body }),
+        addNewBlipToRadar: builder.mutation<CreateBlipEventApiResponse, Blip>({
+            async queryFn(blip, _, __, fetchBaseQuery) {
+                const blipRequest: CreateBlipApiRequest = {
+                    name: blip.name,
+                    description: blip.description || '',
+                    radarId: 1000500,
+                };
+
+                const blipResponse = await fetchBaseQuery({
+                    url: 'blips',
+                    method: 'POST',
+                    body: blipRequest,
+                });
+
+                if (blipResponse.error) return { error: blipResponse.error };
+
+                const blipEventRequest: CreateBlipEventApiRequest = {
+                    comment: '',
+                    parentId: 9999,
+                    blipId: 9999,
+                    quadrantId: 2,
+                    ringId: 2,
+                    authorId: 100500,
+                };
+
+                const blipEventResponse = await fetchBaseQuery({
+                    url: 'blip-events',
+                    method: 'POST',
+                    body: blipEventRequest,
+                });
+
+                if (blipEventResponse.error) return { error: blipEventResponse.error };
+                return { data: blipEventResponse.data as CreateBlipEventApiResponse };
+            },
         }),
     }),
 });
@@ -99,5 +133,4 @@ export const {
     useGetRadarByVersionIdQuery,
     useGetAllRadarVersionsQuery,
     useSaveNewRadarMutation,
-    useCreateBlipEventMutation,
 } = companyRadarsApi;
