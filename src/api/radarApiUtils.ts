@@ -99,7 +99,6 @@ export interface CreateRadarVersionDataApi {
     blipEventId: number;
 }
 
-<<<<<<< HEAD
 export interface CreateBlipApiRequest {
     name: string;
     description: string;
@@ -113,8 +112,6 @@ export interface CreateBlipApiResponse {
     radarId: number;
 }
 
-=======
->>>>>>> 015742f (dispatcher fix)
 export interface CreateVersionApiRequest {
     name: string;
     release: boolean;
