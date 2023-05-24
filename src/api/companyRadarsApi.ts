@@ -204,5 +204,4 @@ export const {
     useGetAllRadarVersionsQuery,
     useAddNewBlipToRadarMutation,
     useSaveNewRadarMutation,
-    useCreateBlipEventMutation,
 } = companyRadarsApi;
