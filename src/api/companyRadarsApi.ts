@@ -119,15 +119,15 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
                 if (blipResponse.error) return { error: blipResponse.error };
 
-                const newBlipApi = blipResponse.data as CreateBlipApiResponse;
+                const newApiBlip = blipResponse.data as CreateBlipApiResponse;
 
                 const blipEventRequest: CreateBlipEventApiRequest = {
                     comment: '',
                     parentId: Number(state.currentBlipEventId),
-                    blipId: newBlipApi.id,
+                    blipId: newApiBlip.id,
                     quadrantId: getQuadrantId(state, blip.sectorName),
                     ringId: getRingId(state, blip.ringName),
-                    authorId: 100500,
+                    authorId: 1,
                 };
 
                 const blipEventResponse = await fetchBaseQuery({
@@ -148,5 +148,6 @@ export const {
     useGetRadarQuery,
     useGetRadarByVersionIdQuery,
     useGetAllRadarVersionsQuery,
+    useAddNewBlipToRadarMutation,
     useSaveNewRadarMutation,
 } = companyRadarsApi;

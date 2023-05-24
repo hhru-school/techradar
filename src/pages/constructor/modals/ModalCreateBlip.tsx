@@ -3,7 +3,8 @@ import { Button, Modal } from '@mui/material';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { addNewBlip, closeCreateBlipModal } from '../../../store/editRadarSlice';
+import { useAddNewBlipToRadarMutation } from '../../../api/companyRadarsApi';
+import { ConstructorMode, addNewBlip, closeCreateBlipModal } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import ModalSelectField from './ModalSelectField';
 import ModalTextField from './ModalTextField';
@@ -11,6 +12,13 @@ import ModalTextField from './ModalTextField';
 import styles from './modal.module.less';
 
 const btnSx = { width: 140 };
+
+interface FieldValues {
+    name: string;
+    sectorName: string;
+    ringName: string;
+    description: string;
+}
 
 const validationSchema = Yup.object({
     name: Yup.string().trim().required('Обязательное поле'),
@@ -20,9 +28,30 @@ const ModalCreateBlip: FC = () => {
     const sectorNames = useAppSelector((state) => state.editRadar.sectorNames);
     const ringNames = useAppSelector((state) => state.editRadar.ringNames);
 
+    const mode = useAppSelector((state) => state.editRadar.mode);
+
+    const isNewRadar = mode === ConstructorMode.NewRadarCreation;
+
     const activeSegment = useAppSelector((state) => state.editRadar.activeSegment);
 
+    const [addNewBlipEvent] = useAddNewBlipToRadarMutation();
+
     const dispatch = useAppDispatch();
+
+    const submitHandler = useCallback(
+        async (values: FieldValues) => {
+            const blip = {
+                ...values,
+                id: -1,
+            };
+            if (!isNewRadar) {
+                await addNewBlipEvent(blip);
+            }
+
+            dispatch(addNewBlip(blip));
+        },
+        [dispatch, isNewRadar, addNewBlipEvent]
+    );
 
     const cancelBtnClickHandler = useCallback(() => {
         dispatch(closeCreateBlipModal());
@@ -40,16 +69,8 @@ const ModalCreateBlip: FC = () => {
                         description: '',
                     }}
                     validationSchema={validationSchema}
-                    onSubmit={(values, { setSubmitting }) => {
-                        dispatch(
-                            addNewBlip({
-                                id: -1,
-                                name: values.name,
-                                ringName: values.ringName,
-                                sectorName: values.sectorName,
-                                description: values.description,
-                            })
-                        );
+                    onSubmit={async (values, { setSubmitting }) => {
+                        await submitHandler(values);
                         setSubmitting(false);
                     }}
                 >
