@@ -9,8 +9,8 @@ import {
     CreateBlipEventApi,
     CreateBlipEventApiResponse,
     RadarData,
-    RadarVersionApiResponse,
     CreateRadarVersionDataApi,
+    VersionApiResponse,
 } from './radarApiUtils';
 
 const baseUrl = '/api/';
@@ -51,11 +51,11 @@ export const authApiSlice = apiSlice.injectEndpoints({
             transformResponse: (rawResult: RadarApiDataResponse) => formatApiData(rawResult),
         }),
 
-        getAllRadarVersions: builder.query<RadarVersionApiResponse[], number>({
+        getAllRadarVersions: builder.query<VersionApiResponse[], number>({
             query: (radarId) => `radar-versions/?radar-id=${radarId}`,
         }),
 
-        saveNewRadar: builder.mutation<RadarVersionApiResponse, CreateRadarApiData>({
+        saveNewRadar: builder.mutation<VersionApiResponse, CreateRadarApiData>({
             async queryFn(radarData, { getState }, _options, fetchBaseQuery) {
                 const radarResponse = await fetchBaseQuery({
                     url: 'containers',
@@ -69,7 +69,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 const state = getState() as RootState;
 
                 const versionRequestBody: CreateRadarVersionDataApi = {
-                    name: state.editRadar.radarVersion,
+                    name: state.editRadar.currentVersionName,
                     release: false,
                     radarId: newRadar.radar.id,
                     blipEventId: Number(newRadar.blipEventId),
@@ -83,7 +83,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
                 if (result.error) return { error: result.error };
 
-                return { data: result.data as RadarVersionApiResponse };
+                return { data: result.data as VersionApiResponse };
             },
         }),
 

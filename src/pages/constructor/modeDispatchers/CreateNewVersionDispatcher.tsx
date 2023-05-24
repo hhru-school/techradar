@@ -3,11 +3,11 @@ import { useParams } from 'react-router-dom';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 import { useGetAllRadarVersionsQuery, useGetRadarByVersionIdQuery } from '../../../api/companyRadarsApi';
-import { RadarVersionApiResponse } from '../../../api/radarApiUtils';
+import { VersionApiResponse } from '../../../api/radarApiUtils';
 import { cleanUp, setHasError, setInitialRadarAsset, setIsLoading } from '../../../store/editRadarSlice';
 import { useAppDispatch } from '../../../store/hooks';
 
-const getLastVersion = (versions: RadarVersionApiResponse[]): RadarVersionApiResponse =>
+const getLastVersion = (versions: VersionApiResponse[]): VersionApiResponse =>
     versions.sort((versionA, versionB) => versionB.creationTime.localeCompare(versionA.creationTime))[0];
 
 const CreateNewVersionDispatcher: FC = () => {
@@ -35,14 +35,14 @@ const CreateNewVersionDispatcher: FC = () => {
         if (versions) {
             dispatch(setIsLoading(isLoading));
             dispatch(setHasError(hasError));
-            if (radar) {
-                dispatch(setInitialRadarAsset(radar));
+            if (radar && lastVersion) {
+                dispatch(setInitialRadarAsset({ radar, version: lastVersion }));
             }
         }
         return () => {
             dispatch(cleanUp());
         };
-    }, [dispatch, versions, isLoading, hasError, radar]);
+    }, [dispatch, versions, isLoading, hasError, radar, lastVersion]);
 
     return null;
 };

@@ -15,7 +15,7 @@ const companyId = 1;
 
 const ModalSaveDialog: FC = () => {
     const radarName = useAppSelector((state) => state.editRadar.radarName);
-    const radarVersion = useAppSelector((state) => state.editRadar.radarVersion);
+    const radarVersion = useAppSelector((state) => state.editRadar.currentVersionName);
 
     const radar = useCurrentRadar();
 

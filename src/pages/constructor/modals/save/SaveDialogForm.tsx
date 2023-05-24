@@ -7,7 +7,7 @@ import {
     ConstructorMode,
     setEditMode,
     setRadarName,
-    setRadarVersion,
+    setCurrentRadarVersionName,
     setShowSaveRadarDialog,
 } from '../../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
@@ -31,7 +31,7 @@ type Props = {
 
 const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
     const radarName = useAppSelector((state) => state.editRadar.radarName);
-    const radarVersion = useAppSelector((state) => state.editRadar.radarVersion);
+    const radarVersion = useAppSelector((state) => state.editRadar.currentVersionName);
 
     const [initialRadarName] = useState(radarName);
     const [initialRadarVersion] = useState(radarVersion);
@@ -41,7 +41,7 @@ const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
     const cancelBtnClickHandler = useCallback(() => {
         dispatch(setShowSaveRadarDialog(false));
         dispatch(setRadarName(initialRadarName));
-        dispatch(setRadarVersion(initialRadarVersion));
+        dispatch(setCurrentRadarVersionName(initialRadarVersion));
     }, [dispatch, initialRadarName, initialRadarVersion]);
 
     const submitBtnClickHandler = useCallback(async () => {
