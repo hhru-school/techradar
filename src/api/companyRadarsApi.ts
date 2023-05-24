@@ -6,6 +6,7 @@ import { ApiRadarData, FormattedRadarData, formatApiData } from './radarApiUtils
 
 // const baseUrl = '/api';
 import { Blip } from '../components/radar/types';
+import { EditRadarState } from '../store/editRadarSlice';
 import { RootState } from '../store/store';
 import {
     CreateRadarApiData,
@@ -18,9 +19,20 @@ import {
     CreateBlipEventApiResponse,
     CreateBlipEventApiRequest,
     CreateBlipApiRequest,
+    CreateBlipApiResponse,
 } from './radarApiUtils';
 
 const baseUrl = '/api/';
+
+const getQuadrantId = (state: EditRadarState, sectorName: string): number => {
+    if (!state.sectors) return -1;
+    return state.sectors.find((sector) => sector.name === sectorName)?.id || -1;
+};
+
+const getRingId = (state: EditRadarState, ringName: string): number => {
+    if (!state.rings) return -1;
+    return state.rings.find((ring) => ring.name === ringName)?.id || -1;
+};
 
 export interface RadarApi {
     id: number;
@@ -141,11 +153,13 @@ export const authApiSlice = apiSlice.injectEndpoints({
         }),
 
         addNewBlipToRadar: builder.mutation<CreateBlipEventApiResponse, Blip>({
-            async queryFn(blip, _, __, fetchBaseQuery) {
+            async queryFn(blip, { getState }, __, fetchBaseQuery) {
+                const state = (getState() as RootState).editRadar;
+
                 const blipRequest: CreateBlipApiRequest = {
                     name: blip.name,
                     description: blip.description || '',
-                    radarId: 1000500,
+                    radarId: Number(state.radarId),
                 };
 
                 const blipResponse = await fetchBaseQuery({
@@ -156,12 +170,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
                 if (blipResponse.error) return { error: blipResponse.error };
 
+                const newBlipApi = blipResponse.data as CreateBlipApiResponse;
+
                 const blipEventRequest: CreateBlipEventApiRequest = {
                     comment: '',
-                    parentId: 9999,
-                    blipId: 9999,
-                    quadrantId: 2,
-                    ringId: 2,
+                    parentId: Number(state.currentBlipEventId),
+                    blipId: newBlipApi.id,
+                    quadrantId: getQuadrantId(state, blip.sectorName),
+                    ringId: getRingId(state, blip.ringName),
                     authorId: 100500,
                 };
 
