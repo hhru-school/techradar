@@ -50,7 +50,7 @@ export enum ConstructorMode {
     VersionEditing,
 }
 
-interface EditRadarState {
+export interface EditRadarState {
     isLoading: boolean;
     hasError: boolean;
     version: VersionApiResponse | null;
