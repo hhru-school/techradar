@@ -10,33 +10,15 @@ export const buildRadarUrl = (companyId: number, radarId: number, versionId?: nu
     return `/techradar/company/${companyId}/radar/${radarId}/version/${version}`;
 };
 
-// export interface DataQuadrant {
-//     id: number;
-//     name: string;
-//     position: number;
-// }
+export interface Sector {
+    id: number;
+    name: string;
+}
 
-// export interface DataRing {
-//     id: number;
-//     name: string;
-//     position: number;
-// }
-
-// export interface DataBlip {
-//     id: number;
-//     name: string;
-//     description: string;
-//     quadrantId: number;
-//     ringId: number;
-// }
-
-// export interface RadraDataApi {
-//     radarId: number;
-//     name: string;
-//     quadrants: DataQuadrant[];
-//     rings: DataRing[];
-//     blips: DataBlip[];
-// }
+export interface Ring {
+    id: number;
+    name: string;
+}
 
 export interface BasicRadarData {
     blips: Blip[];
@@ -47,6 +29,8 @@ export interface BasicRadarData {
 export interface RadarData extends BasicRadarData {
     id: number;
     name: string;
+    sectors: Sector[];
+    rings: Ring[];
     companyId: number;
     authorId: number;
 }
@@ -148,10 +132,16 @@ export interface CreateBlipEventApiResponse {
 }
 
 export const formatApiData = (apiData: RadarApiDataResponse): RadarData => {
-    const sectorNames = apiData.quadrants
+    const sectors = apiData.quadrants
         .sort((quadrant1, quadrant2) => quadrant1.position - quadrant2.position)
-        .map((quadrant) => quadrant.name);
-    const ringNames = apiData.rings.sort((ring1, ring2) => ring1.position - ring2.position).map((ring) => ring.name);
+        .map((quadrant) => ({ id: quadrant.id, name: quadrant.name }));
+
+    const sectorNames = sectors.map((sector) => sector.name);
+    const rings = apiData.rings
+        .sort((ring1, ring2) => ring1.position - ring2.position)
+        .map((ring) => ({ id: ring.id, name: ring.name }));
+
+    const ringNames = rings.map((ring) => ring.name);
 
     const blips = apiData.blips
         .sort((blip1, blip2) => (blip1.name < blip2.name ? -1 : 1))
@@ -188,7 +178,9 @@ export const formatApiData = (apiData: RadarApiDataResponse): RadarData => {
         companyId: apiData.radar.companyId,
         authorId: apiData.radar.companyId,
         sectorNames,
+        sectors,
         ringNames,
+        rings,
         blips: sortedBlips,
     };
 };
