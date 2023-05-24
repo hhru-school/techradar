@@ -416,6 +416,10 @@ export const editRadarSlice = createSlice({
             state.currentBlipEventId = action.payload;
         },
 
+        setCurrenBlipEventId: (state, action: PayloadAction<number>) => {
+            state.currentBlipEventId = action.payload;
+        },
+
         cleanUp: (state) => {
             state.isLoading = false;
             state.hasError = false;
