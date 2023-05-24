@@ -11,7 +11,7 @@ const MainEditPanel: FC = () => {
     const dispatch = useAppDispatch();
 
     const radarName = useAppSelector((state) => state.editRadar.radarName);
-    const radarVersion = useAppSelector((state) => state.editRadar.radarVersion);
+    const radarVersion = useAppSelector((state) => state.editRadar.currentVersionName);
 
     const saveBtnClickHandler = () => {
         dispatch(setShowSaveRadarDialog(true));
