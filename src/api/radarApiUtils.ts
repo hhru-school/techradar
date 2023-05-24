@@ -99,12 +99,14 @@ export interface CreateRadarVersionDataApi {
     blipEventId: number;
 }
 
-// export interface RadarVersionDataApi extends CreateRadarVersionDataApi {
-//     id: number;
-//     creationTime: string;
-//     lastChangeTime: string;
-// }
-export interface RadarVersionApiResponse {
+export interface CreateVersionApiRequest {
+    name: string;
+    release: boolean;
+    radarId: number;
+    blipEventId: number;
+}
+
+export interface VersionApiResponse {
     id: number;
     name: string;
     release: boolean;

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { BasicRadarData, RadarData } from '../api/radarApiUtils';
+import { RadarData, Ring, Sector, VersionApiResponse } from '../api/radarApiUtils';
 import { Blip } from '../components/radar/types';
 import {
     defaultRadarName,
@@ -31,11 +31,9 @@ interface MoveBlipAsset {
     ringName: string;
 }
 
-interface EditRadarInitialDataset {
-    radarId: number;
-    radarName: string;
-    radarVersion: string;
-    radar: BasicRadarData;
+interface RadarInitialData {
+    radar: RadarData;
+    version: VersionApiResponse;
 }
 
 export enum EventSuggest {
@@ -55,12 +53,12 @@ export enum ConstructorMode {
 interface EditRadarState {
     isLoading: boolean;
     hasError: boolean;
-
-    blipEventId: number | null;
+    version: VersionApiResponse | null;
+    currentVersionName: string;
+    currentBlipEventId: number | null;
     mode: ConstructorMode;
     radarId: number | null;
     radarName: string;
-    radarVersion: string;
     isDragging: boolean;
     blip: Blip | null;
     blipAsset: EditingBlipAsset | null;
@@ -82,19 +80,21 @@ interface EditRadarState {
     editingSectorName: string | null;
     editingRingName: string | null;
     sectorNames: string[];
+    sectors: Sector[] | null;
     ringNames: string[];
+    rings: Ring[] | null;
     showEditIcon: boolean;
 }
 
 const initialState: EditRadarState = {
     isLoading: false,
     hasError: false,
-
-    blipEventId: null,
+    version: null,
+    currentVersionName: defaultVersionName,
+    currentBlipEventId: null,
     mode: ConstructorMode.NewRadarCreation,
     radarId: null,
     radarName: defaultRadarName,
-    radarVersion: defaultVersionName,
     isDragging: false,
     blip: null,
     blipAsset: null,
@@ -114,7 +114,9 @@ const initialState: EditRadarState = {
     showAddNewSectorModal: false,
     showAddNewRingModal: false,
     sectorNames: defaultSectorNames,
+    sectors: null,
     ringNames: defaultRingNames,
+    rings: null,
     blips: [],
 
     showSaveRadarDialog: false,
@@ -388,17 +390,8 @@ export const editRadarSlice = createSlice({
         setRadarName: (state, action: PayloadAction<string>) => {
             state.radarName = action.payload;
         },
-        setRadarVersion: (state, action: PayloadAction<string>) => {
-            state.radarVersion = action.payload;
-        },
-
-        setEditRadarParams: (state, action: PayloadAction<EditRadarInitialDataset>) => {
-            state.radarId = action.payload.radarId;
-            state.radarName = action.payload.radarName;
-            state.radarVersion = action.payload.radarVersion;
-            state.sectorNames = action.payload.radar.sectorNames;
-            state.ringNames = action.payload.radar.ringNames;
-            state.blips = action.payload.radar.blips;
+        setCurrentRadarVersionName: (state, action: PayloadAction<string>) => {
+            state.currentVersionName = action.payload;
         },
 
         setEditMode: (state, action: PayloadAction<ConstructorMode>) => {
@@ -409,7 +402,7 @@ export const editRadarSlice = createSlice({
         },
 
         setBlipEventId: (state, action: PayloadAction<number>) => {
-            state.blipEventId = action.payload;
+            state.currentBlipEventId = action.payload;
         },
 
         setIsLoading: (state, action: PayloadAction<boolean>) => {
@@ -420,10 +413,12 @@ export const editRadarSlice = createSlice({
             state.hasError = action.payload;
         },
 
-        setInitialRadarAsset: (state, action: PayloadAction<RadarData>) => {
-            const radar = action.payload;
+        setInitialRadarAsset: (state, action: PayloadAction<RadarInitialData>) => {
+            const radar = action.payload.radar;
             state.sectorNames = radar.sectorNames;
             state.ringNames = radar.ringNames;
+            state.sectors = radar.sectors;
+
             state.blips = radar.blips;
             state.radarId = radar.id;
             state.radarName = radar.name;
@@ -474,8 +469,7 @@ export const {
     setShowSaveRadarDialog,
     setRadarId,
     setRadarName,
-    setRadarVersion,
-    setEditRadarParams,
+    setCurrentRadarVersionName,
     setEditMode,
     setIsLoading,
     setHasError,
