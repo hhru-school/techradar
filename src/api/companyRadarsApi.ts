@@ -6,7 +6,7 @@ import { ApiRadarData, FormattedRadarData, formatApiData } from './radarApiUtils
 
 // const baseUrl = '/api';
 import { Blip } from '../components/radar/types';
-import { EditRadarState } from '../store/editRadarSlice';
+import { EditRadarState, setCurrenBlipEventId } from '../store/editRadarSlice';
 import { RootState } from '../store/store';
 import {
     CreateRadarApiData,
@@ -153,7 +153,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         }),
 
         addNewBlipToRadar: builder.mutation<CreateBlipEventApiResponse, Blip>({
-            async queryFn(blip, { getState }, __, fetchBaseQuery) {
+            async queryFn(blip, { getState, dispatch }, _, fetchBaseQuery) {
                 const state = (getState() as RootState).editRadar;
 
                 const blipRequest: CreateBlipApiRequest = {
@@ -188,7 +188,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 });
 
                 if (blipEventResponse.error) return { error: blipEventResponse.error };
-                return { data: blipEventResponse.data as CreateBlipEventApiResponse };
+                const blipEvent = blipEventResponse.data as CreateBlipEventApiResponse;
+                dispatch(setCurrenBlipEventId(blipEvent.id));
+                return { data: blipEvent };
             },
         }),
     }),
