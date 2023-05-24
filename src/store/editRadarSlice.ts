@@ -415,13 +415,16 @@ export const editRadarSlice = createSlice({
 
         setInitialRadarAsset: (state, action: PayloadAction<RadarInitialData>) => {
             const radar = action.payload.radar;
+            const version = action.payload.version;
             state.sectorNames = radar.sectorNames;
             state.ringNames = radar.ringNames;
             state.sectors = radar.sectors;
-
+            state.rings = radar.rings;
             state.blips = radar.blips;
             state.radarId = radar.id;
             state.radarName = radar.name;
+            state.version = version;
+            state.currentBlipEventId = version.blipEventId;
         },
 
         cleanUp: (state) => {
