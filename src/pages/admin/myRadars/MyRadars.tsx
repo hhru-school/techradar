@@ -28,7 +28,6 @@ const MyRadar: FC = () => {
     return (
         <Container maxWidth="xl">
             <Box sx={{ display: 'flex' }}>
-            <Box sx={{ display: 'flex' }}>
                 <Tabs
                     sx={{ display: 'flex', alignItems: 'center', height: '48px' }}
                     value={value}
