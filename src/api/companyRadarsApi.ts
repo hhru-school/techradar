@@ -1,8 +1,7 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
 import { Blip } from '../components/radar/types';
 import { EditRadarState, setCurrenBlipEventId } from '../store/editRadarSlice';
 import { RootState } from '../store/store';
+import { apiSlice } from './authApi';
 import {
     CreateRadarApiData,
     RadarApiDataResponse,
@@ -16,29 +15,6 @@ import {
     CreateBlipApiRequest,
     CreateBlipApiResponse,
 } from './radarApiUtils';
-
-const baseUrl = '/api/';
-const baseUrl = '/api/';
-
-const getQuadrantId = (state: EditRadarState, sectorName: string): number => {
-    if (!state.sectors) return -1;
-    return state.sectors.find((sector) => sector.name === sectorName)?.id || -1;
-};
-
-const getRingId = (state: EditRadarState, ringName: string): number => {
-    if (!state.rings) return -1;
-    return state.rings.find((ring) => ring.name === ringName)?.id || -1;
-};
-
-const getQuadrantId = (state: EditRadarState, sectorName: string): number => {
-    if (!state.sectors) return -1;
-    return state.sectors.find((sector) => sector.name === sectorName)?.id || -1;
-};
-
-const getRingId = (state: EditRadarState, ringName: string): number => {
-    if (!state.rings) return -1;
-    return state.rings.find((ring) => ring.name === ringName)?.id || -1;
-};
 
 const getQuadrantId = (state: EditRadarState, sectorName: string): number => {
     if (!state.sectors) return -1;
@@ -73,7 +49,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getAllCompanyRadars: builder.query<RadarApi[], number>({
             query: (companyId) => `/radars?company-id=${companyId}`,
-            query: (companyId) => `/radars?companyId=${companyId}`,
         }),
 
         getRadar: builder.query<BasicRadarData, number>({
@@ -163,10 +138,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 return { data: blipEvent };
             },
         }),
-
-        createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApi>({
-            query: (body) => ({ url: `/api/blip-events`, method: 'POST', body }),
-        }),
     }),
 });
 
@@ -178,5 +149,4 @@ export const {
     useAddNewBlipToRadarMutation,
     useSaveNewRadarMutation,
     useCreateBlipEventMutation,
-} = companyRadarsApi;
-export const { useGetAllCompanyRadarsQuery, useGetRadarQuery, useSaveNewRadarMutation } = companyRadarsApi;
+} = authApiSlice;
