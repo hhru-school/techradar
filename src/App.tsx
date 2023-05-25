@@ -11,8 +11,8 @@ import TechSinglePage from './pages/admin/techSinglePage/TechSinglePage';
 import Constructor from './pages/constructor/Constructor';
 import TechRadar from './pages/techradar/TechRadar';
 import { setCredentials } from './store/authSlice';
-import { useAppDispatch } from './store/hooks';
 import { ConstructorMode } from './store/editRadarSlice';
+import { useAppDispatch } from './store/hooks';
 
 const theme = createTheme(
     {
@@ -60,7 +60,7 @@ const App: FC = () => {
         <ThemeProvider theme={theme}>
             <Header />
             <Routes>
-                <Route path="/1/1" element={<TechRadar />} />
+                {/* <Route path="/1/1" element={<TechRadar />} /> */}
                 <Route path="/techradar">
                     <Route path="company/:companySlug/radar/:radarSlug/version/:versionSlug" element={<TechRadar />} />
                 </Route>

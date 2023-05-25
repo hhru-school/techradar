@@ -29,7 +29,8 @@ const NavTabs: FC<Props> = ({ radarId, companyId, radars }) => {
                     label={radar.name}
                     value={radar.id}
                     component={Link}
-                    to={`/techradar/${companyId}/${radar.id}`}
+                    // to={`/techradar/${companyId}/${radar.id}`}
+                    to={`/techradar/company/${companyId}/radar/${radar.id}/version/latest`}
                 />
             )),
         [radars, companyId]
