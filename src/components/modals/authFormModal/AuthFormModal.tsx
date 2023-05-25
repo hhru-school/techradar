@@ -87,7 +87,7 @@ const AuthFormModal: FC = () => {
                     setTimeout(() => {
                         dispatch(setAuthFormOpen(false));
                         setSubmitting(false);
-                        navigate('/admin/my-radars');
+                        navigate('/admin/my-radars/grid/1');
                         setMessage(null);
                     }, 3000);
                 })

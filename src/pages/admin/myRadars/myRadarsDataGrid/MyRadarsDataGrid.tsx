@@ -39,7 +39,7 @@ const MyRadarsDataGrid: FC = () => {
 
     const editVersion = useCallback(
         (params: { id: GridRowId }) => [
-            <Link to={`/constructor/edit/version/${params.id}`}>
+            <Link to={`/admin/constructor/edit/version/${params.id}`}>
                 <GridActionsCellItem icon={<EditIcon />} label="edit" />
             </Link>,
         ],

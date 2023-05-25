@@ -136,7 +136,7 @@ const Header: FC = () => {
                             transformOrigin={transformOrigin}
                             anchorOrigin={anchorOrigin}
                         >
-                            <Link to="/admin/my-radars">
+                            <Link to="/admin/my-radars/grid/1">
                                 <MenuItem onClick={handleClose}>
                                     <ListItemIcon>
                                         <RadarIcon fontSize="small" />

@@ -59,6 +59,7 @@ const App: FC = () => {
         <ThemeProvider theme={theme}>
             <Header />
             <Routes>
+                <Route path="/1/1" element={<TechRadar />} />
                 <Route path="/techradar">
                     <Route path=":companyId/:radarId" element={<TechRadar />} />
                 </Route>

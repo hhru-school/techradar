@@ -4,9 +4,12 @@ import { Link } from 'react-router-dom';
 import { Typography, Box, Container, Tab, Tabs, Button } from '@mui/material';
 
 import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import {
+    useAppDispatch,
+    // useAppSelector
+} from '../../../store/hooks';
 import { setRadarsCreateModalOpen } from '../../../store/myRadarsSlice';
-import MyRadarCreateModal from './myRadarCreateModal/MyRadarCreateModal';
+// import MyRadarCreateModal from './myRadarCreateModal/MyRadarCreateModal';
 import MyRadarsDataGrid from './myRadarsDataGrid/MyRadarsDataGrid';
 
 import './MyRadars.less';
@@ -24,7 +27,7 @@ type Tab = { id: number; label: string };
 
 const MyRadar: FC = () => {
     const dispatch = useAppDispatch();
-    const showRadarsCreateModal = useAppSelector((state) => state.myRadars.showRadarsCreateModal);
+    // const showRadarsCreateModal = useAppSelector((state) => state.myRadars.showRadarsCreateModal);
     const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(1);
     const [value, setValue] = useState<number>(0);
 
@@ -70,7 +73,7 @@ const MyRadar: FC = () => {
             <Typography variant="h5" sx={styles.title}>
                 Радары
             </Typography>
-            <Link to={'/constructor/new/version/radar/:radarId'}>
+            <Link to={'/admin/constructor/new/version/radar/:radarId'}>
                 <Button variant="outlined" color="secondary" sx={styles.newVersionBtn}>
                     Новая версия +
                 </Button>
@@ -78,7 +81,7 @@ const MyRadar: FC = () => {
             <Routes>
                 <Route path="/grid/:rowsId" element={<MyRadarsDataGrid />} />
             </Routes>
-            {showRadarsCreateModal && <MyRadarCreateModal />}
+            {/* {showRadarsCreateModal && <MyRadarCreateModal />} */}
         </Container>
     );
 };
