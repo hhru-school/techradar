@@ -1,13 +1,11 @@
 import { GridRowId } from '@mui/x-data-grid';
 
-// import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { apiSlice } from './authApi';
-import { ApiRadarData, FormattedRadarData, formatApiData } from './radarApiUtils';
-
 // const baseUrl = '/api';
 import { Blip } from '../components/radar/types';
 import { EditRadarState, setCurrenBlipEventId } from '../store/editRadarSlice';
 import { RootState } from '../store/store';
+// import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { apiSlice } from './authApi';
 import {
     CreateRadarApiData,
     RadarApiDataResponse,
@@ -22,7 +20,7 @@ import {
     CreateBlipApiResponse,
 } from './radarApiUtils';
 
-const baseUrl = '/api/';
+// const baseUrl = '/api/';
 
 const getQuadrantId = (state: EditRadarState, sectorName: string): number => {
     if (!state.sectors) return -1;
@@ -91,14 +89,11 @@ export const authApiSlice = apiSlice.injectEndpoints({
             query: (companyId) => `/radars?company-id=${companyId}`,
         }),
 
-        getRadar: builder.query<FormattedRadarData, number>({
+        getRadar: builder.query<BasicRadarData, number>({
             query: (radarId) => `/radars/${radarId}`,
-            transformResponse: (rawResult: ApiRadarData) => formatApiData(rawResult),
+            transformResponse: (rawResult: RadarApiDataResponse) => formatApiData(rawResult),
         }),
 
-        getAllRadarVersions: builder.query<CreateRadarVersionDataApiResponse[], number>({
-            query: (radarId) => `radar_versions?radarId=${radarId}`,
-        }),
         getRadarByVersionId: builder.query<RadarData, number>({
             query: (radarVersionId) => `containers?radar-version-id=${radarVersionId}`,
             transformResponse: (rawResult: RadarApiDataResponse) => formatApiData(rawResult),
@@ -138,6 +133,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
                 return { data: result.data as VersionApiResponse };
             },
+        }),
         getRadarVersions: builder.query<RadarVersionData, number>({
             query: (radarId) => ({
                 url: `/radar-versions?radar-id=${radarId}`,
@@ -207,10 +203,9 @@ export const {
     useGetAllCompanyRadarsQuery,
     useGetRadarQuery,
     useGetRadarVersionsQuery,
-    useDeleteRadarVersionsMutation,
-} = authApiSlice;
-    useGetRadarByVersionIdQuery,
     useGetAllRadarVersionsQuery,
+    useGetRadarByVersionIdQuery,
     useAddNewBlipToRadarMutation,
     useSaveNewRadarMutation,
-} = companyRadarsApi;
+    useDeleteRadarVersionsMutation,
+} = authApiSlice;
