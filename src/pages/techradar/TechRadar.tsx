@@ -1,18 +1,43 @@
 import { FC } from 'react';
 import { useParams } from 'react-router-dom';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 
-import { useGetAllCompanyRadarsQuery, useGetRadarQuery } from '../../api/companyRadarsApi';
+import { useGetAllCompanyRadarsQuery, useGetRadarByVersionIdQuery } from '../../api/companyRadarsApi';
 import { isFetchBaseQueryError } from '../../api/helpers';
+// import { RadarVersionDataApi } from '../../api/radarApiUtils';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
 import NavTabsContainer from './components/tab/NavTabsContainer';
 
+export interface Version {
+    id: number;
+    name: string;
+}
+
+// const getLastradarVersionId = (versions: RadarVersionDataApi[]) =>
+//     versions.sort((versionA, versionB) => versionB.lastChangeTime.localeCompare(versionA.lastChangeTime))[0].id;
+
+// const getVersionNameById = (versions: RadarVersionDataApi[], id: number): Version => {
+//     const versionName = versions.find((version) => version.id === id)?.name || '';
+//     return { id, name: versionName };
+// };
+
 const TechRadar: FC = () => {
-    const { companyId, radarId } = useParams();
+    const { companySlug, radarSlug, versionSlug } = useParams();
 
-    const { data: radars, isLoading: radarsIsLoading } = useGetAllCompanyRadarsQuery(Number(companyId));
+    const companyId = Number(companySlug);
+    const radarId = Number(radarSlug);
+    const versionId = Number(versionSlug);
 
-    const { data: radar, isFetching: radarIsFetching, error: radarError } = useGetRadarQuery(Number(radarId));
+    const { data: radars, isLoading: radarsIsLoading } = useGetAllCompanyRadarsQuery(companyId);
+
+    // const { data: radarVersions } = useGetAllRadarVersionsQuery(radarId);
+
+    const {
+        data: radar,
+        isFetching: radarIsFetching,
+        error: radarError,
+    } = useGetRadarByVersionIdQuery(versionId ?? skipToken);
 
     if (radarError) {
         return <ErrorMessage errorStatus={isFetchBaseQueryError(radarError) ? radarError.status : null} />;
@@ -26,7 +51,15 @@ const TechRadar: FC = () => {
                 radars={radars}
                 isLoading={radarsIsLoading}
             />
-            <TechRadarMain radar={radar} isLoading={radarIsFetching} />
+            {/* {radarVersions && (
+                <SelectVersion
+                    versions={radarVersions}
+                    version={getVersionNameById(radarVersions, versionId)}
+                    companyId={companyId}
+                    radarId={radarId}
+                />
+            )} */}
+            {<TechRadarMain radar={radar} isLoading={radarIsFetching} />}
         </>
     );
 };

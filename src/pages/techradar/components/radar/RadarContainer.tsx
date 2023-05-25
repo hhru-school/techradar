@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Skeleton } from '@mui/material';
 
-import { FormattedRadarData } from '../../../../api/radarApiUtils';
+import { BasicRadarData } from '../../../../api/radarApiUtils';
 import Radar from '../../../../components/radar/Radar';
 import { RadarComponentVariant } from '../../../../components/radar/types';
 import SectorControlPanel from '../controls/SectorControlPanel';
@@ -9,11 +9,13 @@ import SectorControlPanel from '../controls/SectorControlPanel';
 import styles from './radar.module.less';
 
 type Props = {
-    radar?: FormattedRadarData;
+    radar?: BasicRadarData;
     isLoading?: boolean;
 };
 
-const controlSkeletonSx = { height: 32, width: 400, borderRadius: 16 };
+const style = {
+    constrolSkeleton: { height: 32, width: 400, borderRadius: 16 },
+};
 
 const radius = 250;
 
@@ -22,7 +24,7 @@ const RadarContainer: FC<Props> = ({ radar, isLoading = false }) => {
         <div className={styles.container}>
             <div className={styles.controlContainer}>
                 {!isLoading && radar && <SectorControlPanel sectorNames={radar.sectorNames} />}
-                {isLoading && <Skeleton variant="rectangular" sx={controlSkeletonSx} />}
+                {isLoading && <Skeleton variant="rectangular" sx={style.constrolSkeleton} />}
             </div>
             <div className={styles.radarContainer}>
                 {!isLoading && radar && (

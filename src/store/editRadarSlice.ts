@@ -1,8 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { generateData, sectorNames, ringNames } from '../components/radar/testData';
+import { RadarData, Ring, Sector, VersionApiResponse } from '../api/radarApiUtils';
 import { Blip } from '../components/radar/types';
+import {
+    defaultRadarName,
+    defaultRingNames,
+    defaultSectorNames,
+    defaultVersionName,
+} from '../pages/constructor/config';
 
 interface Segment {
     sectorName: string;
@@ -25,6 +31,11 @@ interface MoveBlipAsset {
     ringName: string;
 }
 
+interface RadarInitialData {
+    radar: RadarData;
+    version: VersionApiResponse;
+}
+
 export enum EventSuggest {
     Delete = 'delete',
     Add = 'add',
@@ -33,9 +44,21 @@ export enum EventSuggest {
     EditText = 'editText',
 }
 
-interface EditRadarState {
+export enum ConstructorMode {
+    NewRadarCreation,
+    NewVersionCreation,
+    VersionEditing,
+}
+
+export interface EditRadarState {
+    isLoading: boolean;
+    hasError: boolean;
+    version: VersionApiResponse | null;
+    currentVersionName: string;
+    currentBlipEventId: number | null;
+    mode: ConstructorMode;
+    radarId: number | null;
     radarName: string;
-    radarVersion: string;
     isDragging: boolean;
     blip: Blip | null;
     blipAsset: EditingBlipAsset | null;
@@ -53,17 +76,25 @@ interface EditRadarState {
     showDeleteRingModal: boolean;
     showAddNewSectorModal: boolean;
     showAddNewRingModal: boolean;
+    showSaveRadarDialog: boolean;
     editingSectorName: string | null;
     editingRingName: string | null;
     sectorNames: string[];
+    sectors: Sector[] | null;
     ringNames: string[];
+    rings: Ring[] | null;
     showEditIcon: boolean;
 }
 
 const initialState: EditRadarState = {
-    radarName: 'My-new-radar',
-    radarVersion: 'Q1-2024',
-
+    isLoading: false,
+    hasError: false,
+    version: null,
+    currentVersionName: defaultVersionName,
+    currentBlipEventId: null,
+    mode: ConstructorMode.NewRadarCreation,
+    radarId: null,
+    radarName: defaultRadarName,
     isDragging: false,
     blip: null,
     blipAsset: null,
@@ -82,12 +113,13 @@ const initialState: EditRadarState = {
     editingRingName: null,
     showAddNewSectorModal: false,
     showAddNewRingModal: false,
-    // mock
-    sectorNames,
-    ringNames,
-    blips: generateData(50),
-    //
+    sectorNames: defaultSectorNames,
+    sectors: null,
+    ringNames: defaultRingNames,
+    rings: null,
+    blips: [],
 
+    showSaveRadarDialog: false,
     showEditIcon: false,
 };
 
@@ -217,7 +249,7 @@ export const editRadarSlice = createSlice({
         },
 
         addNewBlip: (state, action: PayloadAction<Blip>) => {
-            const maxId = Math.max(...state.blips.map((blip) => blip.id));
+            const maxId = state.blips.length > 0 ? Math.max(...state.blips.map((blip) => blip.id)) : 0;
             state.blips.push({ ...action.payload, id: maxId + 1 });
             state.showCreateBlipModal = false;
             state.activeSegment = null;
@@ -348,6 +380,61 @@ export const editRadarSlice = createSlice({
             state.ringNames.push(action.payload);
             state.showAddNewSectorModal = false;
         },
+
+        setShowSaveRadarDialog: (state, action: PayloadAction<boolean>) => {
+            state.showSaveRadarDialog = action.payload;
+        },
+        setRadarId: (state, action: PayloadAction<number>) => {
+            state.radarId = action.payload;
+        },
+        setRadarName: (state, action: PayloadAction<string>) => {
+            state.radarName = action.payload;
+        },
+        setCurrentRadarVersionName: (state, action: PayloadAction<string>) => {
+            state.currentVersionName = action.payload;
+        },
+
+        setEditMode: (state, action: PayloadAction<ConstructorMode>) => {
+            state.mode = action.payload;
+            if (action.payload === ConstructorMode.NewVersionCreation) {
+                state.radarId = null;
+            }
+        },
+
+        setBlipEventId: (state, action: PayloadAction<number>) => {
+            state.currentBlipEventId = action.payload;
+        },
+
+        setIsLoading: (state, action: PayloadAction<boolean>) => {
+            state.isLoading = action.payload;
+        },
+
+        setHasError: (state, action: PayloadAction<boolean>) => {
+            state.hasError = action.payload;
+        },
+
+        setInitialRadarAsset: (state, action: PayloadAction<RadarInitialData>) => {
+            const radar = action.payload.radar;
+            const version = action.payload.version;
+            state.sectorNames = radar.sectorNames;
+            state.ringNames = radar.ringNames;
+            state.sectors = radar.sectors;
+            state.rings = radar.rings;
+            state.blips = radar.blips;
+            state.radarId = radar.id;
+            state.radarName = radar.name;
+            state.version = version;
+            state.currentBlipEventId = version.blipEventId;
+        },
+
+        setCurrenBlipEventId: (state, action: PayloadAction<number>) => {
+            state.currentBlipEventId = action.payload;
+        },
+
+        cleanUp: (state) => {
+            state.isLoading = false;
+            state.hasError = false;
+        },
     },
 });
 
@@ -386,6 +473,16 @@ export const {
     closeAddNewSectorModal,
     openAddNewRingModal,
     addNewSector,
+    setShowSaveRadarDialog,
+    setRadarId,
+    setRadarName,
+    setCurrentRadarVersionName,
+    setEditMode,
+    setIsLoading,
+    setHasError,
+    setInitialRadarAsset,
+    setCurrenBlipEventId,
+    cleanUp,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;

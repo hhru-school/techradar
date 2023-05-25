@@ -1,6 +1,6 @@
 import { FC, memo, useMemo } from 'react';
 
-import { FormattedRadarData } from '../../../../api/radarApiUtils';
+import { BasicRadarData } from '../../../../api/radarApiUtils';
 import { defaultColorScheme } from '../../../../components/radar/styleConfig';
 import { useAppSelector } from '../../../../store/hooks';
 import LegendSearch from './LegendSearch';
@@ -8,7 +8,7 @@ import LegendSectorGroup from './LegendSectorGroup';
 
 import styles from './legend.module.less';
 
-type Props = { radar: FormattedRadarData; colorScheme?: string[] };
+type Props = { radar: BasicRadarData; colorScheme?: string[] };
 
 const suggestsHeight = 150;
 
