@@ -1,7 +1,5 @@
 import { Blip } from '../components/radar/types';
 import { GridRadarObj } from '../pages/admin/myRadars/myRadarsDataGrid/MyRadarsDataGrid';
-import { GridTech } from '../pages/admin/myTechnologies/myTechDataGrid/MyTechDataGrid';
-import { GridRadarConstructor } from '../pages/admin/radarConstructor/radarConstructorGrid/RadarConstructorGrid';
 
 type Input = { label: string; id: string; name: string; type: string; autoComplete: string };
 
@@ -20,7 +18,7 @@ export interface AuthFormInputs {
 interface State {
     techContructorInputs: ConstructorInputs;
     radarGrid: GridRadarObj;
-    // radarConstructorGrid: GridRadarConstructor;
+    authentificationFormData: AuthFormInputs;
     countRingInputs: number;
     countSectorInputs: number;
     showRadarsCreateModal: boolean;
@@ -76,6 +74,7 @@ export const initialState: State = {
             autoComplete: 'off',
         },
     ],
+<<<<<<< HEAD
     techGrid: [
         {
             id: 1,
@@ -194,6 +193,10 @@ export const initialState: State = {
             },
         ],
     },
+=======
+    authentificationFormData: { email: null, password: null },
+    showAuthentificationForm: false,
+>>>>>>> 517ca21 (working delete, show radars, show versions, need to validate dates)
     showRadarsCreateModal: false,
     showTechCreateModal: false,
     showRadarConstrTechModal: false,

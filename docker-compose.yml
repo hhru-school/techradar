@@ -4,23 +4,22 @@ services:
     container_name: postgres
     image: postgres:15.2
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-tech_radar}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
     ports:
-      - "5433:5432"
+      - '5433:5432'
     networks:
       - radar
   techradar-api:
     container_name: techradar-api
-    image: techradarapi/techradar-api:auth
-    command: [
-      "bash -c 'touch /app.jar'"
-    ]
+    image: techradarapi/techradar-api:1.0.4
+    command: [ "bash -c 'touch /app.jar'" ]
     ports:
-      - "8080:8080"
+      - '8080:8080'
     depends_on:
-      - "postgres"
+      - 'postgres'
     networks:
       - radar
 

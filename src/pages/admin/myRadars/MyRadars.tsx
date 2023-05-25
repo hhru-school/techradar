@@ -11,6 +11,15 @@ import MyRadarsDataGrid from './myRadarsDataGrid/MyRadarsDataGrid';
 
 import './MyRadars.less';
 
+const styles = {
+    tabs: { display: 'flex', alignItems: 'center', height: '48px' },
+    tab: { minHeight: '48px' },
+    newRadarBtn: { height: '25px', mt: '11px' },
+    title: { textAlign: 'left', margin: '15px 0 0 40px' },
+    newVersionBtn: { textAlign: 'left', margin: '15px 0 15px 40px' },
+    box: { display: 'flex' },
+};
+
 type Tab = { id: number; label: string };
 
 const MyRadar: FC = () => {
@@ -27,9 +36,9 @@ const MyRadar: FC = () => {
 
     return (
         <Container maxWidth="xl">
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={styles.box}>
                 <Tabs
-                    sx={{ display: 'flex', alignItems: 'center', height: '48px' }}
+                    sx={styles.tabs}
                     value={value}
                     onChange={handleChange}
                     scrollButtons
@@ -41,10 +50,10 @@ const MyRadar: FC = () => {
                             return (
                                 <Tab
                                     key={item.id}
-                                    sx={{ minHeight: '48px' }}
+                                    sx={styles.tab}
                                     label={item.name}
                                     icon={
-                                        <Link key={item.id} to={`grid/${item.name.split(' ')[0]}`} id={'tab-link'}>
+                                        <Link key={item.id} to={`grid/${item.id}`} id={'tab-link'}>
                                             {item.name}
                                         </Link>
                                     }
@@ -52,18 +61,17 @@ const MyRadar: FC = () => {
                             );
                         })}
                 </Tabs>
-                <Button onClick={handleClick} variant="outlined" color="secondary" sx={{ height: '25px', mt: '11px' }}>
-                    +
-                </Button>
-                <Button onClick={handleClick} variant="outlined" color="secondary" sx={{ height: '25px', mt: '11px' }}>
-                    +
-                </Button>
+                <Link to={'/constructor/new/radar'}>
+                    <Button onClick={handleClick} variant="outlined" color="secondary" sx={styles.newRadarBtn}>
+                        +
+                    </Button>
+                </Link>
             </Box>
-            <Typography variant="h5" sx={{ textAlign: 'left', margin: '15px 0 0 40px' }}>
+            <Typography variant="h5" sx={styles.title}>
                 Радары
             </Typography>
-            <Link to={'/admin/radar-constructor'}>
-                <Button variant="outlined" color="secondary" sx={{ textAlign: 'left', margin: '15px 0 15px 40px' }}>
+            <Link to={'/constructor/new/version/radar/:radarId'}>
+                <Button variant="outlined" color="secondary" sx={styles.newVersionBtn}>
                     Новая версия +
                 </Button>
             </Link>
