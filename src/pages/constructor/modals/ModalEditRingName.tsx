@@ -17,7 +17,7 @@ const ModalEditRingName: FC = () => {
                 names={ringNames}
                 header={'Изменить название кольца'}
                 inputLabel={'Название кольца'}
-                cancelBtnActionCreator={closeEditRingNameModal}
+                cancelBtnHandler={closeEditRingNameModal}
                 submitBtnActionCreator={renameRing}
             ></ModalRename>
         );
