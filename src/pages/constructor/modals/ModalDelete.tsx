@@ -9,16 +9,16 @@ import styles from './modal.module.less';
 const btnSx = { width: 140 };
 
 type Props = {
-    itemName: string;
+    itemId: number;
     closeBtnActionCreator: ActionCreatorWithoutPayload;
-    deleteBtnActionCreator: ActionCreatorWithPayload<string>;
+    deleteBtnActionCreator: ActionCreatorWithPayload<number>;
     header: string | ReactNode;
     message: string | ReactNode;
     warningMessage?: string;
 };
 
 const ModalDelete: FC<Props> = ({
-    itemName,
+    itemId,
     closeBtnActionCreator,
     deleteBtnActionCreator,
     header,
@@ -32,8 +32,8 @@ const ModalDelete: FC<Props> = ({
     }, [dispatch, closeBtnActionCreator]);
 
     const confirmBtnClickHandler = useCallback(() => {
-        dispatch(deleteBtnActionCreator(itemName));
-    }, [dispatch, deleteBtnActionCreator, itemName]);
+        dispatch(deleteBtnActionCreator(itemId));
+    }, [dispatch, deleteBtnActionCreator, itemId]);
 
     return (
         <Modal open={true}>

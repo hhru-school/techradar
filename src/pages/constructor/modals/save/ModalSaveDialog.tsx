@@ -4,7 +4,6 @@ import { Modal } from '@mui/material';
 import { useSaveNewRadarMutation } from '../../../../api/companyRadarsApi';
 import { formatCreateRadarData } from '../../../../api/radarApiUtils';
 import { useAppSelector } from '../../../../store/hooks';
-import { useCurrentRadar } from '../../hooks';
 import SaveDialogForm from './SaveDialogForm';
 import SuccessDialog from './SuccessDialog';
 
@@ -14,16 +13,14 @@ import styles from '../modal.module.less';
 const companyId = 1;
 
 const ModalSaveDialog: FC = () => {
-    const radarName = useAppSelector((state) => state.editRadar.radarName);
-    const radarVersion = useAppSelector((state) => state.editRadar.currentVersionName);
-
-    const radar = useCurrentRadar();
+    const radar = useAppSelector((state) => state.editRadar.radar);
+    const versionName = useAppSelector((state) => state.editRadar.currentVersionName);
 
     const [saveRadar, { data, isLoading, isSuccess }] = useSaveNewRadarMutation();
 
     const submitHandler = useCallback(async () => {
-        await saveRadar(formatCreateRadarData({ ...radar, authorId: 1, companyId: 1, name: radarName }));
-    }, [saveRadar, radar, radarName]);
+        await saveRadar(formatCreateRadarData({ ...radar, authorId: 1, companyId: 1, name: radar.name }));
+    }, [saveRadar, radar]);
 
     return (
         <Modal open={true}>
@@ -31,8 +28,8 @@ const ModalSaveDialog: FC = () => {
                 {!isSuccess && <SaveDialogForm submitHandler={submitHandler} isLoading={isLoading} />}
                 {isSuccess && data && (
                     <SuccessDialog
-                        radarName={radarName}
-                        radarVersion={radarVersion}
+                        radarName={radar.name}
+                        radarVersion={versionName}
                         radarId={data.radarId}
                         companyId={companyId}
                         versionId={data.id}

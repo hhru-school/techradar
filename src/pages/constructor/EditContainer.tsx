@@ -1,19 +1,19 @@
 import { FC } from 'react';
 
-import { BasicRadarData } from '../../api/radarApiUtils';
+import { RadarInterface } from '../../components/radar/types';
 import RadarBaseEditPanel from './editPanel/RadarBaseEditPanel';
 import EditWrapper from './radarContainer/EditWrapper';
 
 import styles from './editContainer.module.less';
 
 type Props = {
-    radar: BasicRadarData;
+    radar: RadarInterface;
 };
 
 const EditContainer: FC<Props> = ({ radar }) => {
     return (
         <div className={styles.layout}>
-            <RadarBaseEditPanel sectorNames={radar.sectorNames} ringNames={radar.ringNames} />
+            <RadarBaseEditPanel sectors={radar.sectors} rings={radar.rings} />
             <EditWrapper radar={radar} />
         </div>
     );

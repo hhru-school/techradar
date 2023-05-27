@@ -1,15 +1,16 @@
 import { FC } from 'react';
 
 import { defaultColorScheme } from '../../../../components/radar/styleConfig';
+import { Sector } from '../../../../components/radar/types';
 import SectorControlChip from './SectorControlChip';
 
 import styles from './controls.module.less';
 
-type Props = { sectorNames: string[]; colorScheme?: string[] };
+type Props = { sectors: Sector[]; colorScheme?: string[] };
 
-const SectorControlPanel: FC<Props> = ({ sectorNames, colorScheme = defaultColorScheme }) => {
-    const chips = sectorNames?.map((sectorName, i) => (
-        <SectorControlChip key={sectorName} sectorName={sectorName} color={colorScheme[i]} />
+const SectorControlPanel: FC<Props> = ({ sectors, colorScheme = defaultColorScheme }) => {
+    const chips = sectors.map((sector, i) => (
+        <SectorControlChip key={sector.id} sector={sector} color={colorScheme[i]} />
     ));
 
     return <div className={styles.sectorControlContainer}>{chips}</div>;

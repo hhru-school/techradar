@@ -2,7 +2,7 @@ import { FC, memo, useCallback, useMemo } from 'react';
 import { Delete, Edit } from '@mui/icons-material';
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, GridRowParams, useGridApiRef } from '@mui/x-data-grid';
 
-import { BasicRadarData } from '../../../api/radarApiUtils';
+import { RadarInterface } from '../../../components/radar/types';
 import { clearActiveBlip, setActiveBlip } from '../../../store/activeBlipSlice';
 import { openDeleteBlipModal, openEditBlipModal } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import styles from './tableContainer.module.less';
 
 type Props = {
-    radar: BasicRadarData;
+    radar: RadarInterface;
 };
 
 const nameColumnWidth = 120;
@@ -73,15 +73,12 @@ const Table: FC<Props> = ({ radar }) => {
                 field: 'sectorName',
                 headerName: 'Сектор',
                 width: sectorColumnWidth,
-                valueOptions: radar.sectorNames,
                 headerClassName: styles.tableHeader,
             },
             {
                 field: 'ringName',
                 headerName: 'Кольцо',
-
                 width: ringNameWidth,
-
                 headerClassName: styles.tableHeader,
             },
             {
@@ -95,7 +92,7 @@ const Table: FC<Props> = ({ radar }) => {
                 ],
             },
         ],
-        [radar, deleteBtnHandler, editBtnHandler]
+        [deleteBtnHandler, editBtnHandler]
     );
 
     return (

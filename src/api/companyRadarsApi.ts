@@ -1,14 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { Blip } from '../components/radar/types';
-import { EditRadarState, setCurrenBlipEventId } from '../store/editRadarSlice';
+import { Blip, RadarInterface } from '../components/radar/types';
+import { setCurrenBlipEventId } from '../store/editRadarSlice';
 import { RootState } from '../store/store';
 import {
-    CreateRadarApiData,
+    CreateRadarApiRequest,
     RadarApiDataResponse,
-    BasicRadarData,
     formatApiData,
-    RadarData,
     CreateRadarVersionDataApi,
     VersionApiResponse,
     CreateBlipEventApiResponse,
@@ -19,20 +17,39 @@ import {
 
 const baseUrl = '/api/';
 
-const getQuadrantId = (state: EditRadarState, sectorName: string): number => {
-    if (!state.sectors) return -1;
-    return state.sectors.find((sector) => sector.name === sectorName)?.id || -1;
-};
-
-const getRingId = (state: EditRadarState, ringName: string): number => {
-    if (!state.rings) return -1;
-    return state.rings.find((ring) => ring.name === ringName)?.id || -1;
-};
-
 export interface RadarApi {
     id: number;
     name: string;
 }
+
+/*
+*****************
+
+Пока не подключена авторизация, accsess токен прописывается хардкодом в header запроса:
+Получить токен:
+
+fetch('http://localhost:8080/api/auth/authenticate', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+    },
+    body: JSON.stringify({
+        username: 'user@hh.ru',
+        password: '123',
+    }),
+})
+    .then((response) => response.json())
+    .then(console.log);
+******************
+{
+    "typeToken": "Bearer",
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MDk0Mjg3LCJleHAiOjE2ODUxMzAyODd9.4snelK7oOx6Kyq3opHd492ooWDAo1kPT5EClnMDp810",
+    "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MDk0Mjg3LCJleHAiOjE2ODUxMzAyODd9.4snelK7oOx6Kyq3opHd492ooWDAo1kPT5EClnMDp810"
+}
+*/
+
+const accessToken =
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MTcwMzY5LCJleHAiOjE2ODUyMDYzNjl9.Fgi0emye5RAT3Tdj2s6Zql4VR5aEM2p01xvsuXUFoaM';
 
 // Все радары компании:
 // http://localhost:8080/api/radars?companyId=1
@@ -53,16 +70,34 @@ export const companyRadarsApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl }),
     endpoints: (builder) => ({
         getAllCompanyRadars: builder.query<RadarApi[], number>({
-            query: (companyId) => `/radars?company-id=${companyId}`,
+            query: (companyId) => ({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                method: 'GET',
+                url: `/radars?company-id=${companyId}`,
+            }),
         }),
 
-        getRadar: builder.query<BasicRadarData, number>({
-            query: (blipEventId) => `/containers?blipEventId=${blipEventId}`,
+        getRadar: builder.query<RadarInterface, number>({
+            query: (blipEventId) => ({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                method: 'GET',
+                url: `/containers?blipEventId=${blipEventId}`,
+            }),
             transformResponse: (rawResult: RadarApiDataResponse) => formatApiData(rawResult),
         }),
 
-        getRadarByVersionId: builder.query<RadarData, number>({
-            query: (radarVersionId) => `containers?radar-version-id=${radarVersionId}`,
+        getRadarByVersionId: builder.query<RadarInterface, number>({
+            query: (radarVersionId) => ({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                method: 'GET',
+                url: `containers?radar-version-id=${radarVersionId}`,
+            }),
             transformResponse: (rawResult: RadarApiDataResponse) => formatApiData(rawResult),
         }),
 
@@ -70,9 +105,12 @@ export const companyRadarsApi = createApi({
             query: (radarId) => `radar-versions/?radar-id=${radarId}`,
         }),
 
-        saveNewRadar: builder.mutation<VersionApiResponse, CreateRadarApiData>({
+        saveNewRadar: builder.mutation<VersionApiResponse, CreateRadarApiRequest>({
             async queryFn(radarData, { getState }, _options, fetchBaseQuery) {
                 const radarResponse = await fetchBaseQuery({
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
                     url: 'containers',
                     method: 'POST',
                     body: radarData,
@@ -91,6 +129,9 @@ export const companyRadarsApi = createApi({
                 };
 
                 const result = await fetchBaseQuery({
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
                     url: 'radar-versions',
                     method: 'POST',
                     body: versionRequestBody,
@@ -109,10 +150,13 @@ export const companyRadarsApi = createApi({
                 const blipRequest: CreateBlipApiRequest = {
                     name: blip.name,
                     description: blip.description || '',
-                    radarId: Number(state.radarId),
+                    radarId: Number(state.radar.id),
                 };
 
                 const blipResponse = await fetchBaseQuery({
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
                     url: 'blips',
                     method: 'POST',
                     body: blipRequest,
@@ -126,12 +170,15 @@ export const companyRadarsApi = createApi({
                     comment: '',
                     parentId: Number(state.currentBlipEventId),
                     blipId: newApiBlip.id,
-                    quadrantId: getQuadrantId(state, blip.sectorName),
-                    ringId: getRingId(state, blip.ringName),
+                    quadrantId: blip.sector.id,
+                    ringId: blip.ring.id,
                     authorId: 1,
                 };
 
                 const blipEventResponse = await fetchBaseQuery({
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
                     url: 'blip-events',
                     method: 'POST',
                     body: blipEventRequest,

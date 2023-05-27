@@ -6,21 +6,21 @@ import { mouseUpHandler } from '../../pages/constructor/utils';
 import { clearActiveBlip, setActiveBlip } from '../../store/activeBlipSlice';
 import { setDraggingBlip } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { RadarComponentVariant } from './types';
+import { RadarVariant } from './types';
 
 import styles from './blip.module.less';
 
 type Props = {
     id: number;
-    label?: string;
+    label: string | number;
     name: string;
     r: number;
     x: number;
     y: number;
-    variant?: RadarComponentVariant;
+    variant?: RadarVariant;
 };
 
-const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarComponentVariant.Demonstrative }) => {
+const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarVariant.Demonstrative }) => {
     const activeId = useAppSelector((state) => state.activeBlip.id);
 
     const isTransforming = useAppSelector((state) => state.activeSector.isTransforming);
@@ -28,8 +28,8 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarCompone
     const dispatch = useAppDispatch();
 
     const isActive = activeId === id;
-    const isDemonsrtative = variant === RadarComponentVariant.Demonstrative;
-    const isEditable = variant === RadarComponentVariant.Editable;
+    const isDemonsrtative = variant === RadarVariant.Demonstrative;
+    const isEditable = variant === RadarVariant.Editable;
 
     const mouseEnterHandler = useCallback(() => {
         dispatch(setActiveBlip(id));
@@ -66,7 +66,7 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarCompone
     const mouseDownHandler = useCallback(
         (event: MouseEvent) => {
             event.preventDefault();
-            if (variant === RadarComponentVariant.Editable) {
+            if (variant === RadarVariant.Editable) {
                 const bbox = (event.target as HTMLElement).getBoundingClientRect();
                 const x = event.clientX;
                 const y = event.clientY;
@@ -99,7 +99,7 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarCompone
                     dominantBaseline="middle"
                     className={blipTextClasses}
                 >
-                    {label || id}
+                    {label}
                 </text>
             </g>
         ),

@@ -10,7 +10,7 @@ const btnSx = { width: 140 };
 
 const ModalMoveBlip: FC = () => {
     const activeSegment = useAppSelector((state) => state.editRadar.activeSegment);
-    const blip = useAppSelector((state) => state.editRadar.blip);
+    const blip = useAppSelector((state) => state.editRadar.editingBlip);
 
     const dispatch = useAppDispatch();
 
@@ -29,8 +29,8 @@ const ModalMoveBlip: FC = () => {
                     Перемещение технологии <span>{blip?.name}</span>
                 </h3>
                 <div className={styles.message}>
-                    Действительно переместить технологию в кольцо <span>{activeSegment?.ringName}</span> сектора{' '}
-                    <span>{activeSegment?.sectorName}</span>?
+                    Действительно переместить технологию в кольцо <span>{activeSegment?.ring.name}</span> сектора{' '}
+                    <span>{activeSegment?.sector.name}</span>?
                 </div>
                 <div className={styles.buttonContainer}>
                     <Button
