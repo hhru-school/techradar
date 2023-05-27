@@ -8,8 +8,8 @@ import { useAppDispatch } from '../../../store/hooks';
 
 type Props = {
     item: Sector | Ring;
-    deleteBtnActionCreator: ActionCreatorWithPayload<number>;
-    editBtnActionCreator: ActionCreatorWithPayload<number>;
+    deleteBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
+    editBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
     isOnlyItem: boolean;
 };
 
@@ -17,11 +17,11 @@ const EditMenuItem: FC<Props> = ({ item, deleteBtnActionCreator, editBtnActionCr
     const dispatch = useAppDispatch();
 
     const editClickHandler = () => {
-        dispatch(editBtnActionCreator(item.id));
+        dispatch(editBtnActionCreator(item));
     };
 
     const deleteClickHandler = () => {
-        dispatch(deleteBtnActionCreator(item.id));
+        dispatch(deleteBtnActionCreator(item));
     };
 
     return (
