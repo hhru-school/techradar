@@ -30,7 +30,7 @@ type Props = {
 };
 
 const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
-    const radarName = useAppSelector((state) => state.editRadar.radarName);
+    const radarName = useAppSelector((state) => state.editRadar.radar.name);
     const radarVersion = useAppSelector((state) => state.editRadar.currentVersionName);
 
     const [initialRadarName] = useState(radarName);

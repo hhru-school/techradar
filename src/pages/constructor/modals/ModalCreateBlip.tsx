@@ -4,6 +4,8 @@ import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
 import { useAddNewBlipToRadarMutation } from '../../../api/companyRadarsApi';
+import { Blip } from '../../../components/radar/types';
+import { getRingByName, getRingNames, getSectorByName, getSectorNames } from '../../../components/radar/utils';
 import { ConstructorMode, addNewBlip, closeCreateBlipModal } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import ModalSelectField from './ModalSelectField';
@@ -25,8 +27,7 @@ const validationSchema = Yup.object({
 });
 
 const ModalCreateBlip: FC = () => {
-    const sectorNames = useAppSelector((state) => state.editRadar.sectorNames);
-    const ringNames = useAppSelector((state) => state.editRadar.ringNames);
+    const radar = useAppSelector((state) => state.editRadar.radar);
 
     const mode = useAppSelector((state) => state.editRadar.mode);
 
@@ -40,17 +41,22 @@ const ModalCreateBlip: FC = () => {
 
     const submitHandler = useCallback(
         async (values: FieldValues) => {
-            const blip = {
-                ...values,
+            const blip: Blip = {
                 id: -1,
+                label: -1,
+                name: values.name,
+                ring: getRingByName(radar, values.ringName),
+                sector: getSectorByName(radar, values.sectorName),
+                description: values.description,
             };
+
             if (!isNewRadar) {
                 await addNewBlipEvent(blip);
             }
 
             dispatch(addNewBlip(blip));
         },
-        [dispatch, isNewRadar, addNewBlipEvent]
+        [radar, dispatch, isNewRadar, addNewBlipEvent]
     );
 
     const cancelBtnClickHandler = useCallback(() => {
@@ -64,8 +70,8 @@ const ModalCreateBlip: FC = () => {
                 <Formik
                     initialValues={{
                         name: '',
-                        sectorName: activeSegment?.sectorName || '',
-                        ringName: activeSegment?.ringName || '',
+                        sectorName: activeSegment?.sector.name as string,
+                        ringName: activeSegment?.ring.name as string,
                         description: '',
                     }}
                     validationSchema={validationSchema}
@@ -77,8 +83,8 @@ const ModalCreateBlip: FC = () => {
                     {({ isValid, dirty }) => (
                         <Form>
                             <ModalTextField label={'Технология'} name={'name'} />
-                            <ModalSelectField label={'Сектор'} name={'sectorName'} values={sectorNames} />
-                            <ModalSelectField label={'Кольцо'} name={'ringName'} values={ringNames} />
+                            <ModalSelectField label={'Сектор'} name={'sectorName'} values={getSectorNames(radar)} />
+                            <ModalSelectField label={'Кольцо'} name={'ringName'} values={getRingNames(radar)} />
                             <ModalTextField label={'Комментарий'} name={'description'} multiline={true} />
                             <div className={styles.buttonContainer}>
                                 <Button

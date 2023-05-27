@@ -1,13 +1,13 @@
 import { FC } from 'react';
 
-import { BasicRadarData } from '../../api/radarApiUtils';
+import { RadarInterface } from '../../components/radar/types';
 import EditContainer from './EditContainer';
 import TableContainer from './table/TableContainer';
 
 import styles from './constructor.module.less';
 
 type Props = {
-    radar: BasicRadarData;
+    radar: RadarInterface;
 };
 
 const MainContainer: FC<Props> = ({ radar }) => {

@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import RadarBlip from './RadarBlip';
 import RadarRingLabel from './RadarRingLabel';
 import packEntries from './packEngine';
-import { Blip, Entry, RadarComponentVariant, Segment } from './types';
+import { Blip, Entry, RadarVariant, Ring, Sector, Segment } from './types';
 import { getRandomPoint, translateSegmentToD3 } from './utils';
 
 import styles from './radar.module.less';
@@ -14,13 +14,13 @@ type Props = {
     id: string;
     segment: Segment;
     color: string;
-    ringName: string;
-    sectorName: string;
+    ring: Ring;
+    sector: Sector;
     blipRadius: number;
     gap?: number;
-    data?: Blip[] | null;
+    blips: Blip[];
     seed?: number;
-    variant?: RadarComponentVariant;
+    variant?: RadarVariant;
 };
 
 const getOpacity = (isEditable: boolean, isDragging: boolean, isActive: boolean) => {
@@ -34,25 +34,26 @@ const RadarSegment: FC<Props> = ({
     id,
     segment,
     color,
-    ringName,
-    sectorName,
+    ring,
+    blips,
+    sector,
     seed = 0,
     gap = 0,
-    data = null,
     blipRadius,
-    variant = RadarComponentVariant.Demonstrative,
+    variant = RadarVariant.Demonstrative,
 }) => {
-    const blips = useMemo(() => {
-        if (!data) return null;
-        const entries = new Array<Entry>(data.length);
+    const blipItems = useMemo(() => {
+        if (blips.length === 0) return null;
+        const entries = new Array<Entry>(blips.length);
         entries.fill({ ...getRandomPoint(seed), r: blipRadius * 2 });
         const packed = packEntries(entries, segment);
         return packed.map((entry, i) => {
             return (
                 <RadarBlip
-                    key={data[i].id}
-                    id={data[i].id}
-                    name={data[i].name}
+                    key={blips[i].id}
+                    id={blips[i].id}
+                    label={blips[i].label}
+                    name={blips[i].name}
                     r={blipRadius}
                     x={entry.x}
                     y={entry.y}
@@ -60,7 +61,7 @@ const RadarSegment: FC<Props> = ({
                 />
             );
         });
-    }, [data, blipRadius, seed, segment, variant]);
+    }, [blips, blipRadius, seed, segment, variant]);
 
     const path: string = translateSegmentToD3(segment);
 
@@ -70,16 +71,15 @@ const RadarSegment: FC<Props> = ({
     const dispatch = useAppDispatch();
     const isActive = useAppSelector(
         (state) =>
-            state.editRadar.activeSegment?.ringName === ringName &&
-            state.editRadar.activeSegment?.sectorName === sectorName
+            state.editRadar.activeSegment?.ring.id === ring.id && state.editRadar.activeSegment?.sector.id === sector.id
     );
     const isDragging = useAppSelector((state) => state.editRadar.isDragging);
 
-    const isEditable = variant === RadarComponentVariant.Editable;
+    const isEditable = variant === RadarVariant.Editable;
 
     const onMouseEnterHandler = () => {
-        if (variant === RadarComponentVariant.Editable && isDragging) {
-            dispatch(setActiveSegment({ ringName, sectorName }));
+        if (variant === RadarVariant.Editable && isDragging) {
+            dispatch(setActiveSegment({ ring, sector }));
         }
     };
 
@@ -98,14 +98,14 @@ const RadarSegment: FC<Props> = ({
                 d={path}
                 fill={color}
                 className={styles.segment}
-                onMouseEnter={variant === RadarComponentVariant.Editable ? onMouseEnterHandler : undefined}
-                onMouseLeave={variant === RadarComponentVariant.Editable ? onMouseLeaveHandler : undefined}
+                onMouseEnter={variant === RadarVariant.Editable ? onMouseEnterHandler : undefined}
+                onMouseLeave={variant === RadarVariant.Editable ? onMouseLeaveHandler : undefined}
                 opacity={opacity}
             />
 
-            {blips}
+            {blipItems}
 
-            {gap && <RadarRingLabel x={x} y={y} segment={segment} ringName={ringName} variant={variant} />}
+            {gap && <RadarRingLabel x={x} y={y} segment={segment} ring={ring} variant={variant} />}
         </g>
     );
 };

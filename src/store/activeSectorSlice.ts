@@ -2,28 +2,28 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 interface ActiveSectorState {
-    activeSectorName: string | null;
-    hoveredSectorName: string | null;
+    activeSectorId: number | null;
+    hoveredSectorId: number | null;
     isTransforming: boolean;
 }
 
-const initialState: ActiveSectorState = { activeSectorName: null, hoveredSectorName: null, isTransforming: false };
+const initialState: ActiveSectorState = { activeSectorId: null, hoveredSectorId: null, isTransforming: false };
 
 export const activeSectorSlice = createSlice({
     name: 'activeSector',
     initialState,
     reducers: {
-        setActiveSector: (state, action: PayloadAction<string>) => {
-            state.hoveredSectorName = null;
-            state.isTransforming = state.activeSectorName !== action.payload;
-            state.activeSectorName = action.payload;
+        setActiveSector: (state, action: PayloadAction<number>) => {
+            state.hoveredSectorId = null;
+            state.isTransforming = state.activeSectorId !== action.payload;
+            state.activeSectorId = action.payload;
         },
 
-        setHoveredSector: (state, action: PayloadAction<string>) => {
-            state.hoveredSectorName = action.payload;
+        setHoveredSector: (state, action: PayloadAction<number>) => {
+            state.hoveredSectorId = action.payload;
         },
         clearHoveredSector: (state) => {
-            state.hoveredSectorName = null;
+            state.hoveredSectorId = null;
         },
 
         setIsTransforming: (state, action: PayloadAction<boolean>) => {
@@ -31,8 +31,8 @@ export const activeSectorSlice = createSlice({
         },
 
         clearActiveSector: (state) => {
-            state.activeSectorName = null;
-            state.hoveredSectorName = null;
+            state.activeSectorId = null;
+            state.hoveredSectorId = null;
             state.isTransforming = false;
         },
     },

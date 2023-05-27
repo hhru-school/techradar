@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Blip } from '../components/radar/types';
-import { AddTechModalData } from '../pages/admin/radarConstructor/addTechModal/AddTechModal';
 import { initialState } from './mock';
 
 export const constructorRadarSlice = createSlice({
@@ -30,9 +29,9 @@ export const constructorRadarSlice = createSlice({
             state.blips = action.payload;
         },
 
-        addNewBlip: (state, action: PayloadAction<AddTechModalData>) => {
-            state.blips.push({ id: state.blips.length, description: null, ...action.payload });
-        },
+        // addNewBlip: (state, action: PayloadAction<AddTechModalData>) => {
+        //     state.blips.push({ legendId: state.blips.length, description: null, ...action.payload });
+        // },
     },
 });
 
@@ -43,7 +42,7 @@ export const {
     updateRingNames,
     updateSectorNames,
     updateBlips,
-    addNewBlip,
+    // addNewBlip,
 } = constructorRadarSlice.actions;
 
 export default constructorRadarSlice.reducer;

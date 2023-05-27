@@ -5,24 +5,27 @@ import { useAppSelector } from '../../../store/hooks';
 import ModalDelete from './ModalDelete';
 
 const ModalDeleteSector: FC = () => {
-    const currentName = useAppSelector((state) => state.editRadar.editingSectorName || '');
+    const sector = useAppSelector((state) => state.editRadar.editingSector);
 
-    const message = (
-        <div>
-            Действительно удалить сектор <span>{currentName}</span>?
-        </div>
-    );
+    if (sector) {
+        const message = (
+            <div>
+                Действительно удалить сектор <span>{sector.name}</span>?
+            </div>
+        );
 
-    return (
-        <ModalDelete
-            itemName={currentName}
-            closeBtnActionCreator={closeDeleteSectorModal}
-            deleteBtnActionCreator={deleteSector}
-            header="Удаление сектора"
-            message={message}
-            warningMessage="Это действие удалит все технологии принадлежащие сектору с радара!"
-        />
-    );
+        return (
+            <ModalDelete
+                itemId={sector.id}
+                closeBtnActionCreator={closeDeleteSectorModal}
+                deleteBtnActionCreator={deleteSector}
+                header="Удаление сектора"
+                message={message}
+                warningMessage="Это действие удалит все технологии принадлежащие сектору с радара!"
+            />
+        );
+    }
+    return null;
 };
 
 export default ModalDeleteSector;

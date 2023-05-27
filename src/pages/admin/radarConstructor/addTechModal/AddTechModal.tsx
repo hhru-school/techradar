@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 import { styles } from '../../../../components/modals/authFormModal/AuthFormModal';
 import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
-import { addNewBlip, setRadarConstrTechModalOpen } from '../../../../store/constructorRadarSlice';
+import { setRadarConstrTechModalOpen } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import AddTechModalSelectInput from './AddTechModalSelectInput';
 
@@ -52,7 +52,7 @@ const AddTechModal: FC = () => {
                     validationSchema={validSchema}
                     onSubmit={(values: AddTechModalData, { setSubmitting }: FormikHelpers<AddTechModalData>) => {
                         setSubmitting(false);
-                        dispatch(addNewBlip(values));
+                        // dispatch(addNewBlip(values));
                         dispatch(setRadarConstrTechModalOpen(false));
                     }}
                 >

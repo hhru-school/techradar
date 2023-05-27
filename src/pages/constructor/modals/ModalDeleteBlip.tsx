@@ -9,7 +9,7 @@ import styles from './modal.module.less';
 const btnSx = { width: 140 };
 
 const ModalDeleteBlip: FC = () => {
-    const blip = useAppSelector((state) => state.editRadar.blip);
+    const blip = useAppSelector((state) => state.editRadar.editingBlip);
 
     const dispatch = useAppDispatch();
 

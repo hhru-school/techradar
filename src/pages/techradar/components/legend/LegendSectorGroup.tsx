@@ -18,7 +18,7 @@ const LegendSectorGroup: FC<Props> = ({ blips, sectorName, ringNames, color, opa
         () =>
             ringNames.map((ringName) => (
                 <li key={ringName}>
-                    <LegendRingGroup blips={blips.filter((blip) => blip.ringName === ringName)} ringName={ringName} />
+                    <LegendRingGroup blips={blips.filter((blip) => blip.ring.name === ringName)} ringName={ringName} />
                 </li>
             )),
         [blips, ringNames]

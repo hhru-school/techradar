@@ -4,32 +4,32 @@ import classNames from 'classnames';
 import { openEditSectorNameModal, setShowEditIcon } from '../../store/editRadarSlice';
 import { useAppDispatch } from '../../store/hooks';
 import { sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
-import { RadarComponentVariant } from './types';
+import { RadarVariant, Sector } from './types';
 import { buildArc } from './utils';
 
 import styles from './radar.module.less';
 
 type Props = {
-    sectorName: string;
+    sector: Sector;
     startAngle: number;
     sweepAngle: number;
     radius: number;
-    variant: RadarComponentVariant;
+    variant: RadarVariant;
 };
 
 const RadarSectorLabel: FC<Props> = ({
-    sectorName,
+    sector,
     startAngle,
     sweepAngle,
     radius,
-    variant = RadarComponentVariant.Demonstrative,
+    variant = RadarVariant.Demonstrative,
 }) => {
-    const isEditable = variant === RadarComponentVariant.Editable;
+    const isEditable = variant === RadarVariant.Editable;
 
     const dispatch = useAppDispatch();
 
     const clickHandler = () => {
-        dispatch(openEditSectorNameModal(sectorName));
+        dispatch(openEditSectorNameModal(sector.id));
     };
 
     const [isActive, setIsActive] = useState(false);
@@ -55,7 +55,7 @@ const RadarSectorLabel: FC<Props> = ({
     return (
         <>
             <path
-                id={`curve-${sectorName}`}
+                id={`curve-${sector.name}`}
                 fill="transparent"
                 d={buildArc(startAngle, startAngle + sweepAngle, radius)}
             />
@@ -66,12 +66,12 @@ const RadarSectorLabel: FC<Props> = ({
                 onMouseLeave={mouseLeaveHandler}
             >
                 <textPath
-                    xlinkHref={`#curve-${sectorName}`}
+                    xlinkHref={`#curve-${sector.name}`}
                     dominantBaseline="middle"
                     className={classes}
                     startOffset="50%"
                 >
-                    <tspan dy={-sectorNameTextOffset}>{sectorName}</tspan>
+                    <tspan dy={-sectorNameTextOffset}>{sector.name}</tspan>
                 </textPath>
             </text>
         </>

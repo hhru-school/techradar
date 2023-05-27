@@ -10,7 +10,7 @@ import styles from './mainEditPanel.module.less';
 const MainEditPanel: FC = () => {
     const dispatch = useAppDispatch();
 
-    const radarName = useAppSelector((state) => state.editRadar.radarName);
+    const name = useAppSelector((state) => state.editRadar.radar.name);
     const radarVersion = useAppSelector((state) => state.editRadar.currentVersionName);
 
     const saveBtnClickHandler = () => {
@@ -19,7 +19,7 @@ const MainEditPanel: FC = () => {
 
     return (
         <div className={styles.container}>
-            <EditCredetialContainer label={'Название радара'} value={radarName} />
+            <EditCredetialContainer label={'Название радара'} value={name} />
             <EditCredetialContainer label={'Версия'} value={radarVersion} />
             <div className={styles.spacer}></div>
             <Button variant="contained" color="primary" onClick={saveBtnClickHandler}>

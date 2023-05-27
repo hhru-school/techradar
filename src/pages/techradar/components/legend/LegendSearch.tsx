@@ -11,7 +11,7 @@ type Props = {
 };
 
 const getOptionLabel = (blip: Blip) => blip.name;
-const groupBy = (blip: Blip) => blip.sectorName;
+const groupBy = (blip: Blip) => blip.sector.name;
 const autoCompleteSx = { width: 300 };
 const renderInput = (params: AutocompleteRenderInputParams) => (
     <TextField {...params} label="Search" variant="standard" />
@@ -29,7 +29,7 @@ const LegendSearch: FC<Props> = ({ blips }) => {
         (event: SyntheticEvent, value: Blip | null) => {
             if (value) {
                 dispatch(clearActiveBlip());
-                dispatch(setActiveSector(value.sectorName));
+                dispatch(setActiveSector(value.sector.id));
                 dispatch(setActiveBlip(value.id));
                 dispatch(setOpenDescription(true));
             }

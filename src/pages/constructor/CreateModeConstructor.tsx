@@ -1,12 +1,11 @@
 import { FC, useEffect } from 'react';
 
 import { ConstructorMode, setEditMode } from '../../store/editRadarSlice';
-import { useAppDispatch } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import MainContainer from './MainContainer';
-import { useCurrentRadar } from './hooks';
 
 const CreateModeConstructor: FC = () => {
-    const radar = useCurrentRadar();
+    const radar = useAppSelector((state) => state.editRadar.radar);
 
     const dispatch = useAppDispatch();
 

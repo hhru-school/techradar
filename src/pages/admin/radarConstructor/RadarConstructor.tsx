@@ -21,7 +21,6 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import SideBar from '../components/sideBar/SideBar';
 import AddTechModal from './addTechModal/AddTechModal';
 import RadarConstructorGrid from './radarConstructorGrid/RadarConstructorGrid';
-import RadarConstructorContainer from './radarContainer/RadarConstrucorContainer';
 import RadarPublishBtn from './radarPublishBtn/RadarPublishBtn';
 import RingInputs from './ringInputs/RingInputs';
 import SectorInputs from './sectorInputs/SectorInputs';
@@ -158,9 +157,7 @@ const RadarConstructor: FC = () => {
                         </Grid>
                     </Grid>
                     <Grid container>
-                        <Grid item sm={8}>
-                            <RadarConstructorContainer />
-                        </Grid>
+                        <Grid item sm={8}></Grid>
                         <Grid
                             item
                             sm={4}
