@@ -4,6 +4,7 @@ import { ActionCreatorWithPayload, ActionCreatorWithoutPayload } from '@reduxjs/
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
+import { Ring, Sector } from '../../../components/radar/types';
 import { useAppDispatch } from '../../../store/hooks';
 import ModalTextField from './ModalTextField';
 
@@ -11,12 +12,12 @@ import styles from './modal.module.less';
 
 type Props = {
     open: boolean;
-    name: string;
+    item: Sector | Ring;
     names: string[];
     header: string;
     inputLabel: string;
-    cancelBtnActionCreator: ActionCreatorWithoutPayload;
-    submitBtnActionCreator: ActionCreatorWithPayload<string>;
+    cancelBtnHandler: ActionCreatorWithoutPayload;
+    submitBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
 };
 
 const btnSx = { width: 140 };
@@ -26,13 +27,13 @@ const getValidationSchema = (values: string[]) =>
         name: Yup.string().trim().notOneOf(values, 'Значение уже существует').required('Обязательное поле'),
     });
 
-const ModalEditName: FC<Props> = ({
+const ModalBasic: FC<Props> = ({
     open,
-    name,
+    item,
     names,
     header,
     inputLabel,
-    cancelBtnActionCreator,
+    cancelBtnHandler: cancelBtnActionCreator,
     submitBtnActionCreator,
 }) => {
     const dispatch = useAppDispatch();
@@ -47,11 +48,11 @@ const ModalEditName: FC<Props> = ({
                 <h3 className={styles.header}>{header}</h3>
                 <Formik
                     initialValues={{
-                        name,
+                        name: item.name,
                     }}
                     validationSchema={getValidationSchema(names)}
                     onSubmit={(values, { setSubmitting }) => {
-                        dispatch(submitBtnActionCreator(values.name));
+                        dispatch(submitBtnActionCreator({ id: item.id, name: values.name }));
                         setSubmitting(false);
                     }}
                 >
@@ -81,4 +82,4 @@ const ModalEditName: FC<Props> = ({
     );
 };
 
-export default ModalEditName;
+export default ModalBasic;

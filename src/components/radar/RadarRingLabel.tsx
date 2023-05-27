@@ -30,7 +30,7 @@ const RadarRingLabel: FC<Props> = ({ x, y, segment, ring, variant = RadarVariant
     const dispatch = useAppDispatch();
 
     const doubleClickHandler = () => {
-        dispatch(openEditRingNameModal(ring.id));
+        dispatch(openEditRingNameModal(ring));
     };
 
     const [isActive, setIsActive] = useState(false);
