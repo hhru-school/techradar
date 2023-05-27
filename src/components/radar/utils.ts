@@ -1,7 +1,7 @@
 import { Arc, DefaultArcObject } from 'd3';
 import * as d3 from 'd3';
 
-import { Cartesian, Entry, Polar, Segment, Transform } from './types';
+import { Cartesian, Entry, Polar, RadarInterface, Ring, Sector, Segment, Transform } from './types';
 
 function getRingSquare(innerRadius = 0, outerRadius: number): number {
     return Math.PI * (Math.pow(outerRadius, 2) - Math.pow(innerRadius, 2));
@@ -166,3 +166,23 @@ export function getTransform(startAngle: number, endAngle: number, r: number): T
         scale,
     };
 }
+
+export const getSectorNames = (radar: RadarInterface): string[] => radar.sectors.map((sector) => sector.name);
+export const getRingNames = (radar: RadarInterface): string[] => radar.rings.map((ring) => ring.name);
+
+export const getSectorById = (radar: RadarInterface, id: number): Sector =>
+    radar.sectors.find((sector) => sector.id === id) as Sector;
+export const getRingById = (radar: RadarInterface, id: number): Ring =>
+    radar.rings.find((ring) => ring.id === id) as Ring;
+
+export const getSectorByName = (radar: RadarInterface, name: string): Sector => {
+    const sector = radar.sectors.find((sector) => sector.name.toLowerCase() === name.toLowerCase());
+    if (!sector) throw new Error('SectorName not exist on radar');
+    return sector;
+};
+
+export const getRingByName = (radar: RadarInterface, name: string): Ring => {
+    const ring = radar.rings.find((ring) => ring.name.toLowerCase() === name.toLowerCase());
+    if (!ring) throw new Error('RingName not exist on radar');
+    return ring;
+};

@@ -1,11 +1,10 @@
 import { FC, memo, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
-import { BasicRadarData } from '../../../api/radarApiUtils';
 import Radar from '../../../components/radar/Radar';
 import RadarBlip from '../../../components/radar/RadarBlip';
 import { defaultBlipRadius } from '../../../components/radar/styleConfig';
-import { RadarComponentVariant } from '../../../components/radar/types';
+import { RadarInterface, RadarVariant } from '../../../components/radar/types';
 import { setDraggingBlip, setIsCreating } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { mouseUpHandler } from '../utils';
@@ -17,14 +16,10 @@ import styles from './wrapper.module.less';
 type Position = { x: number; y: number };
 
 type Props = {
-    radar: BasicRadarData;
+    radar: RadarInterface;
 };
 
 const EditWrapper: FC<Props> = ({ radar }) => {
-    const sectorNames = radar.sectorNames;
-    const ringNames = radar.ringNames;
-    const data = radar.blips;
-
     const blipAsset = useAppSelector((state) => state.editRadar.blipAsset);
     const onDropEvent = useAppSelector((state) => state.editRadar.eventSuggest);
     const showEditIcon = useAppSelector((state) => state.editRadar.showEditIcon);
@@ -77,13 +72,7 @@ const EditWrapper: FC<Props> = ({ radar }) => {
             ref={ref}
         >
             <BlipGenerator onMouseDown={mouseDownHandler} />
-            <Radar
-                sectorNames={sectorNames}
-                ringNames={ringNames}
-                radius={250}
-                data={data}
-                variant={RadarComponentVariant.Editable}
-            />
+            <Radar radar={radar} radius={250} variant={RadarVariant.Editable} />
             {position && blipAsset && (
                 <div
                     className={styles.ghost}
@@ -95,7 +84,7 @@ const EditWrapper: FC<Props> = ({ radar }) => {
                     <svg width={blipAsset.r * 2} height={blipAsset.r * 2} pointerEvents="none">
                         <RadarBlip
                             id={blipAsset.id}
-                            label={blipAsset.label}
+                            label={blipAsset.label ?? '+'}
                             name={'mock'}
                             r={blipAsset.r}
                             x={blipAsset.r}

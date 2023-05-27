@@ -1,10 +1,9 @@
 import { FC, useEffect } from 'react';
 
 import { ConstructorMode, setEditMode } from '../../store/editRadarSlice';
-import { useAppDispatch } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import MainContainer from './MainContainer';
 import MainEditPanel from './editPanel/MainEditPanel';
-import { useCurrentRadar } from './hooks';
 import Modals from './modals/Modals';
 import ModeDispatcher from './modeDispatchers/ModeDispatcher';
 
@@ -13,7 +12,7 @@ type Props = { mode?: ConstructorMode };
 const Constructor: FC<Props> = ({ mode = ConstructorMode.NewRadarCreation }) => {
     const dispatch = useAppDispatch();
 
-    const radar = useCurrentRadar();
+    const radar = useAppSelector((state) => state.editRadar.radar);
 
     useEffect(() => {
         dispatch(setEditMode(mode));

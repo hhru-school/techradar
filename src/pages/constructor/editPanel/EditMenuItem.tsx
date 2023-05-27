@@ -3,24 +3,25 @@ import { Delete, Edit } from '@mui/icons-material';
 import { IconButton, MenuItem } from '@mui/material';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 
+import { Ring, Sector } from '../../../components/radar/types';
 import { useAppDispatch } from '../../../store/hooks';
 
 type Props = {
-    name: string;
-    deleteBtnActionCreator: ActionCreatorWithPayload<string>;
-    editBtnActionCreator: ActionCreatorWithPayload<string>;
+    item: Sector | Ring;
+    deleteBtnActionCreator: ActionCreatorWithPayload<number>;
+    editBtnActionCreator: ActionCreatorWithPayload<number>;
     isOnlyItem: boolean;
 };
 
-const EditMenuItem: FC<Props> = ({ name, deleteBtnActionCreator, editBtnActionCreator, isOnlyItem }) => {
+const EditMenuItem: FC<Props> = ({ item, deleteBtnActionCreator, editBtnActionCreator, isOnlyItem }) => {
     const dispatch = useAppDispatch();
 
     const editClickHandler = () => {
-        dispatch(editBtnActionCreator(name));
+        dispatch(editBtnActionCreator(item.id));
     };
 
     const deleteClickHandler = () => {
-        dispatch(deleteBtnActionCreator(name));
+        dispatch(deleteBtnActionCreator(item.id));
     };
 
     return (
@@ -33,7 +34,7 @@ const EditMenuItem: FC<Props> = ({ name, deleteBtnActionCreator, editBtnActionCr
                     <Delete />
                 </IconButton>
             )}
-            {name}
+            {item.name}
         </MenuItem>
     );
 };

@@ -1,40 +1,41 @@
 import { FC, memo, useMemo } from 'react';
 
-import { BasicRadarData } from '../../../../api/radarApiUtils';
 import { defaultColorScheme } from '../../../../components/radar/styleConfig';
+import { RadarInterface } from '../../../../components/radar/types';
+import { getRingNames } from '../../../../components/radar/utils';
 import { useAppSelector } from '../../../../store/hooks';
 import LegendSearch from './LegendSearch';
 import LegendSectorGroup from './LegendSectorGroup';
 
 import styles from './legend.module.less';
 
-type Props = { radar: BasicRadarData; colorScheme?: string[] };
+type Props = { radar: RadarInterface; colorScheme?: string[] };
 
 const suggestsHeight = 150;
 
 const Legend: FC<Props> = ({ radar, colorScheme = defaultColorScheme }) => {
-    const hoveredSector = useAppSelector((state) => state.activeSector.hoveredSectorName);
-    const activeSector = useAppSelector((state) => state.activeSector.activeSectorName);
+    const hoveredSectorId = useAppSelector((state) => state.activeSector.hoveredSectorId);
+    const activeSectorId = useAppSelector((state) => state.activeSector.activeSectorId);
 
     const sectorGroups = useMemo(
         () =>
-            radar.sectorNames.map((sectorName, i) => {
-                if (activeSector && activeSector !== sectorName) return null;
+            radar.sectors.map((sector, i) => {
+                if (activeSectorId && activeSectorId !== sector.id) return null;
                 return (
                     <LegendSectorGroup
-                        key={sectorName}
-                        blips={radar.blips.filter((blip) => blip.sectorName === sectorName)}
-                        sectorName={sectorName}
-                        ringNames={radar.ringNames}
+                        key={sector.id}
+                        blips={radar.blips.filter((blip) => blip.sector.id === sector.id)}
+                        sectorName={sector.name}
+                        ringNames={getRingNames(radar)}
                         color={colorScheme[i]}
-                        opacity={hoveredSector && hoveredSector !== sectorName ? 0.2 : 1}
+                        opacity={hoveredSectorId && hoveredSectorId !== sector.id ? 0.2 : 1}
                     />
                 );
             }),
-        [radar, hoveredSector, activeSector, colorScheme]
+        [radar, hoveredSectorId, activeSectorId, colorScheme]
     );
 
-    const isActiveSector = Boolean(activeSector);
+    const isActiveSector = Boolean(activeSectorId);
 
     const legendContainerStyle = useMemo(
         () => ({ marginTop: isActiveSector ? suggestsHeight + 30 : 0 }),

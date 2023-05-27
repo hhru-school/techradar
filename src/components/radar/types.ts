@@ -21,12 +21,33 @@ export interface Segment {
     endAngle: number;
 }
 
-export interface Blip {
+export interface Sector {
     id: number;
     name: string;
-    ringName: string;
-    sectorName: string;
+}
+
+export interface Ring {
+    id: number;
+    name: string;
+}
+
+export interface Blip {
+    id: number;
+    label: string | number;
+    name: string;
+    ring: Ring;
+    sector: Sector;
     description: string | null;
+}
+
+export interface RadarInterface {
+    id: number;
+    name: string;
+    sectors: Sector[];
+    rings: Ring[];
+    companyId: number;
+    authorId: number;
+    blips: Blip[];
 }
 
 export interface Transform {
@@ -35,7 +56,7 @@ export interface Transform {
     scale: number;
 }
 
-export enum RadarComponentVariant {
+export enum RadarVariant {
     Demonstrative,
     Editable,
 }

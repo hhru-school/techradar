@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { useFormikContext } from 'formik';
 
-import { setRadarName, setCurrentRadarVersionName } from '../../../../store/editRadarSlice';
+import { setCurrentRadarVersionName, setRadarName } from '../../../../store/editRadarSlice';
 import { useAppDispatch } from '../../../../store/hooks';
 
 interface Credetials {

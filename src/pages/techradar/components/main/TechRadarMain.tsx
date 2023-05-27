@@ -1,13 +1,13 @@
 import { FC } from 'react';
 
-import { BasicRadarData } from '../../../../api/radarApiUtils';
+import { RadarInterface } from '../../../../components/radar/types';
 import Legend from '../legend/Legend';
 import RadarContainer from '../radar/RadarContainer';
 
 import styles from './main.module.less';
 
 type Props = {
-    radar?: BasicRadarData;
+    radar?: RadarInterface;
     isLoading?: boolean;
 };
 
