@@ -51,6 +51,7 @@ const EditItemsDropDown: FC<Props> = ({
     );
 
     const addItemClickHandler = useCallback(() => {
+        setAnchorEl(null);
         dispatch(addItemActionCreator());
     }, [addItemActionCreator, dispatch]);
 

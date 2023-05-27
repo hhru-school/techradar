@@ -16,7 +16,7 @@ type Props = {
     names: string[];
     header: string;
     inputLabel: string;
-    cancelBtnHandler: ActionCreatorWithoutPayload;
+    cancelBtnActionCreator: ActionCreatorWithoutPayload;
     submitBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
 };
 
@@ -33,7 +33,7 @@ const ModalBasic: FC<Props> = ({
     names,
     header,
     inputLabel,
-    cancelBtnHandler: cancelBtnActionCreator,
+    cancelBtnActionCreator,
     submitBtnActionCreator,
 }) => {
     const dispatch = useAppDispatch();
