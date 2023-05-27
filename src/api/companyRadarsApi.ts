@@ -49,7 +49,7 @@ fetch('http://localhost:8080/api/auth/authenticate', {
 */
 
 const accessToken =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MTg2OTA5LCJleHAiOjE2ODUyMjI5MDl9.WVhzOapX-Fx5MWO-6MGw_0mAkIEUFsL_FMX_-mlwCcY';
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MTg5MjE0LCJleHAiOjE2ODUyMjUyMTR9.v2p5fmkWuUkEu1lS1u2dfDkJMjvnu5WxDcwqwfUFCVA';
 
 // Все радары компании:
 // http://localhost:8080/api/radars?companyId=1

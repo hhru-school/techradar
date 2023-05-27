@@ -16,7 +16,7 @@ const ModalAddNewSector: FC = () => {
             names={sectorNames}
             header={'Добавление сектора'}
             inputLabel={'Название сектора'}
-            cancelBtnHandler={closeEditSectorNameModal}
+            cancelBtnActionCreator={closeEditSectorNameModal}
             submitBtnActionCreator={addNewSector}
         ></ModalBasic>
     );
