@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { getRingNames } from '../../../components/radar/utils';
 import { closeEditRingNameModal, renameRing } from '../../../store/editRadarSlice';
 import { useAppSelector } from '../../../store/hooks';
-import ModalRename from './ModalBasic';
+import ModalBasic from './ModalBasic';
 
 const ModalEditRingName: FC = () => {
     const editingRing = useAppSelector((state) => state.editRadar.editingRing);
@@ -11,7 +11,7 @@ const ModalEditRingName: FC = () => {
 
     if (editingRing) {
         return (
-            <ModalRename
+            <ModalBasic
                 open={true}
                 item={editingRing}
                 names={ringNames}
@@ -19,7 +19,7 @@ const ModalEditRingName: FC = () => {
                 inputLabel={'Название кольца'}
                 cancelBtnHandler={closeEditRingNameModal}
                 submitBtnActionCreator={renameRing}
-            ></ModalRename>
+            ></ModalBasic>
         );
     }
     return null;

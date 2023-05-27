@@ -33,7 +33,7 @@ const ModalBasic: FC<Props> = ({
     names,
     header,
     inputLabel,
-    cancelBtnHandler: cancelBtnActionCreator,
+    cancelBtnActionCreator,
     submitBtnActionCreator,
 }) => {
     const dispatch = useAppDispatch();
