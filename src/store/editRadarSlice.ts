@@ -3,7 +3,6 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 import { VersionApiResponse } from '../api/radarApiUtils';
 import { Blip, RadarInterface, Ring, Sector } from '../components/radar/types';
-import { getRingById, getSectorById } from '../components/radar/utils';
 import { defaultRadarAsset, defaultVersionName } from '../pages/constructor/config';
 
 interface Segment {
@@ -263,17 +262,17 @@ export const editRadarSlice = createSlice({
             state.showDeleteBlipModal = false;
         },
 
-        openEditSectorNameModal: (state, action: PayloadAction<number>) => {
+        openEditSectorNameModal: (state, action: PayloadAction<Sector>) => {
             state.showEditSectorNameModal = true;
-            state.editingSector = getSectorById(state.radar, action.payload);
+            state.editingSector = action.payload;
         },
 
         closeEditSectorNameModal: (state) => {
             state.showEditSectorNameModal = false;
         },
 
-        openDeleteSectorModal: (state, action: PayloadAction<number>) => {
-            state.editingSector = getSectorById(state.radar, action.payload);
+        openDeleteSectorModal: (state, action: PayloadAction<Sector>) => {
+            state.editingSector = action.payload;
             state.showDeleteSectorModal = true;
         },
 
@@ -281,21 +280,33 @@ export const editRadarSlice = createSlice({
             state.showDeleteSectorModal = false;
         },
 
-        renameSector: () => {
-            // Переименование
+        renameSector: (state, action: PayloadAction<Sector>) => {
+            if (state.editingSector) {
+                state.radar.sectors.forEach((sector) => {
+                    if (sector.id === action.payload.id) {
+                        sector.name = action.payload.name;
+                    }
+                });
+            }
         },
 
-        renameRing: () => {
-            // Здесь будет логика переименования
+        renameRing: (state, action: PayloadAction<Ring>) => {
+            if (state.editingRing) {
+                state.radar.rings.forEach((ring) => {
+                    if (ring.id === action.payload.id) {
+                        ring.name = action.payload.name;
+                    }
+                });
+            }
         },
 
-        deleteSector: () => {
-            // Логика удаления сектора
+        deleteSector: (state, action: PayloadAction<Sector>) => {
+            state.radar.sectors = [...state.radar.sectors.filter((sector) => sector.id !== action.payload.id)];
         },
 
-        openEditRingNameModal: (state, action: PayloadAction<number>) => {
+        openEditRingNameModal: (state, action: PayloadAction<Ring>) => {
             state.showEditRingNameModal = true;
-            state.editingRing = getRingById(state.radar, action.payload);
+            state.editingRing = action.payload;
         },
 
         closeEditRingNameModal: (state) => {
@@ -315,8 +326,8 @@ export const editRadarSlice = createSlice({
         //     state.showEditRingNameModal = false;
         // },
 
-        deleteRing: (state, action: PayloadAction<number>) => {
-            state.radar.rings = state.radar.rings.filter((ring) => ring.id !== action.payload);
+        deleteRing: (state, action: PayloadAction<Ring>) => {
+            state.radar.rings = state.radar.rings.filter((ring) => ring.id !== action.payload.id);
         },
 
         openDeleteRingModal: (state, action: PayloadAction<Ring>) => {
@@ -351,13 +362,15 @@ export const editRadarSlice = createSlice({
             state.showAddNewSectorModal = false;
         },
 
-        addNewSector: (state, action: PayloadAction<string>) => {
-            state.radar.sectors.push({ id: state.radar.sectors.length, name: action.payload });
+        addNewSector: (state, action: PayloadAction<Sector>) => {
+            // Рефакторить при подключении API
+            state.radar.sectors.push({ id: state.radar.sectors.length, name: action.payload.name });
             state.showAddNewSectorModal = false;
         },
 
-        addNewRing: (state, action: PayloadAction<string>) => {
-            state.radar.rings.push({ id: state.radar.rings.length, name: action.payload });
+        addNewRing: (state, action: PayloadAction<Ring>) => {
+            // Рефакторить при подключении API
+            state.radar.rings.push({ id: state.radar.rings.length, name: action.payload.name });
             state.showAddNewSectorModal = false;
         },
 

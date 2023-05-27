@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { getSectorNames } from '../../../components/radar/utils';
 import { closeEditSectorNameModal, renameSector } from '../../../store/editRadarSlice';
 import { useAppSelector } from '../../../store/hooks';
-import ModalRename from './ModalEditName';
+import ModalRename from './ModalBasic';
 
 const ModalEditSectorName: FC = () => {
     const editingSector = useAppSelector((state) => state.editRadar.editingSector);
@@ -13,11 +13,11 @@ const ModalEditSectorName: FC = () => {
         return (
             <ModalRename
                 open={true}
-                name={editingSector.name}
+                item={editingSector}
                 names={sectorNames}
                 header={'Edit sector name'}
                 inputLabel={'Sector name'}
-                cancelBtnActionCreator={closeEditSectorNameModal}
+                cancelBtnHandler={closeEditSectorNameModal}
                 submitBtnActionCreator={renameSector}
             ></ModalRename>
         );

@@ -36,7 +36,7 @@ const defaultTransform = { x: 0, y: 0, scale: 1 };
 
 const getDisplay = (activeSectorId: number | null, sectorId: number, variant: RadarVariant) => {
     if (variant === RadarVariant.Editable) return 'auto';
-    return activeSectorId ?? activeSectorId !== sectorId ? 'none' : 'auto';
+    return activeSectorId !== null && activeSectorId !== sectorId ? 'none' : 'auto';
 };
 
 const RadarSector: FC<Props> = ({

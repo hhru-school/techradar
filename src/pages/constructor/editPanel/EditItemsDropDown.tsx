@@ -11,12 +11,12 @@ import EditMenuItem from './EditMenuItem';
 type Props = {
     items: Ring[] | Sector[];
     label: string;
-    deleteBtnActionCreator: ActionCreatorWithPayload<number>;
-    editBtnActionCreator: ActionCreatorWithPayload<number>;
+    deleteBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
+    editBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
     addItemActionCreator: ActionCreatorWithoutPayload;
 };
 
-const btnSx = { width: 130 };
+const style = { btnSx: { width: 130 } };
 
 const EditItemsDropDown: FC<Props> = ({
     items,
@@ -64,7 +64,7 @@ const EditItemsDropDown: FC<Props> = ({
                 onClick={handleClick}
                 variant="outlined"
                 endIcon={<ArrowDropDownIcon />}
-                sx={btnSx}
+                sx={style.btnSx}
             >
                 {label}
             </Button>

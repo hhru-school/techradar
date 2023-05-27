@@ -29,7 +29,7 @@ const RadarSectorLabel: FC<Props> = ({
     const dispatch = useAppDispatch();
 
     const clickHandler = () => {
-        dispatch(openEditSectorNameModal(sector.id));
+        dispatch(openEditSectorNameModal(sector));
     };
 
     const [isActive, setIsActive] = useState(false);
