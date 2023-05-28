@@ -1,19 +1,19 @@
 import { FC, useCallback } from 'react';
-import { Button, Modal } from '@mui/material';
+import { Button, LinearProgress, Modal } from '@mui/material';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { useAddNewBlipToRadarMutation } from '../../../api/companyRadarsApi';
-import { Blip } from '../../../components/radar/types';
+import { Blip, RadarInterface } from '../../../components/radar/types';
 import { getRingByName, getRingNames, getSectorByName, getSectorNames } from '../../../components/radar/utils';
 import { ConstructorMode, addNewBlip, closeCreateBlipModal } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { useAddNewBlipToRadar } from '../hooks';
 import ModalSelectField from './ModalSelectField';
 import ModalTextField from './ModalTextField';
 
 import styles from './modal.module.less';
 
-const btnSx = { width: 140 };
+const style = { btnSx: { width: 140 } };
 
 interface FieldValues {
     name: string;
@@ -22,11 +22,19 @@ interface FieldValues {
     description: string;
 }
 
-const validationSchema = Yup.object({
-    name: Yup.string().trim().required('Обязательное поле'),
-});
+const getValidationSchema = (radar: RadarInterface) => {
+    const blipNames = radar.blips.map((blip) => blip.name.toLowerCase());
 
-const ModalCreateBlip: FC = () => {
+    return Yup.object({
+        name: Yup.string()
+            .trim()
+            .lowercase()
+            .required('Обязательное поле')
+            .notOneOf(blipNames, 'Такая технология уже есть на радаре'),
+    });
+};
+
+const ModalAddNewBlip: FC = () => {
     const radar = useAppSelector((state) => state.editRadar.radar);
 
     const mode = useAppSelector((state) => state.editRadar.mode);
@@ -35,9 +43,9 @@ const ModalCreateBlip: FC = () => {
 
     const activeSegment = useAppSelector((state) => state.editRadar.activeSegment);
 
-    const [addNewBlipEvent] = useAddNewBlipToRadarMutation();
-
     const dispatch = useAppDispatch();
+
+    const [{ isLoading }, add] = useAddNewBlipToRadar();
 
     const submitHandler = useCallback(
         async (values: FieldValues) => {
@@ -51,12 +59,12 @@ const ModalCreateBlip: FC = () => {
             };
 
             if (!isNewRadar) {
-                await addNewBlipEvent(blip);
+                await add(blip, radar.id);
+            } else {
+                dispatch(addNewBlip(blip));
             }
-
-            dispatch(addNewBlip(blip));
         },
-        [radar, dispatch, isNewRadar, addNewBlipEvent]
+        [radar, dispatch, isNewRadar, add]
     );
 
     const cancelBtnClickHandler = useCallback(() => {
@@ -74,7 +82,7 @@ const ModalCreateBlip: FC = () => {
                         ringName: activeSegment?.ring.name as string,
                         description: '',
                     }}
-                    validationSchema={validationSchema}
+                    validationSchema={getValidationSchema(radar)}
                     onSubmit={async (values, { setSubmitting }) => {
                         await submitHandler(values);
                         setSubmitting(false);
@@ -88,24 +96,25 @@ const ModalCreateBlip: FC = () => {
                             <ModalTextField label={'Комментарий'} name={'description'} multiline={true} />
                             <div className={styles.buttonContainer}>
                                 <Button
-                                    sx={btnSx}
+                                    sx={style.btnSx}
                                     color="success"
                                     variant="contained"
                                     type="submit"
-                                    disabled={!isValid || !dirty}
+                                    disabled={!isValid || !dirty || isLoading}
                                 >
                                     Создать
                                 </Button>
-                                <Button sx={btnSx} variant="outlined" onClick={cancelBtnClickHandler}>
+                                <Button sx={style.btnSx} variant="outlined" onClick={cancelBtnClickHandler}>
                                     Отмена
                                 </Button>
                             </div>
                         </Form>
                     )}
                 </Formik>
+                {isLoading && <LinearProgress className={styles.bar} />}
             </div>
         </Modal>
     );
 };
 
-export default ModalCreateBlip;
+export default ModalAddNewBlip;

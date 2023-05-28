@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { Blip, RadarInterface } from '../components/radar/types';
-import { setCurrenBlipEventId } from '../store/editRadarSlice';
 import { RootState } from '../store/store';
 import {
     CreateRadarApiRequest,
@@ -10,9 +9,8 @@ import {
     CreateRadarVersionDataApi,
     VersionApiResponse,
     CreateBlipEventApiResponse,
-    CreateBlipEventApiRequest,
-    CreateBlipApiRequest,
     CreateBlipApiResponse,
+    UpdateVersionRequest,
 } from './radarApiUtils';
 
 const baseUrl = '/api/';
@@ -49,7 +47,7 @@ fetch('http://localhost:8080/api/auth/authenticate', {
 */
 
 const accessToken =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MTg5MjE0LCJleHAiOjE2ODUyMjUyMTR9.v2p5fmkWuUkEu1lS1u2dfDkJMjvnu5WxDcwqwfUFCVA';
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MjY0NDE3LCJleHAiOjE2ODUzMDA0MTd9.lYAbsooxqqWiyem6hM63jM8Pd-RaPE6KxtS6ajvrDGg';
 
 // Все радары компании:
 // http://localhost:8080/api/radars?companyId=1
@@ -105,6 +103,16 @@ export const companyRadarsApi = createApi({
             query: (radarId) => `radar-versions/?radar-id=${radarId}`,
         }),
 
+        getVersionById: builder.query<VersionApiResponse, number>({
+            query: (versionId) => ({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                method: 'GET',
+                url: `radar-versions/${versionId}`,
+            }),
+        }),
+
         saveNewRadar: builder.mutation<VersionApiResponse, CreateRadarApiRequest>({
             async queryFn(radarData, { getState }, _options, fetchBaseQuery) {
                 const radarResponse = await fetchBaseQuery({
@@ -143,53 +151,98 @@ export const companyRadarsApi = createApi({
             },
         }),
 
-        addNewBlipToRadar: builder.mutation<CreateBlipEventApiResponse, Blip>({
-            async queryFn(blip, { getState, dispatch }, _, fetchBaseQuery) {
-                const state = (getState() as RootState).editRadar;
-
-                const blipRequest: CreateBlipApiRequest = {
+        createBlip: builder.mutation<CreateBlipApiResponse, { blip: Blip; radarId: number }>({
+            query: ({ blip, radarId }) => ({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                url: 'blips',
+                method: 'POST',
+                body: {
                     name: blip.name,
                     description: blip.description || '',
-                    radarId: Number(state.radar.id),
-                };
+                    radarId: Number(radarId),
+                },
+            }),
+        }),
 
-                const blipResponse = await fetchBaseQuery({
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                    url: 'blips',
-                    method: 'POST',
-                    body: blipRequest,
-                });
+        updateVersion: builder.mutation<UpdateVersionRequest, UpdateVersionRequest>({
+            query: (version) => ({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                url: `radar-versions/${version.id}`,
+                method: 'PUT',
+                body: version,
+            }),
+        }),
 
-                if (blipResponse.error) return { error: blipResponse.error };
-
-                const newApiBlip = blipResponse.data as CreateBlipApiResponse;
-
-                const blipEventRequest: CreateBlipEventApiRequest = {
+        createBlipEvent: builder.mutation<CreateBlipEventApiResponse, { blip: Blip; parentId: number }>({
+            query: ({ blip, parentId }) => ({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                url: 'blip-events',
+                method: 'POST',
+                body: {
                     comment: '',
-                    parentId: Number(state.currentBlipEventId),
-                    blipId: newApiBlip.id,
+                    parentId,
+                    blipId: blip.id,
                     quadrantId: blip.sector.id,
                     ringId: blip.ring.id,
                     authorId: 1,
-                };
-
-                const blipEventResponse = await fetchBaseQuery({
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                    url: 'blip-events',
-                    method: 'POST',
-                    body: blipEventRequest,
-                });
-
-                if (blipEventResponse.error) return { error: blipEventResponse.error };
-                const blipEvent = blipEventResponse.data as CreateBlipEventApiResponse;
-                dispatch(setCurrenBlipEventId(blipEvent.id));
-                return { data: blipEvent };
-            },
+                },
+            }),
         }),
+
+        // addNewBlipToRadar: builder.mutation<CreateBlipEventApiResponse, Blip>({
+        //     async queryFn(blip, { getState, dispatch }, _, fetchBaseQuery) {
+        //         const state = (getState() as RootState).editRadar;
+
+        //         const blipRequest: CreateBlipApiRequest = {
+        //             name: blip.name,
+        //             description: blip.description || '',
+        //             radarId: Number(state.radar.id),
+        //         };
+
+        //         const blipResponse = await fetchBaseQuery({
+        //             headers: {
+        //                 Authorization: `Bearer ${accessToken}`,
+        //             },
+        //             url: 'blips',
+        //             method: 'POST',
+        //             body: blipRequest,
+        //         });
+
+        //         if (blipResponse.error) return { error: blipResponse.error };
+
+        //         const newApiBlip = blipResponse.data as CreateBlipApiResponse;
+
+        //         const blipEventRequest: CreateBlipEventApiRequest = {
+        //             comment: '',
+        //             parentId: Number(state.currentBlipEventId),
+        //             blipId: newApiBlip.id,
+        //             quadrantId: blip.sector.id,
+        //             ringId: blip.ring.id,
+        //             authorId: 1,
+        //         };
+
+        //         const blipEventResponse = await fetchBaseQuery({
+        //             headers: {
+        //                 Authorization: `Bearer ${accessToken}`,
+        //             },
+        //             url: 'blip-events',
+        //             method: 'POST',
+        //             body: blipEventRequest,
+        //         });
+
+        //         if (blipEventResponse.error) return { error: blipEventResponse.error };
+        //         const blipEvent = blipEventResponse.data as CreateBlipEventApiResponse;
+        //         dispatch(setCurrentBlipEventId(blipEvent.id));
+
+        //         return { data: blipEvent };
+        //     },
+        // }),
     }),
 });
 
@@ -198,6 +251,10 @@ export const {
     useGetRadarQuery,
     useGetRadarByVersionIdQuery,
     useGetAllRadarVersionsQuery,
-    useAddNewBlipToRadarMutation,
+    useGetVersionByIdQuery,
+    useCreateBlipMutation,
+    useCreateBlipEventMutation,
+    // useAddNewBlipToRadarMutation,
+    useUpdateVersionMutation,
     useSaveNewRadarMutation,
 } = companyRadarsApi;

@@ -4,7 +4,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 import { useGetAllRadarVersionsQuery, useGetRadarByVersionIdQuery } from '../../../api/companyRadarsApi';
 import { VersionApiResponse } from '../../../api/radarApiUtils';
-import { cleanUp, setHasError, setInitialRadarAsset, setIsLoading } from '../../../store/editRadarSlice';
+import { cleanUp, setHasError, setRadar, setIsLoading } from '../../../store/editRadarSlice';
 import { useAppDispatch } from '../../../store/hooks';
 
 const getLastVersion = (versions: VersionApiResponse[]): VersionApiResponse =>
@@ -36,7 +36,7 @@ const CreateNewVersionDispatcher: FC = () => {
             dispatch(setIsLoading(isLoading));
             dispatch(setHasError(hasError));
             if (radar && lastVersion) {
-                dispatch(setInitialRadarAsset({ radar, version: lastVersion }));
+                dispatch(setRadar({ radar, version: lastVersion }));
             }
         }
         return () => {

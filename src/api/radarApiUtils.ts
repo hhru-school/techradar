@@ -127,6 +127,14 @@ export interface CreateBlipEventApiResponse {
     lastChangeTime: string;
 }
 
+export interface UpdateVersionRequest {
+    id: number;
+    name: string;
+    release: boolean;
+    radarId: number;
+    blipEventId: number;
+}
+
 export const formatApiData = (apiData: RadarApiDataResponse): RadarInterface => {
     const sectors = apiData.quadrants
         .sort((quadrant1, quadrant2) => quadrant1.position - quadrant2.position)
