@@ -17,14 +17,15 @@ import {
     Toolbar,
     Tooltip,
     Typography,
+    SxProps,
 } from '@mui/material';
 
-import { logOut, setAuthFormOpen } from '../../store/authSlice';
+import { logOut, setAuthFormOpen } from '../../store/authSlice/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AuthFormModal from '../modals/authFormModal/AuthFormModal';
 import RegistrationFormModal from '../modals/registrationFormModal/RegistrationFormModal';
 
-const styles = {
+const styles: Record<string, SxProps> = {
     iconBtnUnauth: { ml: 2 },
     iconBtn: { margin: 'auto 0' },
     label: { flexGrow: 1 },

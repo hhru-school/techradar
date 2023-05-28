@@ -1,7 +1,5 @@
 import { Blip } from '../components/radar/types';
 import { GridRadarObj } from '../pages/admin/myRadars/myRadarsDataGrid/MyRadarsDataGrid';
-import { GridTech } from '../pages/admin/myTechnologies/myTechDataGrid/MyTechDataGrid';
-import { GridRadarConstructor } from '../pages/admin/radarConstructor/radarConstructorGrid/RadarConstructorGrid';
 
 type Input = { label: string; id: string; name: string; type: string; autoComplete: string };
 
@@ -74,51 +72,6 @@ export const initialState: State = {
             name: 'name-Circle-1',
             type: 'text',
             autoComplete: 'off',
-        },
-    ],
-    techGrid: [
-        {
-            id: 1,
-            techName: 'babel',
-            link: 'babel',
-            relevantAt: '01.01.2023',
-            lastVersion: '01.01.2023',
-            comment: 'preset-env на уровне ES2018',
-        },
-        {
-            id: 2,
-            techName: 'Typescript',
-            relevantAt: '01.05.2023',
-            lastVersion: '01.05.2023',
-            comment: 'Планируем внедрять, есть чемпионское направление.',
-        },
-        {
-            id: 3,
-            techName: 'Less',
-            relevantAt: '01.05.2023',
-            lastVersion: '01.05.2023',
-            comment: 'Только без фанатизма и вложенных &, их сложнее грепать.',
-        },
-    ],
-
-    radarConstructorGrid: [
-        {
-            id: 1,
-            techName: 'babel',
-            Circle: 1,
-            sector: 2,
-        },
-        {
-            id: 2,
-            techName: 'react',
-            Circle: 3,
-            sector: 4,
-        },
-        {
-            id: 3,
-            techName: 'JS',
-            Circle: 2,
-            sector: 4,
         },
     ],
     radarGrid: {

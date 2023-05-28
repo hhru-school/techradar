@@ -9,36 +9,9 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { Mutex } from 'async-mutex';
 
-import { logOut, setCredentials } from '../store/authSlice';
+import { logOut, setCredentials } from '../store/authSlice/authSlice';
 import { RootState } from '../store/store';
-
-export interface ErrorResponseData {
-    message: string;
-    status: string;
-    timestamp: string;
-}
-
-export interface ErrorResponse {
-    data: ErrorResponseData;
-    status: number;
-}
-
-export interface UserResponse {
-    typeToken: string;
-    accessToken: string;
-    refreshToken: string;
-}
-
-export interface LoginRequest {
-    username: string;
-    password: string;
-}
-
-export interface ServerResponse {
-    username: string | null;
-    tokenAccess: string | null;
-    refreshToken: string | null;
-}
+import { SignInResponse } from './types';
 
 const mutex = new Mutex();
 
@@ -46,9 +19,9 @@ const baseQuery = fetchBaseQuery({
     baseUrl: '/api',
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
-        const tokenAccess = (getState() as RootState).auth.tokenAccess;
-        if (tokenAccess) {
-            headers.set('Authorization', `Bearer ${tokenAccess}`);
+        const accessToken = (getState() as RootState).auth.accessToken;
+        if (accessToken) {
+            headers.set('Authorization', `Bearer ${accessToken}`);
         }
         return headers;
     },
@@ -96,8 +69,8 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
                     api.dispatch(
                         setCredentials({
                             username,
-                            tokenAccess: (refreshResult.data as UserResponse).accessToken,
-                            refreshToken: (refreshResult.data as UserResponse).refreshToken,
+                            accessToken: (refreshResult.data as SignInResponse).accessToken,
+                            refreshToken: (refreshResult.data as SignInResponse).refreshToken,
                         })
                     );
 

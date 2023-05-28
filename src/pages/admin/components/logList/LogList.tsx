@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import { Box, Typography, TextField } from '@mui/material';
+import { Box, Typography, TextField, SxProps } from '@mui/material';
 
 import LogListItem from './logListItem/LogListItem';
 
-const styles = {
+const styles: Record<string, SxProps> = {
     boxItems: {
         mt: '8px',
         boxSizing: 'border-box',

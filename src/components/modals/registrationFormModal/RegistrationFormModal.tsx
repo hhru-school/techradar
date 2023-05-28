@@ -1,16 +1,16 @@
 import { FC, useCallback, useState } from 'react';
-import { Alert, Backdrop, Box, Button, Fade, Modal, Typography } from '@mui/material';
+import { Alert, Backdrop, Box, Button, Fade, Modal, SxProps, Typography } from '@mui/material';
 import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { ErrorResponse } from '../../../api/authApi';
-import { useRegistrMutation } from '../../../api/loginApi';
-import { setAuthFormOpen, setRegistrFormOpen } from '../../../store/authSlice';
+import { useSignUpMutation } from '../../../api/loginApi';
+import { ErrorResponse, SignUpResponse, SignUpValues } from '../../../api/types';
+import { setAuthFormOpen, setRegistrFormOpen } from '../../../store/authSlice/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import TextInputOutlined from '../../textInputOutlined/TextInputOutlined';
 import PassInput from '../components/PassInput/PassInput';
 
-const styles = {
+const styles: Record<string, SxProps> = {
     boxModal: {
         position: 'absolute',
         top: '50%',
@@ -24,16 +24,6 @@ const styles = {
     },
     btnSuccess: { marginTop: '20px' },
 };
-
-export interface RegistrationValues {
-    username: string;
-    password: string;
-    confirmPassword: string;
-}
-
-export interface RegistrResponse {
-    message: string;
-}
 
 const validSchema = Yup.object({
     username: Yup.string().required('Обязательное поле!'),
@@ -61,17 +51,17 @@ const RegistrationFormModal: FC = () => {
     const showRegistrForm = useAppSelector((state) => state.auth.showRegistrForm);
     const [message, setMessage] = useState<string | null>(null);
     const [errMessage, setErrMessage] = useState<string | null>(null);
-    const [registr, { isLoading }] = useRegistrMutation();
+    const [signUp, { isLoading }] = useSignUpMutation();
 
     const handleClose = useCallback(() => {
         dispatch(setRegistrFormOpen(false));
     }, [dispatch]);
 
     const onSubmitHandler = useCallback(
-        async (values: RegistrationValues, { setSubmitting }: FormikHelpers<RegistrationValues>) => {
-            await registr(values)
+        async (values: SignUpValues, { setSubmitting }: FormikHelpers<SignUpValues>) => {
+            await signUp(values)
                 .unwrap()
-                .then((res: RegistrResponse) => {
+                .then((res: SignUpResponse) => {
                     setErrMessage(null);
                     setMessage(res.message);
 
@@ -85,7 +75,7 @@ const RegistrationFormModal: FC = () => {
                 })
                 .catch((err: ErrorResponse) => setErrMessage(err.data.message));
         },
-        [dispatch, registr]
+        [dispatch, signUp]
     );
 
     return (

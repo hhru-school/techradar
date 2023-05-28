@@ -1,15 +1,15 @@
 import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import ErrorMessage from '../../../components/error/ErrorMessage';
-import { useAppSelector } from '../../../store/hooks';
-import MyRadars from '../myRadars/MyRadars';
-import RadarConstructor from '../radarConstructor/RadarConstructor';
+import MyRadars from '../../pages/admin/myRadars/MyRadars';
+import RadarConstructor from '../../pages/admin/radarConstructor/RadarConstructor';
+import { useAppSelector } from '../../store/hooks';
+import ErrorMessage from '../error/ErrorMessage';
 
 const RequireAuth: FC = () => {
-    const tokenAccess = useAppSelector((state) => state.auth.tokenAccess);
+    const accessToken = useAppSelector((state) => state.auth.accessToken);
 
-    const content = tokenAccess ? (
+    const content = accessToken ? (
         <Routes>
             <Route path="/my-radars/*" element={<MyRadars />} />
             <Route path="/radar-constructor" element={<RadarConstructor />} />

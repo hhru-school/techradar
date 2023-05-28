@@ -1,24 +1,24 @@
 import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Backdrop, Box, Button, Fade, Link, Modal, Typography } from '@mui/material';
+import { Alert, Backdrop, Box, Button, Fade, Link, Modal, SxProps, Typography } from '@mui/material';
 import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { ErrorResponse, UserResponse } from '../../../api/authApi';
-import { useLoginMutation } from '../../../api/loginApi';
-import { setAuthFormOpen, setRegistrFormOpen, setCredentials } from '../../../store/authSlice';
+import { useSignInMutation } from '../../../api/loginApi';
+import { ErrorResponse, SignInResponse } from '../../../api/types';
+import { setAuthFormOpen, setRegistrFormOpen, setCredentials } from '../../../store/authSlice/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import TextInputOutlined from '../../textInputOutlined/TextInputOutlined';
 import PassInput from '../components/PassInput/PassInput';
 
 import './AuthFormModal.less';
 
-const styles = {
+const styles: Record<string, SxProps> = {
     btnSuccess: { marginTop: '20px' },
     linkRegistr: { textAlign: 'center', mt: 3, cursor: 'pointer' },
 };
 
-export interface Values {
+export interface SignInValues {
     username: string;
     password: string;
 }
@@ -57,7 +57,7 @@ const AuthFormModal: FC = () => {
     const showAuthForm = useAppSelector((state) => state.auth.showAuthForm);
     const [message, setMessage] = useState<string | null>(null);
     const [errMessage, setErrMessage] = useState<string | null>(null);
-    const [login, { isLoading }] = useLoginMutation();
+    const [signIn, { isLoading }] = useSignInMutation();
 
     const handleClose = useCallback(() => {
         dispatch(setAuthFormOpen(false));
@@ -71,16 +71,16 @@ const AuthFormModal: FC = () => {
     }, [dispatch]);
 
     const onSubmitHandler = useCallback(
-        async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-            await login(values)
+        async (values: SignInValues, { setSubmitting }: FormikHelpers<SignInValues>) => {
+            await signIn(values)
                 .unwrap()
-                .then((credentials: UserResponse) => {
+                .then((credentials: SignInResponse) => {
                     setErrMessage(null);
                     setMessage('Вы успешно авторизированы!');
                     dispatch(
                         setCredentials({
                             username: values.username,
-                            tokenAccess: credentials.accessToken,
+                            accessToken: credentials.accessToken,
                             refreshToken: credentials.refreshToken,
                         })
                     );
@@ -95,7 +95,7 @@ const AuthFormModal: FC = () => {
                     setErrMessage(err.data.message);
                 });
         },
-        [dispatch, login, navigate]
+        [dispatch, signIn, navigate]
     );
 
     return (

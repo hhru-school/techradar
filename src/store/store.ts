@@ -4,9 +4,10 @@ import { apiSlice } from '../api/authApi';
 import { companyRadarsApi } from '../api/companyRadarsApi';
 import activeBlipReducer from './activeBlipSlice';
 import activeSectorReducer from './activeSectorSlice';
-import authReducer from './authSlice';
+import authReducer from './authSlice/authSlice';
 import constructorRadarReducer from './constructorRadarSlice';
 import editRadarReducer from './editRadarSlice';
+import { authMiddleware } from './middleware/authMiddleware';
 import myRadarsReducer from './myRadarsSlice';
 
 const rootReducer = combineReducers({
@@ -23,7 +24,7 @@ const rootReducer = combineReducers({
 export const store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat([apiSlice.middleware, companyRadarsApi.middleware]),
+        getDefaultMiddleware().concat([apiSlice.middleware, companyRadarsApi.middleware, authMiddleware]),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

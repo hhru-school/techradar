@@ -1,23 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ServerResponse } from '../api/authApi';
-import { RootState } from './store';
-
-interface AuthState {
-    showAuthForm: boolean;
-    showRegistrForm: boolean;
-    username: string | null;
-    password: string | null;
-    tokenAccess: string | null;
-    refreshToken: string | null;
-}
+import { ServerResponse } from '../../api/types';
+import { RootState } from '../store';
+import { AuthState } from './types';
 
 const initAuthState: AuthState = {
     showAuthForm: false,
     showRegistrForm: false,
     username: null,
     password: null,
-    tokenAccess: null,
+    accessToken: null,
     refreshToken: null,
 };
 
@@ -33,20 +25,15 @@ export const authSlice = createSlice({
         },
         setCredentials: (
             state,
-            { payload: { username, tokenAccess, refreshToken } }: PayloadAction<ServerResponse>
+            { payload: { username, accessToken, refreshToken } }: PayloadAction<ServerResponse>
         ) => {
             state.username = username;
-            state.tokenAccess = tokenAccess;
+            state.accessToken = accessToken;
             state.refreshToken = refreshToken;
-            if (typeof username === 'string' && typeof tokenAccess === 'string' && typeof refreshToken === 'string') {
-                localStorage.setItem('username', username);
-                localStorage.setItem('tokenAccess', tokenAccess);
-                localStorage.setItem('refreshToken', refreshToken);
-            }
         },
         logOut: (state) => {
             state.username = null;
-            state.tokenAccess = null;
+            state.accessToken = null;
             state.refreshToken = null;
             localStorage.clear();
         },
@@ -58,5 +45,5 @@ export const { setAuthFormOpen, setCredentials, logOut, setRegistrFormOpen } = a
 export default authSlice.reducer;
 
 export const selectCurrentUser = (state: RootState): string | null => state.auth.username;
-export const selectCurrentAccessToken = (state: RootState): string | null => state.auth.tokenAccess;
+export const selectCurrentAccessToken = (state: RootState): string | null => state.auth.accessToken;
 export const selectCurrentRefreshToken = (state: RootState): string | null => state.auth.refreshToken;
