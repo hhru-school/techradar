@@ -4,6 +4,7 @@ import {
     useCreateBlipEventMutation,
     useCreateBlipMutation,
     useGetRadarByVersionIdQuery,
+    useGetVersionByIdQuery,
     useUpdateVersionMutation,
 } from '../../api/companyRadarsApi';
 import { Blip } from '../../components/radar/types';
@@ -22,20 +23,25 @@ export const useAddNewBlipToRadar = (): [EditRadarMutationState, AddNewBlipFunc]
 
     const [state, setState] = useState<EditRadarMutationState>({ isLoading: false, hasError: false });
 
-    const parentId = useAppSelector((state) => state.editRadar.currentBlipEventId);
+    const parentId = useAppSelector((state) => state.editRadar.version?.blipEventId);
     const version = useAppSelector((state) => state.editRadar.version);
 
     const [createBlip] = useCreateBlipMutation();
     const [createBlipEvent] = useCreateBlipEventMutation();
-    const [updateVersion, { isSuccess }] = useUpdateVersionMutation();
-    const { data: radar } = useGetRadarByVersionIdQuery(version?.id ?? -1, { skip: !isSuccess });
+    const [updateVersion, { isSuccess: isUpdateVersionSuccess }] = useUpdateVersionMutation();
+    const { data: updatedRadar } = useGetRadarByVersionIdQuery(version?.id ?? -1, {
+        skip: !isUpdateVersionSuccess,
+    });
+    const { data: updatedVersion } = useGetVersionByIdQuery(version?.id ?? -1, {
+        skip: !isUpdateVersionSuccess,
+    });
 
     useEffect(() => {
-        if (radar) {
-            setRadar({ radar });
+        if (updatedRadar && updatedVersion) {
+            dispatch(setRadar({ radar: updatedRadar, version: updatedVersion }));
             dispatch(closeCreateBlipModal());
         }
-    }, [radar, dispatch]);
+    }, [dispatch, updatedRadar, updatedVersion, version]);
 
     const addNewBlip = useCallback(
         async (blip: Blip, radarId: number) => {
@@ -48,7 +54,7 @@ export const useAddNewBlipToRadar = (): [EditRadarMutationState, AddNewBlipFunc]
                 await updateVersion({ ...version, blipEventId: blipEvent.id });
                 setState({ isLoading: false, hasError: false });
             } catch (error) {
-                console.error('add new blip error');
+                console.error('Add new blip error');
                 setState({ isLoading: false, hasError: true });
             }
         },
