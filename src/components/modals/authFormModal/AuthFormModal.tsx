@@ -1,6 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Backdrop, Box, Button, Fade, Link, Modal, SxProps, Typography } from '@mui/material';
+import { Alert, Backdrop, Box, Button, CircularProgress, Fade, Link, Modal, SxProps, Typography } from '@mui/material';
 import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
@@ -13,9 +13,21 @@ import PassInput from '../components/PassInput/PassInput';
 
 import './AuthFormModal.less';
 
-const styles: Record<string, SxProps> = {
+export const styles: Record<string, SxProps> = {
     btnSuccess: { marginTop: '20px' },
     linkRegistr: { textAlign: 'center', mt: 3, cursor: 'pointer' },
+    progressCircle: { height: '100%' },
+    modal: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        minWidth: 250,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    },
 };
 
 export interface SignInValues {
@@ -27,18 +39,6 @@ const validSchema = Yup.object({
     username: Yup.string().email('Введите валидный email').required('Обязательное поле!'),
     password: Yup.string().min(2, 'Минимум 2 символа для заполнения').required('Обязательное поле!'),
 });
-
-export const styleModal = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    minWidth: 250,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
 
 const slots = { backdrop: Backdrop };
 const initialValues = {
@@ -84,18 +84,23 @@ const AuthFormModal: FC = () => {
                             refreshToken: credentials.refreshToken,
                         })
                     );
-                    setTimeout(() => {
-                        dispatch(setAuthFormOpen(false));
-                        setSubmitting(false);
-                        navigate('/admin/my-radars');
-                        setMessage(null);
-                    }, 3000);
+                    dispatch(setAuthFormOpen(false));
+                    setSubmitting(false);
+                    navigate('/admin/my-radars');
+                    setMessage(null);
                 })
                 .catch((err: ErrorResponse) => {
                     setErrMessage(err.data.message);
                 });
         },
         [dispatch, signIn, navigate]
+    );
+
+    const textSignInBtn = isLoading ? <CircularProgress color="inherit" sx={styles.progressCircle} /> : 'Войти';
+    const textSignUpBtn = isLoading ? (
+        <CircularProgress color="inherit" sx={styles.progressCircle} />
+    ) : (
+        'Зарегистрироваться'
     );
 
     return (
@@ -109,7 +114,7 @@ const AuthFormModal: FC = () => {
             slotProps={slotProps}
         >
             <Fade in={showAuthForm}>
-                <Box sx={styleModal}>
+                <Box sx={styles.modal}>
                     <Typography variant="h6" component="h2">
                         Вход в учетную запись TechRadar
                     </Typography>
@@ -137,12 +142,12 @@ const AuthFormModal: FC = () => {
                                 sx={styles.btnSuccess}
                                 disabled={isLoading}
                             >
-                                Войти
+                                {textSignInBtn}
                             </Button>
                             {message && <Alert severity="success">{message}</Alert>}
                             {errMessage && <Alert severity="error">{errMessage}</Alert>}
                             <Link sx={styles.linkRegistr} onClick={handleRegistr}>
-                                Зарегистрироваться
+                                {textSignUpBtn}
                             </Link>
                         </Form>
                     </Formik>
