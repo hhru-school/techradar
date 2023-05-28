@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Button } from '@mui/material';
 
-import { ConstructorMode, setShowSaveRadarDialog } from '../../../store/editRadarSlice';
+import { ConstructorMode, setShowSaveRadarDialog, setShowSwitchReleaseModal } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import EditCredetialContainer from '../editPanel/EditCredetionalContainer';
+import VersionStatusContainer from './VersionStatusContainer';
 
 import styles from './mainEditPanel.module.less';
 
@@ -25,26 +26,32 @@ const MainEditPanel: FC<Props> = ({ mode }) => {
     };
 
     const isReleased = !isNewRadar && version?.release;
-    const isDraft = !isNewRadar && version;
+    const isDraft = !isNewRadar && !version?.release;
+
+    const clickHandler = useCallback(() => {
+        dispatch(setShowSwitchReleaseModal(true));
+    }, [dispatch]);
 
     return (
         <div className={styles.container}>
             <EditCredetialContainer label={'Название радара'} value={name} />
             <EditCredetialContainer label={'Версия'} value={currentVersionName} />
+
             <div className={styles.spacer}></div>
 
+            {!isNewRadar && version && <VersionStatusContainer release={version?.release} />}
             {isNewRadar && (
                 <Button variant="contained" color="primary" onClick={saveBtnClickHandler}>
                     Сохранить
                 </Button>
             )}
             {isReleased && (
-                <Button variant="contained" color="warning">
+                <Button variant="contained" color="error" onClick={clickHandler}>
                     Unpublish
                 </Button>
             )}
             {isDraft && (
-                <Button variant="contained" color="success">
+                <Button variant="contained" color="success" onClick={clickHandler}>
                     Опубликовать
                 </Button>
             )}

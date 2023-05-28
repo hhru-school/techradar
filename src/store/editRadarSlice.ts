@@ -71,6 +71,7 @@ export interface EditRadarState {
     showAddNewSectorModal: boolean;
     showAddNewRingModal: boolean;
     showSaveRadarDialog: boolean;
+    showSwitchReleaseModal: boolean;
     editingSector: Sector | null;
     editingRing: Ring | null;
     showEditIcon: boolean;
@@ -104,6 +105,7 @@ const initialState: EditRadarState = {
     showAddNewSectorModal: false,
     showAddNewRingModal: false,
     showSaveRadarDialog: false,
+    showSwitchReleaseModal: false,
     showEditIcon: false,
 };
 
@@ -434,6 +436,10 @@ export const editRadarSlice = createSlice({
             state.isModalLoading = false;
             state.hasError = false;
         },
+
+        setShowSwitchReleaseModal: (state, action: PayloadAction<boolean>) => {
+            state.showSwitchReleaseModal = action.payload;
+        },
     },
 });
 
@@ -483,6 +489,7 @@ export const {
     setRadar,
     setVersion,
     cleanUp,
+    setShowSwitchReleaseModal,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;
