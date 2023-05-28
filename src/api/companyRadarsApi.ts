@@ -11,6 +11,7 @@ import {
     CreateBlipEventApiResponse,
     CreateBlipApiResponse,
     UpdateVersionRequest,
+    CreateBlipEventApiRequest,
 } from './radarApiUtils';
 
 const baseUrl = '/api/';
@@ -47,7 +48,7 @@ fetch('http://localhost:8080/api/auth/authenticate', {
 */
 
 const accessToken =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1Mjc1MzMyLCJleHAiOjE2ODUzMTEzMzJ9.TNhjKAlP3mLL9rxsjWC7Xp9OHRsMZlNAW37DSeT9-8U';
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MzAxMzkwLCJleHAiOjE2ODUzMzczOTB9.069iaX47XWEhpWFQUt52Km6YB-z3tpederk5Mt4UlAo';
 
 // Все радары компании:
 // http://localhost:8080/api/radars?companyId=1
@@ -183,21 +184,23 @@ export const companyRadarsApi = createApi({
             invalidatesTags: ['Radar', 'Version'],
         }),
 
-        createBlipEvent: builder.mutation<CreateBlipEventApiResponse, { blip: Blip; parentId: number }>({
-            query: ({ blip, parentId }) => ({
+        createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApiRequest>({
+            query: (body) => ({
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
                 url: 'blip-events',
                 method: 'POST',
-                body: {
-                    comment: '',
-                    parentId,
-                    blipId: blip.id,
-                    quadrantId: blip.sector.id,
-                    ringId: blip.ring.id,
-                    authorId: 1,
-                },
+                body,
+
+                // {
+                //     comment: '',
+                //     parentId,
+                //     blipId: blip.id,
+                //     quadrantId: blip.sector.id,
+                //     ringId: blip.ring.id,
+                //     authorId: 1,
+                // },
             }),
         }),
 

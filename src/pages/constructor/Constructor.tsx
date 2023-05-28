@@ -21,7 +21,7 @@ const Constructor: FC<Props> = ({ mode = ConstructorMode.NewRadarCreation }) => 
     return (
         <>
             <Modals />
-            <MainEditPanel />
+            <MainEditPanel mode={mode} />
             <MainContainer radar={radar} />
             <ModeDispatcher mode={mode} />
         </>
