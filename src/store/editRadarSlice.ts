@@ -5,7 +5,7 @@ import { VersionApiResponse } from '../api/radarApiUtils';
 import { Blip, RadarInterface, Ring, Sector } from '../components/radar/types';
 import { defaultRadarAsset, defaultVersionName } from '../pages/constructor/config';
 
-interface Segment {
+export interface Segment {
     sector: Sector;
     ring: Ring;
 }
@@ -418,6 +418,10 @@ export const editRadarSlice = createSlice({
             }
         },
 
+        setVersion: (state, action: PayloadAction<VersionApiResponse>) => {
+            state.version = action.payload;
+        },
+
         isetCurrentBlipEventId: (state, action: PayloadAction<number>) => {
             state.currentBlipEventId = action.payload;
         },
@@ -477,7 +481,7 @@ export const {
     setIsLoading,
     setHasError,
     setRadar,
-    // setCurrentBlipEventId,
+    setVersion,
     cleanUp,
 } = editRadarSlice.actions;
 
