@@ -2,7 +2,7 @@ import { FC, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
-import { buildRadarUrl } from '../../../../api/radarApiUtils';
+import { buildRadarViewerUrl } from '../../../../api/radarApiUtils';
 import { Version } from '../../TechRadar';
 
 type Props = {
@@ -32,7 +32,7 @@ const SelectVersion: FC<Props> = ({ versions, version, companyId, radarId }) => 
     const changeHandler = useCallback(
         (event: SelectChangeEvent) => {
             const version = getVersionById(versions, event.target.value) as Version;
-            navigate(buildRadarUrl(companyId, radarId, version.id), { replace: true });
+            navigate(buildRadarViewerUrl(companyId, radarId, version.id), { replace: true });
         },
         [navigate, radarId, companyId, versions]
     );

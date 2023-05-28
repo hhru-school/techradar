@@ -5,22 +5,14 @@ export const getUrl = (url: string, hostUrl = ''): string => hostUrl.concat(url)
 // Пример запроса радара
 // http://localhost:3000/techradar/company/123/radar/123/version/123
 
-export const buildRadarUrl = (companyId: number, radarId: number, versionId?: number): string => {
+export const buildRadarViewerUrl = (companyId: number, radarId: number, versionId?: number): string => {
     const version = versionId ? `${versionId}` : 'latest';
     return `/techradar/company/${companyId}/radar/${radarId}/version/${version}`;
 };
 
-// export interface BasicRadarData {
-//     blips: Blip[];
-//     sectorNames: string[];
-//     ringNames: string[];
-// }
-
-// export interface CreateRadarApiRequest {
-//     name: string;
-//     companyId: number;
-//     authorId: number;
-// }
+export const buildEditRadarVersionUrl = (versionId: number): string => {
+    return `/constructor/edit/version/${versionId}`;
+};
 
 export interface CreateRadarApiRequest {
     radar: {
