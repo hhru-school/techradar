@@ -2,8 +2,8 @@ import { FC } from 'react';
 
 import { useAppSelector } from '../../../store/hooks';
 import ModalEditSectorName from './ModaEditSectorName';
+import ModalAddNewBlip from './ModalAddNewBlip';
 import ModalAddNewSector from './ModalAddNewSector';
-import ModalCreateBlip from './ModalCreateBlip';
 import ModalDeleteBlip from './ModalDeleteBlip';
 import ModalDeleteRing from './ModalDeleteRing';
 import ModalDeleteSector from './ModalDeleteSector';
@@ -25,7 +25,7 @@ const Modals: FC = () => {
     const showSaveRadarDialog = useAppSelector((state) => state.editRadar.showSaveRadarDialog);
     return (
         <>
-            {showCreateBlipModal && <ModalCreateBlip />}
+            {showCreateBlipModal && <ModalAddNewBlip />}
             {showEditBlipModal && <ModalEditBlip />}
             {showMoveBlipRadar && <ModalMoveBlip />}
             {showEditSectorNameModal && <ModalEditSectorName />}

@@ -28,7 +28,7 @@ interface MoveBlipAsset {
 
 interface RadarInitialData {
     radar: RadarInterface;
-    version: VersionApiResponse;
+    version?: VersionApiResponse;
 }
 
 export enum EventSuggest {
@@ -47,7 +47,8 @@ export enum ConstructorMode {
 
 export interface EditRadarState {
     radar: RadarInterface;
-    isLoading: boolean;
+    isModalLoading: boolean;
+    isPageLoading: boolean;
     hasError: boolean;
     version: VersionApiResponse | null;
     currentVersionName: string;
@@ -76,8 +77,9 @@ export interface EditRadarState {
 }
 
 const initialState: EditRadarState = {
+    isModalLoading: false,
+    isPageLoading: false,
     radar: defaultRadarAsset,
-    isLoading: false,
     hasError: false,
     version: null,
     currentVersionName: defaultVersionName,
@@ -135,6 +137,13 @@ export const editRadarSlice = createSlice({
     name: 'editRadar',
     initialState,
     reducers: {
+        setIsPageLoading: (state, action: PayloadAction<boolean>) => {
+            state.isPageLoading = action.payload;
+        },
+
+        setIsModalLoading: (state, action: PayloadAction<boolean>) => {
+            state.isModalLoading = action.payload;
+        },
         setIsDragging: (state, action: PayloadAction<boolean>) => {
             state.isDragging = action.payload;
         },
@@ -387,9 +396,6 @@ export const editRadarSlice = createSlice({
 
         setEditMode: (state, action: PayloadAction<ConstructorMode>) => {
             state.mode = action.payload;
-            // if (action.payload === ConstructorMode.NewVersionCreation) {
-            //     state.radarId = null;
-            // }
         },
 
         setBlipEventId: (state, action: PayloadAction<number>) => {
@@ -397,20 +403,26 @@ export const editRadarSlice = createSlice({
         },
 
         setIsLoading: (state, action: PayloadAction<boolean>) => {
-            state.isLoading = action.payload;
+            state.isModalLoading = action.payload;
         },
 
         setHasError: (state, action: PayloadAction<boolean>) => {
             state.hasError = action.payload;
         },
 
-        setInitialRadarAsset: (state, action: PayloadAction<RadarInitialData>) => {
+        setRadar: (state, action: PayloadAction<RadarInitialData>) => {
             state.radar = action.payload.radar;
-            state.version = action.payload.version;
-            state.currentBlipEventId = action.payload.version.blipEventId;
+            const version = action.payload.version;
+            if (version) {
+                state.version = version;
+                state.currentBlipEventId = version.blipEventId;
+                if (state.mode === ConstructorMode.VersionEditing) {
+                    state.currentVersionName = state.version.name;
+                }
+            }
         },
 
-        setCurrenBlipEventId: (state, action: PayloadAction<number>) => {
+        setCurrentBlipEventId: (state, action: PayloadAction<number>) => {
             state.currentBlipEventId = action.payload;
         },
 
@@ -419,13 +431,15 @@ export const editRadarSlice = createSlice({
         },
 
         cleanUp: (state) => {
-            state.isLoading = false;
+            state.isModalLoading = false;
             state.hasError = false;
         },
     },
 });
 
 export const {
+    setIsModalLoading,
+    setIsPageLoading,
     setIsDragging,
     setActiveSegment,
     clearActiveSegment,
@@ -466,8 +480,8 @@ export const {
     setEditMode,
     setIsLoading,
     setHasError,
-    setInitialRadarAsset,
-    setCurrenBlipEventId,
+    setRadar,
+    setCurrentBlipEventId,
     cleanUp,
 } = editRadarSlice.actions;
 
