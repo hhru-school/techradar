@@ -4,11 +4,10 @@ import {
     useCreateBlipEventMutation,
     useCreateBlipMutation,
     useGetRadarByVersionIdQuery,
-    useGetVersionByIdQuery,
     useUpdateVersionMutation,
 } from '../../api/companyRadarsApi';
 import { Blip } from '../../components/radar/types';
-import { closeCreateBlipModal, setRadar } from '../../store/editRadarSlice';
+import { Segment, setRadar, setVersion } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 interface EditRadarMutationState {
@@ -16,50 +15,61 @@ interface EditRadarMutationState {
     hasError: boolean;
 }
 
-type AddNewBlipFunc = (blip: Blip, radarId: number) => Promise<void>;
+export enum OperationType {
+    Move,
+    Add,
+    Delete,
+}
 
-export const useAddNewBlipToRadar = (): [EditRadarMutationState, AddNewBlipFunc] => {
+type OperationHandler = (blip: Blip, distSegment?: Segment) => Promise<void>;
+
+export const useOperationHandler = (operation: OperationType): [EditRadarMutationState, OperationHandler] => {
     const dispatch = useAppDispatch();
 
     const [state, setState] = useState<EditRadarMutationState>({ isLoading: false, hasError: false });
 
     const parentId = useAppSelector((state) => state.editRadar.version?.blipEventId);
+    const radarId = useAppSelector((state) => state.editRadar.radar.id);
     const version = useAppSelector((state) => state.editRadar.version);
 
     const [createBlip] = useCreateBlipMutation();
     const [createBlipEvent] = useCreateBlipEventMutation();
     const [updateVersion, { isSuccess: isUpdateVersionSuccess }] = useUpdateVersionMutation();
-    const { data: updatedRadar } = useGetRadarByVersionIdQuery(version?.id ?? -1, {
-        skip: !isUpdateVersionSuccess,
-    });
-    const { data: updatedVersion } = useGetVersionByIdQuery(version?.id ?? -1, {
+    const { data: radar } = useGetRadarByVersionIdQuery(version?.id ?? -1, {
         skip: !isUpdateVersionSuccess,
     });
 
     useEffect(() => {
-        if (updatedRadar && updatedVersion) {
-            dispatch(setRadar({ radar: updatedRadar, version: updatedVersion }));
-            dispatch(closeCreateBlipModal());
+        if (radar && version) {
+            dispatch(setRadar({ radar, version }));
         }
-    }, [dispatch, updatedRadar, updatedVersion, version]);
+    }, [dispatch, radar, version]);
 
-    const addNewBlip = useCallback(
-        async (blip: Blip, radarId: number) => {
+    const handler = useCallback(
+        async (blip: Blip, distSegment?: Segment) => {
             try {
-                if (!parentId || !version) throw new Error();
+                if (!parentId || !version || !radarId) throw new Error();
                 setState({ isLoading: true, hasError: false });
-                const newBlipResp = await createBlip({ blip, radarId }).unwrap();
-                const newBlip = { ...blip, id: newBlipResp.id };
-                const blipEvent = await createBlipEvent({ blip: newBlip, parentId }).unwrap();
-                await updateVersion({ ...version, blipEventId: blipEvent.id });
+                let currentBlip = blip;
+                if (operation === OperationType.Add) {
+                    const newBlipResp = await createBlip({ blip, radarId }).unwrap();
+                    currentBlip = { ...blip, id: newBlipResp.id };
+                }
+                if (operation === OperationType.Move) {
+                    const segment = distSegment as Segment;
+                    currentBlip = { ...blip, ring: segment.ring, sector: segment.sector };
+                }
+                const blipEvent = await createBlipEvent({ blip: currentBlip, parentId }).unwrap();
+                const updatedVersion = await updateVersion({ ...version, blipEventId: blipEvent.id }).unwrap();
+                dispatch(setVersion(updatedVersion));
                 setState({ isLoading: false, hasError: false });
             } catch (error) {
                 console.error('Add new blip error');
                 setState({ isLoading: false, hasError: true });
             }
         },
-        [setState, createBlip, createBlipEvent, updateVersion, parentId, version]
+        [setState, createBlip, createBlipEvent, updateVersion, parentId, version, dispatch, operation, radarId]
     );
 
-    return [state, addNewBlip];
+    return [state, handler];
 };

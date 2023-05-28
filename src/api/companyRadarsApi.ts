@@ -171,7 +171,7 @@ export const companyRadarsApi = createApi({
             }),
         }),
 
-        updateVersion: builder.mutation<UpdateVersionRequest, UpdateVersionRequest>({
+        updateVersion: builder.mutation<VersionApiResponse, UpdateVersionRequest>({
             query: (version) => ({
                 headers: {
                     Authorization: `Bearer ${accessToken}`,

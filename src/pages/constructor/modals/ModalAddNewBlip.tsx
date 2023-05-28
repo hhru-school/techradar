@@ -7,7 +7,7 @@ import { Blip, RadarInterface } from '../../../components/radar/types';
 import { getRingByName, getRingNames, getSectorByName, getSectorNames } from '../../../components/radar/utils';
 import { ConstructorMode, addNewBlip, closeCreateBlipModal } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { useAddNewBlipToRadar } from '../hooks';
+import { OperationType, useOperationHandler } from '../hooks';
 import ModalSelectField from './ModalSelectField';
 import ModalTextField from './ModalTextField';
 
@@ -45,7 +45,7 @@ const ModalAddNewBlip: FC = () => {
 
     const dispatch = useAppDispatch();
 
-    const [{ isLoading }, add] = useAddNewBlipToRadar();
+    const [{ isLoading }, add] = useOperationHandler(OperationType.Add);
 
     const submitHandler = useCallback(
         async (values: FieldValues) => {
@@ -59,7 +59,8 @@ const ModalAddNewBlip: FC = () => {
             };
 
             if (!isNewRadar) {
-                await add(blip, radar.id);
+                await add(blip);
+                dispatch(closeCreateBlipModal());
             } else {
                 dispatch(addNewBlip(blip));
             }
