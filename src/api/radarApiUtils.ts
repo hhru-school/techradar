@@ -1,4 +1,4 @@
-import { RadarInterface, Ring, Sector } from '../components/radar/types';
+import { Blip, RadarInterface, Ring, Sector } from '../components/radar/types';
 
 export const getUrl = (url: string, hostUrl = ''): string => hostUrl.concat(url);
 
@@ -114,8 +114,8 @@ export interface CreateBlipEventApiRequest {
     comment: string;
     parentId: number;
     blipId: number;
-    quadrantId: number;
-    ringId: number;
+    quadrantId: number | null;
+    ringId: number | null;
     authorId: number;
 }
 
@@ -209,3 +209,12 @@ export const formatCreateRadarData = (radar: RadarInterface): CreateRadarApiRequ
         blips,
     };
 };
+
+export const buildBlipEventRequest = (blip: Blip, parentId: number, comment?: string): CreateBlipEventApiRequest => ({
+    comment: comment || '',
+    parentId,
+    blipId: blip.id,
+    quadrantId: blip.sector.id || null,
+    ringId: blip.ring.id || null,
+    authorId: 1,
+});

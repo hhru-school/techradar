@@ -6,6 +6,7 @@ import {
     useGetRadarByVersionIdQuery,
     useUpdateVersionMutation,
 } from '../../api/companyRadarsApi';
+import { CreateBlipEventApiRequest, buildBlipEventRequest } from '../../api/radarApiUtils';
 import { Blip } from '../../components/radar/types';
 import { Segment, setRadar, setVersion } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -50,21 +51,25 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
             try {
                 if (!parentId || !version || !radarId) throw new Error();
                 setState({ isLoading: true, hasError: false });
-                let currentBlip = blip;
+                let blipEventRequest: CreateBlipEventApiRequest = buildBlipEventRequest(blip, parentId);
                 if (operation === OperationType.Add) {
                     const newBlipResp = await createBlip({ blip, radarId }).unwrap();
-                    currentBlip = { ...blip, id: newBlipResp.id };
+                    blipEventRequest = { ...blipEventRequest, blipId: newBlipResp.id };
                 }
                 if (operation === OperationType.Move) {
                     const segment = distSegment as Segment;
-                    currentBlip = { ...blip, ring: segment.ring, sector: segment.sector };
+                    blipEventRequest = { ...blipEventRequest, ringId: segment.ring.id, quadrantId: segment.sector.id };
                 }
-                const blipEvent = await createBlipEvent({ blip: currentBlip, parentId }).unwrap();
+                if (operation === OperationType.Delete) {
+                    blipEventRequest = { ...blipEventRequest, ringId: null, quadrantId: null };
+                }
+
+                const blipEvent = await createBlipEvent(blipEventRequest).unwrap();
                 const updatedVersion = await updateVersion({ ...version, blipEventId: blipEvent.id }).unwrap();
                 dispatch(setVersion(updatedVersion));
                 setState({ isLoading: false, hasError: false });
             } catch (error) {
-                console.error('Add new blip error');
+                console.error('Blip operation error');
                 setState({ isLoading: false, hasError: true });
             }
         },
