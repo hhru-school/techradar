@@ -47,7 +47,7 @@ fetch('http://localhost:8080/api/auth/authenticate', {
 */
 
 const accessToken =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MjY0NDE3LCJleHAiOjE2ODUzMDA0MTd9.lYAbsooxqqWiyem6hM63jM8Pd-RaPE6KxtS6ajvrDGg';
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1Mjc1MzMyLCJleHAiOjE2ODUzMTEzMzJ9.TNhjKAlP3mLL9rxsjWC7Xp9OHRsMZlNAW37DSeT9-8U';
 
 // Все радары компании:
 // http://localhost:8080/api/radars?companyId=1
@@ -66,6 +66,7 @@ const accessToken =
 export const companyRadarsApi = createApi({
     reducerPath: 'companyRadarsApi',
     baseQuery: fetchBaseQuery({ baseUrl }),
+    tagTypes: ['Radar', 'Version'],
     endpoints: (builder) => ({
         getAllCompanyRadars: builder.query<RadarApi[], number>({
             query: (companyId) => ({
@@ -75,6 +76,7 @@ export const companyRadarsApi = createApi({
                 method: 'GET',
                 url: `/radars?company-id=${companyId}`,
             }),
+            providesTags: ['Radar'],
         }),
 
         getRadar: builder.query<RadarInterface, number>({
@@ -96,7 +98,9 @@ export const companyRadarsApi = createApi({
                 method: 'GET',
                 url: `containers?radar-version-id=${radarVersionId}`,
             }),
+
             transformResponse: (rawResult: RadarApiDataResponse) => formatApiData(rawResult),
+            providesTags: ['Radar'],
         }),
 
         getAllRadarVersions: builder.query<VersionApiResponse[], number>({
@@ -111,6 +115,7 @@ export const companyRadarsApi = createApi({
                 method: 'GET',
                 url: `radar-versions/${versionId}`,
             }),
+            providesTags: ['Version'],
         }),
 
         saveNewRadar: builder.mutation<VersionApiResponse, CreateRadarApiRequest>({
@@ -175,6 +180,7 @@ export const companyRadarsApi = createApi({
                 method: 'PUT',
                 body: version,
             }),
+            invalidatesTags: ['Radar', 'Version'],
         }),
 
         createBlipEvent: builder.mutation<CreateBlipEventApiResponse, { blip: Blip; parentId: number }>({
