@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowForward, Edit } from '@mui/icons-material';
 import { Alert, AlertTitle, Button, Stack } from '@mui/material';
 
-import { buildRadarUrl } from '../../../../api/radarApiUtils';
+import { buildEditRadarVersionUrl, buildRadarViewerUrl } from '../../../../api/radarApiUtils';
+import { setShowSaveRadarDialog } from '../../../../store/editRadarSlice';
+import { useAppDispatch } from '../../../../store/hooks';
 
 type Props = {
     radarName: string;
@@ -18,11 +20,17 @@ const style = {
 };
 
 const SuccessDialog: FC<Props> = ({ radarName, radarVersion, radarId, versionId, companyId }) => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const linkBtnHandler = useCallback(() => {
-        navigate(buildRadarUrl(companyId, radarId, versionId), { replace: true });
+    const radarViewerLinkBtn = useCallback(() => {
+        navigate(buildRadarViewerUrl(companyId, radarId, versionId), { replace: true });
     }, [navigate, radarId, companyId, versionId]);
+
+    const radarEditLinkBtn = useCallback(() => {
+        navigate(buildEditRadarVersionUrl(versionId), { replace: true });
+        dispatch(setShowSaveRadarDialog(false));
+    }, [navigate, versionId, dispatch]);
 
     return (
         <>
@@ -39,11 +47,11 @@ const SuccessDialog: FC<Props> = ({ radarName, radarVersion, radarId, versionId,
                     endIcon={<ArrowForward />}
                     variant="contained"
                     color="secondary"
-                    onClick={linkBtnHandler}
+                    onClick={radarViewerLinkBtn}
                 >
                     К просмотру радара
                 </Button>
-                <Button fullWidth={true} startIcon={<Edit />} variant="outlined">
+                <Button fullWidth={true} startIcon={<Edit />} variant="outlined" onClick={radarEditLinkBtn}>
                     Редактировать радар
                 </Button>
             </Stack>
