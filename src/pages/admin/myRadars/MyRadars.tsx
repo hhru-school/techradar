@@ -77,7 +77,7 @@ const MyRadar: FC = () => {
                 </Button>
             </Link>
             <Routes>
-                <Route path="/grid/:rowsId" element={<MyRadarsDataGrid />} />
+                <Route path="/grid/:radarId" element={<MyRadarsDataGrid />} />
             </Routes>
             {showRadarsCreateModal && <MyRadarCreateModal />}
         </Container>

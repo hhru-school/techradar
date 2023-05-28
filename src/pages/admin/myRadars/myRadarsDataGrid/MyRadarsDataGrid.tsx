@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,7 +7,7 @@ import { Box } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, ruRU } from '@mui/x-data-grid';
 
 import { useDeleteRadarVersionsMutation, useGetRadarVersionsQuery } from '../../../../api/companyRadarsApi';
-import { RadarVersionData } from '../../../../api/types';
+import { RadarVersionData, VersionData } from '../../../../api/types';
 
 const styles = {
     box: { height: 'calc(100vh - 240px)', width: '100%' },
@@ -29,10 +29,23 @@ const initialState = {
 
 const MyRadarsDataGrid: FC = () => {
     const { radarId } = useParams();
-    const id = Number(radarId) || 1;
+    const id = Number(radarId);
     const { data: radarVersions } = useGetRadarVersionsQuery(id);
     const [deleteRadarVersions] = useDeleteRadarVersionsMutation();
-    const rows: RadarVersionData | [] = radarVersions || [];
+
+    const rows: RadarVersionData | [] = useMemo(
+        () =>
+            radarVersions !== undefined
+                ? radarVersions.map((item: VersionData) => {
+                      return {
+                          ...item,
+                          creationTime: new Date(item.creationTime).toLocaleString(),
+                          lastChangeTime: new Date(item.lastChangeTime).toLocaleString(),
+                      };
+                  })
+                : [],
+        [radarVersions]
+    );
 
     const editVersion = useCallback(
         (params: { id: GridRowId }) => [
@@ -50,48 +63,51 @@ const MyRadarsDataGrid: FC = () => {
         [deleteRow]
     );
 
-    const columns: GridColDef[] = [
-        {
-            field: 'name',
-            headerName: 'Имя версии',
-            type: 'string',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'release',
-            headerName: 'Опубликован',
-            type: 'boolean',
-            width: 150,
-            editable: true,
-        },
-        {
-            field: 'lastChangeTime',
-            headerName: 'Последнее обновление',
-            type: 'string',
-            width: 250,
-            editable: true,
-        },
-        {
-            field: 'creationTime',
-            headerName: 'Время создания',
-            type: 'string',
-            width: 250,
-            editable: true,
-        },
-        {
-            field: 'edit',
-            type: 'actions',
-            width: 30,
-            getActions: editVersion,
-        },
-        {
-            field: 'delete',
-            type: 'actions',
-            width: 30,
-            getActions: deleteVersionRow,
-        },
-    ];
+    const columns: GridColDef[] = useMemo(
+        () => [
+            {
+                field: 'name',
+                headerName: 'Имя версии',
+                type: 'string',
+                width: 150,
+                editable: true,
+            },
+            {
+                field: 'release',
+                headerName: 'Опубликован',
+                type: 'boolean',
+                width: 150,
+                editable: true,
+            },
+            {
+                field: 'lastChangeTime',
+                headerName: 'Последнее обновление',
+                type: 'string',
+                width: 250,
+                editable: true,
+            },
+            {
+                field: 'creationTime',
+                headerName: 'Время создания',
+                type: 'string',
+                width: 250,
+                editable: true,
+            },
+            {
+                field: 'edit',
+                type: 'actions',
+                width: 30,
+                getActions: editVersion,
+            },
+            {
+                field: 'delete',
+                type: 'actions',
+                width: 30,
+                getActions: deleteVersionRow,
+            },
+        ],
+        [deleteVersionRow, editVersion]
+    );
 
     return (
         <Box sx={styles.box}>
