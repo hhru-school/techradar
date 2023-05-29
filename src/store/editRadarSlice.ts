@@ -442,6 +442,10 @@ export const editRadarSlice = createSlice({
         setShowSwitchReleaseModal: (state, action: PayloadAction<boolean>) => {
             state.showSwitchReleaseModal = action.payload;
         },
+
+        setRadarLog: (state, action: PayloadAction<IndexBlipEventApi[]>) => {
+            state.log = action.payload;
+        },
     },
 });
 
