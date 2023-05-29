@@ -49,7 +49,7 @@ fetch('http://localhost:8080/api/auth/authenticate', {
 */
 
 const accessToken =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MzQxNTkyLCJleHAiOjE2ODUzNzc1OTJ9.-T9jxbluh4W5Zk0F5V3RwdZpaxpU096xtN-hCALZfIU';
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MzU1NjE5LCJleHAiOjE2ODUzOTE2MTl9.a0n2vyZUDWxxGMFrFjEKEoUgut9moUQvomDALrGCB00';
 
 // Все радары компании:
 // http://localhost:8080/api/radars?companyId=1
@@ -68,7 +68,7 @@ const accessToken =
 export const companyRadarsApi = createApi({
     reducerPath: 'companyRadarsApi',
     baseQuery: fetchBaseQuery({ baseUrl }),
-    tagTypes: ['Radar', 'Version'],
+    tagTypes: ['Radar', 'Version', 'Log'],
     endpoints: (builder) => ({
         getAllCompanyRadars: builder.query<RadarApi[], number>({
             query: (companyId) => ({
@@ -105,6 +105,19 @@ export const companyRadarsApi = createApi({
             providesTags: ['Radar'],
         }),
 
+        getRadarByBlipEventId: builder.query<RadarInterface, number>({
+            query: (blipEventId) => ({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                method: 'GET',
+                url: `containers?blip-event-id=${blipEventId}`,
+            }),
+
+            transformResponse: (rawResult: RadarApiDataResponse) => formatApiData(rawResult),
+            providesTags: ['Radar'],
+        }),
+
         getAllRadarVersions: builder.query<VersionApiResponse[], number>({
             query: (radarId) => `radar-versions/?radar-id=${radarId}`,
         }),
@@ -118,6 +131,16 @@ export const companyRadarsApi = createApi({
                 url: `radar-versions/${versionId}`,
             }),
             providesTags: ['Version'],
+        }),
+
+        getBlipEventById: builder.query<IndexBlipEventApi, number>({
+            query: (blipEventId) => ({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                method: 'GET',
+                url: `blip-events/${blipEventId}`,
+            }),
         }),
 
         saveNewRadar: builder.mutation<VersionApiResponse, CreateRadarApiRequest>({
@@ -182,7 +205,7 @@ export const companyRadarsApi = createApi({
                 method: 'PUT',
                 body: version,
             }),
-            invalidatesTags: ['Radar', 'Version'],
+            invalidatesTags: ['Radar', 'Version', 'Log'],
         }),
 
         createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApiRequest>({
@@ -204,6 +227,7 @@ export const companyRadarsApi = createApi({
                 method: 'GET',
                 url: `blip-events/radar-log?blip-event-id=${blipEventId}`,
             }),
+            providesTags: ['Log'],
         }),
     }),
 });
@@ -212,8 +236,10 @@ export const {
     useGetAllCompanyRadarsQuery,
     useGetRadarQuery,
     useGetRadarByVersionIdQuery,
+    useGetRadarByBlipEventIdQuery,
     useGetAllRadarVersionsQuery,
     useGetVersionByIdQuery,
+    useGetBlipEventByIdQuery,
     useCreateBlipMutation,
     useCreateBlipEventMutation,
     useGetBlipEventsForRadarQuery,

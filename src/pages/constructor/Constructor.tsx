@@ -3,7 +3,7 @@ import { FC, useEffect } from 'react';
 import { ConstructorMode, setEditMode } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import MainContainer from './MainContainer';
-import MainEditPanel from './editPanel/MainEditPanel';
+import MainEditPanel from './editPanel/mainPanel/MainEditPanel';
 import Modals from './modals/Modals';
 import ModeDispatcher from './modeDispatchers/ModeDispatcher';
 

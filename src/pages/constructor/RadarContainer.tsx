@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
-import { RadarInterface } from '../../components/radar/types';
+import Radar from '../../components/radar/Radar';
+import { RadarInterface, RadarVariant } from '../../components/radar/types';
 import { ConstructorMode } from '../../store/editRadarSlice';
 import { useAppSelector } from '../../store/hooks';
 import RadarBaseEditPanel from './editPanel/RadarBaseEditPanel';
@@ -12,11 +13,19 @@ type Props = {
     radar: RadarInterface;
 };
 
-const EditContainer: FC<Props> = ({ radar }) => {
+const RadarContainer: FC<Props> = ({ radar }) => {
     const mode = useAppSelector((state) => state.editRadar.mode);
 
     const isNewRadar = mode === ConstructorMode.NewRadarCreation;
+    const isBlipEventDisplay = mode === ConstructorMode.DisplayEvent;
 
+    if (isBlipEventDisplay) {
+        return (
+            <div className={styles.layout}>
+                <Radar radar={radar} radius={250} variant={RadarVariant.Demonstrative} />
+            </div>
+        );
+    }
     return (
         <div className={styles.layout}>
             {isNewRadar && <RadarBaseEditPanel sectors={radar.sectors} rings={radar.rings} />}
@@ -25,4 +34,4 @@ const EditContainer: FC<Props> = ({ radar }) => {
     );
 };
 
-export default EditContainer;
+export default RadarContainer;

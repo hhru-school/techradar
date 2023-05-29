@@ -14,6 +14,10 @@ export const buildEditRadarVersionUrl = (versionId: number): string => {
     return `/constructor/edit/version/${versionId}`;
 };
 
+export const buildDisplayBlipEventUrl = (blipEventId: number): string => {
+    return `/constructor/event/${blipEventId}`;
+};
+
 export interface CreateRadarApiRequest {
     radar: {
         name: string;
@@ -130,8 +134,8 @@ export interface UpdateVersionRequest {
 export interface IndexBlipEventApi {
     id: number;
     blipId: number;
-    quadrantId: number;
-    ringId: number;
+    quadrantId?: number;
+    ringId?: number;
     authorId: number;
     creationTime: string;
     lastChangeTime: string;
