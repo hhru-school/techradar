@@ -196,8 +196,14 @@ export const companyRadarsApi = createApi({
             }),
         }),
 
-        getBlipEventsForRadar: builder.query<IndexBlipEventApi, number>({
-            query: (blipEventId) => `blip-events/radar-log?blip-event-id=${blipEventId}`,
+        getBlipEventsForRadar: builder.query<IndexBlipEventApi[], number>({
+            query: (blipEventId) => ({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                method: 'GET',
+                url: `blip-events/radar-log?blip-event-id=${blipEventId}`,
+            }),
         }),
     }),
 });
@@ -210,7 +216,7 @@ export const {
     useGetVersionByIdQuery,
     useCreateBlipMutation,
     useCreateBlipEventMutation,
-    // useAddNewBlipToRadarMutation,
+    useGetBlipEventsForRadarQuery,
     useUpdateVersionMutation,
     useSaveNewRadarMutation,
 } = companyRadarsApi;

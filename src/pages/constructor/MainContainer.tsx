@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { RadarInterface } from '../../components/radar/types';
 import EditContainer from './EditContainer';
+import RadarLogContainer from './log/RadarLogConstainer';
 import TableContainer from './table/TableContainer';
 
 import styles from './constructor.module.less';
@@ -15,6 +16,7 @@ const MainContainer: FC<Props> = ({ radar }) => {
         <div className={styles.main}>
             <EditContainer radar={radar} />
             <TableContainer radar={radar} />
+            <RadarLogContainer />
         </div>
     );
 };
