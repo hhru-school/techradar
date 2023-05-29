@@ -12,6 +12,7 @@ import {
     CreateBlipApiResponse,
     UpdateVersionRequest,
     CreateBlipEventApiRequest,
+    IndexBlipEventApi,
 } from './radarApiUtils';
 
 const baseUrl = '/api/';
@@ -48,7 +49,7 @@ fetch('http://localhost:8080/api/auth/authenticate', {
 */
 
 const accessToken =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MzAxMzkwLCJleHAiOjE2ODUzMzczOTB9.069iaX47XWEhpWFQUt52Km6YB-z3tpederk5Mt4UlAo';
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MzQxNTkyLCJleHAiOjE2ODUzNzc1OTJ9.-T9jxbluh4W5Zk0F5V3RwdZpaxpU096xtN-hCALZfIU';
 
 // Все радары компании:
 // http://localhost:8080/api/radars?companyId=1
@@ -192,66 +193,12 @@ export const companyRadarsApi = createApi({
                 url: 'blip-events',
                 method: 'POST',
                 body,
-
-                // {
-                //     comment: '',
-                //     parentId,
-                //     blipId: blip.id,
-                //     quadrantId: blip.sector.id,
-                //     ringId: blip.ring.id,
-                //     authorId: 1,
-                // },
             }),
         }),
 
-        // addNewBlipToRadar: builder.mutation<CreateBlipEventApiResponse, Blip>({
-        //     async queryFn(blip, { getState, dispatch }, _, fetchBaseQuery) {
-        //         const state = (getState() as RootState).editRadar;
-
-        //         const blipRequest: CreateBlipApiRequest = {
-        //             name: blip.name,
-        //             description: blip.description || '',
-        //             radarId: Number(state.radar.id),
-        //         };
-
-        //         const blipResponse = await fetchBaseQuery({
-        //             headers: {
-        //                 Authorization: `Bearer ${accessToken}`,
-        //             },
-        //             url: 'blips',
-        //             method: 'POST',
-        //             body: blipRequest,
-        //         });
-
-        //         if (blipResponse.error) return { error: blipResponse.error };
-
-        //         const newApiBlip = blipResponse.data as CreateBlipApiResponse;
-
-        //         const blipEventRequest: CreateBlipEventApiRequest = {
-        //             comment: '',
-        //             parentId: Number(state.currentBlipEventId),
-        //             blipId: newApiBlip.id,
-        //             quadrantId: blip.sector.id,
-        //             ringId: blip.ring.id,
-        //             authorId: 1,
-        //         };
-
-        //         const blipEventResponse = await fetchBaseQuery({
-        //             headers: {
-        //                 Authorization: `Bearer ${accessToken}`,
-        //             },
-        //             url: 'blip-events',
-        //             method: 'POST',
-        //             body: blipEventRequest,
-        //         });
-
-        //         if (blipEventResponse.error) return { error: blipEventResponse.error };
-        //         const blipEvent = blipEventResponse.data as CreateBlipEventApiResponse;
-        //         dispatch(setCurrentBlipEventId(blipEvent.id));
-
-        //         return { data: blipEvent };
-        //     },
-        // }),
+        getBlipEventsForRadar: builder.query<IndexBlipEventApi, number>({
+            query: (blipEventId) => `blip-events/radar-log?blip-event-id=${blipEventId}`,
+        }),
     }),
 });
 

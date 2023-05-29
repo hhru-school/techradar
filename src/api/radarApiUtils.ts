@@ -127,6 +127,16 @@ export interface UpdateVersionRequest {
     blipEventId: number;
 }
 
+export interface IndexBlipEventApi {
+    id: number;
+    blipId: number;
+    quadrantId: number;
+    ringId: number;
+    authorId: number;
+    creationTime: string;
+    lastChangeTime: string;
+}
+
 export const formatApiData = (apiData: RadarApiDataResponse): RadarInterface => {
     const sectors = apiData.quadrants
         .sort((quadrant1, quadrant2) => quadrant1.position - quadrant2.position)
@@ -137,6 +147,7 @@ export const formatApiData = (apiData: RadarApiDataResponse): RadarInterface => 
         .map((ring) => ({ id: ring.id, name: ring.name }));
 
     const blips = apiData.blips
+        .filter((blip) => blip.ringId && blip.quadrantId)
         .sort((blip1, blip2) => (blip1.name < blip2.name ? -1 : 1))
         .map((blip) => ({
             id: blip.id,
