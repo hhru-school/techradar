@@ -1,8 +1,13 @@
 import { FC, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 
-import { useGetRadarByVersionIdQuery, useGetVersionByIdQuery } from '../../../api/companyRadarsApi';
-import { cleanUp, setHasError, setRadar, setIsLoading } from '../../../store/editRadarSlice';
+import {
+    useGetBlipEventsForRadarQuery,
+    useGetRadarByVersionIdQuery,
+    useGetVersionByIdQuery,
+} from '../../../api/companyRadarsApi';
+import { cleanUp, setHasError, setRadar, setIsLoading, setRadarLog } from '../../../store/editRadarSlice';
 import { useAppDispatch } from '../../../store/hooks';
 
 const EditVersionDispatcher: FC = () => {
@@ -21,6 +26,8 @@ const EditVersionDispatcher: FC = () => {
         error: versionError,
     } = useGetVersionByIdQuery(Number(versionId));
 
+    const { data: log } = useGetBlipEventsForRadarQuery(Number(version?.blipEventId) ?? skipToken);
+
     const isLoading = radarIsLoading || versionIsLoading;
     const hasError = Boolean(radarError || versionError);
 
@@ -30,11 +37,14 @@ const EditVersionDispatcher: FC = () => {
         if (radar && version) {
             dispatch(setRadar({ radar, version }));
         }
+        if (log) {
+            dispatch(setRadarLog(log));
+        }
 
         return () => {
             dispatch(cleanUp());
         };
-    }, [dispatch, isLoading, radar, version, hasError]);
+    }, [dispatch, isLoading, radar, version, hasError, log]);
 
     return null;
 };

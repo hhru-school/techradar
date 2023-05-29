@@ -63,7 +63,6 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
                 if (operation === OperationType.Delete) {
                     blipEventRequest = { ...blipEventRequest, ringId: null, quadrantId: null };
                 }
-
                 const blipEvent = await createBlipEvent(blipEventRequest).unwrap();
                 const updatedVersion = await updateVersion({ ...version, blipEventId: blipEvent.id }).unwrap();
                 dispatch(setVersion(updatedVersion));

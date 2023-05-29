@@ -28,7 +28,7 @@ interface MoveBlipAsset {
 
 interface RadarInitialData {
     radar: RadarInterface;
-    version: VersionApiResponse;
+    version?: VersionApiResponse;
 }
 
 export enum EventSuggest {
@@ -43,6 +43,7 @@ export enum ConstructorMode {
     NewRadarCreation,
     NewVersionCreation,
     VersionEditing,
+    DisplayEvent,
 }
 
 export interface EditRadarState {
@@ -51,6 +52,7 @@ export interface EditRadarState {
     isPageLoading: boolean;
     hasError: boolean;
     version: VersionApiResponse | null;
+    blipEvent: IndexBlipEventApi | null;
     log: IndexBlipEventApi[] | null;
     currentVersionName: string;
     currentBlipEventId: number | null;
@@ -85,6 +87,7 @@ const initialState: EditRadarState = {
     log: null,
     hasError: false,
     version: null,
+    blipEvent: null,
     currentVersionName: defaultVersionName,
     currentBlipEventId: null,
     mode: ConstructorMode.NewRadarCreation,
@@ -416,9 +419,12 @@ export const editRadarSlice = createSlice({
 
         setRadar: (state, action: PayloadAction<RadarInitialData>) => {
             state.radar = action.payload.radar;
-            state.version = action.payload.version;
-            if (state.mode === ConstructorMode.VersionEditing) {
-                state.currentVersionName = state.version.name;
+            const version = action.payload.version;
+            if (version) {
+                state.version = version;
+                if (state.mode === ConstructorMode.VersionEditing) {
+                    state.currentVersionName = version.name;
+                }
             }
         },
 
@@ -435,6 +441,7 @@ export const editRadarSlice = createSlice({
         },
 
         cleanUp: (state) => {
+            state.version = null;
             state.isModalLoading = false;
             state.hasError = false;
         },
@@ -445,6 +452,10 @@ export const editRadarSlice = createSlice({
 
         setRadarLog: (state, action: PayloadAction<IndexBlipEventApi[]>) => {
             state.log = action.payload;
+        },
+
+        setBlipEvent: (state, action: PayloadAction<IndexBlipEventApi>) => {
+            state.blipEvent = action.payload;
         },
     },
 });
@@ -494,6 +505,8 @@ export const {
     setHasError,
     setRadar,
     setVersion,
+    setRadarLog,
+    setBlipEvent,
     cleanUp,
     setShowSwitchReleaseModal,
 } = editRadarSlice.actions;

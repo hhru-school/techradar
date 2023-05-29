@@ -58,6 +58,7 @@ const App: FC = () => {
                         path="new/version/radar/:radarId"
                         element={<Constructor mode={ConstructorMode.NewVersionCreation} />}
                     />
+                    <Route path="event/:blipEventId" element={<Constructor mode={ConstructorMode.DisplayEvent} />} />
                 </Route>
                 <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
                 <Route path="/admin/*" element={<RequireAuth />} />
