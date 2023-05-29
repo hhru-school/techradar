@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { VersionApiResponse } from '../api/radarApiUtils';
+import { IndexBlipEventApi, VersionApiResponse } from '../api/radarApiUtils';
 import { Blip, RadarInterface, Ring, Sector } from '../components/radar/types';
 import { defaultRadarAsset, defaultVersionName } from '../pages/constructor/config';
 
@@ -51,6 +51,7 @@ export interface EditRadarState {
     isPageLoading: boolean;
     hasError: boolean;
     version: VersionApiResponse | null;
+    log: IndexBlipEventApi[] | null;
     currentVersionName: string;
     currentBlipEventId: number | null;
     mode: ConstructorMode;
@@ -81,6 +82,7 @@ const initialState: EditRadarState = {
     isModalLoading: false,
     isPageLoading: false,
     radar: defaultRadarAsset,
+    log: null,
     hasError: false,
     version: null,
     currentVersionName: defaultVersionName,

@@ -12,6 +12,7 @@ import {
     CreateBlipApiResponse,
     UpdateVersionRequest,
     CreateBlipEventApiRequest,
+    IndexBlipEventApi,
 } from './radarApiUtils';
 
 const baseUrl = '/api/';
@@ -48,7 +49,7 @@ fetch('http://localhost:8080/api/auth/authenticate', {
 */
 
 const accessToken =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MzAxMzkwLCJleHAiOjE2ODUzMzczOTB9.069iaX47XWEhpWFQUt52Km6YB-z3tpederk5Mt4UlAo';
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1MzQxNTkyLCJleHAiOjE2ODUzNzc1OTJ9.-T9jxbluh4W5Zk0F5V3RwdZpaxpU096xtN-hCALZfIU';
 
 // Все радары компании:
 // http://localhost:8080/api/radars?companyId=1
@@ -192,15 +193,6 @@ export const companyRadarsApi = createApi({
                 url: 'blip-events',
                 method: 'POST',
                 body,
-
-                // {
-                //     comment: '',
-                //     parentId,
-                //     blipId: blip.id,
-                //     quadrantId: blip.sector.id,
-                //     ringId: blip.ring.id,
-                //     authorId: 1,
-                // },
             }),
         }),
 
