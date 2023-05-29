@@ -43,7 +43,7 @@ export interface ServerResponse {
 const mutex = new Mutex();
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: '/api',
+    baseUrl: 'localhost:8080/api',
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
         const tokenAccess = (getState() as RootState).auth.tokenAccess;
