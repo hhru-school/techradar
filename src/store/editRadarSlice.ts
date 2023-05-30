@@ -26,11 +26,6 @@ interface MoveBlipAsset {
     ring: Ring;
 }
 
-interface RadarInitialData {
-    radar: RadarInterface;
-    version?: VersionApiResponse;
-}
-
 export enum EventSuggest {
     Delete = 'delete',
     Add = 'add',
@@ -417,15 +412,15 @@ export const editRadarSlice = createSlice({
             state.hasError = action.payload;
         },
 
-        setRadar: (state, action: PayloadAction<RadarInitialData>) => {
-            state.radar = action.payload.radar;
-            const version = action.payload.version;
-            if (version) {
-                state.version = version;
-                if (state.mode === ConstructorMode.VersionEditing) {
-                    state.currentVersionName = version.name;
-                }
-            }
+        setRadar: (state, action: PayloadAction<RadarInterface>) => {
+            state.radar = action.payload;
+            // const version = action.payload.version;
+            // if (version) {
+            //     state.version = version;
+            //     if (state.mode === ConstructorMode.VersionEditing) {
+            //         state.currentVersionName = version.name;
+            //     }
+            // }
         },
 
         setVersion: (state, action: PayloadAction<VersionApiResponse>) => {
@@ -441,7 +436,6 @@ export const editRadarSlice = createSlice({
         },
 
         cleanUp: (state) => {
-            state.version = null;
             state.isModalLoading = false;
             state.hasError = false;
         },

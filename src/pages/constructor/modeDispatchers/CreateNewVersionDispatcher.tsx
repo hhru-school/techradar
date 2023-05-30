@@ -36,7 +36,7 @@ const CreateNewVersionDispatcher: FC = () => {
             dispatch(setIsLoading(isLoading));
             dispatch(setHasError(hasError));
             if (radar && lastVersion) {
-                dispatch(setRadar({ radar, version: lastVersion }));
+                dispatch(setRadar(radar));
             }
         }
         return () => {
