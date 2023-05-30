@@ -5,7 +5,8 @@ import {
     useCreateBlipMutation,
     useUpdateVersionMutation,
 } from '../../api/companyRadarsApi';
-import { CreateBlipEventApiRequest, buildBlipEventRequest } from '../../api/radarApiUtils';
+import { buildBlipEventRequest } from '../../api/radarApiUtils';
+import { CreateBlipEventApiRequest } from '../../api/types';
 import { Blip } from '../../components/radar/types';
 import { Segment, setVersion } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -42,17 +43,27 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
                 if (!parentId || !version || !radarId) throw new Error();
                 setState({ isLoading: true, hasError: false });
                 let blipEventRequest: CreateBlipEventApiRequest = buildBlipEventRequest(blip, parentId);
-                if (operation === OperationType.Add) {
-                    const newBlipResp = await createBlip({ blip, radarId }).unwrap();
-                    blipEventRequest = { ...blipEventRequest, blipId: newBlipResp.id };
+                switch (operation) {
+                    case OperationType.Add: {
+                        const newBlipResp = await createBlip({ blip, radarId }).unwrap();
+                        blipEventRequest = { ...blipEventRequest, blipId: newBlipResp.id };
+                        break;
+                    }
+                    case OperationType.Move: {
+                        const segment = distSegment as Segment;
+                        blipEventRequest = {
+                            ...blipEventRequest,
+                            ringId: segment.ring.id,
+                            quadrantId: segment.sector.id,
+                        };
+                        break;
+                    }
+                    case OperationType.Delete: {
+                        blipEventRequest = { ...blipEventRequest, ringId: null, quadrantId: null };
+                        break;
+                    }
                 }
-                if (operation === OperationType.Move) {
-                    const segment = distSegment as Segment;
-                    blipEventRequest = { ...blipEventRequest, ringId: segment.ring.id, quadrantId: segment.sector.id };
-                }
-                if (operation === OperationType.Delete) {
-                    blipEventRequest = { ...blipEventRequest, ringId: null, quadrantId: null };
-                }
+
                 const blipEvent = await createBlipEvent(blipEventRequest).unwrap();
                 const updatedVersion = await updateVersion({ ...version, blipEventId: blipEvent.id }).unwrap();
                 dispatch(setVersion(updatedVersion));
@@ -64,6 +75,5 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
         },
         [setState, createBlip, createBlipEvent, updateVersion, parentId, version, dispatch, operation, radarId]
     );
-
     return [state, handler];
 };

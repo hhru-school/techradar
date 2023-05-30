@@ -1,6 +1,6 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { Button, Modal } from '@mui/material';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 
 import { getRingNames, getSectorNames } from '../../../components/radar/utils';
 import { closeEditBlipModal, editBlip } from '../../../store/editRadarSlice';
@@ -14,6 +14,12 @@ const style = {
     btnSx: { width: 140 },
 };
 
+interface Values {
+    sectorName: string;
+    ringName: string;
+    description: string;
+}
+
 const ModalEditBlip: FC = () => {
     const radar = useAppSelector((state) => state.editRadar.radar);
 
@@ -25,6 +31,36 @@ const ModalEditBlip: FC = () => {
         dispatch(closeEditBlipModal());
     }, [dispatch]);
 
+    const initialValues = useMemo(
+        () => ({
+            sectorName: blip?.sector.name as string,
+            ringName: blip?.ring.name as string,
+            description: blip?.description || '',
+        }),
+        [blip]
+    );
+
+    const submitHandler = useCallback(
+        (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+            dispatch(
+                editBlip({
+                    id: blip?.id || -1,
+                    label: blip?.label || -1,
+                    name: blip?.name || '',
+                    ring: radar.rings.find((ring) => ring.name === values.ringName) || { id: -1, name: '' },
+                    sector: radar.sectors.find((sector) => sector.name === values.sectorName) || {
+                        id: -1,
+                        name: '',
+                    },
+                    description: values.description || null,
+                })
+            );
+
+            setSubmitting(false);
+        },
+        [blip, dispatch, radar]
+    );
+
     return (
         <Modal open={true}>
             <div className={styles.modal}>
@@ -32,30 +68,7 @@ const ModalEditBlip: FC = () => {
                     Редактирование технологии <br />
                     <span>{blip?.name}</span>
                 </h3>
-                <Formik
-                    initialValues={{
-                        sectorName: blip?.sector.name || '',
-                        ringName: blip?.ring.name || '',
-                        description: blip?.description || '',
-                    }}
-                    onSubmit={(values, { setSubmitting }) => {
-                        dispatch(
-                            editBlip({
-                                id: blip?.id || -1,
-                                label: blip?.label || -1,
-                                name: blip?.name || '',
-                                ring: radar.rings.find((ring) => ring.name === values.ringName) || { id: -1, name: '' },
-                                sector: radar.sectors.find((sector) => sector.name === values.sectorName) || {
-                                    id: -1,
-                                    name: '',
-                                },
-                                description: values.description || null,
-                            })
-                        );
-
-                        setSubmitting(false);
-                    }}
-                >
+                <Formik initialValues={initialValues} onSubmit={submitHandler}>
                     {({ isValid, dirty }) => (
                         <Form>
                             <ModalSelectField label={'Сектор'} name={'sectorName'} values={getSectorNames(radar)} />

@@ -1,6 +1,6 @@
-import { FC, ReactNode, useCallback, useEffect, useState } from 'react';
+import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, LinearProgress, Stack } from '@mui/material';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
 import {
@@ -19,6 +19,12 @@ import styles from '../modal.module.less';
 const style = {
     stack: { mt: 2 },
 };
+
+interface Values {
+    name: string;
+    version: string;
+}
+
 const validationSchema = Yup.object({
     name: Yup.string().trim().required('Обязательное поле'),
     version: Yup.string().trim().required('Обязательное поле'),
@@ -44,9 +50,17 @@ const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
         dispatch(setCurrentRadarVersionName(initialRadarVersion));
     }, [dispatch, initialRadarName, initialRadarVersion]);
 
-    const submitBtnClickHandler = useCallback(async () => {
-        await submitHandler();
-    }, [submitHandler]);
+    // const submitBtnClickHandler = useCallback(async () => {
+    //     await submitHandler();
+    // }, [submitHandler]);
+
+    const submitBtnClickHandler = useCallback(
+        async (_values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+            await submitHandler();
+            setSubmitting(false);
+        },
+        [submitHandler]
+    );
 
     const isNewRadarCreation = radarName !== initialRadarName;
     const isVersionEditing = radarName === initialRadarName && radarVersion === initialRadarVersion;
@@ -77,6 +91,14 @@ const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
         buttonLabel = 'Создать версию';
     }
 
+    const initialValues = useMemo(
+        () => ({
+            name: radarName || '',
+            version: radarVersion || '',
+        }),
+        [radarName, radarVersion]
+    );
+
     useEffect(() => {
         if (isNewRadarCreation) dispatch(setEditMode(ConstructorMode.NewRadarCreation));
         if (isVersionEditing) dispatch(setEditMode(ConstructorMode.VersionEditing));
@@ -87,17 +109,7 @@ const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
         <>
             <h3 className={styles.header}>Сохранить радар</h3>
             {message && <div className={styles.message}>{message}</div>}
-            <Formik
-                initialValues={{
-                    name: radarName || '',
-                    version: radarVersion || '',
-                }}
-                validationSchema={validationSchema}
-                onSubmit={async (_values, { setSubmitting }) => {
-                    await submitBtnClickHandler();
-                    setSubmitting(false);
-                }}
-            >
+            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={submitBtnClickHandler}>
                 {({ isValid }) => {
                     return (
                         <>

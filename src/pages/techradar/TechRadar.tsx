@@ -4,7 +4,6 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 import { useGetAllCompanyRadarsQuery, useGetRadarByVersionIdQuery } from '../../api/companyRadarsApi';
 import { isFetchBaseQueryError } from '../../api/helpers';
-// import { RadarVersionDataApi } from '../../api/radarApiUtils';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
 import NavTabsContainer from './components/tab/NavTabsContainer';
@@ -36,8 +35,6 @@ const TechRadar: FC = () => {
 
     const { data: radars, isLoading: radarsIsLoading } = useGetAllCompanyRadarsQuery(companyId);
 
-    // const { data: radarVersions } = useGetAllRadarVersionsQuery(radarId);
-
     const {
         data: radar,
         isFetching: radarIsFetching,
@@ -56,14 +53,7 @@ const TechRadar: FC = () => {
                 radars={radars}
                 isLoading={radarsIsLoading}
             />
-            {/* {radarVersions && (
-                <SelectVersion
-                    versions={radarVersions}
-                    version={getVersionNameById(radarVersions, versionId)}
-                    companyId={companyId}
-                    radarId={radarId}
-                />
-            )} */}
+
             {<TechRadarMain radar={radar} isLoading={radarIsFetching} />}
         </>
     );

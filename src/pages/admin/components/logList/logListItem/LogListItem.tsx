@@ -13,6 +13,8 @@ import {
     Typography,
 } from '@mui/material';
 
+import { IndexBlipEventApi } from '../../../../../api/types';
+
 const styles: Record<string, SxProps> = {
     showRadarBtnBox: { cursor: 'pointer', width: '24px', display: 'flex' },
     popoverText: { p: 1 },
@@ -43,6 +45,16 @@ const anchorOrigin: PopoverOrigin = {
 const transformOrigin: PopoverOrigin = {
     vertical: 'top',
     horizontal: 'left',
+};
+
+const getDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+};
+
+type LogListItemProps = {
+    blipEvent: IndexBlipEventApi;
+    color?: string;
 };
 
 const ShowRadarBtn: FC = () => {
@@ -85,16 +97,17 @@ const ShowRadarBtn: FC = () => {
     );
 };
 
-const LogListItem: FC = () => {
+const LogListItem: FC<LogListItemProps> = ({ blipEvent }) => {
     return (
         <Box sx={styles.logListItemBox}>
             <Box sx={styles.logListItemHeader}>
                 <Box sx={styles.headerBtnAndText}>
                     <ShowRadarBtn />
-                    <Typography align={'right'}>11/04/2023 20:22</Typography>
+                    <Typography align={'right'}>{getDate(blipEvent.lastChangeTime)}</Typography>
                 </Box>
                 <Typography align={'center'} variant={'h6'}>
-                    Имя технологии
+                    {/* После доработки бэкенда заменить на name */}
+                    {blipEvent.id}
                 </Typography>
             </Box>
 
@@ -113,10 +126,7 @@ const LogListItem: FC = () => {
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Typography>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
-                        amet blandit leo lobortis eget.
-                    </Typography>
+                    <Typography>{blipEvent.comment}</Typography>
                 </AccordionDetails>
             </Accordion>
         </Box>

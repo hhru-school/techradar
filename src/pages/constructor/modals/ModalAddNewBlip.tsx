@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { Button, LinearProgress, Modal } from '@mui/material';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -47,6 +47,16 @@ const ModalAddNewBlip: FC = () => {
 
     const [{ isLoading }, add] = useOperationHandler(OperationType.Add);
 
+    const initialValues = useMemo(
+        () => ({
+            name: '',
+            sectorName: activeSegment?.sector.name as string,
+            ringName: activeSegment?.ring.name as string,
+            description: '',
+        }),
+        [activeSegment]
+    );
+
     const submitHandler = useCallback(
         async (values: FieldValues) => {
             const blip: Blip = {
@@ -77,12 +87,7 @@ const ModalAddNewBlip: FC = () => {
             <div className={styles.modal}>
                 <h3 className={styles.header}>Создать технологию</h3>
                 <Formik
-                    initialValues={{
-                        name: '',
-                        sectorName: activeSegment?.sector.name as string,
-                        ringName: activeSegment?.ring.name as string,
-                        description: '',
-                    }}
+                    initialValues={initialValues}
                     validationSchema={getValidationSchema(radar)}
                     onSubmit={async (values, { setSubmitting }) => {
                         await submitHandler(values);
