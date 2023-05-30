@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { IndexBlipEventApi, VersionApiResponse } from '../api/radarApiUtils';
+import { IndexBlipEventApi, VersionApiResponse } from '../api/types';
 import { Blip, RadarInterface, Ring, Sector } from '../components/radar/types';
 import { defaultRadarAsset, defaultVersionName } from '../pages/constructor/config';
 

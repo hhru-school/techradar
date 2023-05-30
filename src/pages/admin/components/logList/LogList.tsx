@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { Box, Typography, TextField } from '@mui/material';
 
+import { IndexBlipEventApi } from '../../../../api/types';
 import LogListItem from './logListItem/LogListItem';
 
 const styles = {
@@ -23,14 +24,29 @@ const styles = {
     textField: { width: '100%' },
 };
 
-type LogProps = { boxWidth: string; boxMaxHeight: string };
+type LogProps = {
+    boxWidth?: string;
+    boxMaxHeight?: string;
+    blipEvents: IndexBlipEventApi[];
+    hasHeader?: boolean;
+    color?: string;
+};
 
-const LogList: FC<LogProps> = ({ boxWidth, boxMaxHeight }) => {
+const LogList: FC<LogProps> = ({ boxWidth = '100%', boxMaxHeight = '100%', blipEvents, hasHeader = true }) => {
+    const items = useMemo(
+        () => blipEvents.map((blipEvent, index) => <LogListItem key={index} blipEvent={blipEvent} />).reverse(),
+        [blipEvents]
+    );
+
+    const logBoxStyle = useMemo(() => ({ ...styles.boxItems, maxHeight: boxMaxHeight }), [boxMaxHeight]);
+
     return (
         <Box width={boxWidth} sx={styles.boxContainer} role="presentation">
-            <Typography variant="h5" sx={styles.textHeaderStyle}>
-                Лог событий
-            </Typography>
+            {hasHeader && (
+                <Typography variant="h5" sx={styles.textHeaderStyle}>
+                    Лог событий
+                </Typography>
+            )}
             <TextField
                 sx={styles.textField}
                 size={'small'}
@@ -38,11 +54,7 @@ const LogList: FC<LogProps> = ({ boxWidth, boxMaxHeight }) => {
                 variant="outlined"
                 placeholder="Искать по логу..."
             />
-            <Box sx={{ ...styles.boxItems, maxHeight: boxMaxHeight }}>
-                {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => (
-                    <LogListItem key={index} />
-                ))}
-            </Box>
+            <Box sx={logBoxStyle}>{items}</Box>
         </Box>
     );
 };

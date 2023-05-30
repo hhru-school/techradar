@@ -1,7 +1,7 @@
-import { FC } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { Button, Modal } from '@mui/material';
 import { ActionCreatorWithPayload, ActionCreatorWithoutPayload } from '@reduxjs/toolkit';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
 import { Ring, Sector } from '../../../components/radar/types';
@@ -21,6 +21,10 @@ type Props = {
 };
 
 const btnSx = { width: 140 };
+
+interface Values {
+    name: string;
+}
 
 const getValidationSchema = (values: string[]) =>
     Yup.object({
@@ -42,19 +46,29 @@ const ModalBasic: FC<Props> = ({
         dispatch(cancelBtnActionCreator());
     };
 
+    const initialValues = useMemo(
+        () => ({
+            name: item.name,
+        }),
+        [item]
+    );
+
+    const submitHandler = useCallback(
+        (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+            dispatch(submitBtnActionCreator({ id: item.id, name: values.name }));
+            setSubmitting(false);
+        },
+        [dispatch, item, submitBtnActionCreator]
+    );
+
     return (
         <Modal open={open}>
             <div className={styles.modal}>
                 <h3 className={styles.header}>{header}</h3>
                 <Formik
-                    initialValues={{
-                        name: item.name,
-                    }}
+                    initialValues={initialValues}
                     validationSchema={getValidationSchema(names)}
-                    onSubmit={(values, { setSubmitting }) => {
-                        dispatch(submitBtnActionCreator({ id: item.id, name: values.name }));
-                        setSubmitting(false);
-                    }}
+                    onSubmit={submitHandler}
                 >
                     {({ dirty, isValid }) => (
                         <Form>

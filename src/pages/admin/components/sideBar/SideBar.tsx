@@ -1,6 +1,7 @@
 import { FC, useCallback, useState } from 'react';
 import { Button, Drawer } from '@mui/material';
 
+import { mock } from '../../techSinglePage/TechSinglePage';
 import LogList from '../logList/LogList';
 
 const SideBar: FC = () => {
@@ -16,7 +17,7 @@ const SideBar: FC = () => {
             </Button>
 
             <Drawer anchor={'right'} open={open} onClose={handleClose}>
-                <LogList boxWidth="250px" boxMaxHeight="88vh" />
+                <LogList boxWidth="250px" boxMaxHeight="88vh" blipEvents={mock} />
             </Drawer>
         </div>
     );

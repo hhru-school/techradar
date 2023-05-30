@@ -4,7 +4,6 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 import { useGetAllCompanyRadarsQuery, useGetRadarByVersionIdQuery } from '../../api/companyRadarsApi';
 import { isFetchBaseQueryError } from '../../api/helpers';
-// import { RadarVersionDataApi } from '../../api/radarApiUtils';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
 import NavTabsContainer from './components/tab/NavTabsContainer';
@@ -14,14 +13,6 @@ export interface Version {
     name: string;
 }
 
-// const getLastradarVersionId = (versions: RadarVersionDataApi[]) =>
-//     versions.sort((versionA, versionB) => versionB.lastChangeTime.localeCompare(versionA.lastChangeTime))[0].id;
-
-// const getVersionNameById = (versions: RadarVersionDataApi[], id: number): Version => {
-//     const versionName = versions.find((version) => version.id === id)?.name || '';
-//     return { id, name: versionName };
-// };
-
 const TechRadar: FC = () => {
     const { companySlug, radarSlug, versionSlug } = useParams();
 
@@ -30,8 +21,6 @@ const TechRadar: FC = () => {
     const versionId = Number(versionSlug);
 
     const { data: radars, isLoading: radarsIsLoading } = useGetAllCompanyRadarsQuery(companyId);
-
-    // const { data: radarVersions } = useGetAllRadarVersionsQuery(radarId);
 
     const {
         data: radar,
@@ -51,14 +40,7 @@ const TechRadar: FC = () => {
                 radars={radars}
                 isLoading={radarsIsLoading}
             />
-            {/* {radarVersions && (
-                <SelectVersion
-                    versions={radarVersions}
-                    version={getVersionNameById(radarVersions, versionId)}
-                    companyId={companyId}
-                    radarId={radarId}
-                />
-            )} */}
+
             {<TechRadarMain radar={radar} isLoading={radarIsFetching} />}
         </>
     );

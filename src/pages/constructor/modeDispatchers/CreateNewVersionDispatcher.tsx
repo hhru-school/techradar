@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 import { useGetAllRadarVersionsQuery, useGetRadarByVersionIdQuery } from '../../../api/companyRadarsApi';
-import { VersionApiResponse } from '../../../api/radarApiUtils';
+import { VersionApiResponse } from '../../../api/types';
 import { cleanUp, setHasError, setRadar, setIsLoading } from '../../../store/editRadarSlice';
 import { useAppDispatch } from '../../../store/hooks';
 

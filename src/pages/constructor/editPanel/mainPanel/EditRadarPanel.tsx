@@ -12,7 +12,6 @@ const EditRadarPanel: FC = () => {
     const dispatch = useAppDispatch();
 
     const name = useAppSelector((state) => state.editRadar.radar.name);
-    const currentVersionName = useAppSelector((state) => state.editRadar.currentVersionName);
     const version = useAppSelector((state) => state.editRadar.version);
 
     const isReleased = version?.release;
@@ -24,12 +23,12 @@ const EditRadarPanel: FC = () => {
     return (
         <>
             <EditCredetialContainer label={'Название радара'} value={name} />
-            <EditCredetialContainer label={'Версия'} value={currentVersionName} />
+            {version && <EditCredetialContainer label={'Версия'} value={version.name} />}
             <div className={styles.spacer}></div>
             {version && <VersionStatusContainer release={version?.release} />}
             {isReleased ? (
-                <Button variant="contained" color="error" onClick={clickHandler}>
-                    Unpublish
+                <Button variant="outlined" color="error" onClick={clickHandler}>
+                    Снять с публикации
                 </Button>
             ) : (
                 <Button variant="contained" color="success" onClick={clickHandler}>

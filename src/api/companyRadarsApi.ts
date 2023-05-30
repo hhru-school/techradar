@@ -2,18 +2,17 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { Blip, RadarInterface } from '../components/radar/types';
 import { RootState } from '../store/store';
+import { CreateRadarApiRequest, formatApiData } from './radarApiUtils';
 import {
-    CreateRadarApiRequest,
-    RadarApiDataResponse,
-    formatApiData,
-    CreateRadarVersionDataApi,
-    VersionApiResponse,
-    CreateBlipEventApiResponse,
     CreateBlipApiResponse,
-    UpdateVersionRequest,
     CreateBlipEventApiRequest,
+    CreateBlipEventApiResponse,
+    CreateRadarVersionDataApi,
     IndexBlipEventApi,
-} from './radarApiUtils';
+    RadarApiDataResponse,
+    UpdateVersionRequest,
+    VersionApiResponse,
+} from './types';
 
 const baseUrl = '/api/';
 
@@ -49,7 +48,7 @@ fetch('http://localhost:8080/api/auth/authenticate', {
 */
 
 const accessToken =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1NDMzMTE2LCJleHAiOjE2ODU0NjkxMTZ9.PHV0q0mkQjAwkSqTMuDVczp3ccAU8xwOObhD16gIcoc';
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGhoLnJ1IiwiaWF0IjoxNjg1NDc3Njk4LCJleHAiOjE2ODU1MTM2OTh9.9CUPJHdRSJ8YChmVvsJUAEFhURQ8hF96MOWU5e0yVL8';
 
 // Все радары компании:
 // http://localhost:8080/api/radars?companyId=1
@@ -68,7 +67,7 @@ const accessToken =
 export const companyRadarsApi = createApi({
     reducerPath: 'companyRadarsApi',
     baseQuery: fetchBaseQuery({ baseUrl }),
-    tagTypes: ['Radar', 'Version', 'Log'],
+    tagTypes: ['Radar', 'Version'],
     endpoints: (builder) => ({
         getAllCompanyRadars: builder.query<RadarApi[], number>({
             query: (companyId) => ({
@@ -205,7 +204,7 @@ export const companyRadarsApi = createApi({
                 method: 'PUT',
                 body: version,
             }),
-            invalidatesTags: ['Radar', 'Version', 'Log'],
+            invalidatesTags: ['Radar', 'Version'],
         }),
 
         createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApiRequest>({
@@ -227,7 +226,6 @@ export const companyRadarsApi = createApi({
                 method: 'GET',
                 url: `blip-events/radar-log?blip-event-id=${blipEventId}`,
             }),
-            providesTags: ['Log'],
         }),
     }),
 });

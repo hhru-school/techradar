@@ -2,7 +2,7 @@ import { FC, useCallback } from 'react';
 import { Button, LinearProgress, Modal } from '@mui/material';
 
 import { useUpdateVersionMutation } from '../../../api/companyRadarsApi';
-import { setShowSwitchReleaseModal } from '../../../store/editRadarSlice';
+import { setShowSwitchReleaseModal, setVersion } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
 import styles from './modal.module.less';
@@ -22,7 +22,9 @@ const ModalSwitchRelease: FC = () => {
 
     const confirmBtnClickHandler = useCallback(async () => {
         if (version) {
-            await updateVersion({ ...version, release: !version.release });
+            const newVersion = { ...version, release: !version.release };
+            await updateVersion(newVersion);
+            dispatch(setVersion(newVersion));
             dispatch(setShowSwitchReleaseModal(false));
         }
     }, [dispatch, version, updateVersion]);
