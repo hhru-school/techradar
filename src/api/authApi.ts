@@ -88,5 +88,5 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
     endpoints: () => ({}),
-    tagTypes: ['Radar', 'Version', 'VersionsList'],
+    tagTypes: ['Radar', 'Version'],
 });

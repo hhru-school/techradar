@@ -1,4 +1,5 @@
 import { GridRowId } from '@mui/x-data-grid';
+
 import { Blip, RadarInterface } from '../components/radar/types';
 import { RootState } from '../store/store';
 import { apiSlice } from './authApi';
@@ -143,19 +144,6 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 url: `blip-events/radar-log?blip-event-id=${blipEventId}`,
             }),
         }),
-		getRadarVersions: builder.query<RadarVersionData, number>({
-            query: (radarId) => ({
-                url: `/radar-versions?radar-id=${radarId}`,
-            }),
-            providesTags: ['VersionsList'],
-        }),
-        deleteRadarVersions: builder.mutation<RadarVersionData, GridRowId>({
-            query: (versionId) => ({
-                url: `/radar-versions/${versionId}`,
-                method: 'DELETE',
-            }),
-            invalidatesTags: ['VersionsList'],
-        }),
     }),
 });
 
@@ -172,6 +160,4 @@ export const {
     useUpdateVersionMutation,
     useSaveNewRadarMutation,
     useGetBlipEventsForRadarQuery,
-	useDeleteRadarVersionsMutation
-	useGetRadarVersionsQuery
 } = companyRadarsApi;

@@ -3,13 +3,13 @@ import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box } from '@mui/material';
+import { Box, SxProps } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, ruRU } from '@mui/x-data-grid';
 
-import { useDeleteRadarVersionsMutation, useGetRadarVersionsQuery } from '../../../../api/companyRadarsApi';
+import { useDeleteRadarVersionsMutation, useGetRadarVersionsQuery } from '../../../../api/radarsGridApi';
 import { RadarVersionData, VersionData } from '../../../../api/types';
 
-const styles = {
+const styles: Record<string, SxProps> = {
     box: { height: 'calc(100vh - 240px)', width: '100%' },
 };
 
@@ -70,28 +70,28 @@ const MyRadarsDataGrid: FC = () => {
                 headerName: 'Имя версии',
                 type: 'string',
                 width: 150,
-                editable: true,
+                editable: false,
             },
             {
                 field: 'release',
                 headerName: 'Опубликован',
                 type: 'boolean',
                 width: 150,
-                editable: true,
+                editable: false,
             },
             {
                 field: 'lastChangeTime',
                 headerName: 'Последнее обновление',
                 type: 'string',
                 width: 250,
-                editable: true,
+                editable: false,
             },
             {
                 field: 'creationTime',
                 headerName: 'Время создания',
                 type: 'string',
                 width: 250,
-                editable: true,
+                editable: false,
             },
             {
                 field: 'edit',
