@@ -9,7 +9,7 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { Mutex } from 'async-mutex';
 
-import { logOut, setCredentials } from '../store/authSlice/authSlice';
+import { signOut, setCredentials } from '../store/authSlice/authSlice';
 import { RootState } from '../store/store';
 import { SignInResponse } from './types';
 
@@ -56,9 +56,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
     if (
         result?.error?.status === 'PARSING_ERROR' &&
         result?.error?.originalStatus &&
-        (result?.error?.originalStatus === 403 ||
-            result?.error?.originalStatus === 401 ||
-            result?.error?.originalStatus === 500)
+        (result?.error?.originalStatus === 403 || result?.error?.originalStatus === 401)
     ) {
         if (!mutex.isLocked()) {
             const release = await mutex.acquire();
@@ -77,7 +75,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
                     result = await baseQuery(args, api, extraOptions);
                 } else {
                     await baseQuery('/auth/logout', api, extraOptions);
-                    api.dispatch(logOut());
+                    api.dispatch(signOut());
                 }
             } finally {
                 release();

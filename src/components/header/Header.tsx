@@ -20,7 +20,7 @@ import {
     SxProps,
 } from '@mui/material';
 
-import { logOut, setAuthFormOpen } from '../../store/authSlice/authSlice';
+import { signOut, setAuthFormOpen } from '../../store/authSlice/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AuthFormModal from '../modals/authFormModal/AuthFormModal';
 import RegistrationFormModal from '../modals/registrationFormModal/RegistrationFormModal';
@@ -86,7 +86,7 @@ const Header: FC = () => {
 
     const handleUnauthorization = useCallback(() => {
         setAnchorEl(null);
-        dispatch(logOut());
+        dispatch(signOut());
         navigate('/');
     }, [dispatch, navigate]);
 

@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ruRU } from '@mui/x-data-grid';
@@ -36,9 +36,7 @@ const theme = createTheme(
 );
 
 const App: FC = () => {
-    const localStorageGetCreds = useCredentials();
-
-    useEffect(() => localStorageGetCreds(), [localStorageGetCreds]);
+    useCredentials();
 
     return (
         <ThemeProvider theme={theme}>

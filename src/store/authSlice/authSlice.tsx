@@ -31,7 +31,7 @@ export const authSlice = createSlice({
             state.accessToken = accessToken;
             state.refreshToken = refreshToken;
         },
-        logOut: (state) => {
+        signOut: (state) => {
             state.username = null;
             state.accessToken = null;
             state.refreshToken = null;
@@ -40,7 +40,7 @@ export const authSlice = createSlice({
     },
 });
 
-export const { setAuthFormOpen, setCredentials, logOut, setRegistrFormOpen } = authSlice.actions;
+export const { setAuthFormOpen, setCredentials, signOut, setRegistrFormOpen } = authSlice.actions;
 
 export default authSlice.reducer;
 
