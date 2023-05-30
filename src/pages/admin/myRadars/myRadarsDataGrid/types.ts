@@ -1,7 +1,7 @@
 export interface VersionData {
     id: number;
     name: string;
-    release: boolean;
+    release: boolean | string;
     radarId: number;
     blipEventId: number;
     creationTime: string | Date;

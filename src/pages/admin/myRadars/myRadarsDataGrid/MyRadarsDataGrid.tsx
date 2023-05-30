@@ -39,6 +39,7 @@ const MyRadarsDataGrid: FC = () => {
                 ? radarVersions.map((item: VersionData) => {
                       return {
                           ...item,
+                          release: item.release ? 'да' : 'нет',
                           creationTime: new Date(item.creationTime).toLocaleString(),
                           lastChangeTime: new Date(item.lastChangeTime).toLocaleString(),
                       };
@@ -75,7 +76,7 @@ const MyRadarsDataGrid: FC = () => {
             {
                 field: 'release',
                 headerName: 'Опубликован',
-                type: 'boolean',
+                type: 'string',
                 width: 150,
                 editable: false,
             },
