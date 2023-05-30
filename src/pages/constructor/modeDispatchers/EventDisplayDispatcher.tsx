@@ -36,7 +36,7 @@ const EventDisplayDispatcher: FC = () => {
         dispatch(setIsLoading(isLoading));
         dispatch(setHasError(hasError));
         if (radar) {
-            dispatch(setRadar({ radar }));
+            dispatch(setRadar(radar));
         }
         if (blipEvent) {
             dispatch(setBlipEvent(blipEvent));

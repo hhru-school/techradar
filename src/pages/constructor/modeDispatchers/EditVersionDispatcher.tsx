@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, memo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 
@@ -7,13 +7,15 @@ import {
     useGetRadarByVersionIdQuery,
     useGetVersionByIdQuery,
 } from '../../../api/companyRadarsApi';
-import { cleanUp, setHasError, setRadar, setIsLoading, setRadarLog } from '../../../store/editRadarSlice';
-import { useAppDispatch } from '../../../store/hooks';
+import { cleanUp, setHasError, setRadar, setIsLoading, setRadarLog, setVersion } from '../../../store/editRadarSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
 const EditVersionDispatcher: FC = () => {
     const dispatch = useAppDispatch();
 
     const { versionId } = useParams();
+
+    const currentVersionState = useAppSelector((state) => state.editRadar.version);
 
     const {
         data: radar,
@@ -24,9 +26,9 @@ const EditVersionDispatcher: FC = () => {
         data: version,
         isLoading: versionIsLoading,
         error: versionError,
-    } = useGetVersionByIdQuery(Number(versionId));
+    } = useGetVersionByIdQuery(Number(versionId), { skip: Boolean(currentVersionState) });
 
-    const { data: log } = useGetBlipEventsForRadarQuery(Number(version?.blipEventId) ?? skipToken);
+    const { data: log } = useGetBlipEventsForRadarQuery(currentVersionState?.blipEventId ?? skipToken);
 
     const isLoading = radarIsLoading || versionIsLoading;
     const hasError = Boolean(radarError || versionError);
@@ -34,8 +36,11 @@ const EditVersionDispatcher: FC = () => {
     useEffect(() => {
         dispatch(setIsLoading(isLoading));
         dispatch(setHasError(hasError));
-        if (radar && version) {
-            dispatch(setRadar({ radar, version }));
+        if (!currentVersionState && version) {
+            dispatch(setVersion(version));
+        }
+        if (radar) {
+            dispatch(setRadar(radar));
         }
         if (log) {
             dispatch(setRadarLog(log));
@@ -44,9 +49,9 @@ const EditVersionDispatcher: FC = () => {
         return () => {
             dispatch(cleanUp());
         };
-    }, [dispatch, isLoading, radar, version, hasError, log]);
+    }, [dispatch, isLoading, radar, version, currentVersionState, hasError, log]);
 
     return null;
 };
 
-export default EditVersionDispatcher;
+export default memo(EditVersionDispatcher);

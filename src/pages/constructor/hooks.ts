@@ -1,14 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import {
     useCreateBlipEventMutation,
     useCreateBlipMutation,
-    useGetRadarByVersionIdQuery,
     useUpdateVersionMutation,
 } from '../../api/companyRadarsApi';
 import { CreateBlipEventApiRequest, buildBlipEventRequest } from '../../api/radarApiUtils';
 import { Blip } from '../../components/radar/types';
-import { Segment, setRadar, setVersion } from '../../store/editRadarSlice';
+import { Segment, setVersion } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 interface EditRadarMutationState {
@@ -35,16 +34,7 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
 
     const [createBlip] = useCreateBlipMutation();
     const [createBlipEvent] = useCreateBlipEventMutation();
-    const [updateVersion, { isSuccess: isUpdateVersionSuccess }] = useUpdateVersionMutation();
-    const { data: radar } = useGetRadarByVersionIdQuery(version?.id ?? -1, {
-        skip: !isUpdateVersionSuccess,
-    });
-
-    useEffect(() => {
-        if (radar && version) {
-            dispatch(setRadar({ radar, version }));
-        }
-    }, [dispatch, radar, version]);
+    const [updateVersion] = useUpdateVersionMutation();
 
     const handler = useCallback(
         async (blip: Blip, distSegment?: Segment) => {
