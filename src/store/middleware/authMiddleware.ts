@@ -10,9 +10,12 @@ export const authMiddleware: Middleware = () => (next) => (action: PayloadAction
         const refreshToken = action.payload.refreshToken;
 
         if (typeof username === 'string' && typeof accessToken === 'string' && typeof refreshToken === 'string') {
-            localStorage.setItem('username', username);
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', refreshToken);
+            const user = {
+                username,
+                accessToken,
+                refreshToken,
+            };
+            localStorage.setItem('user', JSON.stringify(user));
         }
     }
 

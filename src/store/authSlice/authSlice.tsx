@@ -35,7 +35,6 @@ export const authSlice = createSlice({
             state.username = null;
             state.accessToken = null;
             state.refreshToken = null;
-            localStorage.clear();
         },
     },
 });

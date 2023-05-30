@@ -53,11 +53,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
         extraOptions
     );
 
-    if (
-        result?.error?.status === 'PARSING_ERROR' &&
-        result?.error?.originalStatus &&
-        (result?.error?.originalStatus === 403 || result?.error?.originalStatus === 401)
-    ) {
+    if (result?.error?.status === 403 || result?.error?.status === 401) {
         if (!mutex.isLocked()) {
             const release = await mutex.acquire();
             try {
