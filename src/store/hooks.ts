@@ -11,7 +11,14 @@ export const useCredentials: () => void = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        const user: string | null = localStorage.getItem('user');
+        let user: string | null = null;
+
+        try {
+            user = localStorage.getItem('user');
+        } catch (e) {
+            throw new Error((e as Error).message);
+        }
+
         if (user) {
             dispatch(setCredentials(JSON.parse(user) as ServerResponse));
         }

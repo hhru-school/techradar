@@ -15,7 +15,11 @@ export const authMiddleware: Middleware = () => (next) => (action: PayloadAction
                 accessToken,
                 refreshToken,
             };
-            localStorage.setItem('user', JSON.stringify(user));
+            try {
+                localStorage.setItem('user', JSON.stringify(user));
+            } catch (e) {
+                throw new Error((e as Error).message);
+            }
         }
     }
 

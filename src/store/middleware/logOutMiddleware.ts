@@ -3,7 +3,11 @@ import { Middleware } from 'redux';
 
 export const logOutMiddleware: Middleware = () => (next) => (action: PayloadAction) => {
     if (action.type === 'auth/signOut') {
-        localStorage.removeItem('user');
+        try {
+            localStorage.removeItem('user');
+        } catch (e) {
+            throw new Error((e as Error).message);
+        }
     }
 
     return next(action);
