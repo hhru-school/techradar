@@ -1,13 +1,16 @@
-import { FC, useCallback } from 'react';
-import { Button, Modal } from '@mui/material';
+import { FC, useCallback, useMemo } from 'react';
+import { Modal } from '@mui/material';
+import { Form, Formik } from 'formik';
 
 import { ConstructorMode, closeDeleteBlipModal, deleteBlip } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { OperationType, useOperationHandler } from '../hooks';
+import ControlContainer, { Values } from './ControlContainer';
+import ModalTextField from './ModalTextField';
 
 import styles from './modal.module.less';
 
-const btnSx = { width: 140 };
+const initialValues = { comment: '' };
 
 const ModalDeleteBlip: FC = () => {
     const blip = useAppSelector((state) => state.editRadar.editingBlip);
@@ -20,18 +23,45 @@ const ModalDeleteBlip: FC = () => {
 
     const [{ isLoading }, deleteBlipHandler] = useOperationHandler(OperationType.Delete);
 
-    const cancelBtnClickHandler = useCallback(() => {
+    const cancelBtnHandler = useCallback(() => {
         dispatch(closeDeleteBlipModal());
     }, [dispatch]);
 
-    const confirmBtnClickHandler = useCallback(async () => {
-        if (!isNewRadar && blip) {
-            await deleteBlipHandler(blip);
-            dispatch(closeDeleteBlipModal());
-        } else {
-            dispatch(deleteBlip());
+    const confirmBtnHandler = useCallback(() => {
+        dispatch(deleteBlip());
+    }, [dispatch]);
+
+    const submitBtnHandler = useCallback(
+        async (values: Values) => {
+            if (!isNewRadar && blip && values.comment) {
+                await deleteBlipHandler(blip, values.comment);
+                dispatch(closeDeleteBlipModal());
+            }
+        },
+        [dispatch, deleteBlipHandler, blip, isNewRadar]
+    );
+
+    const controls = useMemo(() => {
+        if (isNewRadar) {
+            return (
+                <ControlContainer
+                    confirmHandler={confirmBtnHandler}
+                    cancelHandler={cancelBtnHandler}
+                    isLoading={isLoading}
+                />
+            );
         }
-    }, [dispatch, blip, deleteBlipHandler, isNewRadar]);
+        return (
+            <Formik onSubmit={submitBtnHandler} initialValues={initialValues}>
+                {() => (
+                    <Form>
+                        {!isNewRadar && <ModalTextField label="Комментарий" name={'comment'} multiline={true} />}
+                        <ControlContainer cancelHandler={cancelBtnHandler} isLoading={isLoading} isSubmit={true} />
+                    </Form>
+                )}
+            </Formik>
+        );
+    }, [cancelBtnHandler, confirmBtnHandler, isLoading, isNewRadar, submitBtnHandler]);
 
     return (
         <Modal open={true}>
@@ -40,27 +70,7 @@ const ModalDeleteBlip: FC = () => {
                     Удаление технологии <span>{blip?.name}</span>
                 </h3>
                 <div className={styles.message}>Вы&nbsp;действительно хотите удалить технологию?</div>
-                <div className={styles.buttonContainer}>
-                    <Button
-                        sx={btnSx}
-                        color="error"
-                        variant="contained"
-                        onClick={confirmBtnClickHandler}
-                        type="button"
-                        disabled={isLoading}
-                    >
-                        Удалить
-                    </Button>
-                    <Button
-                        sx={btnSx}
-                        variant="outlined"
-                        onClick={cancelBtnClickHandler}
-                        type="button"
-                        disabled={isLoading}
-                    >
-                        Отмена
-                    </Button>
-                </div>
+                {controls}
             </div>
         </Modal>
     );

@@ -1,38 +1,67 @@
-import { FC, useCallback } from 'react';
-import { Button, Modal } from '@mui/material';
+import { FC, useCallback, useMemo } from 'react';
+import { Modal } from '@mui/material';
+import { Form, Formik } from 'formik';
 
 import { ConstructorMode, closeMoveBlipModal, moveBlip } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { OperationType, useOperationHandler } from '../hooks';
+import ControlContainer, { Values } from './ControlContainer';
+import ModalTextField from './ModalTextField';
 
 import styles from './modal.module.less';
 
-const btnSx = { width: 140 };
+const initialValues = { comment: '' };
 
 const ModalMoveBlip: FC = () => {
     const activeSegment = useAppSelector((state) => state.editRadar.activeSegment);
     const blip = useAppSelector((state) => state.editRadar.editingBlip);
-
     const mode = useAppSelector((state) => state.editRadar.mode);
-
     const isNewRadar = mode === ConstructorMode.NewRadarCreation;
 
     const dispatch = useAppDispatch();
 
     const [{ isLoading }, move] = useOperationHandler(OperationType.Move);
 
-    const cancelBtnClickHandler = useCallback(() => {
+    const cancelBtnHandler = useCallback(() => {
         dispatch(closeMoveBlipModal());
     }, [dispatch]);
 
-    const confirmBtnClickHandler = useCallback(async () => {
-        if (!isNewRadar && blip && activeSegment) {
-            await move(blip, activeSegment);
-            dispatch(closeMoveBlipModal());
-        } else {
-            dispatch(moveBlip());
+    const confirmBtnHandler = useCallback(() => {
+        dispatch(moveBlip());
+    }, [dispatch]);
+
+    const submitBtnHandler = useCallback(
+        async (values: Values) => {
+            if (!isNewRadar && blip && values.comment && activeSegment) {
+                await move(blip, values.comment, activeSegment);
+                dispatch(closeMoveBlipModal());
+            }
+        },
+        [dispatch, move, activeSegment, blip, isNewRadar]
+    );
+
+    const controls = useMemo(() => {
+        if (isNewRadar) {
+            return (
+                <ControlContainer
+                    confirmHandler={confirmBtnHandler}
+                    cancelHandler={cancelBtnHandler}
+                    isLoading={isLoading}
+                />
+            );
         }
-    }, [dispatch, move, activeSegment, blip, isNewRadar]);
+        return (
+            <Formik onSubmit={submitBtnHandler} initialValues={initialValues}>
+                {() => (
+                    <Form>
+                        {!isNewRadar && <ModalTextField label="Комментарий" name={'comment'} multiline={true} />}
+
+                        <ControlContainer cancelHandler={cancelBtnHandler} isLoading={isLoading} isSubmit={true} />
+                    </Form>
+                )}
+            </Formik>
+        );
+    }, [cancelBtnHandler, confirmBtnHandler, isLoading, isNewRadar, submitBtnHandler]);
 
     return (
         <Modal open={true}>
@@ -44,27 +73,7 @@ const ModalMoveBlip: FC = () => {
                     Действительно переместить технологию в кольцо <span>{activeSegment?.ring.name}</span> сектора{' '}
                     <span>{activeSegment?.sector.name}</span>?
                 </div>
-                <div className={styles.buttonContainer}>
-                    <Button
-                        sx={btnSx}
-                        color="success"
-                        variant="contained"
-                        onClick={confirmBtnClickHandler}
-                        type="button"
-                        disabled={isLoading}
-                    >
-                        Принять
-                    </Button>
-                    <Button
-                        sx={btnSx}
-                        variant="outlined"
-                        onClick={cancelBtnClickHandler}
-                        type="button"
-                        disabled={isLoading}
-                    >
-                        Отмена
-                    </Button>
-                </div>
+                {controls}
             </div>
         </Modal>
     );

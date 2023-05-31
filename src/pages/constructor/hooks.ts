@@ -22,7 +22,7 @@ export enum OperationType {
     Delete,
 }
 
-type OperationHandler = (blip: Blip, distSegment?: Segment) => Promise<void>;
+type OperationHandler = (blip: Blip, comment: string, distSegment?: Segment) => Promise<void>;
 
 export const useOperationHandler = (operation: OperationType): [EditRadarMutationState, OperationHandler] => {
     const dispatch = useAppDispatch();
@@ -38,11 +38,11 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
     const [updateVersion] = useUpdateVersionMutation();
 
     const handler = useCallback(
-        async (blip: Blip, distSegment?: Segment) => {
+        async (blip: Blip, comment: string, distSegment?: Segment) => {
             try {
                 if (!parentId || !version || !radarId) throw new Error();
                 setState({ isLoading: true, hasError: false });
-                let blipEventRequest: CreateBlipEventApiRequest = buildBlipEventRequest(blip, parentId);
+                let blipEventRequest: CreateBlipEventApiRequest = buildBlipEventRequest(blip, parentId, comment);
                 switch (operation) {
                     case OperationType.Add: {
                         const newBlipResp = await createBlip({ blip, radarId }).unwrap();

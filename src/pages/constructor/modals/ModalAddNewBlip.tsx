@@ -69,7 +69,7 @@ const ModalAddNewBlip: FC = () => {
             };
 
             if (!isNewRadar) {
-                await add(blip);
+                await add(blip, '');
                 dispatch(closeCreateBlipModal());
             } else {
                 dispatch(addNewBlip(blip));
