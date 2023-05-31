@@ -116,8 +116,8 @@ export const formatCreateRadarData = (radar: RadarInterface): CreateRadarApiRequ
     };
 };
 
-export const buildBlipEventRequest = (blip: Blip, parentId: number, comment?: string): CreateBlipEventApiRequest => ({
-    comment: comment || '',
+export const buildBlipEventRequest = (blip: Blip, parentId: number, comment: string): CreateBlipEventApiRequest => ({
+    comment: comment || null,
     parentId,
     blipId: blip.id,
     quadrantId: blip.sector.id || null,

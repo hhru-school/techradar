@@ -66,7 +66,7 @@ export interface VersionApiResponse {
 }
 
 export interface CreateBlipEventApiRequest {
-    comment: string;
+    comment: string | null;
     parentId: number;
     blipId: number;
     quadrantId: number | null;
