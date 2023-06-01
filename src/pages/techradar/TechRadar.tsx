@@ -16,15 +16,10 @@ export interface Version {
 // const getLastradarVersionId = (versions: RadarVersionDataApi[]) =>
 //     versions.sort((versionA, versionB) => versionB.lastChangeTime.localeCompare(versionA.lastChangeTime))[0].id;
 
-// const getVersionNameById = (versions: RadarVersionDataApi[], id: number): Version => {
+// const getVersionNameById = (versions: VersionApiResponse[], id: number): Version => {
 //     const versionName = versions.find((version) => version.id === id)?.name || '';
 //     return { id, name: versionName };
 // };
-
-const getVersionNameById = (versions: RadarVersionDataApi[], id: number): Version => {
-    const versionName = versions.find((version) => version.id === id)?.name || '';
-    return { id, name: versionName };
-};
 
 const TechRadar: FC = () => {
     const { companySlug, radarSlug, versionSlug } = useParams();

@@ -17,7 +17,7 @@ const ModalEditSectorName: FC = () => {
                 names={sectorNames}
                 header={'Edit sector name'}
                 inputLabel={'Sector name'}
-                cancelBtnHandler={closeEditSectorNameModal}
+                cancelBtnActionCreator={closeEditSectorNameModal}
                 submitBtnActionCreator={renameSector}
             ></ModalRename>
         );

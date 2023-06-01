@@ -17,7 +17,6 @@ import {
 import { IndexBlipEventApi } from '../../../api/types';
 import LogList from '../components/logList/LogList';
 
-const styles: Record<string, SxProps> = {
 // Удалить при подключении реальной ручки:
 
 export const mock: IndexBlipEventApi[] = [
@@ -36,7 +35,7 @@ export const mock: IndexBlipEventApi[] = [
 
 //* ******************************************
 
-const styles = {
+const styles: Record<string, SxProps> = {
     nameTech: { textAlign: 'left', margin: '15px 0 15px 40px' },
     headerBox: { display: 'flex' },
     headerBtn: { margin: '0 25px' },
