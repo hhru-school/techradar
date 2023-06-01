@@ -3,7 +3,7 @@ import { Box, Button, Modal, Typography } from '@mui/material';
 import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 
-import { styleModal } from '../../../../components/authFormModal/AuthFormModal';
+import { styles } from '../../../../components/modals/authFormModal/AuthFormModal';
 import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
 import { addNewBlip, setRadarConstrTechModalOpen } from '../../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
@@ -39,7 +39,7 @@ const AddTechModal: FC = () => {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
-            <Box sx={styleModal}>
+            <Box sx={styles.modal}>
                 <Typography id="transition-modal-title" variant="h6" component="h2">
                     Добавление технологии
                 </Typography>

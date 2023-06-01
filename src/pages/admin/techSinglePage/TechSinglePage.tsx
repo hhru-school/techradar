@@ -1,11 +1,22 @@
 import { FC, useCallback, useMemo, useState, MouseEvent } from 'react';
 import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Button, Container, Divider, Grid, Popover, PopoverOrigin, TextField, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    Container,
+    Divider,
+    Grid,
+    Popover,
+    PopoverOrigin,
+    SxProps,
+    TextField,
+    Typography,
+} from '@mui/material';
 
 import LogList from '../components/logList/LogList';
 
-const styles = {
+const styles: Record<string, SxProps> = {
     nameTech: { textAlign: 'left', margin: '15px 0 15px 40px' },
     headerBox: { display: 'flex' },
     headerBtn: { margin: '0 25px' },

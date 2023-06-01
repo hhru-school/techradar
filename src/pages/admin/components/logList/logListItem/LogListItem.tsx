@@ -2,9 +2,18 @@ import { FC, useCallback, useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import PreviewIcon from '@mui/icons-material/Preview';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Popover, PopoverOrigin, Typography } from '@mui/material';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Box,
+    Popover,
+    PopoverOrigin,
+    SxProps,
+    Typography,
+} from '@mui/material';
 
-const styles = {
+const styles: Record<string, SxProps> = {
     showRadarBtnBox: { cursor: 'pointer', width: '24px', display: 'flex' },
     popoverText: { p: 1 },
     logListItemBox: {

@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { ReactComponent as AlertCircle } from './icons/alert-circle.svg';
 import { ReactComponent as Other } from './icons/other.svg';
 import { ReactComponent as PageNotFound } from './icons/pageNotFound.svg';
 
@@ -9,6 +10,7 @@ type Props = { errorStatus: number | string | null };
 
 enum Message {
     PageNotFound = 'Page not found',
+    Unauthorized = 'Необходимо авторизироваться',
     Other = 'Oooops!.. Something went wrong',
 }
 
@@ -22,6 +24,12 @@ const ErrorMessage: FC<Props> = ({ errorStatus }) => {
         case 404: {
             message = Message.PageNotFound;
             svg = <PageNotFound style={svgStyle} />;
+            break;
+        }
+        case 401: {
+            message = Message.Unauthorized;
+            svg = <AlertCircle style={svgStyle} />;
+            break;
         }
     }
 

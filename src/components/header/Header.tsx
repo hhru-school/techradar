@@ -1,90 +1,130 @@
-import { FC, useState, MouseEvent } from 'react';
-import { Link } from 'react-router-dom';
-import ConstructionIcon from '@mui/icons-material/Construction';
+import { FC, useState, MouseEvent, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Logout from '@mui/icons-material/Logout';
 import RadarIcon from '@mui/icons-material/Radar';
-import AppBar from '@mui/material/AppBar';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
+import {
+    PopoverOrigin,
+    AppBar,
+    Avatar,
+    Box,
+    Container,
+    Divider,
+    IconButton,
+    ListItemIcon,
+    Menu,
+    MenuItem,
+    Toolbar,
+    Tooltip,
+    Typography,
+    SxProps,
+} from '@mui/material';
 
-import {
-    // setAuthFormOpen,
-    setAuthFormData,
-} from '../../store/authentificationSlice';
-import {
-    useAppDispatch,
-    // useAppSelector
-} from '../../store/hooks';
-import AuthFormModal from '../authFormModal/AuthFormModal';
+import { signOut, setAuthFormOpen } from '../../store/authSlice/authSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import AuthFormModal from '../modals/authFormModal/AuthFormModal';
+import RegistrationFormModal from '../modals/registrationFormModal/RegistrationFormModal';
+
+const styles: Record<string, SxProps> = {
+    iconBtnUnauth: { ml: 2 },
+    iconBtn: { margin: 'auto 0' },
+    label: { flexGrow: 1 },
+    menu: {
+        overflow: 'visible',
+        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+        mt: 1.5,
+        '& .MuiAvatar-root': {
+            width: 32,
+            height: 32,
+            ml: -0.5,
+            mr: 1,
+        },
+        '&:before': {
+            content: '""',
+            display: 'block',
+            position: 'absolute',
+            top: 0,
+            right: 14,
+            width: 10,
+            height: 10,
+            bgcolor: 'background.paper',
+            transform: 'translateY(-50%) rotate(45deg)',
+            zIndex: 0,
+        },
+    },
+    iconBox: {
+        display: 'flex',
+        alignItems: 'center',
+        textAlign: 'center',
+    },
+    circleIcon: { color: 'white', fontSize: 49 },
+    iconBtnAuth: { ml: 2 },
+};
+
+const PaperProps = {
+    elevation: 0,
+    sx: styles.menu,
+};
+
+const transformOrigin: PopoverOrigin = { horizontal: 'right', vertical: 'top' };
+const anchorOrigin: PopoverOrigin = { horizontal: 'right', vertical: 'bottom' };
 
 const Header: FC = () => {
     const dispatch = useAppDispatch();
-    // const authentificationFormData = useAppSelector((state) => state.data.authentificationFormData);
-
+    const navigate = useNavigate();
+    const username = useAppSelector((state) => state.auth.username);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
     const open = Boolean(anchorEl);
 
-    const handleClick = (event: MouseEvent<HTMLElement>) => {
+    const handleClick = useCallback((event: MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
-    };
+    }, []);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setAnchorEl(null);
-        dispatch(setAuthFormData({ email: null, password: null }));
-    };
+    }, []);
 
+    const handleUnauthorization = useCallback(() => {
+        setAnchorEl(null);
+        dispatch(signOut());
+        navigate('/');
+    }, [dispatch, navigate]);
+
+    const handleAuthFormOpen = useCallback(() => dispatch(setAuthFormOpen(true)), [dispatch]);
+
+    const ariaControlsIconBtn = open ? 'account-menu' : undefined;
+    const ariaExpandedIconBtn = open ? 'true' : undefined;
     return (
         <>
             <AppBar position="static">
                 <Container maxWidth="xl">
                     <Toolbar>
-                        <IconButton edge="start" color="inherit" aria-label="menu" sx={{ margin: 'auto 0' }}>
+                        <IconButton edge="start" color="inherit" aria-label="menu" sx={styles.iconBtn}>
                             <Link to="/">
                                 <RadarIcon />
                             </Link>
                         </IconButton>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Typography variant="h6" component="div" sx={styles.label}>
                             <Link to="/">TechRadar</Link>
                         </Typography>
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                textAlign: 'center',
-                            }}
-                        >
+                        <Box sx={styles.iconBox}>
                             <Tooltip title="Account settings">
-                                {/* {authentificationFormData.email === null ? (
+                                {username ? (
                                     <IconButton
-                                        onClick={() => dispatch(setAuthFormOpen(true))}
+                                        onClick={handleClick}
                                         size="small"
-                                        sx={{ ml: 2 }}
+                                        sx={styles.iconBtnAuth}
+                                        aria-controls={ariaControlsIconBtn}
+                                        aria-haspopup="true"
+                                        aria-expanded={ariaExpandedIconBtn}
                                     >
-                                        <Avatar src="/broken-image.jpg" />
+                                        <Avatar>{username[0]}</Avatar>
                                     </IconButton>
-                                ) : ( */}
-                                <IconButton
-                                    onClick={handleClick}
-                                    size="small"
-                                    sx={{ ml: 2 }}
-                                    aria-controls={open ? 'account-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
-                                >
-                                    <Avatar src="/broken-image.jpg" />
-                                    {/* <Avatar>{authentificationFormData.email[0]}</Avatar> */}
-                                </IconButton>
-                                {/* )} */}
+                                ) : (
+                                    <IconButton onClick={handleAuthFormOpen} size="small" sx={styles.iconBtnUnauth}>
+                                        <AccountCircleIcon sx={styles.circleIcon} />
+                                    </IconButton>
+                                )}
                             </Tooltip>
                         </Box>
                         <Menu
@@ -93,36 +133,11 @@ const Header: FC = () => {
                             open={open}
                             onClose={handleClose}
                             onClick={handleClose}
-                            PaperProps={{
-                                elevation: 0,
-                                sx: {
-                                    overflow: 'visible',
-                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                    mt: 1.5,
-                                    '& .MuiAvatar-root': {
-                                        width: 32,
-                                        height: 32,
-                                        ml: -0.5,
-                                        mr: 1,
-                                    },
-                                    '&:before': {
-                                        content: '""',
-                                        display: 'block',
-                                        position: 'absolute',
-                                        top: 0,
-                                        right: 14,
-                                        width: 10,
-                                        height: 10,
-                                        bgcolor: 'background.paper',
-                                        transform: 'translateY(-50%) rotate(45deg)',
-                                        zIndex: 0,
-                                    },
-                                },
-                            }}
-                            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                            PaperProps={PaperProps}
+                            transformOrigin={transformOrigin}
+                            anchorOrigin={anchorOrigin}
                         >
-                            <Link to="/my-radars/grid/android">
+                            <Link to="/admin/my-radars">
                                 <MenuItem onClick={handleClose}>
                                     <ListItemIcon>
                                         <RadarIcon fontSize="small" />
@@ -130,16 +145,8 @@ const Header: FC = () => {
                                     Мои радары
                                 </MenuItem>
                             </Link>
-                            <Link to="/my-tech">
-                                <MenuItem onClick={handleClose}>
-                                    <ListItemIcon>
-                                        <ConstructionIcon fontSize="small" />
-                                    </ListItemIcon>
-                                    Мои технологии
-                                </MenuItem>
-                            </Link>
                             <Divider />
-                            <MenuItem onClick={handleClose}>
+                            <MenuItem onClick={handleUnauthorization}>
                                 <ListItemIcon>
                                     <Logout fontSize="small" />
                                 </ListItemIcon>
@@ -149,7 +156,7 @@ const Header: FC = () => {
                     </Toolbar>
                 </Container>
             </AppBar>
-
+            <RegistrationFormModal />
             <AuthFormModal />
         </>
     );

@@ -4,12 +4,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ruRU } from '@mui/x-data-grid';
 
 import Header from './components/header/Header';
+import RequireAuth from './components/requireAuth.tsx/RequireAuth';
 import MyRadars from './pages/admin/myRadars/MyRadars';
-import MyTechnologies from './pages/admin/myTechnologies/MyTechnologies';
 import RadarConstructor from './pages/admin/radarConstructor/RadarConstructor';
 import TechSinglePage from './pages/admin/techSinglePage/TechSinglePage';
 import Constructor from './pages/constructor/Constructor';
 import TechRadar from './pages/techradar/TechRadar';
+import { useCredentials } from './store/hooks';
 
 const theme = createTheme(
     {
@@ -35,6 +36,8 @@ const theme = createTheme(
 );
 
 const App: FC = () => {
+    useCredentials();
+
     return (
         <ThemeProvider theme={theme}>
             <Header />
@@ -46,7 +49,7 @@ const App: FC = () => {
                 <Route path="/constructor" element={<Constructor />} />
                 <Route path="/single" element={<TechSinglePage />} />
                 <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
-                <Route path="/my-tech" element={<MyTechnologies />} />
+                <Route path="/admin/*" element={<RequireAuth />} />
             </Routes>
         </ThemeProvider>
     );
