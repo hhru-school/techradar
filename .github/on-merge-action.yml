@@ -1,0 +1,53 @@
+name: CD
+on:
+  push:
+    branches:
+     - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set current date as env variable
+      run: echo "TIME=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+    - name: Build app
+      run: |
+        npm ci
+        npx eslint ./src --fix
+        npm run build
+    - name: Docker login
+      run: echo "$PASSWORD" | docker login -u "$USER" --password-stdin
+      env:
+        USER: ${{ secrets.DOCKER_USERNAME }}
+        PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build docker image
+      run: |
+        echo ${{ env.IMAGE_NAME }}
+        docker build -t techradarapi/techradar-api:F-$TIME .
+    - name: Push docker image to Docker Hub
+      run: |
+        docker push techradarapi/techradar-api:F-$TIME
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set current date as env variable
+      run: echo "TIME=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+    - name: SSH connect & deploy
+      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        user: ${{ secrets.SSH_USER }}
+        pass: ${{ secrets.SSH_PASSWORD }}
+        connect_timeout: 10s
+        first_ssh: |
+          cd ~/server
+          sed '/FRONTEND_TAG/d' .env -i
+          echo "FRONTEND_TAG=F-$TIME" >> .env
+          docker compose down
+          docker compose up -d
+          docker image prune --all --force
