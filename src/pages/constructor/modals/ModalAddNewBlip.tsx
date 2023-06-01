@@ -99,7 +99,7 @@ const ModalAddNewBlip: FC = () => {
                             <ModalTextField label={'Технология'} name={'name'} />
                             <ModalSelectField label={'Сектор'} name={'sectorName'} values={getSectorNames(radar)} />
                             <ModalSelectField label={'Кольцо'} name={'ringName'} values={getRingNames(radar)} />
-                            <ModalTextField label={'Комментарий'} name={'description'} multiline={true} />
+                            <ModalTextField label={'Описание'} name={'description'} multiline={true} />
                             <div className={styles.buttonContainer}>
                                 <Button
                                     sx={style.btnSx}

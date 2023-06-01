@@ -33,7 +33,7 @@ const ModalDeleteBlip: FC = () => {
 
     const submitBtnHandler = useCallback(
         async (values: Values) => {
-            if (!isNewRadar && blip && values.comment) {
+            if (!isNewRadar && blip) {
                 await deleteBlipHandler(blip, values.comment);
                 dispatch(closeDeleteBlipModal());
             }

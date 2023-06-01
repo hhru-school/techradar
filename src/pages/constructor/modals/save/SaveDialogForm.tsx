@@ -1,15 +1,9 @@
-import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { Button, LinearProgress, Stack } from '@mui/material';
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import {
-    ConstructorMode,
-    setEditMode,
-    setRadarName,
-    setCurrentRadarVersionName,
-    setShowSaveRadarDialog,
-} from '../../../../store/editRadarSlice';
+import { setRadarName, setCurrentRadarVersionName, setShowSaveRadarDialog } from '../../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import ModalTextField from '../ModalTextField';
 import SaveRadarFormObserver from './SaveRadarFormObserver';
@@ -50,10 +44,6 @@ const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
         dispatch(setCurrentRadarVersionName(initialRadarVersion));
     }, [dispatch, initialRadarName, initialRadarVersion]);
 
-    // const submitBtnClickHandler = useCallback(async () => {
-    //     await submitHandler();
-    // }, [submitHandler]);
-
     const submitBtnClickHandler = useCallback(
         async (_values: Values, { setSubmitting }: FormikHelpers<Values>) => {
             await submitHandler();
@@ -62,53 +52,17 @@ const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
         [submitHandler]
     );
 
-    const isNewRadarCreation = radarName !== initialRadarName;
-    const isVersionEditing = radarName === initialRadarName && radarVersion === initialRadarVersion;
-    const isNewVersionCreation = radarName === initialRadarName && radarVersion !== initialRadarVersion;
-
-    let message: ReactNode;
-    let buttonLabel: string;
-
-    if (isNewRadarCreation) {
-        message = <>Будет создан новый радар.</>;
-        buttonLabel = 'Создать радар';
-    }
-
-    if (isVersionEditing) {
-        message = (
-            <>
-                Версия <span>{radarVersion}</span> будет изменена.
-            </>
-        );
-        buttonLabel = 'Сохранить изменения';
-    }
-    if (isNewVersionCreation) {
-        message = (
-            <>
-                Будет создана новая версия радара <span>{radarName}</span>.
-            </>
-        );
-        buttonLabel = 'Создать версию';
-    }
-
     const initialValues = useMemo(
         () => ({
-            name: radarName || '',
-            version: radarVersion || '',
+            name: radarName,
+            version: radarVersion,
         }),
         [radarName, radarVersion]
     );
 
-    useEffect(() => {
-        if (isNewRadarCreation) dispatch(setEditMode(ConstructorMode.NewRadarCreation));
-        if (isVersionEditing) dispatch(setEditMode(ConstructorMode.VersionEditing));
-        if (isNewVersionCreation) dispatch(setEditMode(ConstructorMode.NewVersionCreation));
-    }, [isNewRadarCreation, isVersionEditing, isNewVersionCreation, dispatch]);
-
     return (
         <>
             <h3 className={styles.header}>Сохранить радар</h3>
-            {message && <div className={styles.message}>{message}</div>}
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={submitBtnClickHandler}>
                 {({ isValid }) => {
                     return (
@@ -118,7 +72,7 @@ const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
                                 <ModalTextField label={'Версия'} name={'version'} disabled={isLoading} />
                                 <Stack spacing={2} sx={style.stack}>
                                     <Button variant="contained" type="submit" disabled={!isValid || isLoading}>
-                                        {buttonLabel}
+                                        Сохранить радар
                                     </Button>
                                     <Button variant="outlined" onClick={cancelBtnClickHandler} disabled={isLoading}>
                                         Отмена
