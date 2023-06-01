@@ -14,7 +14,10 @@ import {
     Typography,
 } from '@mui/material';
 
-import { useGetBlipQuery } from '../../../api/blipsSinglePageApi';
+import {
+    useGetBlipQuery,
+    // useUpdateBlipMutation
+} from '../../../api/blipsSinglePageApi';
 import { IndexBlipEventApi } from '../../../api/types';
 import LogList from '../components/logList/LogList';
 
@@ -70,13 +73,11 @@ const anchorOrigin: PopoverOrigin = {
 const TechSinglePage: FC = () => {
     const [textAboutReadOnly, setTextAboutReadOnly] = useState<boolean>(true);
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-    const {
-        data,
-        // , error, isLoading
-    } = useGetBlipQuery(1);
+    const { data } = useGetBlipQuery(666);
+    // const { updateBlip } = useUpdateBlipMutation();
 
     const nameTech = data ? data.name : 'имя не указано';
-    const descrTech = data ? data.description : 'описание не указано';
+    const descrTech = data ? data.description : '';
 
     const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -93,10 +94,14 @@ const TechSinglePage: FC = () => {
     const id = open ? 'simple-popover' : undefined;
     const editColor = textAboutReadOnly ? 'primary' : 'error';
     const iconColor = !anchorEl ? 'primary' : 'error';
-    const clickToSaveContent = textAboutReadOnly ? null : (
-        <Typography sx={styles.clickToSave}>Нажмите для сохранения</Typography>
+    const clickToSaveContent = textAboutReadOnly ? (
+        <EditIcon color={editColor} />
+    ) : (
+        <Box>
+            <EditIcon color={editColor} />
+            <Typography sx={styles.clickToSave}>Нажмите для сохранения</Typography>
+        </Box>
     );
-    const editToggle = textAboutReadOnly ? null : 'Редактирование включено';
     const InputProps = useMemo(
         () => ({
             readOnly: textAboutReadOnly,
@@ -131,14 +136,12 @@ const TechSinglePage: FC = () => {
                     <Box sx={styles.aboutBox}>
                         <Typography variant="h5">О технологии</Typography>
                         <Button variant="text" sx={styles.aboutBtn} onClick={onClickHandler}>
-                            <EditIcon color={editColor} />
                             {clickToSaveContent}
                         </Button>
                     </Box>
 
                     <TextField
                         id="outlined-read-only-input"
-                        label={editToggle}
                         defaultValue={descrTech}
                         InputProps={InputProps}
                         multiline
