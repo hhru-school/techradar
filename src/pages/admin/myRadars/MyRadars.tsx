@@ -58,7 +58,7 @@ const MyRadar: FC = () => {
             <Typography variant="h5" sx={{ textAlign: 'left', margin: '15px 0 0 40px' }}>
                 Радары
             </Typography>
-            <Link to={'/admin/radar-constructor'}>
+            <Link to={'/constructor/new/radar'}>
                 <Button variant="outlined" color="secondary" sx={{ textAlign: 'left', margin: '15px 0 15px 40px' }}>
                     Новый радар +
                 </Button>
