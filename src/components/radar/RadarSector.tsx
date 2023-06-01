@@ -12,14 +12,15 @@ import {
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import RadarSectorLabel from './RadarSectorLabel';
 import RadarSegment from './RadarSegment';
-import { Blip, RadarComponentVariant, Segment } from './types';
+import { Blip, RadarVariant, Ring, Sector, Segment } from './types';
 import { getRadiusListEqualSquare, getTransform } from './utils';
 
 import styles from './radar.module.less';
 
 type Props = {
-    sectorName: string;
-    ringNames: string[];
+    sector: Sector;
+    rings: Ring[];
+    blips: Blip[];
     radius: number;
     startAngle: number;
     sweepAngle: number;
@@ -27,37 +28,36 @@ type Props = {
     blipRadius: number;
     svgRadius?: number;
     gap?: number;
-    data?: Blip[] | null;
     seed?: number;
-    variant: RadarComponentVariant;
+    variant: RadarVariant;
 };
 
 const defaultTransform = { x: 0, y: 0, scale: 1 };
 
-const getDisplay = (activeSector: string | null, sectorName: string, variant: RadarComponentVariant) => {
-    if (variant === RadarComponentVariant.Editable) return 'auto';
-    return activeSector && activeSector !== sectorName ? 'none' : 'auto';
+const getDisplay = (activeSectorId: number | null, sectorId: number, variant: RadarVariant) => {
+    if (variant === RadarVariant.Editable) return 'auto';
+    return activeSectorId !== null && activeSectorId !== sectorId ? 'none' : 'auto';
 };
 
 const RadarSector: FC<Props> = ({
-    sectorName,
-    ringNames,
+    sector,
+    rings,
+    blips,
     radius,
     startAngle,
     sweepAngle,
     baseColor,
     blipRadius,
-    data = null,
     seed = 0,
     gap = 0,
-    variant = RadarComponentVariant.Demonstrative,
+    variant = RadarVariant.Demonstrative,
 }) => {
-    const isDemonsrtative = variant === RadarComponentVariant.Demonstrative;
+    const isDemonsrtative = variant === RadarVariant.Demonstrative;
 
     const endAngle = startAngle + sweepAngle;
 
-    const activeSector = useAppSelector((state) => state.activeSector.activeSectorName);
-    const hoveredSector = useAppSelector((state) => state.activeSector.hoveredSectorName);
+    const activeSectorId = useAppSelector((state) => state.activeSector.activeSectorId);
+    const hoveredSectorId = useAppSelector((state) => state.activeSector.hoveredSectorId);
 
     const dispatch = useAppDispatch();
 
@@ -67,28 +67,28 @@ const RadarSector: FC<Props> = ({
 
     const transform = useMemo(() => {
         if (isDemonsrtative) {
-            return activeSector && activeSector === sectorName
+            return activeSectorId && activeSectorId === sector.id
                 ? getTransform(startAngle, endAngle, radius + gap / 2)
                 : defaultTransform;
         }
         return defaultTransform;
-    }, [activeSector, sectorName, startAngle, endAngle, radius, gap, isDemonsrtative]);
+    }, [activeSectorId, sector, startAngle, endAngle, radius, gap, isDemonsrtative]);
 
     const onClickHandler = useCallback(() => {
         if (isDemonsrtative) {
-            if (activeSector) {
+            if (activeSectorId) {
                 dispatch(clearActiveSector());
             } else {
-                dispatch(setActiveSector(sectorName));
+                dispatch(setActiveSector(sector.id));
             }
         }
-    }, [dispatch, activeSector, sectorName, isDemonsrtative]);
+    }, [dispatch, activeSectorId, sector, isDemonsrtative]);
 
     const onMouseEnterHandler = useCallback(() => {
         if (isDemonsrtative) {
-            dispatch(setHoveredSector(sectorName));
+            dispatch(setHoveredSector(sector.id));
         }
-    }, [dispatch, sectorName, isDemonsrtative]);
+    }, [dispatch, sector, isDemonsrtative]);
 
     const onMouseLeaveHandler = useCallback(() => {
         if (isDemonsrtative) {
@@ -96,7 +96,7 @@ const RadarSector: FC<Props> = ({
         }
     }, [dispatch, isDemonsrtative]);
 
-    const radiuses = useMemo(() => getRadiusListEqualSquare(ringNames.length, radius), [ringNames, radius]);
+    const radiuses = useMemo(() => getRadiusListEqualSquare(rings.length, radius), [rings, radius]);
 
     const segments = useMemo(
         () =>
@@ -107,15 +107,15 @@ const RadarSector: FC<Props> = ({
                     startAngle,
                     endAngle,
                 };
-                const id = `${sectorName}-${ringNames[i]}`.toLowerCase();
+                const id = `${sector.id}-${rings[i].id}`.toLowerCase();
                 return (
                     <RadarSegment
                         id={id}
                         key={id}
-                        ringName={ringNames[i]}
-                        sectorName={sectorName}
+                        ring={rings[i]}
+                        sector={sector}
                         segment={segment}
-                        data={data && data.filter((item) => item.ringName === ringNames[i])}
+                        blips={blips.filter((item) => item.ring.id === rings[i].id)}
                         color={
                             d3
                                 .color(baseColor)
@@ -129,20 +129,7 @@ const RadarSector: FC<Props> = ({
                     />
                 );
             }),
-        [
-            radiuses,
-            blipRadius,
-            ringNames,
-            baseColor,
-            startAngle,
-            endAngle,
-            transform,
-            gap,
-            data,
-            seed,
-            sectorName,
-            variant,
-        ]
+        [radiuses, blipRadius, rings, baseColor, startAngle, endAngle, transform, gap, blips, seed, sector, variant]
     );
 
     const classes = classNames({
@@ -157,12 +144,12 @@ const RadarSector: FC<Props> = ({
             onMouseLeave={onMouseLeaveHandler}
             className={classes}
             transform={`translate(${transform.x} ${transform.y}) scale(${transform.scale})`}
-            opacity={hoveredSector && hoveredSector !== sectorName ? 0.5 : 1}
-            display={getDisplay(activeSector, sectorName, variant)}
+            opacity={hoveredSectorId && hoveredSectorId !== sector.id ? 0.5 : 1}
+            display={getDisplay(activeSectorId, sector.id, variant)}
             onTransitionEnd={transitionEndHandler}
         >
             <RadarSectorLabel
-                sectorName={sectorName}
+                sector={sector}
                 startAngle={startAngle}
                 sweepAngle={sweepAngle}
                 radius={radius}

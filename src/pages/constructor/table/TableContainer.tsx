@@ -1,7 +1,7 @@
 import { FC, memo, useState } from 'react';
 import { Button } from '@mui/material';
 
-import { FormattedRadarData } from '../../../api/radarApiUtils';
+import { RadarInterface } from '../../../components/radar/types';
 import EditableLegend from '../legend/EditableLegend';
 import Table from './Table';
 import ViewModeControl from './ViewModeControl';
@@ -9,7 +9,7 @@ import ViewModeControl from './ViewModeControl';
 import styles from './tableContainer.module.less';
 
 type Props = {
-    radar: FormattedRadarData;
+    radar: RadarInterface;
 };
 
 export type Mode = 'table' | 'legend';

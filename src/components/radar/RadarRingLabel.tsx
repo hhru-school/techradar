@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import { openEditRingNameModal, setShowEditIcon } from '../../store/editRadarSlice';
 import { useAppDispatch } from '../../store/hooks';
-import { RadarComponentVariant, Segment } from './types';
+import { RadarVariant, Ring, Segment } from './types';
 import { convertRadToDeg } from './utils';
 
 import styles from './radar.module.less';
@@ -17,20 +17,20 @@ type Props = {
     x: number;
     y: number;
     segment: Segment;
-    ringName: string;
-    variant?: RadarComponentVariant;
+    ring: Ring;
+    variant?: RadarVariant;
 };
 
 const getTransform = (startAngle: number, x: number, y: number) =>
     `rotate(${-convertRadToDeg(startAngle)}  0 0) rotate(${textRotation(startAngle)} ${x} ${y})`;
 
-const RadarRingLabel: FC<Props> = ({ x, y, segment, ringName, variant = RadarComponentVariant.Demonstrative }) => {
-    const isEditable = variant === RadarComponentVariant.Editable;
+const RadarRingLabel: FC<Props> = ({ x, y, segment, ring, variant = RadarVariant.Demonstrative }) => {
+    const isEditable = variant === RadarVariant.Editable;
 
     const dispatch = useAppDispatch();
 
     const doubleClickHandler = () => {
-        dispatch(openEditRingNameModal(ringName));
+        dispatch(openEditRingNameModal(ring));
     };
 
     const [isActive, setIsActive] = useState(false);
@@ -61,7 +61,7 @@ const RadarRingLabel: FC<Props> = ({ x, y, segment, ringName, variant = RadarCom
             y={y}
             transform={getTransform(segment.startAngle, x, y)}
         >
-            {ringName}
+            {ring.name}
         </text>
     );
 };

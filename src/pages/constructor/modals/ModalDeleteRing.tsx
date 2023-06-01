@@ -5,23 +5,26 @@ import { useAppSelector } from '../../../store/hooks';
 import ModalDelete from './ModalDelete';
 
 const ModalDeleteRing: FC = () => {
-    const currentName = useAppSelector((state) => state.editRadar.editingRingName || '');
+    const editingRing = useAppSelector((state) => state.editRadar.editingRing);
 
-    const message = (
-        <div>
-            Действительно удалить кольцо <span>{currentName}</span>?
-        </div>
-    );
+    if (editingRing) {
+        const message = (
+            <div>
+                Действительно удалить кольцо <span>{editingRing.name}</span>?
+            </div>
+        );
 
-    return (
-        <ModalDelete
-            itemName={currentName}
-            closeBtnActionCreator={closeDeleteRingModal}
-            deleteBtnActionCreator={deleteRing}
-            header="Delete sector"
-            message={message}
-        />
-    );
+        return (
+            <ModalDelete
+                item={editingRing}
+                closeBtnActionCreator={closeDeleteRingModal}
+                deleteBtnActionCreator={deleteRing}
+                header="Delete sector"
+                message={message}
+            />
+        );
+    }
+    return null;
 };
 
 export default ModalDeleteRing;

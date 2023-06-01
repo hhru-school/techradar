@@ -4,21 +4,22 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { ActionCreatorWithPayload, ActionCreatorWithoutPayload } from '@reduxjs/toolkit';
 
+import { Ring, Sector } from '../../../components/radar/types';
 import { useAppDispatch } from '../../../store/hooks';
 import EditMenuItem from './EditMenuItem';
 
 type Props = {
-    itemNames: string[];
+    items: Ring[] | Sector[];
     label: string;
-    deleteBtnActionCreator: ActionCreatorWithPayload<string>;
-    editBtnActionCreator: ActionCreatorWithPayload<string>;
+    deleteBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
+    editBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
     addItemActionCreator: ActionCreatorWithoutPayload;
 };
 
-const btnSx = { width: 130 };
+const style = { btnSx: { width: 130 } };
 
 const EditItemsDropDown: FC<Props> = ({
-    itemNames,
+    items,
     label,
     deleteBtnActionCreator,
     editBtnActionCreator,
@@ -37,19 +38,20 @@ const EditItemsDropDown: FC<Props> = ({
 
     const menuItems = useMemo(
         () =>
-            itemNames.map((name) => (
+            items.map((item) => (
                 <EditMenuItem
-                    key={name}
-                    name={name}
+                    key={item.id}
+                    item={item}
                     deleteBtnActionCreator={deleteBtnActionCreator}
                     editBtnActionCreator={editBtnActionCreator}
-                    isOnlyItem={itemNames.length === 1}
+                    isOnlyItem={items.length === 1}
                 />
             )),
-        [itemNames, deleteBtnActionCreator, editBtnActionCreator]
+        [items, deleteBtnActionCreator, editBtnActionCreator]
     );
 
     const addItemClickHandler = useCallback(() => {
+        setAnchorEl(null);
         dispatch(addItemActionCreator());
     }, [addItemActionCreator, dispatch]);
 
@@ -63,7 +65,7 @@ const EditItemsDropDown: FC<Props> = ({
                 onClick={handleClick}
                 variant="outlined"
                 endIcon={<ArrowDropDownIcon />}
-                sx={btnSx}
+                sx={style.btnSx}
             >
                 {label}
             </Button>

@@ -3,7 +3,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import { defaultColorScheme } from '../../../components/radar/styleConfig';
-import { Blip } from '../../../components/radar/types';
+import { Blip, Ring, Sector } from '../../../components/radar/types';
 import { setLegendBbox } from '../../../store/activeBlipSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import EditableLegendSectorContainer from './EditableLegendSectorContainer';
@@ -11,8 +11,8 @@ import EditableLegendSectorContainer from './EditableLegendSectorContainer';
 import styles from './legend.module.less';
 
 type Props = {
-    sectorNames: string[];
-    ringNames: string[];
+    sectors: Sector[];
+    rings: Ring[];
     blips: Blip[];
     colorScheme?: string[];
     isSearching?: boolean;
@@ -24,29 +24,29 @@ export interface Bbox {
 }
 
 const EditableLegendMain: FC<Props> = ({
-    sectorNames,
-    ringNames,
+    sectors,
+    rings,
     blips,
     colorScheme = defaultColorScheme,
     isSearching = false,
 }) => {
     const sectorContainers = useMemo(
         () =>
-            sectorNames.map((sectorName, i) => {
-                const sectorBlips = blips.filter((blip) => blip.sectorName === sectorName);
+            sectors.map((sector, i) => {
+                const sectorBlips = blips.filter((blip) => blip.sector.id === sector.id);
                 if (isSearching && sectorBlips.length === 0) return null;
                 return (
                     <EditableLegendSectorContainer
-                        key={sectorName}
-                        sectorName={sectorName}
-                        ringNames={ringNames}
+                        key={sector.id}
+                        sector={sector}
+                        rings={rings}
                         blips={sectorBlips}
                         color={colorScheme[i]}
                         isSearching={isSearching}
                     />
                 );
             }),
-        [ringNames, sectorNames, blips, isSearching, colorScheme]
+        [rings, sectors, blips, isSearching, colorScheme]
     );
 
     const dispatch = useAppDispatch();

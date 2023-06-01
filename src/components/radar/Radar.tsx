@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import RadarSector from './RadarSector';
 import {
@@ -8,61 +8,59 @@ import {
     sectorNameFontSize,
     sectorNameTextOffset,
 } from './styleConfig';
-import { Blip, RadarComponentVariant } from './types';
+import { RadarVariant } from './types';
+import type { RadarInterface } from './types';
 import { getOffset, getOffsetXY } from './utils';
 
 type Props = {
-    sectorNames: string[];
-    ringNames: string[];
+    radar: RadarInterface;
     radius: number;
     gap?: number;
     colorScheme?: string[];
-    data?: Blip[] | null;
     blipRadus?: number;
-    variant?: RadarComponentVariant;
+    variant?: RadarVariant;
 };
 
 const Radar: FC<Props> = ({
-    ringNames,
-    sectorNames,
+    radar,
     radius,
     gap = defaultGap,
     colorScheme = defaultColorScheme,
-    data = null,
     blipRadus: blipRadius = defaultBlipRadius,
-    variant = RadarComponentVariant.Demonstrative,
+    variant = RadarVariant.Demonstrative,
 }) => {
-    const sweepAngle = (2 * Math.PI) / sectorNames.length;
+    const sweepAngle = (2 * Math.PI) / radar.sectors.length;
     const ofst = getOffset(gap, sweepAngle);
     const svgRadius = radius + ofst + sectorNameFontSize + sectorNameTextOffset;
 
-    let currentAngle = 0;
+    const sectors = useMemo(() => {
+        let currentAngle = 0;
+        return radar.sectors.map((sectorItem, i) => {
+            const ofstXY = getOffsetXY(gap, currentAngle, sweepAngle);
+            const sectorBlips = radar.blips && radar.blips.filter((item) => item.sector.name === sectorItem.name);
+            const sector = (
+                <g key={sectorItem.id} transform={`translate (${svgRadius + ofstXY.x} ${svgRadius + ofstXY.y})`}>
+                    <RadarSector
+                        startAngle={currentAngle}
+                        sweepAngle={sweepAngle}
+                        radius={radius}
+                        sector={sectorItem}
+                        rings={radar.rings}
+                        baseColor={colorScheme[i]}
+                        blips={sectorBlips}
+                        seed={i}
+                        gap={gap}
+                        svgRadius={svgRadius}
+                        blipRadius={blipRadius}
+                        variant={variant}
+                    />
+                </g>
+            );
+            currentAngle += sweepAngle;
 
-    const sectors = sectorNames.map((sectorName, i) => {
-        const ofstXY = getOffsetXY(gap, currentAngle, sweepAngle);
-
-        const sector = (
-            <g key={sectorName} transform={`translate (${svgRadius + ofstXY.x} ${svgRadius + ofstXY.y})`}>
-                <RadarSector
-                    startAngle={currentAngle}
-                    sweepAngle={sweepAngle}
-                    radius={radius}
-                    sectorName={sectorName}
-                    ringNames={ringNames}
-                    baseColor={colorScheme[i]}
-                    data={data && data.filter((item) => item.sectorName === sectorName)}
-                    seed={i}
-                    gap={gap}
-                    svgRadius={svgRadius}
-                    blipRadius={blipRadius}
-                    variant={variant}
-                />
-            </g>
-        );
-        currentAngle += sweepAngle;
-
-        return sector;
-    });
+            return sector;
+        });
+    }, [radar, sweepAngle, radius, colorScheme, gap, svgRadius, blipRadius, variant]);
 
     return (
         <>

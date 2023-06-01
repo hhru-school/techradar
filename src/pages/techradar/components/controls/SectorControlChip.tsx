@@ -1,6 +1,7 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import { Chip } from '@mui/material';
 
+import { Sector } from '../../../../components/radar/types';
 import { clearActiveBlip } from '../../../../store/activeBlipSlice';
 import {
     clearActiveSector,
@@ -12,27 +13,27 @@ import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 
 import styles from './controls.module.less';
 
-type Props = { sectorName: string; color: string };
+type Props = { sector: Sector; color: string };
 
-const SectorControlChip: FC<Props> = ({ sectorName, color }) => {
-    const activeSector = useAppSelector((state) => state.activeSector.activeSectorName);
+const SectorControlChip: FC<Props> = ({ sector, color }) => {
+    const activeSectorId = useAppSelector((state) => state.activeSector.activeSectorId);
     const dispatch = useAppDispatch();
 
     const [hoverColor, setHoverColor] = useState('inherit');
 
     const onClickHandler = useCallback(() => {
-        if (activeSector === sectorName) {
+        if (activeSectorId === sector.id) {
             dispatch(clearActiveSector());
         } else {
-            dispatch(setActiveSector(sectorName));
+            dispatch(setActiveSector(sector.id));
         }
         dispatch(clearActiveBlip());
-    }, [activeSector, sectorName, dispatch]);
+    }, [activeSectorId, sector, dispatch]);
 
     const onMouseEnterHandler = useCallback(() => {
-        if (!activeSector) dispatch(setHoveredSector(sectorName));
+        if (!activeSectorId) dispatch(setHoveredSector(sector.id));
         setHoverColor(color);
-    }, [activeSector, sectorName, color, dispatch]);
+    }, [activeSectorId, sector, color, dispatch]);
 
     const onMouseLeaveHandler = useCallback(() => {
         dispatch(clearHoveredSector());
@@ -41,11 +42,11 @@ const SectorControlChip: FC<Props> = ({ sectorName, color }) => {
 
     const style = useMemo(
         () => ({
-            backgroundColor: sectorName === activeSector ? color : 'inherit',
+            backgroundColor: sector.id === activeSectorId ? color : 'inherit',
 
             borderColor: hoverColor,
         }),
-        [sectorName, activeSector, hoverColor, color]
+        [sector, activeSectorId, hoverColor, color]
     );
 
     return (
@@ -53,7 +54,7 @@ const SectorControlChip: FC<Props> = ({ sectorName, color }) => {
             className={styles.chip}
             onMouseEnter={onMouseEnterHandler}
             onMouseLeave={onMouseLeaveHandler}
-            label={sectorName}
+            label={sector.name}
             variant="outlined"
             onClick={onClickHandler}
             style={style}

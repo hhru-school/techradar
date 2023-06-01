@@ -2,23 +2,24 @@ import { FC, ReactNode, useCallback } from 'react';
 import { Alert, Button, Modal } from '@mui/material';
 import { ActionCreatorWithPayload, ActionCreatorWithoutPayload } from '@reduxjs/toolkit';
 
+import { Ring, Sector } from '../../../components/radar/types';
 import { useAppDispatch } from '../../../store/hooks';
 
 import styles from './modal.module.less';
 
-const btnSx = { width: 140 };
+const style = { btnSx: { width: 140 } };
 
 type Props = {
-    itemName: string;
+    item: Sector | Ring;
     closeBtnActionCreator: ActionCreatorWithoutPayload;
-    deleteBtnActionCreator: ActionCreatorWithPayload<string>;
+    deleteBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
     header: string | ReactNode;
     message: string | ReactNode;
     warningMessage?: string;
 };
 
 const ModalDelete: FC<Props> = ({
-    itemName,
+    item: itemId,
     closeBtnActionCreator,
     deleteBtnActionCreator,
     header,
@@ -32,8 +33,8 @@ const ModalDelete: FC<Props> = ({
     }, [dispatch, closeBtnActionCreator]);
 
     const confirmBtnClickHandler = useCallback(() => {
-        dispatch(deleteBtnActionCreator(itemName));
-    }, [dispatch, deleteBtnActionCreator, itemName]);
+        dispatch(deleteBtnActionCreator(itemId));
+    }, [dispatch, deleteBtnActionCreator, itemId]);
 
     return (
         <Modal open={true}>
@@ -42,10 +43,16 @@ const ModalDelete: FC<Props> = ({
                 <div className={styles.message}>{message}</div>
                 {warningMessage && <Alert severity="error">{warningMessage}</Alert>}
                 <div className={styles.buttonContainer}>
-                    <Button sx={btnSx} color="error" variant="contained" onClick={confirmBtnClickHandler} type="button">
+                    <Button
+                        sx={style.btnSx}
+                        color="error"
+                        variant="contained"
+                        onClick={confirmBtnClickHandler}
+                        type="button"
+                    >
                         Delete
                     </Button>
-                    <Button sx={btnSx} variant="outlined" onClick={cancelBtnClickHandler} type="button">
+                    <Button sx={style.btnSx} variant="outlined" onClick={cancelBtnClickHandler} type="button">
                         Cancel
                     </Button>
                 </div>

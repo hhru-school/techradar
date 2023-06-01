@@ -90,7 +90,7 @@ const EditableLegendItem: FC<Props> = ({ blip, isSearching = false }) => {
             className={contentClasses}
             ref={dragRef}
         >
-            <div ref={scrollRef}> {`${blip.id}. ${blip.name}`}</div>
+            <div ref={scrollRef}> {`${blip.label}. ${blip.name}`}</div>
             {openEditMenu && <LegendItemEditMenu id={blip.id} />}
         </li>
     );

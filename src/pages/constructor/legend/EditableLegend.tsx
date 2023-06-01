@@ -1,12 +1,11 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 
-import { FormattedRadarData } from '../../../api/radarApiUtils';
-import { Blip } from '../../../components/radar/types';
+import { Blip, RadarInterface } from '../../../components/radar/types';
 import EditableLegendMain from './EditableLegendMain';
 import SearchField from './SearchField';
 
 type Props = {
-    radar: FormattedRadarData;
+    radar: RadarInterface;
 };
 
 const getMatchingBlips = (query: string, blips: Blip[]) => {
@@ -54,8 +53,8 @@ const EditableLegend: FC<Props> = ({ radar }) => {
         <div>
             <SearchField onChange={changeHandler} clear={clearHandler} value={searchValue} />
             <EditableLegendMain
-                ringNames={radar.ringNames}
-                sectorNames={radar.sectorNames}
+                rings={radar.rings}
+                sectors={radar.sectors}
                 blips={visibleBlips}
                 isSearching={isSearching}
             />

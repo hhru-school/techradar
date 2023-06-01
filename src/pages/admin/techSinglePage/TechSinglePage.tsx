@@ -14,7 +14,26 @@ import {
     Typography,
 } from '@mui/material';
 
+import { IndexBlipEventApi } from '../../../api/types';
 import LogList from '../components/logList/LogList';
+
+// Удалить при подключении реальной ручки:
+
+export const mock: IndexBlipEventApi[] = [
+    {
+        id: 100500,
+        comment:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque elementum neque et augue pharetra, id posuere diam fringilla. Mauris pharetra consectetur lobortis.',
+        blipId: 700,
+        quadrantId: 1,
+        ringId: 1,
+        authorId: 1,
+        creationTime: '2023-05-30T12:09:41.606821Z',
+        lastChangeTime: '2023-05-30T12:09:41.606821Z',
+    },
+];
+
+//* ******************************************
 
 const styles: Record<string, SxProps> = {
     nameTech: { textAlign: 'left', margin: '15px 0 15px 40px' },
@@ -128,7 +147,7 @@ const TechSinglePage: FC = () => {
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <LogList boxWidth="100%" boxMaxHeight="72vh" />
+                    <LogList boxWidth="100%" boxMaxHeight="72vh" blipEvents={mock} />
                 </Grid>
             </Grid>
         </Container>

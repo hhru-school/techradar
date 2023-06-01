@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { Ring, Sector } from '../../../components/radar/types';
 import {
     deleteRing,
     openAddNewRingModal,
@@ -13,23 +14,23 @@ import EditItemsDropDown from './EditItemsDropDown';
 import styles from './radarBaseEditPanel.module.less';
 
 type Props = {
-    sectorNames: string[];
-    ringNames: string[];
+    sectors: Sector[];
+    rings: Ring[];
 };
 
-const RadarBaseEditPanel: FC<Props> = ({ sectorNames, ringNames }) => {
+const RadarBaseEditPanel: FC<Props> = ({ sectors, rings }) => {
     return (
         <div className={styles.container}>
             <EditItemsDropDown
                 label="Секторы"
-                itemNames={sectorNames}
+                items={sectors}
                 editBtnActionCreator={openEditSectorNameModal}
                 deleteBtnActionCreator={openDeleteSectorModal}
                 addItemActionCreator={openAddNewSectorModal}
             />
             <EditItemsDropDown
                 label="Кольца"
-                itemNames={ringNames}
+                items={rings}
                 editBtnActionCreator={openEditRingNameModal}
                 deleteBtnActionCreator={deleteRing}
                 addItemActionCreator={openAddNewRingModal}
