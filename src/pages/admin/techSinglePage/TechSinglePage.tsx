@@ -14,10 +14,9 @@ import {
     Typography,
 } from '@mui/material';
 
+import { useGetBlipQuery } from '../../../api/blipsSinglePageApi';
 import { IndexBlipEventApi } from '../../../api/types';
 import LogList from '../components/logList/LogList';
-
-// Удалить при подключении реальной ручки:
 
 export const mock: IndexBlipEventApi[] = [
     {
@@ -50,8 +49,6 @@ export const mock: IndexBlipEventApi[] = [
     },
 ];
 
-//* ******************************************
-
 const styles: Record<string, SxProps> = {
     nameTech: { textAlign: 'left', margin: '15px 0 15px 40px' },
     headerBox: { display: 'flex' },
@@ -73,6 +70,13 @@ const anchorOrigin: PopoverOrigin = {
 const TechSinglePage: FC = () => {
     const [textAboutReadOnly, setTextAboutReadOnly] = useState<boolean>(true);
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+    const {
+        data,
+        // , error, isLoading
+    } = useGetBlipQuery(1);
+
+    const nameTech = data ? data.name : 'имя не указано';
+    const descrTech = data ? data.description : 'описание не указано';
 
     const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -104,7 +108,7 @@ const TechSinglePage: FC = () => {
         <Container maxWidth="xl">
             <Box sx={styles.headerBox}>
                 <Typography variant="h5" sx={styles.nameTech}>
-                    Название технологии
+                    {nameTech}
                 </Typography>
                 <Button variant="text" sx={styles.headerBtn} aria-describedby={id} onClick={handleClick}>
                     <EditIcon id="editTextAboutTech" color={iconColor} />
@@ -135,27 +139,7 @@ const TechSinglePage: FC = () => {
                     <TextField
                         id="outlined-read-only-input"
                         label={editToggle}
-                        defaultValue="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, odit, debitis totam sit
-                            tempora amet quia quod sed molestiae omnis temporibus quas, harum accusamus tenetur maiores
-                            modi velit dolores? Natus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, odit, debitis totam sit
-                            tempora amet quia quod sed molestiae omnis temporibus quas, harum accusamus tenetur maiores
-                            modi velit dolores? Natus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, odit, debitis totam sit
-                            tempora amet quia quod sed molestiae omnis temporibus quas, harum accusamus tenetur maiores
-                            modi velit dolores? Natus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, odit, debitis totam sit
-                            tempora amet quia quod sed molestiae omnis temporibus quas, harum accusamus tenetur maiores
-                            modi velit dolores? Natus.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, odit, debitis totam sit
-                            tempora amet quia quod sed molestiae omnis temporibus quas, harum accusamus tenetur maiores
-                            modi velit dolores? Natus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, odit, debitis totam sit
-                            tempora amet quia quod sed molestiae omnis temporibus quas, harum accusamus tenetur maiores
-                            modi velit dolores? Natus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, odit, debitis totam sit
-                            tempora amet quia quod sed molestiae omnis temporibus quas, harum accusamus tenetur maiores
-                            modi velit dolores? Natus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, odit, debitis totam sit
-                            tempora amet quia quod sed molestiae omnis temporibus quas, harum accusamus tenetur maiores
-                            modi velit dolores? Natus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, odit, debitis totam sit
-                            tempora amet quia quod sed molestiae omnis temporibus quas, harum accusamus tenetur maiores
-                            modi velit dolores? Natus.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, odit, debitis totam sit
-                            tempora amet quia quod sed molestiae omnis temporibus quas, harum accusamus tenetur maiores
-                            modi velit dolores? Natus."
+                        defaultValue={descrTech}
                         InputProps={InputProps}
                         multiline
                         placeholder="Внесите информацию о технологии..."

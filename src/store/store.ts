@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { apiSlice } from '../api/authApi';
+import { singlePageBlipApi } from '../api/blipsSinglePageApi';
 import { companyRadarsApi } from '../api/companyRadarsApi';
 import { radarsGridApi } from '../api/radarsGridApi';
 import activeBlipReducer from './activeBlipSlice';
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
     [apiSlice.reducerPath]: apiSlice.reducer,
     [companyRadarsApi.reducerPath]: companyRadarsApi.reducer,
     [radarsGridApi.reducerPath]: radarsGridApi.reducer,
+    [singlePageBlipApi.reducerPath]: singlePageBlipApi.reducer,
 });
 
 export const store = configureStore({
@@ -30,6 +32,7 @@ export const store = configureStore({
             apiSlice.middleware,
             companyRadarsApi.middleware,
             radarsGridApi.middleware,
+            singlePageBlipApi.middleware,
             authMiddleware,
         ]),
 });
