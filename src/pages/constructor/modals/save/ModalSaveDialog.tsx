@@ -16,7 +16,7 @@ const ModalSaveDialog: FC = () => {
     const radar = useAppSelector((state) => state.editRadar.radar);
     const versionName = useAppSelector((state) => state.editRadar.currentVersionName);
 
-    const [saveRadar, { data, isLoading, isSuccess, error }] = useSaveNewRadarMutation();
+    const [saveRadar, { data, isLoading, isSuccess }] = useSaveNewRadarMutation();
 
     const submitHandler = useCallback(async () => {
         await saveRadar(formatCreateRadarData({ ...radar, authorId: 1, companyId: 1, name: radar.name }));
@@ -25,7 +25,7 @@ const ModalSaveDialog: FC = () => {
     return (
         <Modal open={true}>
             <div className={styles.modal}>
-                {!isSuccess && <SaveDialogForm submitHandler={submitHandler} isLoading={isLoading} error={error} />}
+                {!isSuccess && <SaveDialogForm submitHandler={submitHandler} isLoading={isLoading} />}
                 {isSuccess && data && (
                     <SuccessDialog
                         radarName={radar.name}
