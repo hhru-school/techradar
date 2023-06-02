@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent, useMemo, useState } from 'react';
+import { FC, SyntheticEvent, useCallback, useMemo, useState } from 'react';
 import { Routes, Route } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Typography, Box, Container, Tab, Tabs, Button, SxProps } from '@mui/material';
@@ -22,10 +22,15 @@ type Tab = { id: number; label: string };
 const MyRadar: FC = () => {
     const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(1);
     const [value, setValue] = useState<number>(0);
+    const [activeRadarId, setActiveRadarId] = useState<number>(0);
 
-    const handleChange = (event: SyntheticEvent, newValue: number) => {
+    const handleChange = useCallback((event: SyntheticEvent, newValue: number) => {
         setValue(newValue);
-    };
+    }, []);
+
+    const handleSetActiveRadarId = useCallback((id: number) => {
+        setActiveRadarId(id);
+    }, []);
 
     const tabsItems = useMemo(
         () =>
@@ -36,6 +41,7 @@ const MyRadar: FC = () => {
                         key={item.id}
                         sx={styles.tab}
                         label={item.name}
+                        onClick={() => handleSetActiveRadarId(item.id)}
                         icon={
                             <Link key={item.id} to={`grid/${item.id}`} id={'tab-link'}>
                                 {item.name}
@@ -44,7 +50,7 @@ const MyRadar: FC = () => {
                     />
                 );
             }),
-        [allCompanyRadars]
+        [allCompanyRadars, handleSetActiveRadarId]
     );
 
     return (
@@ -69,7 +75,7 @@ const MyRadar: FC = () => {
             <Typography variant="h5" sx={styles.title}>
                 Радары
             </Typography>
-            <Link to={`/constructor/new/version/radar/${value}`}>
+            <Link to={`/constructor/new/version/radar/${activeRadarId}`}>
                 <Button variant="outlined" color="secondary" sx={styles.newVersionBtn}>
                     Сделать следующую версию +
                 </Button>
