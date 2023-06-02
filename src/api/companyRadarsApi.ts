@@ -46,6 +46,13 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
             providesTags: ['Radar'],
         }),
 
+        getLastReleasedVersion: builder.query<VersionApiResponse, number>({
+            query: (radarId) => ({
+                method: 'GET',
+                url: `radar-versions/last-released-version?radar-id=${radarId}`,
+            }),
+        }),
+
         getRadarByBlipEventId: builder.query<RadarInterface, number>({
             query: (blipEventId) => ({
                 method: 'GET',
@@ -96,7 +103,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 };
 
                 const result = await fetchBaseQuery({
-                    url: 'radar-versions?link-to-last-release=true',
+                    url: 'radar-versions?link-to-last-release=false',
                     method: 'POST',
                     body: versionRequestBody,
                 });
@@ -150,6 +157,7 @@ export const {
     useGetRadarByVersionIdQuery,
     useGetRadarByBlipEventIdQuery,
     useGetAllRadarVersionsQuery,
+    useGetLastReleasedVersionQuery,
     useGetVersionByIdQuery,
     useGetBlipEventByIdQuery,
     useCreateBlipMutation,

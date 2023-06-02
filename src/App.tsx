@@ -10,8 +10,8 @@ import RadarConstructor from './pages/admin/radarConstructor/RadarConstructor';
 import TechSinglePage from './pages/admin/techSinglePage/TechSinglePage';
 import Constructor from './pages/constructor/Constructor';
 import TechRadar from './pages/techradar/TechRadar';
-import { useCredentials } from './store/hooks';
 import { ConstructorMode } from './store/editRadarSlice';
+import { useCredentials } from './store/hooks';
 
 const theme = createTheme(
     {
@@ -58,7 +58,6 @@ const App: FC = () => {
                         path="new/version/radar/:radarId"
                         element={<Constructor mode={ConstructorMode.NewVersionCreation} />}
                     />
-                    <Route path="event/:blipEventId" element={<Constructor mode={ConstructorMode.DisplayEvent} />} />
                 </Route>
                 <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
                 <Route path="/admin/*" element={<RequireAuth />} />
