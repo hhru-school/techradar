@@ -96,7 +96,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 };
 
                 const result = await fetchBaseQuery({
-                    url: 'radar-versions',
+                    url: 'radar-versions?link-to-last-release=true',
                     method: 'POST',
                     body: versionRequestBody,
                 });
