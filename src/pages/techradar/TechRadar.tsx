@@ -6,6 +6,7 @@ import { useGetAllCompanyRadarsQuery, useGetRadarByVersionIdQuery } from '../../
 import { isFetchBaseQueryError } from '../../api/helpers';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
+import SelectRadarPanel from './components/selectRadarPanel/SelectRadarPanel';
 import NavTabsContainer from './components/tab/NavTabsContainer';
 
 export interface Version {
@@ -48,6 +49,7 @@ const TechRadar: FC = () => {
                 radars={radars}
                 isLoading={radarsIsLoading}
             />
+            {radars && <SelectRadarPanel radars={radars} companyId={Number(companyId)} />}
 
             {<TechRadarMain radar={radar} isLoading={radarIsFetching} />}
         </>
