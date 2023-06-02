@@ -116,11 +116,17 @@ export const formatCreateRadarData = (radar: RadarInterface): CreateRadarApiRequ
     };
 };
 
-export const buildBlipEventRequest = (blip: Blip, parentId: number, comment: string): CreateBlipEventApiRequest => ({
+export const buildBlipEventRequest = (
+    blip: Blip,
+    parentId: number,
+    comment: string,
+    radarId: number
+): CreateBlipEventApiRequest => ({
     comment: comment || null,
     parentId,
     blipId: blip.id,
     quadrantId: blip.sector.id || null,
     ringId: blip.ring.id || null,
     authorId: 1,
+    radarId,
 });
