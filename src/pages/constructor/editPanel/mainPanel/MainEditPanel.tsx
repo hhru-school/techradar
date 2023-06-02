@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 import { ConstructorMode } from '../../../../store/editRadarSlice';
-import DisplayBlipEventPanel from './DisplayBlipEventPanel';
 import EditRadarPanel from './EditRadarPanel';
 import NewRadarPanel from './NewRadarPanel';
 
@@ -14,13 +13,12 @@ type Props = {
 const MainEditPanel: FC<Props> = ({ mode }) => {
     const isNewRadar = mode === ConstructorMode.NewRadarCreation;
     const isEditVersion = mode === ConstructorMode.VersionEditing;
-    const isBlipEventDisplay = mode === ConstructorMode.DisplayEvent;
+    const isNewVersion = mode === ConstructorMode.NewVersionCreation;
 
     return (
         <div className={styles.container}>
             {isNewRadar && <NewRadarPanel />}
-            {isEditVersion && <EditRadarPanel />}
-            {isBlipEventDisplay && <DisplayBlipEventPanel />}
+            {(isEditVersion || isNewVersion) && <EditRadarPanel />}
         </div>
     );
 };

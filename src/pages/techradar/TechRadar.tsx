@@ -2,34 +2,33 @@ import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 
-import { useGetAllCompanyRadarsQuery, useGetRadarByVersionIdQuery } from '../../api/companyRadarsApi';
+import {
+    useGetAllCompanyRadarsQuery,
+    useGetLastReleasedVersionQuery,
+    useGetRadarByVersionIdQuery,
+} from '../../api/companyRadarsApi';
 import { isFetchBaseQueryError } from '../../api/helpers';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import TechRadarMain from './components/main/TechRadarMain';
 import SelectRadarPanel from './components/selectRadarPanel/SelectRadarPanel';
-import NavTabsContainer from './components/tab/NavTabsContainer';
 
 export interface Version {
     id: number;
     name: string;
 }
 
-// const getLastradarVersionId = (versions: RadarVersionDataApi[]) =>
-//     versions.sort((versionA, versionB) => versionB.lastChangeTime.localeCompare(versionA.lastChangeTime))[0].id;
-
-// const getVersionNameById = (versions: VersionApiResponse[], id: number): Version => {
-//     const versionName = versions.find((version) => version.id === id)?.name || '';
-//     return { id, name: versionName };
-// };
-
 const TechRadar: FC = () => {
     const { companySlug, radarSlug, versionSlug } = useParams();
 
     const companyId = Number(companySlug);
     const radarId = Number(radarSlug);
-    const versionId = Number(versionSlug);
 
-    const { data: radars, isLoading: radarsIsLoading } = useGetAllCompanyRadarsQuery(companyId);
+    const isLatestVersion = versionSlug === 'latest';
+
+    const { data: radars } = useGetAllCompanyRadarsQuery(companyId);
+    const { data: lastReleaseVersion } = useGetLastReleasedVersionQuery(radarId, { skip: !isLatestVersion });
+
+    const versionId = isLatestVersion ? lastReleaseVersion?.id : Number(versionSlug);
 
     const {
         data: radar,
@@ -43,12 +42,6 @@ const TechRadar: FC = () => {
 
     return (
         <>
-            <NavTabsContainer
-                radarId={Number(radarId)}
-                companyId={Number(companyId)}
-                radars={radars}
-                isLoading={radarsIsLoading}
-            />
             {radars && <SelectRadarPanel radars={radars} companyId={Number(companyId)} />}
 
             {<TechRadarMain radar={radar} isLoading={radarIsFetching} />}

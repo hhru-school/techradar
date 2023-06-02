@@ -38,7 +38,6 @@ export enum ConstructorMode {
     NewRadarCreation,
     NewVersionCreation,
     VersionEditing,
-    DisplayEvent,
 }
 
 export interface EditRadarState {
