@@ -6,8 +6,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Box, SxProps } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, ruRU } from '@mui/x-data-grid';
 
-import { useDeleteRadarVersionsMutation, useGetRadarVersionsQuery } from '../../../../api/radarsGridApi';
-import { RadarVersionData, VersionData } from '../../../../api/types';
+import { useDeleteRadarVersionMutation, useGetRadarVersionsQuery } from '../../../../api/radarsGridApi';
+import { RadarVersionData, VersionData } from './types';
 
 const styles: Record<string, SxProps> = {
     box: { height: 'calc(100vh - 240px)', width: '100%' },
@@ -31,7 +31,7 @@ const MyRadarsDataGrid: FC = () => {
     const { radarId } = useParams();
     const id = Number(radarId);
     const { data: radarVersions } = useGetRadarVersionsQuery(id);
-    const [deleteRadarVersions] = useDeleteRadarVersionsMutation();
+    const [deleteRadarVersion] = useDeleteRadarVersionMutation();
 
     const rows: RadarVersionData | [] = useMemo(
         () =>
@@ -56,7 +56,7 @@ const MyRadarsDataGrid: FC = () => {
         ],
         []
     );
-    const deleteRow = useCallback((id: GridRowId) => deleteRadarVersions(id), [deleteRadarVersions]);
+    const deleteRow = useCallback((id: GridRowId) => deleteRadarVersion(id), [deleteRadarVersion]);
     const deleteVersionRow = useCallback(
         (params: { id: GridRowId }) => [
             <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => deleteRow(params.id)} />,

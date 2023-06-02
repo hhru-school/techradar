@@ -1,11 +1,9 @@
-import { FC, SyntheticEvent, useState, useCallback } from 'react';
+import { FC, SyntheticEvent, useMemo, useState } from 'react';
 import { Routes, Route } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Typography, Box, Container, Tab, Tabs, Button, SxProps } from '@mui/material';
 
 import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
-import { useAppDispatch } from '../../../store/hooks';
-import { setRadarsCreateModalOpen } from '../../../store/myRadarsSlice';
 import MyRadarsDataGrid from './myRadarsDataGrid/MyRadarsDataGrid';
 
 import './MyRadars.less';
@@ -22,14 +20,32 @@ const styles: Record<string, SxProps> = {
 type Tab = { id: number; label: string };
 
 const MyRadar: FC = () => {
-    const dispatch = useAppDispatch();
     const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(1);
     const [value, setValue] = useState<number>(0);
 
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
-    const handleClick = useCallback(() => dispatch(setRadarsCreateModalOpen(true)), [dispatch]);
+
+    const tabsItems = useMemo(
+        () =>
+            allCompanyRadars &&
+            allCompanyRadars.map((item) => {
+                return (
+                    <Tab
+                        key={item.id}
+                        sx={styles.tab}
+                        label={item.name}
+                        icon={
+                            <Link key={item.id} to={`grid/${item.id}`} id={'tab-link'}>
+                                {item.name}
+                            </Link>
+                        }
+                    />
+                );
+            }),
+        [allCompanyRadars]
+    );
 
     return (
         <Container maxWidth="xl">
@@ -42,24 +58,10 @@ const MyRadar: FC = () => {
                     variant="scrollable"
                     allowScrollButtonsMobile
                 >
-                    {allCompanyRadars &&
-                        allCompanyRadars.map((item) => {
-                            return (
-                                <Tab
-                                    key={item.id}
-                                    sx={styles.tab}
-                                    label={item.name}
-                                    icon={
-                                        <Link key={item.id} to={`grid/${item.id}`} id={'tab-link'}>
-                                            {item.name}
-                                        </Link>
-                                    }
-                                />
-                            );
-                        })}
+                    {tabsItems}
                 </Tabs>
                 <Link to={'/constructor/new/radar'}>
-                    <Button onClick={handleClick} variant="outlined" color="secondary" sx={styles.newRadarBtn}>
+                    <Button variant="outlined" color="secondary" sx={styles.newRadarBtn}>
                         Создать радар
                     </Button>
                 </Link>
@@ -67,7 +69,7 @@ const MyRadar: FC = () => {
             <Typography variant="h5" sx={styles.title}>
                 Радары
             </Typography>
-            <Link to={'/constructor/new/version/radar/:radarId'}>
+            <Link to={`/constructor/new/version/radar/${value}`}>
                 <Button variant="outlined" color="secondary" sx={styles.newVersionBtn}>
                     Сделать следующую версию +
                 </Button>

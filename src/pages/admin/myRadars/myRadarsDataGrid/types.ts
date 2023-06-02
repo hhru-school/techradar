@@ -8,9 +8,9 @@ export interface VersionData {
     lastChangeTime: string | Date;
 }
 
-export type RadarsVersionData = Array<VersionData>;
+export type RadarVersionData = Array<VersionData>;
 
-export type GridRadar = Array<RadarsVersionData>;
+export type GridRadar = Array<RadarVersionData>;
 
 export interface GridRadarObj {
     [index: string]: GridRadar;

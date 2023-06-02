@@ -1,7 +1,7 @@
 import { GridRowId } from '@mui/x-data-grid';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { RadarsVersionData } from '../pages/admin/myRadars/myRadarsDataGrid/types';
+import { RadarVersionData } from '../pages/admin/myRadars/myRadarsDataGrid/types';
 
 const baseUrl = '/api';
 
@@ -10,13 +10,13 @@ export const radarsGridApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl }),
     tagTypes: ['VersionsList'],
     endpoints: (builder) => ({
-        getRadarVersions: builder.query<RadarsVersionData, number>({
+        getRadarVersions: builder.query<RadarVersionData, number>({
             query: (radarId) => ({
                 url: `/radar-versions?radar-id=${radarId}`,
             }),
             providesTags: ['VersionsList'],
         }),
-        deleteRadarVersions: builder.mutation<RadarsVersionData, GridRowId>({
+        deleteRadarVersion: builder.mutation<RadarVersionData, GridRowId>({
             query: (versionId) => ({
                 url: `/radar-versions/${versionId}`,
                 method: 'DELETE',
@@ -26,4 +26,4 @@ export const radarsGridApi = createApi({
     }),
 });
 
-export const { useGetRadarVersionsQuery, useDeleteRadarVersionsMutation } = radarsGridApi;
+export const { useGetRadarVersionsQuery, useDeleteRadarVersionMutation } = radarsGridApi;
