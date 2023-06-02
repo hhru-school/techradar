@@ -109,6 +109,7 @@ export interface CreateBlipEventApiRequest {
     quadrantId: number | null;
     ringId: number | null;
     authorId: number;
+    radarId: number;
 }
 
 export interface CreateBlipEventApiResponse {

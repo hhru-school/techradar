@@ -42,7 +42,12 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
             try {
                 if (!parentId || !version || !radarId) throw new Error();
                 setState({ isLoading: true, hasError: false });
-                let blipEventRequest: CreateBlipEventApiRequest = buildBlipEventRequest(blip, parentId, comment);
+                let blipEventRequest: CreateBlipEventApiRequest = buildBlipEventRequest(
+                    blip,
+                    parentId,
+                    comment,
+                    radarId
+                );
                 switch (operation) {
                     case OperationType.Add: {
                         const newBlipResp = await createBlip({ blip, radarId }).unwrap();
