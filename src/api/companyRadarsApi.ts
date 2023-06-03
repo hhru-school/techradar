@@ -165,6 +165,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 url: `rings/${body.id}`,
                 body,
             }),
+            invalidatesTags: ['Radar'],
         }),
     }),
 });
