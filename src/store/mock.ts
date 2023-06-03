@@ -1,5 +1,4 @@
 import { Blip } from '../components/radar/types';
-import { GridRadarObj } from '../pages/admin/myRadars/myRadarsDataGrid/MyRadarsDataGrid';
 
 type Input = { label: string; id: string; name: string; type: string; autoComplete: string };
 
@@ -17,11 +16,10 @@ export interface AuthFormInputs {
 
 interface State {
     techContructorInputs: ConstructorInputs;
-    radarGrid: GridRadarObj;
-    // radarConstructorGrid: GridRadarConstructor;
     countRingInputs: number;
     countSectorInputs: number;
-    showRadarsCreateModal: boolean;
+    showCreateVersionModal: boolean;
+    createVersionId: number | null;
     showTechCreateModal: boolean;
     showRadarConstrTechModal: boolean;
     ringNames: string[];
@@ -74,80 +72,8 @@ export const initialState: State = {
             autoComplete: 'off',
         },
     ],
-    radarGrid: {
-        android: [
-            {
-                id: 1,
-                radarName: '2023Q1',
-                link: 'android-radar',
-                relevantAt: '01.01.2023',
-                lastUpdate: '16 апреля 2023 20:55',
-                status: 'Опубликовано',
-            },
-            {
-                id: 2,
-                radarName: '2023Q2',
-                relevantAt: '01.05.2023',
-                lastUpdate: '16 апреля 2023 20:55',
-                status: 'Опубликовано',
-            },
-        ],
-        backend: [
-            {
-                id: 1,
-                radarName: '2023Q4',
-                relevantAt: '01.04.2023',
-                lastUpdate: '16 апреля 2023 20:55',
-                status: 'Опубликовано',
-            },
-        ],
-        data: [
-            {
-                id: 1,
-                radarName: '2023',
-                relevantAt: '01.04.2023',
-                lastUpdate: '16 апреля 2023 20:55',
-                status: 'Опубликовано',
-            },
-        ],
-        frontend: [
-            {
-                id: 1,
-                radarName: '2023',
-                relevantAt: '01.04.2023',
-                lastUpdate: '16 апреля 2023 20:55',
-                status: 'Опубликовано',
-            },
-        ],
-        ios: [
-            {
-                id: 1,
-                radarName: '2023',
-                relevantAt: '01.04.2023',
-                lastUpdate: '16 апреля 2023 20:55',
-                status: 'Опубликовано',
-            },
-        ],
-        qa: [
-            {
-                id: 1,
-                radarName: '2023',
-                relevantAt: '01.04.2023',
-                lastUpdate: '16 апреля 2023 20:55',
-                status: 'Опубликовано',
-            },
-        ],
-        datawarehouse: [
-            {
-                id: 1,
-                radarName: '2023',
-                relevantAt: '01.04.2023',
-                lastUpdate: '16 апреля 2023 20:55',
-                status: 'Опубликовано',
-            },
-        ],
-    },
-    showRadarsCreateModal: false,
+    showCreateVersionModal: false,
+    createVersionId: null,
     showTechCreateModal: false,
     showRadarConstrTechModal: false,
     countRingInputs: defaultRingNumber,

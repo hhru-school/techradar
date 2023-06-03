@@ -137,3 +137,43 @@ export interface IndexBlipEventApi {
     creationTime: string;
     lastChangeTime: string;
 }
+
+export interface VersionData {
+    id: number;
+    name: string;
+    release: boolean;
+    radarId: number;
+    blipEventId: number;
+    creationTime: string | Date;
+    lastChangeTime: string | Date;
+}
+
+export interface NewVersionResponse {
+    id: number;
+    name: string;
+    release: boolean;
+    radarId: number;
+    blipEventId: number;
+    parentId: number;
+    level: number;
+    toggleAvailable: boolean;
+    creationTime: string | Date;
+    lastChangeTime: string | Date;
+}
+
+export interface NewVersionRequest {
+    name: string;
+    release: boolean;
+    radarId: number;
+    blipEventId?: number;
+}
+export interface NewVersionError {
+    error: {
+        data: string;
+        error: string;
+        originalStatus: number;
+        status: string;
+    };
+}
+
+export type RadarVersionData = Array<VersionData>;

@@ -1,73 +1,106 @@
-import { FC, SyntheticEvent, useState, useMemo, useCallback } from 'react';
+import { FC, SyntheticEvent, useCallback, useMemo, useState } from 'react';
 import { Routes, Route } from 'react-router';
-import { Link } from 'react-router-dom';
-import { Typography, Box, Container, Tab, Tabs, Button } from '@mui/material';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Typography, Box, Container, Tab, Tabs, Button, SxProps } from '@mui/material';
 
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { setRadarsCreateModalOpen } from '../../../store/myRadarsSlice';
+import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
+import { useAppDispatch } from '../../../store/hooks';
+import { setCreateVersionModalOpen } from '../../../store/myRadarsSlice';
 import MyRadarCreateModal from './myRadarCreateModal/MyRadarCreateModal';
 import MyRadarsDataGrid from './myRadarsDataGrid/MyRadarsDataGrid';
 
 import './MyRadars.less';
 
+const styles: Record<string, SxProps> = {
+    tabs: { display: 'flex', alignItems: 'center', height: '48px' },
+    tab: { minHeight: '48px' },
+    newRadarBtn: { height: '25px', mt: '11px', width: '240px' },
+    title: { textAlign: 'left', margin: '15px 0 0 40px' },
+    newVersionBtn: { textAlign: 'left', margin: '15px 0 15px 40px' },
+    box: { display: 'flex' },
+};
+
 type Tab = { id: number; label: string };
 
 const MyRadar: FC = () => {
     const dispatch = useAppDispatch();
-    const radarGrid = useAppSelector((state) => state.myRadars.radarGrid);
-    const showRadarsCreateModal = useAppSelector((state) => state.myRadars.showRadarsCreateModal);
+    const navigate = useNavigate();
+    const { paramRadarId } = useParams();
+    const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(1);
     const [value, setValue] = useState<number>(0);
 
-    const handleChange = (event: SyntheticEvent, newValue: number) => {
+    const handleChange = useCallback((event: SyntheticEvent, newValue: number) => {
         setValue(newValue);
-    };
-    const tabs = useMemo(() => Object.keys(radarGrid).map((key, index) => ({ id: index, label: key })), [radarGrid]);
+    }, []);
 
-    const handleClick = useCallback(() => dispatch(setRadarsCreateModalOpen(true)), [dispatch]);
+    const handleCreateVersionModalOpen = useCallback(() => {
+        if (paramRadarId) dispatch(setCreateVersionModalOpen({ show: true, radarId: +paramRadarId }));
+    }, [dispatch, paramRadarId]);
+
+    const handleCreateRadar = useCallback(() => {
+        navigate('/constructor/new/radar');
+    }, [navigate]);
+
+    const tabsItems = useMemo(
+        () =>
+            allCompanyRadars &&
+            allCompanyRadars.map((item, i) => {
+                if (paramRadarId && item.id === +paramRadarId) {
+                    setValue(i);
+                }
+
+                return (
+                    <Tab
+                        key={item.id}
+                        sx={styles.tab}
+                        label={item.name}
+                        icon={
+                            <Link key={item.id} to={`grid/${item.id}`} id={'tab-link'}>
+                                {item.name}
+                            </Link>
+                        }
+                    />
+                );
+            }),
+        [allCompanyRadars, paramRadarId]
+    );
 
     return (
-        <Container maxWidth="xl">
-            <Box sx={{ display: 'flex' }}>
-                <Tabs
-                    sx={{ display: 'flex', alignItems: 'center', height: '48px' }}
-                    value={value}
-                    onChange={handleChange}
-                    scrollButtons
-                    variant="scrollable"
-                    allowScrollButtonsMobile
+        <>
+            <Container maxWidth="xl">
+                <Box sx={styles.box}>
+                    <Tabs
+                        sx={styles.tabs}
+                        value={value}
+                        onChange={handleChange}
+                        scrollButtons
+                        variant="scrollable"
+                        allowScrollButtonsMobile
+                    >
+                        {tabsItems}
+                    </Tabs>
+
+                    <Button onClick={handleCreateRadar} variant="outlined" color="secondary" sx={styles.newRadarBtn}>
+                        Создать радар
+                    </Button>
+                </Box>
+                <Typography variant="h5" sx={styles.title}>
+                    Радары
+                </Typography>
+                <Button
+                    onClick={handleCreateVersionModalOpen}
+                    variant="outlined"
+                    color="secondary"
+                    sx={styles.newVersionBtn}
                 >
-                    {tabs.map((item, i) => {
-                        return (
-                            <Tab
-                                key={i}
-                                sx={{ minHeight: '48px' }}
-                                label={item.label}
-                                icon={
-                                    <Link key={item.id} to={`grid/${item.label.split(' ')[0]}`} id={'tab-link'}>
-                                        {item.label}
-                                    </Link>
-                                }
-                            />
-                        );
-                    })}
-                </Tabs>
-                <Button onClick={handleClick} variant="outlined" color="secondary" sx={{ height: '25px', mt: '11px' }}>
-                    +
+                    Сделать следующую версию +
                 </Button>
-            </Box>
-            <Typography variant="h5" sx={{ textAlign: 'left', margin: '15px 0 0 40px' }}>
-                Радары
-            </Typography>
-            <Link to={'/constructor/new/radar'}>
-                <Button variant="outlined" color="secondary" sx={{ textAlign: 'left', margin: '15px 0 15px 40px' }}>
-                    Новый радар +
-                </Button>
-            </Link>
-            <Routes>
-                <Route path="/grid/:rowsId" element={<MyRadarsDataGrid />} />
-            </Routes>
-            {showRadarsCreateModal && <MyRadarCreateModal />}
-        </Container>
+                <Routes>
+                    <Route path="/grid/:radarId" element={<MyRadarsDataGrid />} />
+                </Routes>
+                <MyRadarCreateModal />
+            </Container>
+        </>
     );
 };
 

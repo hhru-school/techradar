@@ -1,12 +1,15 @@
-import { FC, useCallback } from 'react';
-import { Box, Button, Modal, Typography } from '@mui/material';
+import { FC, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Alert, Box, Button, CircularProgress, Modal, Typography } from '@mui/material';
 import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 
+import { useCreateNewVersionMutation } from '../../../../api/radarsGridApi';
+import { NewVersionError, NewVersionResponse } from '../../../../api/types';
 import { styles } from '../../../../components/modals/authFormModal/AuthFormModal';
 import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { createNewRadarSection, setRadarsCreateModalOpen } from '../../../../store/myRadarsSlice';
+import { setCreateVersionModalOpen } from '../../../../store/myRadarsSlice';
 
 export interface Values {
     name: string;
@@ -16,11 +19,46 @@ const validSchema = Yup.object({
     name: Yup.string().required('Обязательное поле!'),
 });
 
+const initialValues = {
+    name: '',
+};
+
 const MyRadarCreateModal: FC = () => {
     const dispatch = useAppDispatch();
-    const showRadarsCreateModal = useAppSelector((state) => state.myRadars.showRadarsCreateModal);
+    const navigate = useNavigate();
+    const showRadarsCreateModal = useAppSelector((state) => state.myRadars.showCreateVersionModal);
+    const createVersionId = useAppSelector((state) => state.myRadars.createVersionId);
+    const [errMessage, setErrMessage] = useState<string | null>(null);
+    const [createVersion, { isLoading }] = useCreateNewVersionMutation();
+    const radarIdValue = createVersionId || 0;
 
-    const handleClose = useCallback(() => dispatch(setRadarsCreateModalOpen(false)), [dispatch]);
+    const handleClose = useCallback(
+        () => dispatch(setCreateVersionModalOpen({ show: false, radarId: null })),
+        [dispatch]
+    );
+
+    const handleSubmit = useCallback(
+        async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+            await createVersion({ name: values.name, release: false, radarId: radarIdValue })
+                .unwrap()
+                .then(({ id }: NewVersionResponse) => {
+                    setErrMessage(null);
+                    navigate(` /constructor/edit/version/${id}`);
+                    dispatch(setCreateVersionModalOpen({ show: false, radarId: null }));
+                    setSubmitting(false);
+                })
+                .catch((err: NewVersionError) => {
+                    setErrMessage(err.error.error);
+                });
+        },
+        [createVersion, dispatch, navigate, radarIdValue]
+    );
+
+    const textCreateVersionBtn = isLoading ? (
+        <CircularProgress color="inherit" sx={styles.progressCircle} />
+    ) : (
+        'Перейти в конструктор'
+    );
 
     return (
         <Modal
@@ -31,38 +69,28 @@ const MyRadarCreateModal: FC = () => {
         >
             <Box sx={styles.modal}>
                 <Typography id="transition-modal-title" variant="h6" component="h2">
-                    Введите название для нового радар
+                    Введите название для новой версии
                 </Typography>
-                <Formik
-                    initialValues={{
-                        name: '',
-                    }}
-                    validationSchema={validSchema}
-                    onSubmit={(values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-                        dispatch(createNewRadarSection(values.name));
-                        dispatch(setRadarsCreateModalOpen(false));
-                        setSubmitting(false);
-                    }}
-                >
-                    {({ isSubmitting }) => (
-                        <Form className="form auth-form">
-                            <TextInputOutlined
-                                label="Название"
-                                type="text"
-                                name="name"
-                                placeholder="Введите название раздела"
-                            />
-                            <Button
-                                disabled={isSubmitting}
-                                type="submit"
-                                variant="contained"
-                                color="success"
-                                sx={{ marginTop: '20px' }}
-                            >
-                                Создать раздел
-                            </Button>
-                        </Form>
-                    )}
+                <Formik initialValues={initialValues} validationSchema={validSchema} onSubmit={handleSubmit}>
+                    <Form className="form auth-form">
+                        <TextInputOutlined
+                            label="Название"
+                            type="text"
+                            name="name"
+                            placeholder="Введите название новой версии"
+                            disabled={isLoading}
+                        />
+                        <Button
+                            disabled={isLoading}
+                            type="submit"
+                            variant="contained"
+                            color="success"
+                            sx={styles.btnSuccess}
+                        >
+                            {textCreateVersionBtn}
+                        </Button>
+                        {errMessage && <Alert severity="error">{errMessage}</Alert>}
+                    </Form>
                 </Formik>
             </Box>
         </Modal>

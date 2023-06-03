@@ -1,64 +1,23 @@
-import { FC, useMemo } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Box } from '@mui/material';
-import { DataGrid, GridColDef, ruRU, GridRenderCellParams } from '@mui/x-data-grid';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { Alert, Box, Skeleton, SxProps } from '@mui/material';
+import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, ruRU } from '@mui/x-data-grid';
 
-import { useAppSelector } from '../../../../store/hooks';
+import { useDeleteRadarVersionMutation, useGetRadarVersionsQuery } from '../../../../api/radarsGridApi';
+import { RadarVersionData, VersionData } from './types';
 
-type RowRadar = {
-    id: number;
-    link?: string;
-    radarName: string;
-    relevantAt: string;
-    lastUpdate: string;
-    status: string;
+const styles: Record<string, SxProps> = {
+    box: { height: 'calc(100vh - 240px)', width: '100%' },
 };
-type GridRadar = Array<RowRadar>;
+
+type GridRadar = Array<RadarVersionData>;
 
 export interface GridRadarObj {
     [index: string]: GridRadar;
 }
-
-const columns: GridColDef[] = [
-    {
-        field: 'radarName',
-        headerName: 'Имя радара',
-        type: 'string',
-        width: 150,
-        editable: true,
-    },
-    {
-        field: 'link',
-        headerName: 'Ссылка',
-        type: 'string',
-        width: 150,
-        renderCell: (params: GridRenderCellParams<typeof Link>) => (
-            <Link to={params.value as string}>{params.value}</Link>
-        ),
-    },
-    {
-        field: 'relevantAt',
-        headerName: 'Актуальность',
-        type: 'string',
-        width: 150,
-        editable: true,
-    },
-    {
-        field: 'lastUpdate',
-        headerName: 'Последнее обновление',
-        type: 'string',
-        width: 200,
-        editable: true,
-    },
-    {
-        field: 'status',
-        headerName: 'Статус',
-        type: 'string',
-        width: 150,
-        editable: true,
-    },
-];
 
 const initialState = {
     pagination: {
@@ -69,35 +28,125 @@ const initialState = {
 };
 
 const MyRadarsDataGrid: FC = () => {
-    const rows = useAppSelector((state) => state.myRadars.radarGrid);
-    const { rowsId } = useParams();
+    const { radarId } = useParams();
+    const id = Number(radarId);
+    const { data: radarVersions, isError, isLoading } = useGetRadarVersionsQuery(id);
+    const [deleteRadarVersion] = useDeleteRadarVersionMutation();
 
-    const gridRows = useMemo(
+    const rows: RadarVersionData | [] = useMemo(
         () =>
-            typeof rowsId === 'string'
-                ? rows[rowsId]
-                : [
-                      {
-                          id: 1,
-                          radarName: 'ошибка',
-                          relevantAt: 'ошибка',
-                          lastUpdate: 'ошибка',
-                          status: 'ошибка',
-                      },
-                  ],
-        [rows, rowsId]
+            radarVersions !== undefined
+                ? radarVersions.map((item: VersionData) => {
+                      return {
+                          ...item,
+                          release: item.release ? 'да' : 'нет',
+                          creationTime: new Date(item.creationTime).toLocaleString(),
+                          lastChangeTime: new Date(item.lastChangeTime).toLocaleString(),
+                      };
+                  })
+                : [],
+        [radarVersions]
+    );
+
+    const editVersion = useCallback(
+        (params: { id: GridRowId }) => [
+            <Link to={`/constructor/edit/version/${params.id}`}>
+                <GridActionsCellItem icon={<EditIcon />} label="edit" />
+            </Link>,
+        ],
+        []
+    );
+    const deleteRow = useCallback((id: GridRowId) => deleteRadarVersion(id), [deleteRadarVersion]);
+    const deleteVersionRow = useCallback(
+        (params: { id: GridRowId }) => [
+            <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => deleteRow(params.id)} />,
+        ],
+        [deleteRow]
+    );
+
+    const columns: GridColDef[] = useMemo(
+        () => [
+            {
+                field: 'name',
+                headerName: 'Имя версии',
+                type: 'string',
+                width: 120,
+                editable: false,
+            },
+            {
+                field: 'release',
+                headerName: 'Опубликован',
+                type: 'string',
+                width: 120,
+                editable: false,
+            },
+            {
+                field: 'lastChangeTime',
+                headerName: 'Последнее обновление',
+                type: 'string',
+                width: 180,
+                editable: false,
+            },
+            {
+                field: 'creationTime',
+                headerName: 'Время создания',
+                type: 'string',
+                width: 180,
+                editable: false,
+            },
+            {
+                field: 'toggleAvailable',
+                headerName: 'toggleAvailable',
+                type: 'string',
+                width: 120,
+                editable: false,
+            },
+            {
+                field: 'id',
+                headerName: 'id',
+                type: 'string',
+                width: 100,
+                editable: false,
+            },
+            {
+                field: 'parentId',
+                headerName: 'parentId',
+                type: 'string',
+                width: 100,
+                editable: false,
+            },
+
+            {
+                field: 'edit',
+                type: 'actions',
+                width: 30,
+                getActions: editVersion,
+            },
+            {
+                field: 'delete',
+                type: 'actions',
+                width: 30,
+                getActions: deleteVersionRow,
+            },
+        ],
+        [deleteVersionRow, editVersion]
     );
 
     return (
-        <Box sx={{ height: 'calc(100vh - 240px)', width: '100%' }}>
-            <DataGrid
-                rows={gridRows}
-                columns={columns}
-                initialState={initialState}
-                pageSizeOptions={[5]}
-                disableRowSelectionOnClick
-                localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
-            />
+        <Box sx={styles.box}>
+            {isError && <Alert severity="error">Произошла ошибка попробуйте перезагрузить страницу</Alert>}
+            {isLoading ? (
+                <Skeleton sx={{ bgcolor: 'grey.900' }} variant="rectangular" width={'100%'} height={'100%'} />
+            ) : (
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    initialState={initialState}
+                    pageSizeOptions={[5]}
+                    disableRowSelectionOnClick
+                    localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
+                />
+            )}
         </Box>
     );
 };
