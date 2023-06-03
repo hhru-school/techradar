@@ -15,7 +15,7 @@ const ModalEditSectorName: FC = () => {
 
     const submitBtnMutationHandler = useCallback(
         (value: string) => {
-            if (!editingSector) throw new Error();
+            if (!editingSector) throw new Error('Sector rename error');
             const position = sectors.findIndex((sector) => sector.id === editingSector.id + 1);
             return updateSector({ id: editingSector.id, name: value, position }).unwrap();
         },
@@ -28,8 +28,8 @@ const ModalEditSectorName: FC = () => {
                 open={true}
                 item={editingSector}
                 names={sectorNames}
-                header={'Переименовать сектор'}
-                inputLabel={'Название сектора'}
+                header={'Переименовать кольцо'}
+                inputLabel={'Название кольца'}
                 closeModalActionCreator={closeEditSectorNameModal}
                 submitBtnActionCreator={renameSector}
                 submitBtnMutationHandler={submitBtnMutationHandler}
