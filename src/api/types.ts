@@ -178,3 +178,9 @@ export interface NewVersionError {
 }
 
 export type RadarVersionData = Array<VersionData>;
+
+export interface RenameContainerItemApi {
+    id: number;
+    name: string;
+    position: number;
+}

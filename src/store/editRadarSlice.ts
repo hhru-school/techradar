@@ -323,19 +323,6 @@ export const editRadarSlice = createSlice({
             state.showEditRingNameModal = false;
         },
 
-        // renameRing: (state, action: PayloadAction<string>) => {
-        //     if (state.editingRingName) {
-        //         const oldName = state.editingRingName;
-        //         renameItemByName(state.ringNames, state.editingRingName, action.payload);
-        //         state.blips = [
-        //             ...state.blips.map((blip) =>
-        //                 blip.ringName === oldName ? { ...blip, ringName: action.payload } : blip
-        //             ),
-        //         ];
-        //     }
-        //     state.showEditRingNameModal = false;
-        // },
-
         deleteRing: (state, action: PayloadAction<Ring>) => {
             state.radar.rings = state.radar.rings.filter((ring) => ring.id !== action.payload.id);
         },
@@ -413,13 +400,6 @@ export const editRadarSlice = createSlice({
 
         setRadar: (state, action: PayloadAction<RadarInterface>) => {
             state.radar = action.payload;
-            // const version = action.payload.version;
-            // if (version) {
-            //     state.version = version;
-            //     if (state.mode === ConstructorMode.VersionEditing) {
-            //         state.currentVersionName = version.name;
-            //     }
-            // }
         },
 
         setVersion: (state, action: PayloadAction<VersionApiResponse>) => {
