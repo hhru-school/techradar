@@ -149,18 +149,16 @@ export interface VersionData {
 }
 
 export interface NewVersionResponse {
-    data: {
-        id: number;
-        name: string;
-        release: boolean;
-        radarId: number;
-        blipEventId: number;
-        parentId: number;
-        level: number;
-        toggleAvailable: boolean;
-        creationTime: string | Date;
-        lastChangeTime: string | Date;
-    };
+    id: number;
+    name: string;
+    release: boolean;
+    radarId: number;
+    blipEventId: number;
+    parentId: number;
+    level: number;
+    toggleAvailable: boolean;
+    creationTime: string | Date;
+    lastChangeTime: string | Date;
 }
 
 export interface NewVersionRequest {

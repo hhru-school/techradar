@@ -1,6 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Box, Button, Modal, Typography } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, Modal, Typography } from '@mui/material';
 import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 
@@ -29,10 +29,7 @@ const MyRadarCreateModal: FC = () => {
     const showRadarsCreateModal = useAppSelector((state) => state.myRadars.showCreateVersionModal);
     const createVersionId = useAppSelector((state) => state.myRadars.createVersionId);
     const [errMessage, setErrMessage] = useState<string | null>(null);
-    const [
-        createVersion,
-        // , { isLoading, isSuccess }
-    ] = useCreateNewVersionMutation();
+    const [createVersion, { isLoading }] = useCreateNewVersionMutation();
     const radarIdValue = createVersionId || 0;
 
     const handleClose = useCallback(
@@ -43,17 +40,24 @@ const MyRadarCreateModal: FC = () => {
     const handleSubmit = useCallback(
         async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
             await createVersion({ name: values.name, release: false, radarId: radarIdValue })
+                .unwrap()
                 .then((data: NewVersionResponse) => {
                     setErrMessage(null);
-                    navigate(`/constructor/new/version/radar/${data.data.id}`);
+                    navigate(`/constructor/new/version/radar/${data.id}`);
+                    dispatch(setCreateVersionModalOpen({ show: false, radarId: null }));
+                    setSubmitting(false);
                 })
                 .catch((err: NewVersionError) => {
                     setErrMessage(err.error.error);
                 });
-            dispatch(setCreateVersionModalOpen({ show: false, radarId: null }));
-            setSubmitting(false);
         },
         [createVersion, dispatch, navigate, radarIdValue]
+    );
+
+    const textCreateVersionBtn = isLoading ? (
+        <CircularProgress color="inherit" sx={styles.progressCircle} />
+    ) : (
+        'Перейти в конструктор'
     );
 
     return (
@@ -68,26 +72,25 @@ const MyRadarCreateModal: FC = () => {
                     Введите название для новой версии
                 </Typography>
                 <Formik initialValues={initialValues} validationSchema={validSchema} onSubmit={handleSubmit}>
-                    {({ isSubmitting }) => (
-                        <Form className="form auth-form">
-                            <TextInputOutlined
-                                label="Название"
-                                type="text"
-                                name="name"
-                                placeholder="Введите название новой версии"
-                            />
-                            <Button
-                                disabled={isSubmitting}
-                                type="submit"
-                                variant="contained"
-                                color="success"
-                                sx={{ marginTop: '20px' }}
-                            >
-                                Перейти в конструктор
-                            </Button>
-                            {errMessage && <Alert severity="error">{errMessage}</Alert>}
-                        </Form>
-                    )}
+                    <Form className="form auth-form">
+                        <TextInputOutlined
+                            label="Название"
+                            type="text"
+                            name="name"
+                            placeholder="Введите название новой версии"
+                            disabled={isLoading}
+                        />
+                        <Button
+                            disabled={isLoading}
+                            type="submit"
+                            variant="contained"
+                            color="success"
+                            sx={styles.btnSuccess}
+                        >
+                            {textCreateVersionBtn}
+                        </Button>
+                        {errMessage && <Alert severity="error">{errMessage}</Alert>}
+                    </Form>
                 </Formik>
             </Box>
         </Modal>
