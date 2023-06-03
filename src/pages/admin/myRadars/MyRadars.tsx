@@ -1,6 +1,6 @@
 import { FC, SyntheticEvent, useCallback, useMemo, useState } from 'react';
 import { Routes, Route } from 'react-router';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Typography, Box, Container, Tab, Tabs, Button, SxProps } from '@mui/material';
 
 import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
@@ -14,7 +14,7 @@ import './MyRadars.less';
 const styles: Record<string, SxProps> = {
     tabs: { display: 'flex', alignItems: 'center', height: '48px' },
     tab: { minHeight: '48px' },
-    newRadarBtn: { height: '25px', mt: '11px', width: '153px' },
+    newRadarBtn: { height: '25px', mt: '11px', width: '240px' },
     title: { textAlign: 'left', margin: '15px 0 0 40px' },
     newVersionBtn: { textAlign: 'left', margin: '15px 0 15px 40px' },
     box: { display: 'flex' },
@@ -24,6 +24,7 @@ type Tab = { id: number; label: string };
 
 const MyRadar: FC = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const { paramRadarId } = useParams();
     const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(1);
     const [value, setValue] = useState<number>(0);
@@ -35,6 +36,10 @@ const MyRadar: FC = () => {
     const handleCreateVersionModalOpen = useCallback(() => {
         if (paramRadarId) dispatch(setCreateVersionModalOpen({ show: true, radarId: +paramRadarId }));
     }, [dispatch, paramRadarId]);
+
+    const handleCreateRadar = useCallback(() => {
+        navigate('/constructor/new/radar');
+    }, [navigate]);
 
     const tabsItems = useMemo(
         () =>
@@ -74,11 +79,10 @@ const MyRadar: FC = () => {
                     >
                         {tabsItems}
                     </Tabs>
-                    <Link to={'/constructor/new/radar'}>
-                        <Button variant="outlined" color="secondary" sx={styles.newRadarBtn}>
-                            Создать радар
-                        </Button>
-                    </Link>
+
+                    <Button onClick={handleCreateRadar} variant="outlined" color="secondary" sx={styles.newRadarBtn}>
+                        Создать радар
+                    </Button>
                 </Box>
                 <Typography variant="h5" sx={styles.title}>
                     Радары

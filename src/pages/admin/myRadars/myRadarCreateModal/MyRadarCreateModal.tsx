@@ -41,9 +41,9 @@ const MyRadarCreateModal: FC = () => {
         async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
             await createVersion({ name: values.name, release: false, radarId: radarIdValue })
                 .unwrap()
-                .then((data: NewVersionResponse) => {
+                .then(({ id }: NewVersionResponse) => {
                     setErrMessage(null);
-                    navigate(`/constructor/new/version/radar/${data.id}`);
+                    navigate(` /constructor/edit/version/${id}`);
                     dispatch(setCreateVersionModalOpen({ show: false, radarId: null }));
                     setSubmitting(false);
                 })

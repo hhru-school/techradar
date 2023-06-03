@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, SxProps } from '@mui/material';
+import { Alert, Box, Skeleton, SxProps } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, ruRU } from '@mui/x-data-grid';
 
 import { useDeleteRadarVersionMutation, useGetRadarVersionsQuery } from '../../../../api/radarsGridApi';
@@ -30,7 +30,7 @@ const initialState = {
 const MyRadarsDataGrid: FC = () => {
     const { radarId } = useParams();
     const id = Number(radarId);
-    const { data: radarVersions } = useGetRadarVersionsQuery(id);
+    const { data: radarVersions, isError, isLoading } = useGetRadarVersionsQuery(id);
     const [deleteRadarVersion] = useDeleteRadarVersionMutation();
 
     const rows: RadarVersionData | [] = useMemo(
@@ -134,14 +134,19 @@ const MyRadarsDataGrid: FC = () => {
 
     return (
         <Box sx={styles.box}>
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                initialState={initialState}
-                pageSizeOptions={[5]}
-                disableRowSelectionOnClick
-                localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
-            />
+            {isError && <Alert severity="error">Произошла ошибка попробуйте перезагрузить страницу</Alert>}
+            {isLoading ? (
+                <Skeleton sx={{ bgcolor: 'grey.900' }} variant="rectangular" width={'100%'} height={'100%'} />
+            ) : (
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    initialState={initialState}
+                    pageSizeOptions={[5]}
+                    disableRowSelectionOnClick
+                    localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
+                />
+            )}
         </Box>
     );
 };
