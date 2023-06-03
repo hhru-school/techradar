@@ -1,5 +1,3 @@
-import { GridRowId } from '@mui/x-data-grid';
-
 import { Blip, RadarInterface } from '../components/radar/types';
 import { RootState } from '../store/store';
 import { apiSlice } from './authApi';
@@ -11,7 +9,6 @@ import {
     CreateRadarVersionDataApi,
     IndexBlipEventApi,
     RadarApiDataResponse,
-    RadarVersionData,
     UpdateVersionRequest,
     VersionApiResponse,
 } from './types';
