@@ -39,7 +39,11 @@ const MyRadar: FC = () => {
     const tabsItems = useMemo(
         () =>
             allCompanyRadars &&
-            allCompanyRadars.map((item) => {
+            allCompanyRadars.map((item, i) => {
+                if (paramRadarId && item.id === +paramRadarId) {
+                    setValue(i);
+                }
+
                 return (
                     <Tab
                         key={item.id}
@@ -53,7 +57,7 @@ const MyRadar: FC = () => {
                     />
                 );
             }),
-        [allCompanyRadars]
+        [allCompanyRadars, paramRadarId]
     );
 
     return (
