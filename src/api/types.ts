@@ -138,3 +138,9 @@ export interface IndexBlipEventApi {
     creationTime: string;
     lastChangeTime: string;
 }
+
+export interface RenameContainerItemApi {
+    id: number;
+    name: string;
+    position: number;
+}

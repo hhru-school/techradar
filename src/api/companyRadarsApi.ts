@@ -9,6 +9,7 @@ import {
     CreateRadarVersionDataApi,
     IndexBlipEventApi,
     RadarApiDataResponse,
+    RenameContainerItemApi,
     UpdateVersionRequest,
     VersionApiResponse,
 } from './types';
@@ -148,6 +149,23 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 url: `blip-events/radar-log?blip-event-id=${blipEventId}`,
             }),
         }),
+
+        updateSector: builder.mutation<RenameContainerItemApi, RenameContainerItemApi>({
+            query: (body) => ({
+                method: 'PUT',
+                url: `quadrants/${body.id}`,
+                body,
+            }),
+            invalidatesTags: ['Radar'],
+        }),
+
+        updateRing: builder.mutation<RenameContainerItemApi, RenameContainerItemApi>({
+            query: (body) => ({
+                method: 'PUT',
+                url: `rings/${body.id}`,
+                body,
+            }),
+        }),
     }),
 });
 
@@ -165,4 +183,6 @@ export const {
     useUpdateVersionMutation,
     useSaveNewRadarMutation,
     useGetBlipEventsForRadarQuery,
+    useUpdateSectorMutation,
+    useUpdateRingMutation,
 } = companyRadarsApi;
