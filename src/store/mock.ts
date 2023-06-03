@@ -18,7 +18,8 @@ interface State {
     techContructorInputs: ConstructorInputs;
     countRingInputs: number;
     countSectorInputs: number;
-    showRadarsCreateModal: boolean;
+    showCreateVersionModal: boolean;
+    createVersionId: number | null;
     showTechCreateModal: boolean;
     showRadarConstrTechModal: boolean;
     ringNames: string[];
@@ -71,7 +72,8 @@ export const initialState: State = {
             autoComplete: 'off',
         },
     ],
-    showRadarsCreateModal: false,
+    showCreateVersionModal: false,
+    createVersionId: null,
     showTechCreateModal: false,
     showRadarConstrTechModal: false,
     countRingInputs: defaultRingNumber,

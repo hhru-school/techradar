@@ -1,20 +1,16 @@
 import { GridRowId } from '@mui/x-data-grid';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { RadarVersionData } from '../pages/admin/myRadars/myRadarsDataGrid/types';
+import { apiSlice } from './authApi';
+import { NewVersionRequest, NewVersionResponse } from './types';
 
-const baseUrl = '/api';
-
-export const radarsGridApi = createApi({
-    reducerPath: 'radarsGridApi',
-    baseQuery: fetchBaseQuery({ baseUrl }),
-    tagTypes: ['VersionsList'],
+export const radarsGridApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getRadarVersions: builder.query<RadarVersionData, number>({
             query: (radarId) => ({
                 url: `/radar-versions?radar-id=${radarId}`,
             }),
-            providesTags: ['VersionsList'],
+            providesTags: ['VersionsList', 'CreateVersion'],
         }),
         deleteRadarVersion: builder.mutation<RadarVersionData, GridRowId>({
             query: (versionId) => ({
@@ -23,7 +19,15 @@ export const radarsGridApi = createApi({
             }),
             invalidatesTags: ['VersionsList'],
         }),
+        createNewVersion: builder.mutation<NewVersionResponse, NewVersionRequest>({
+            query: (body) => ({
+                url: `/radar-versions?link-to-last-release=true`,
+                method: 'POST',
+                body,
+            }),
+            invalidatesTags: ['CreateVersion'],
+        }),
     }),
 });
 
-export const { useGetRadarVersionsQuery, useDeleteRadarVersionMutation } = radarsGridApi;
+export const { useGetRadarVersionsQuery, useDeleteRadarVersionMutation, useCreateNewVersionMutation } = radarsGridApi;
