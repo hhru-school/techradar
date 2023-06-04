@@ -1,3 +1,4 @@
+import { VersionApiResponse } from '../../api/types';
 import { RadarInterface } from '../../components/radar/types';
 
 const defaultRadarName = 'My-radar';
@@ -14,6 +15,17 @@ export const defaultRadarAsset: RadarInterface = {
     companyId: 1,
     authorId: 1,
     blips: [],
+};
+
+export const defaultVersionAsset: VersionApiResponse = {
+    id: -1,
+    name: defaultVersionName,
+    release: false,
+    radarId: defaultRadarAsset.id,
+    blipEventId: -1,
+    creationTime: '_not_created_',
+    lastChangeTime: '_not_created_',
+    toggleAvailable: false,
 };
 
 function getVersionName(): string {

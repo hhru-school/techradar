@@ -3,7 +3,7 @@ import { FC, useCallback, useMemo } from 'react';
 import { useUpdateSectorMutation } from '../../../api/companyRadarsApi';
 import { closeEditSectorNameModal, renameSector } from '../../../store/editRadarSlice';
 import { useAppSelector } from '../../../store/hooks';
-import ModalRename from './ModalRename';
+import ModalRename from './ModalBasic';
 
 const ModalEditSectorName: FC = () => {
     const editingSector = useAppSelector((state) => state.editRadar.editingSector);
@@ -26,14 +26,14 @@ const ModalEditSectorName: FC = () => {
         return (
             <ModalRename
                 open={true}
-                item={editingSector}
+                name={editingSector.name}
                 names={sectorNames}
-                header={'Переименовать кольцо'}
-                inputLabel={'Название кольца'}
+                header={'Переименовать сектор'}
+                inputLabel={'Название сектора'}
                 closeModalActionCreator={closeEditSectorNameModal}
                 submitBtnActionCreator={renameSector}
                 submitBtnMutationHandler={submitBtnMutationHandler}
-            ></ModalRename>
+            />
         );
     }
     return null;

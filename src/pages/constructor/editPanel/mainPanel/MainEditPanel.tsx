@@ -13,12 +13,11 @@ type Props = {
 const MainEditPanel: FC<Props> = ({ mode }) => {
     const isNewRadar = mode === ConstructorMode.NewRadarCreation;
     const isEditVersion = mode === ConstructorMode.VersionEditing;
-    const isNewVersion = mode === ConstructorMode.NewVersionCreation;
 
     return (
         <div className={styles.container}>
             {isNewRadar && <NewRadarPanel />}
-            {(isEditVersion || isNewVersion) && <EditRadarPanel />}
+            {isEditVersion && <EditRadarPanel />}
         </div>
     );
 };

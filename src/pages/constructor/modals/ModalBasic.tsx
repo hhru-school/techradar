@@ -4,8 +4,6 @@ import { ActionCreatorWithPayload, ActionCreatorWithoutPayload } from '@reduxjs/
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { RenameContainerItemApi } from '../../../api/types';
-import { Ring, Sector } from '../../../components/radar/types';
 import { ConstructorMode } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import ModalTextField from './ModalTextField';
@@ -14,13 +12,13 @@ import styles from './modal.module.less';
 
 type Props = {
     open: boolean;
-    item: Sector | Ring;
+    name: string;
     names: string[];
     header: string;
     inputLabel: string;
     closeModalActionCreator: ActionCreatorWithoutPayload;
-    submitBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
-    submitBtnMutationHandler?: (value: string) => Promise<RenameContainerItemApi>;
+    submitBtnActionCreator: ActionCreatorWithPayload<string>;
+    submitBtnMutationHandler?: (value: string) => Promise<unknown>;
 };
 
 const btnSx = { width: 140 };
@@ -34,9 +32,9 @@ const getValidationSchema = (values: string[]) =>
         name: Yup.string().trim().notOneOf(values, 'Название уже существует').required('Обязательное поле'),
     });
 
-const ModalRename: FC<Props> = ({
+const ModalBasic: FC<Props> = ({
     open,
-    item,
+    name,
     names,
     header,
     inputLabel,
@@ -44,23 +42,23 @@ const ModalRename: FC<Props> = ({
     submitBtnActionCreator,
     submitBtnMutationHandler,
 }) => {
-    const dispatch = useAppDispatch();
-
     const mode = useAppSelector((state) => state.editRadar.mode);
+
+    const dispatch = useAppDispatch();
 
     const isNewRadar = mode === ConstructorMode.NewRadarCreation;
 
     const initialValues = useMemo(
         () => ({
-            name: item.name,
+            name,
         }),
-        [item]
+        [name]
     );
 
     const submitHandler = useCallback(
         (values: Values, { setSubmitting, setErrors }: FormikHelpers<Values>) => {
             if (isNewRadar) {
-                dispatch(submitBtnActionCreator({ id: item.id, name: values.name }));
+                dispatch(submitBtnActionCreator(values.name));
             } else if (submitBtnMutationHandler) {
                 submitBtnMutationHandler(values.name)
                     .then(() => dispatch(closeModalActionCreator()))
@@ -69,7 +67,7 @@ const ModalRename: FC<Props> = ({
 
             setSubmitting(false);
         },
-        [dispatch, item, submitBtnActionCreator, closeModalActionCreator, submitBtnMutationHandler, isNewRadar]
+        [dispatch, submitBtnActionCreator, closeModalActionCreator, submitBtnMutationHandler, isNewRadar]
     );
 
     const form = useMemo(
@@ -116,4 +114,4 @@ const ModalRename: FC<Props> = ({
     );
 };
 
-export default ModalRename;
+export default ModalBasic;

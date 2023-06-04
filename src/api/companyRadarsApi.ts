@@ -10,6 +10,8 @@ import {
     IndexBlipEventApi,
     RadarApiDataResponse,
     RenameContainerItemApi,
+    UpdateRadarApiRequest,
+    UpdateRadarApiResponse,
     UpdateVersionRequest,
     VersionApiResponse,
 } from './types';
@@ -97,7 +99,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 const state = getState() as RootState;
 
                 const versionRequestBody: CreateRadarVersionDataApi = {
-                    name: state.editRadar.currentVersionName,
+                    name: state.editRadar.version.name,
                     release: false,
                     radarId: newRadar.radar.id,
                     blipEventId: Number(newRadar.blipEventId),
@@ -167,6 +169,15 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['Radar'],
         }),
+
+        updateRadar: builder.mutation<UpdateRadarApiResponse, UpdateRadarApiRequest>({
+            query: (body) => ({
+                method: 'PUT',
+                url: `radars/${body.id}`,
+                body,
+            }),
+            invalidatesTags: ['Radar'],
+        }),
     }),
 });
 
@@ -185,5 +196,6 @@ export const {
     useSaveNewRadarMutation,
     useGetBlipEventsForRadarQuery,
     useUpdateSectorMutation,
+    useUpdateRadarMutation,
     useUpdateRingMutation,
 } = companyRadarsApi;

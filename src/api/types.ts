@@ -100,6 +100,7 @@ export interface VersionApiResponse {
     blipEventId: number;
     creationTime: string;
     lastChangeTime: string;
+    toggleAvailable: boolean;
 }
 
 export interface CreateBlipEventApiRequest {
@@ -123,9 +124,9 @@ export interface CreateBlipEventApiResponse {
 export interface UpdateVersionRequest {
     id: number;
     name: string;
-    release: boolean;
-    radarId: number;
-    blipEventId: number;
+    release?: boolean;
+    radarId?: number;
+    blipEventId?: number;
 }
 
 export interface IndexBlipEventApi {
@@ -183,4 +184,16 @@ export interface RenameContainerItemApi {
     id: number;
     name: string;
     position: number;
+}
+
+export interface UpdateRadarApiRequest {
+    id: number;
+    name: string;
+}
+
+export interface UpdateRadarApiResponse {
+    id: number;
+    name: string;
+    authorId: number;
+    companyId: number;
 }

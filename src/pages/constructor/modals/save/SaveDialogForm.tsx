@@ -3,7 +3,7 @@ import { Button, LinearProgress, Stack } from '@mui/material';
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { setRadarName, setCurrentRadarVersionName, setShowSaveRadarDialog } from '../../../../store/editRadarSlice';
+import { setRadarName, setShowSaveRadarDialog, setVersionName } from '../../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import ModalTextField from '../ModalTextField';
 import SaveRadarFormObserver from './SaveRadarFormObserver';
@@ -31,17 +31,17 @@ type Props = {
 
 const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
     const radarName = useAppSelector((state) => state.editRadar.radar.name);
-    const radarVersion = useAppSelector((state) => state.editRadar.currentVersionName);
+    const versionName = useAppSelector((state) => state.editRadar.version.name);
 
     const [initialRadarName] = useState(radarName);
-    const [initialRadarVersion] = useState(radarVersion);
+    const [initialRadarVersion] = useState(versionName);
 
     const dispatch = useAppDispatch();
 
     const cancelBtnClickHandler = useCallback(() => {
         dispatch(setShowSaveRadarDialog(false));
         dispatch(setRadarName(initialRadarName));
-        dispatch(setCurrentRadarVersionName(initialRadarVersion));
+        dispatch(setVersionName(initialRadarVersion));
     }, [dispatch, initialRadarName, initialRadarVersion]);
 
     const submitBtnClickHandler = useCallback(
@@ -55,9 +55,9 @@ const SaveDialogForm: FC<Props> = ({ submitHandler, isLoading = false }) => {
     const initialValues = useMemo(
         () => ({
             name: radarName,
-            version: radarVersion,
+            version: versionName,
         }),
-        [radarName, radarVersion]
+        [radarName, versionName]
     );
 
     return (

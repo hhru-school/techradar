@@ -3,15 +3,15 @@ import { Button } from '@mui/material';
 
 import { setShowSaveRadarDialog } from '../../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import EditCredetialContainer from '../EditCredetionalContainer';
+import PropertiesContainer from './PropertiesContainer';
 
 import styles from './mainEditPanel.module.less';
 
 const NewRadarPanel: FC = () => {
     const dispatch = useAppDispatch();
 
-    const name = useAppSelector((state) => state.editRadar.radar.name);
-    const currentVersionName = useAppSelector((state) => state.editRadar.currentVersionName);
+    const radarName = useAppSelector((state) => state.editRadar.radar.name);
+    const versionName = useAppSelector((state) => state.editRadar.version.name);
 
     const saveBtnClickHandler = () => {
         dispatch(setShowSaveRadarDialog(true));
@@ -19,8 +19,7 @@ const NewRadarPanel: FC = () => {
 
     return (
         <>
-            <EditCredetialContainer label={'Название радара'} value={name} />
-            <EditCredetialContainer label={'Версия'} value={currentVersionName} />
+            <PropertiesContainer radarName={radarName} versionName={versionName} />
             <div className={styles.spacer}></div>
             <Button variant="contained" color="primary" onClick={saveBtnClickHandler}>
                 Сохранить
