@@ -4,20 +4,21 @@ import { ActionCreatorWithPayload, ActionCreatorWithoutPayload } from '@reduxjs/
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-import { Ring, Sector } from '../../../components/radar/types';
-import { useAppDispatch } from '../../../store/hooks';
+import { ConstructorMode } from '../../../store/editRadarSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import ModalTextField from './ModalTextField';
 
 import styles from './modal.module.less';
 
 type Props = {
     open: boolean;
-    item: Sector | Ring;
+    name: string;
     names: string[];
     header: string;
     inputLabel: string;
-    cancelBtnActionCreator: ActionCreatorWithoutPayload;
-    submitBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
+    closeModalActionCreator: ActionCreatorWithoutPayload;
+    submitBtnActionCreator: ActionCreatorWithPayload<string>;
+    submitBtnMutationHandler?: (value: string) => Promise<unknown>;
 };
 
 const btnSx = { width: 140 };
@@ -28,70 +29,87 @@ interface Values {
 
 const getValidationSchema = (values: string[]) =>
     Yup.object({
-        name: Yup.string().trim().notOneOf(values, 'Значение уже существует').required('Обязательное поле'),
+        name: Yup.string().trim().notOneOf(values, 'Название уже существует').required('Обязательное поле'),
     });
 
 const ModalBasic: FC<Props> = ({
     open,
-    item,
+    name,
     names,
     header,
     inputLabel,
-    cancelBtnActionCreator,
+    closeModalActionCreator,
     submitBtnActionCreator,
+    submitBtnMutationHandler,
 }) => {
+    const mode = useAppSelector((state) => state.editRadar.mode);
+
     const dispatch = useAppDispatch();
 
-    const cancelBtnHandler = () => {
-        dispatch(cancelBtnActionCreator());
-    };
+    const isNewRadar = mode === ConstructorMode.NewRadarCreation;
 
     const initialValues = useMemo(
         () => ({
-            name: item.name,
+            name,
         }),
-        [item]
+        [name]
     );
 
     const submitHandler = useCallback(
-        (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-            dispatch(submitBtnActionCreator({ id: item.id, name: values.name }));
+        (values: Values, { setSubmitting, setErrors }: FormikHelpers<Values>) => {
+            if (isNewRadar) {
+                dispatch(submitBtnActionCreator(values.name));
+            } else if (submitBtnMutationHandler) {
+                submitBtnMutationHandler(values.name)
+                    .then(() => dispatch(closeModalActionCreator()))
+                    .catch(() => setErrors({ name: 'Переименование не удалось' }));
+            }
+
             setSubmitting(false);
         },
-        [dispatch, item, submitBtnActionCreator]
+        [dispatch, submitBtnActionCreator, closeModalActionCreator, submitBtnMutationHandler, isNewRadar]
+    );
+
+    const form = useMemo(
+        () =>
+            ({ dirty, isValid }: { dirty: boolean; isValid: boolean }) =>
+                (
+                    <Form>
+                        <ModalTextField label={inputLabel} name={'name'} />
+
+                        <div className={styles.buttonContainer}>
+                            <Button
+                                sx={btnSx}
+                                color="success"
+                                variant="contained"
+                                type="submit"
+                                disabled={!dirty || !isValid}
+                            >
+                                Принять
+                            </Button>
+                            <Button sx={btnSx} variant="outlined" onClick={() => dispatch(closeModalActionCreator())}>
+                                Отмена
+                            </Button>
+                        </div>
+                    </Form>
+                ),
+        [closeModalActionCreator, inputLabel, dispatch]
     );
 
     return (
         <Modal open={open}>
-            <div className={styles.modal}>
-                <h3 className={styles.header}>{header}</h3>
-                <Formik
-                    initialValues={initialValues}
-                    validationSchema={getValidationSchema(names)}
-                    onSubmit={submitHandler}
-                >
-                    {({ dirty, isValid }) => (
-                        <Form>
-                            <ModalTextField label={inputLabel} name={'name'} />
-
-                            <div className={styles.buttonContainer}>
-                                <Button
-                                    sx={btnSx}
-                                    color="success"
-                                    variant="contained"
-                                    type="submit"
-                                    disabled={!dirty || !isValid}
-                                >
-                                    Принять
-                                </Button>
-                                <Button sx={btnSx} variant="outlined" onClick={cancelBtnHandler}>
-                                    Отмена
-                                </Button>
-                            </div>
-                        </Form>
-                    )}
-                </Formik>
-            </div>
+            <>
+                <div className={styles.modal}>
+                    <h3 className={styles.header}>{header}</h3>
+                    <Formik
+                        initialValues={initialValues}
+                        validationSchema={getValidationSchema(names)}
+                        onSubmit={submitHandler}
+                    >
+                        {form}
+                    </Formik>
+                </div>
+            </>
         </Modal>
     );
 };

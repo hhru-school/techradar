@@ -32,7 +32,7 @@ const ModalMoveBlip: FC = () => {
 
     const submitBtnHandler = useCallback(
         async (values: Values) => {
-            if (!isNewRadar && blip && values.comment && activeSegment) {
+            if (!isNewRadar && blip && activeSegment) {
                 await move(blip, values.comment, activeSegment);
                 dispatch(closeMoveBlipModal());
             }

@@ -9,6 +9,9 @@ import {
     CreateRadarVersionDataApi,
     IndexBlipEventApi,
     RadarApiDataResponse,
+    RenameContainerItemApi,
+    UpdateRadarApiRequest,
+    UpdateRadarApiResponse,
     UpdateVersionRequest,
     VersionApiResponse,
 } from './types';
@@ -44,6 +47,13 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
 
             transformResponse: (rawResult: RadarApiDataResponse) => formatApiData(rawResult),
             providesTags: ['Radar'],
+        }),
+
+        getLastReleasedVersion: builder.query<VersionApiResponse, number>({
+            query: (radarId) => ({
+                method: 'GET',
+                url: `radar-versions/last-released-version?radar-id=${radarId}`,
+            }),
         }),
 
         getRadarByBlipEventId: builder.query<RadarInterface, number>({
@@ -89,14 +99,14 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 const state = getState() as RootState;
 
                 const versionRequestBody: CreateRadarVersionDataApi = {
-                    name: state.editRadar.currentVersionName,
+                    name: state.editRadar.version.name,
                     release: false,
                     radarId: newRadar.radar.id,
                     blipEventId: Number(newRadar.blipEventId),
                 };
 
                 const result = await fetchBaseQuery({
-                    url: 'radar-versions',
+                    url: 'radar-versions?link-to-last-release=false',
                     method: 'POST',
                     body: versionRequestBody,
                 });
@@ -130,7 +140,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
 
         createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApiRequest>({
             query: (body) => ({
-                url: 'blip-events',
+                url: 'blip-events?is-insert=false',
                 method: 'POST',
                 body,
             }),
@@ -141,6 +151,33 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 url: `blip-events/radar-log?blip-event-id=${blipEventId}`,
             }),
         }),
+
+        updateSector: builder.mutation<RenameContainerItemApi, RenameContainerItemApi>({
+            query: (body) => ({
+                method: 'PUT',
+                url: `quadrants/${body.id}`,
+                body,
+            }),
+            invalidatesTags: ['Radar'],
+        }),
+
+        updateRing: builder.mutation<RenameContainerItemApi, RenameContainerItemApi>({
+            query: (body) => ({
+                method: 'PUT',
+                url: `rings/${body.id}`,
+                body,
+            }),
+            invalidatesTags: ['Radar'],
+        }),
+
+        updateRadar: builder.mutation<UpdateRadarApiResponse, UpdateRadarApiRequest>({
+            query: (body) => ({
+                method: 'PUT',
+                url: `radars/${body.id}`,
+                body,
+            }),
+            invalidatesTags: ['Radar'],
+        }),
     }),
 });
 
@@ -150,6 +187,7 @@ export const {
     useGetRadarByVersionIdQuery,
     useGetRadarByBlipEventIdQuery,
     useGetAllRadarVersionsQuery,
+    useGetLastReleasedVersionQuery,
     useGetVersionByIdQuery,
     useGetBlipEventByIdQuery,
     useCreateBlipMutation,
@@ -157,4 +195,7 @@ export const {
     useUpdateVersionMutation,
     useSaveNewRadarMutation,
     useGetBlipEventsForRadarQuery,
+    useUpdateSectorMutation,
+    useUpdateRadarMutation,
+    useUpdateRingMutation,
 } = companyRadarsApi;

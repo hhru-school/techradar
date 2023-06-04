@@ -6,7 +6,7 @@ import NavTabs from './NavTabs';
 import styles from './navTabs.module.less';
 
 type Props = {
-    radars?: { id: number; name: string }[];
+    radars?: Array<{ id: number; name: string }>;
     radarId: number;
     companyId: number;
     isLoading?: boolean;

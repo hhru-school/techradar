@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 import { IndexBlipEventApi, VersionApiResponse } from '../api/types';
 import { Blip, RadarInterface, Ring, Sector } from '../components/radar/types';
-import { defaultRadarAsset, defaultVersionName } from '../pages/constructor/config';
+import { defaultRadarAsset, defaultVersionAsset } from '../pages/constructor/config';
 
 export interface Segment {
     sector: Sector;
@@ -38,7 +38,6 @@ export enum ConstructorMode {
     NewRadarCreation,
     NewVersionCreation,
     VersionEditing,
-    DisplayEvent,
 }
 
 export interface EditRadarState {
@@ -46,10 +45,11 @@ export interface EditRadarState {
     isModalLoading: boolean;
     isPageLoading: boolean;
     hasError: boolean;
-    version: VersionApiResponse | null;
+    // version: VersionApiResponse | null;
+    version: VersionApiResponse;
     blipEvent: IndexBlipEventApi | null;
     log: IndexBlipEventApi[] | null;
-    currentVersionName: string;
+    // currentVersionName: string;
     currentBlipEventId: number | null;
     mode: ConstructorMode;
     isDragging: boolean;
@@ -66,6 +66,8 @@ export interface EditRadarState {
     showDeleteSectorModal: boolean;
     showEditRingNameModal: boolean;
     showDeleteRingModal: boolean;
+    showEditRadarNameModal: boolean;
+    showEditVersionNameModal: boolean;
     showAddNewSectorModal: boolean;
     showAddNewRingModal: boolean;
     showSaveRadarDialog: boolean;
@@ -81,9 +83,9 @@ const initialState: EditRadarState = {
     radar: defaultRadarAsset,
     log: null,
     hasError: false,
-    version: null,
+    version: defaultVersionAsset,
     blipEvent: null,
-    currentVersionName: defaultVersionName,
+    // currentVersionName: defaultVersionName,
     currentBlipEventId: null,
     mode: ConstructorMode.NewRadarCreation,
     isDragging: false,
@@ -100,6 +102,8 @@ const initialState: EditRadarState = {
     showDeleteSectorModal: false,
     showEditRingNameModal: false,
     showDeleteRingModal: false,
+    showEditRadarNameModal: false,
+    showEditVersionNameModal: false,
     editingSector: null,
     editingRing: null,
     showAddNewSectorModal: false,
@@ -127,13 +131,6 @@ const repalceBlip = (state: EditRadarState, blip: Blip) => {
     removeBlipById(state, blip.id);
     state.radar.blips.push(blip);
 };
-
-// const renameItemById = (arr: { id: number; name: string }[], id: number, newName: string) => {
-//     const itemToRename = arr.find((item) => item.id === id);
-//     if (itemToRename) {
-//         itemToRename.name = newName;
-//     }
-// };
 
 export const editRadarSlice = createSlice({
     name: 'editRadar',
@@ -291,24 +288,20 @@ export const editRadarSlice = createSlice({
             state.showDeleteSectorModal = false;
         },
 
-        renameSector: (state, action: PayloadAction<Sector>) => {
-            if (state.editingSector) {
-                state.radar.sectors.forEach((sector) => {
-                    if (sector.id === action.payload.id) {
-                        sector.name = action.payload.name;
-                    }
-                });
-            }
+        renameSector: (state, action: PayloadAction<string>) => {
+            state.radar.sectors.forEach((sector) => {
+                if (sector.id === state.editingSector?.id) {
+                    sector.name = action.payload;
+                }
+            });
         },
 
-        renameRing: (state, action: PayloadAction<Ring>) => {
-            if (state.editingRing) {
-                state.radar.rings.forEach((ring) => {
-                    if (ring.id === action.payload.id) {
-                        ring.name = action.payload.name;
-                    }
-                });
-            }
+        renameRing: (state, action: PayloadAction<string>) => {
+            state.radar.rings.forEach((ring) => {
+                if (ring.id === state.editingRing?.id) {
+                    ring.name = action.payload;
+                }
+            });
         },
 
         deleteSector: (state, action: PayloadAction<Sector>) => {
@@ -324,19 +317,6 @@ export const editRadarSlice = createSlice({
             state.showEditRingNameModal = false;
         },
 
-        // renameRing: (state, action: PayloadAction<string>) => {
-        //     if (state.editingRingName) {
-        //         const oldName = state.editingRingName;
-        //         renameItemByName(state.ringNames, state.editingRingName, action.payload);
-        //         state.blips = [
-        //             ...state.blips.map((blip) =>
-        //                 blip.ringName === oldName ? { ...blip, ringName: action.payload } : blip
-        //             ),
-        //         ];
-        //     }
-        //     state.showEditRingNameModal = false;
-        // },
-
         deleteRing: (state, action: PayloadAction<Ring>) => {
             state.radar.rings = state.radar.rings.filter((ring) => ring.id !== action.payload.id);
         },
@@ -348,6 +328,30 @@ export const editRadarSlice = createSlice({
 
         closeDeleteRingModal: (state) => {
             state.showDeleteRingModal = false;
+        },
+
+        openEditRadarNameModal: (state) => {
+            state.showEditRadarNameModal = true;
+        },
+
+        closeEditRadarNameModal: (state) => {
+            state.showEditRadarNameModal = false;
+        },
+
+        setRadarName: (state, action: PayloadAction<string>) => {
+            state.radar.name = action.payload;
+        },
+
+        setVersionName: (state, action: PayloadAction<string>) => {
+            state.version.name = action.payload;
+        },
+
+        openEditVersionNameModal: (state) => {
+            state.showEditVersionNameModal = true;
+        },
+
+        closeEditVersionNameModal: (state) => {
+            state.showEditVersionNameModal = false;
         },
 
         setShowEditIcon: (state, action: PayloadAction<boolean>) => {
@@ -373,27 +377,20 @@ export const editRadarSlice = createSlice({
             state.showAddNewSectorModal = false;
         },
 
-        addNewSector: (state, action: PayloadAction<Sector>) => {
+        addNewSector: (state, action: PayloadAction<string>) => {
             // Рефакторить при подключении API
-            state.radar.sectors.push({ id: state.radar.sectors.length, name: action.payload.name });
+            state.radar.sectors.push({ id: state.radar.sectors.length, name: action.payload });
             state.showAddNewSectorModal = false;
         },
 
-        addNewRing: (state, action: PayloadAction<Ring>) => {
+        addNewRing: (state, action: PayloadAction<string>) => {
             // Рефакторить при подключении API
-            state.radar.rings.push({ id: state.radar.rings.length, name: action.payload.name });
+            state.radar.rings.push({ id: state.radar.rings.length, name: action.payload });
             state.showAddNewSectorModal = false;
         },
 
         setShowSaveRadarDialog: (state, action: PayloadAction<boolean>) => {
             state.showSaveRadarDialog = action.payload;
-        },
-
-        setRadarName: (state, action: PayloadAction<string>) => {
-            state.radar.name = action.payload;
-        },
-        setCurrentRadarVersionName: (state, action: PayloadAction<string>) => {
-            state.currentVersionName = action.payload;
         },
 
         setEditMode: (state, action: PayloadAction<ConstructorMode>) => {
@@ -414,13 +411,6 @@ export const editRadarSlice = createSlice({
 
         setRadar: (state, action: PayloadAction<RadarInterface>) => {
             state.radar = action.payload;
-            // const version = action.payload.version;
-            // if (version) {
-            //     state.version = version;
-            //     if (state.mode === ConstructorMode.VersionEditing) {
-            //         state.currentVersionName = version.name;
-            //     }
-            // }
         },
 
         setVersion: (state, action: PayloadAction<VersionApiResponse>) => {
@@ -492,8 +482,8 @@ export const {
     openAddNewRingModal,
     addNewSector,
     setShowSaveRadarDialog,
-    setRadarName,
-    setCurrentRadarVersionName,
+    // setRadarName,
+    // setCurrentRadarVersionName,
     setEditMode,
     setIsLoading,
     setHasError,
@@ -503,6 +493,12 @@ export const {
     setBlipEvent,
     cleanUp,
     setShowSwitchReleaseModal,
+    openEditRadarNameModal,
+    closeEditRadarNameModal,
+    setRadarName,
+    setVersionName,
+    openEditVersionNameModal,
+    closeEditVersionNameModal,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;

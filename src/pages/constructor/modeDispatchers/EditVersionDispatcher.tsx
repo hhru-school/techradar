@@ -1,6 +1,5 @@
 import { FC, memo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 
 import {
     useGetBlipEventsForRadarQuery,
@@ -15,20 +14,23 @@ const EditVersionDispatcher: FC = () => {
 
     const { versionId } = useParams();
 
-    const currentVersionState = useAppSelector((state) => state.editRadar.version);
+    const currentVersrion = useAppSelector((state) => state.editRadar.version);
 
     const {
         data: radar,
         isLoading: radarIsLoading,
         error: radarError,
     } = useGetRadarByVersionIdQuery(Number(versionId));
+
     const {
         data: version,
         isLoading: versionIsLoading,
         error: versionError,
-    } = useGetVersionByIdQuery(Number(versionId), { skip: Boolean(currentVersionState) });
+    } = useGetVersionByIdQuery(Number(versionId));
 
-    const { data: log } = useGetBlipEventsForRadarQuery(currentVersionState?.blipEventId ?? skipToken);
+    const { data: log } = useGetBlipEventsForRadarQuery(currentVersrion.blipEventId, {
+        skip: currentVersrion.blipEventId < 0,
+    });
 
     const isLoading = radarIsLoading || versionIsLoading;
     const hasError = Boolean(radarError || versionError);
@@ -36,7 +38,7 @@ const EditVersionDispatcher: FC = () => {
     useEffect(() => {
         dispatch(setIsLoading(isLoading));
         dispatch(setHasError(hasError));
-        if (!currentVersionState && version) {
+        if (version) {
             dispatch(setVersion(version));
         }
         if (radar) {
@@ -49,7 +51,7 @@ const EditVersionDispatcher: FC = () => {
         return () => {
             dispatch(cleanUp());
         };
-    }, [dispatch, isLoading, radar, version, currentVersionState, hasError, log]);
+    }, [dispatch, isLoading, radar, version, hasError, log]);
 
     return null;
 };
