@@ -1,15 +1,15 @@
 import { FC, useEffect } from 'react';
 import { useFormikContext } from 'formik';
 
-import { setCurrentRadarVersionName, setRadarName } from '../../../../store/editRadarSlice';
+import { setRadarName, setVersionName } from '../../../../store/editRadarSlice';
 import { useAppDispatch } from '../../../../store/hooks';
 
-interface Credetials {
+interface Properties {
     name: string;
     version: string;
 }
 
-function isFormValues(values: unknown): values is Credetials {
+function isFormValues(values: unknown): values is Properties {
     return typeof values === 'object' && values !== null && 'name' in values && 'version' in values;
 }
 
@@ -21,7 +21,7 @@ const SaveRadarFormObserver: FC = () => {
     useEffect(() => {
         if (isFormValues(values)) {
             dispatch(setRadarName(values.name));
-            dispatch(setCurrentRadarVersionName(values.version));
+            dispatch(setVersionName(values.version));
         }
     }, [values, dispatch]);
 

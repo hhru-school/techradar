@@ -14,7 +14,7 @@ const companyId = 1;
 
 const ModalSaveDialog: FC = () => {
     const radar = useAppSelector((state) => state.editRadar.radar);
-    const versionName = useAppSelector((state) => state.editRadar.currentVersionName);
+    const versionName = useAppSelector((state) => state.editRadar.version.name);
 
     const [saveRadar, { data, isLoading, isSuccess }] = useSaveNewRadarMutation();
 

@@ -29,7 +29,6 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
 
     const [state, setState] = useState<EditRadarMutationState>({ isLoading: false, hasError: false });
 
-    const parentId = useAppSelector((state) => state.editRadar.version?.blipEventId);
     const radarId = useAppSelector((state) => state.editRadar.radar.id);
     const version = useAppSelector((state) => state.editRadar.version);
 
@@ -40,11 +39,11 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
     const handler = useCallback(
         async (blip: Blip, comment: string, distSegment?: Segment) => {
             try {
-                if (!parentId || !version || !radarId) throw new Error();
+                // if (!parentId || !version || !radarId) throw new Error();
                 setState({ isLoading: true, hasError: false });
                 let blipEventRequest: CreateBlipEventApiRequest = buildBlipEventRequest(
                     blip,
-                    parentId,
+                    version.blipEventId,
                     comment,
                     radarId
                 );
@@ -78,7 +77,7 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
                 setState({ isLoading: false, hasError: true });
             }
         },
-        [setState, createBlip, createBlipEvent, updateVersion, parentId, version, dispatch, operation, radarId]
+        [setState, createBlip, createBlipEvent, updateVersion, version, dispatch, operation, radarId]
     );
     return [state, handler];
 };
