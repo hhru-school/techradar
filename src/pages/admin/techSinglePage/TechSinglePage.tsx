@@ -1,18 +1,6 @@
-import { FC, useCallback, useMemo, useState, MouseEvent } from 'react';
-import DoneIcon from '@mui/icons-material/Done';
+import { FC, useCallback, useMemo, useState, MouseEvent, FormEvent } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
-import {
-    Box,
-    Button,
-    Container,
-    Divider,
-    Grid,
-    Popover,
-    PopoverOrigin,
-    SxProps,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { Box, Button, Container, Divider, Grid, SxProps, TextField, Typography } from '@mui/material';
 
 import {
     useGetBlipQuery,
@@ -65,29 +53,24 @@ const styles: Record<string, SxProps> = {
     clickToSave: { ml: '3px' },
 };
 
-const anchorOrigin: PopoverOrigin = {
-    vertical: 'top',
-    horizontal: 'right',
-};
-
 const TechSinglePage: FC = () => {
     const [textAboutReadOnly, setTextAboutReadOnly] = useState<boolean>(true);
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
     const { data } = useGetBlipQuery(666);
     // const { updateBlip } = useUpdateBlipMutation();
-
-    const nameTech = data ? data.name : 'имя не указано';
+    const [techName, setTechName] = useState<string | null>('имя не указано');
     const descrTech = data ? data.description : '';
 
     const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     }, []);
-    const handleClose = useCallback(() => {
-        setAnchorEl(null);
-    }, []);
     const onClickHandler = useCallback(() => {
         setTextAboutReadOnly(!textAboutReadOnly);
     }, [textAboutReadOnly]);
+
+    const onInputHandler = useCallback((e: FormEvent<HTMLDivElement>) => {
+        setTechName((e.target as HTMLDivElement).textContent);
+    }, []);
 
     const open = Boolean(anchorEl);
 
@@ -112,23 +95,16 @@ const TechSinglePage: FC = () => {
     return (
         <Container maxWidth="xl">
             <Box sx={styles.headerBox}>
-                <Typography variant="h5" sx={styles.nameTech}>
-                    {nameTech}
-                </Typography>
+                <div
+                    contentEditable="true"
+                    onInput={onInputHandler}
+                    style={{ width: '320px', margin: '15px 0 15px 10px', fontSize: '25px' }}
+                >
+                    {techName}
+                </div>
                 <Button variant="text" sx={styles.headerBtn} aria-describedby={id} onClick={handleClick}>
                     <EditIcon id="editTextAboutTech" color={iconColor} />
                 </Button>
-                <Popover
-                    id={id}
-                    open={open}
-                    anchorEl={anchorEl}
-                    onClose={handleClose}
-                    anchorOrigin={anchorOrigin}
-                    sx={styles.popover}
-                >
-                    <TextField placeholder="Введите новое название" variant="outlined" />
-                    <DoneIcon sx={styles.doneIcon} />
-                </Popover>
             </Box>
             <Divider />
             <Grid container spacing={2} sx={styles.grid}>
