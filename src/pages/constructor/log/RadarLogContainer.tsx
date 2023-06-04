@@ -15,7 +15,7 @@ const RadarLogContainer: FC = () => {
     if (isNewRadar) {
         return (
             <div className={styles.container}>
-                <div className={styles.emptyContainer}>Лог будет доступен после сохранения радара</div>{' '}
+                <div className={styles.emptyContainer}>Лог будет доступен после сохранения радара</div>
             </div>
         );
     }
