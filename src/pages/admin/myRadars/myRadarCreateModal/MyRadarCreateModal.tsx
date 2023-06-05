@@ -43,7 +43,7 @@ const MyRadarCreateModal: FC = () => {
                 .unwrap()
                 .then(({ id }: NewVersionResponse) => {
                     setErrMessage(null);
-                    navigate(` /constructor/edit/version/${id}`);
+                    navigate(`/constructor/edit/version/${id}`);
                     dispatch(setCreateVersionModalOpen({ show: false, radarId: null }));
                     setSubmitting(false);
                 })
