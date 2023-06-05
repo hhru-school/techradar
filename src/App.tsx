@@ -8,6 +8,7 @@ import RequireAuth from './components/requireAuth.tsx/RequireAuth';
 import RadarConstructor from './pages/admin/radarConstructor/RadarConstructor';
 import TechSinglePage from './pages/admin/techSinglePage/TechSinglePage';
 import Constructor from './pages/constructor/Constructor';
+import Main from './pages/main/Main';
 import TechRadar from './pages/techradar/TechRadar';
 import { ConstructorMode } from './store/editRadarSlice';
 import { useCredentials } from './store/hooks';
@@ -42,6 +43,7 @@ const App: FC = () => {
         <ThemeProvider theme={theme}>
             <Header />
             <Routes>
+                <Route path="/*" element={<Main />}></Route>
                 <Route path="/techradar">
                     <Route path="company/:companySlug/radar/:radarSlug/version/:versionSlug" element={<TechRadar />} />
                 </Route>
