@@ -1,7 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 import { Delete } from '@mui/icons-material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import PreviewIcon from '@mui/icons-material/Preview';
 import {
     Accordion,
@@ -121,9 +120,11 @@ const LogListItem: FC<LogListItemProps> = ({ blipEvent, isEditable }) => {
                     <ShowRadarBtn />
                     <Typography align={'right'}>{getDate(blipEvent.lastChangeTime)}</Typography>
                 </Box>
-                <Typography align={'center'} variant={'h6'}>
-                    {blipEvent.blip?.name || 'Радар создан'}
-                </Typography>
+                {blipEvent.blip && (
+                    <Typography align={'center'} variant={'h6'}>
+                        {blipEvent.blip.name}
+                    </Typography>
+                )}
             </Box>
 
             <Accordion sx={styles.accordion}>
@@ -134,10 +135,9 @@ const LogListItem: FC<LogListItemProps> = ({ blipEvent, isEditable }) => {
                     sx={styles.accordionSummary}
                 >
                     <Typography align="center" variant="body2" sx={styles.logText}>
-                        эксперимент
-                        <ArrowRightAltIcon />
-                        <ArrowRightAltIcon />
-                        используется
+                        {blipEvent.quadrant && blipEvent.ring
+                            ? `${blipEvent.quadrant.name} : ${blipEvent.ring.name}`
+                            : 'Создан радар'}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>

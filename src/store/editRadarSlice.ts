@@ -45,12 +45,8 @@ export interface EditRadarState {
     isModalLoading: boolean;
     isPageLoading: boolean;
     hasError: boolean;
-    // version: VersionApiResponse | null;
     version: VersionApiResponse;
-    blipEvent: IndexBlipEventApi | null;
     log: IndexBlipEventApi[] | null;
-    // currentVersionName: string;
-    currentBlipEventId: number | null;
     mode: ConstructorMode;
     isDragging: boolean;
     editingBlip: Blip | null;
@@ -86,8 +82,6 @@ const initialState: EditRadarState = {
     log: null,
     hasError: false,
     version: defaultVersionAsset,
-    blipEvent: null,
-    currentBlipEventId: null,
     mode: ConstructorMode.NewRadarCreation,
     isDragging: false,
     editingBlip: null,
@@ -400,10 +394,6 @@ export const editRadarSlice = createSlice({
             state.mode = action.payload;
         },
 
-        setBlipEventId: (state, action: PayloadAction<number>) => {
-            state.currentBlipEventId = action.payload;
-        },
-
         setIsLoading: (state, action: PayloadAction<boolean>) => {
             state.isModalLoading = action.payload;
         },
@@ -420,14 +410,6 @@ export const editRadarSlice = createSlice({
             state.version = action.payload;
         },
 
-        isetCurrentBlipEventId: (state, action: PayloadAction<number>) => {
-            state.currentBlipEventId = action.payload;
-        },
-
-        setCurrenBlipEventId: (state, action: PayloadAction<number>) => {
-            state.currentBlipEventId = action.payload;
-        },
-
         cleanUp: (state) => {
             state.isModalLoading = false;
             state.hasError = false;
@@ -439,10 +421,6 @@ export const editRadarSlice = createSlice({
 
         setRadarLog: (state, action: PayloadAction<IndexBlipEventApi[]>) => {
             state.log = action.payload;
-        },
-
-        setBlipEvent: (state, action: PayloadAction<IndexBlipEventApi>) => {
-            state.blipEvent = action.payload;
         },
 
         openDeleteBlipEventModal: (state, action: PayloadAction<number>) => {
@@ -500,7 +478,6 @@ export const {
     setRadar,
     setVersion,
     setRadarLog,
-    setBlipEvent,
     cleanUp,
     setShowSwitchReleaseModal,
     openEditRadarNameModal,

@@ -185,7 +185,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'DELETE',
                 url: `blip-events/${blipEventId}`,
             }),
-            invalidatesTags: ['Log'],
+            invalidatesTags: ['Radar', 'Version'],
         }),
     }),
 });
