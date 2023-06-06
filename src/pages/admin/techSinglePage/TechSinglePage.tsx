@@ -1,13 +1,13 @@
-import { FC, useCallback, useMemo, useState, MouseEvent, FormEvent } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Button, Container, Divider, Grid, SxProps, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, Divider, Grid, SxProps, Typography } from '@mui/material';
 
-import {
-    useGetBlipQuery,
-    // useUpdateBlipMutation
-} from '../../../api/blipsSinglePageApi';
+import { useGetBlipQuery } from '../../../api/blipsSinglePageApi';
 import { IndexBlipEventApi } from '../../../api/types';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { setEditTechModalOpen, setTechData } from '../../../store/techSinglePageSlice';
 import LogList from '../components/logList/LogList';
+import EditTechModal from './editTechModal/EditTechModal';
 
 export const mock: IndexBlipEventApi[] = [
     {
@@ -41,7 +41,7 @@ export const mock: IndexBlipEventApi[] = [
 ];
 
 const styles: Record<string, SxProps> = {
-    nameTech: { textAlign: 'left', margin: '15px 0 15px 40px' },
+    nameTech: { margin: '15px 0', fontSize: '30px' },
     headerBox: { display: 'flex' },
     headerBtn: { margin: '0 25px' },
     popover: { mt: '3px' },
@@ -49,61 +49,31 @@ const styles: Record<string, SxProps> = {
     grid: { mt: '5px' },
     aboutBox: { display: 'flex', justifyContent: 'start' },
     aboutBtn: { margin: '0 25px' },
-    textField: { width: '100%' },
+    textField: { width: '100%', marginTop: '10px' },
     clickToSave: { ml: '3px' },
 };
 
 const TechSinglePage: FC = () => {
-    const [textAboutReadOnly, setTextAboutReadOnly] = useState<boolean>(true);
-    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-    const { data } = useGetBlipQuery(666);
-    // const { updateBlip } = useUpdateBlipMutation();
-    const [techName, setTechName] = useState<string | null>('имя не указано');
-    const descrTech = data ? data.description : '';
+    const dispatch = useAppDispatch();
+    const showEditTechModal = useAppSelector((state) => state.techSinglePage.showEditTechModal);
+    const techData = useAppSelector((state) => state.techSinglePage.techData);
 
-    const handleClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    }, []);
-    const onClickHandler = useCallback(() => {
-        setTextAboutReadOnly(!textAboutReadOnly);
-    }, [textAboutReadOnly]);
+    const { data } = useGetBlipQuery(154);
 
-    const onInputHandler = useCallback((e: FormEvent<HTMLDivElement>) => {
-        setTechName((e.target as HTMLDivElement).textContent);
-    }, []);
+    const onEditTechNameHandler = useCallback(() => dispatch(setEditTechModalOpen(true)), [dispatch]);
 
-    const open = Boolean(anchorEl);
-
-    const id = open ? 'simple-popover' : undefined;
-    const editColor = textAboutReadOnly ? 'primary' : 'error';
-    const iconColor = !anchorEl ? 'primary' : 'error';
-    const clickToSaveContent = textAboutReadOnly ? (
-        <EditIcon color={editColor} />
-    ) : (
-        <Box>
-            <EditIcon color={editColor} />
-            <Typography sx={styles.clickToSave}>Нажмите для сохранения</Typography>
-        </Box>
-    );
-    const InputProps = useMemo(
-        () => ({
-            readOnly: textAboutReadOnly,
-        }),
-        [textAboutReadOnly]
-    );
+    useEffect(() => {
+        if (data) {
+            dispatch(setTechData({ ...data }));
+        }
+    }, [data, dispatch]);
 
     return (
         <Container maxWidth="xl">
             <Box sx={styles.headerBox}>
-                <div
-                    contentEditable="true"
-                    onInput={onInputHandler}
-                    style={{ width: '320px', margin: '15px 0 15px 10px', fontSize: '25px' }}
-                >
-                    {techName}
-                </div>
-                <Button variant="text" sx={styles.headerBtn} aria-describedby={id} onClick={handleClick}>
-                    <EditIcon id="editTextAboutTech" color={iconColor} />
+                <Box sx={styles.nameTech}>{techData.name}</Box>
+                <Button variant="text" sx={styles.headerBtn} onClick={onEditTechNameHandler}>
+                    <EditIcon id="editTextAboutTech" color="primary" />
                 </Button>
             </Box>
             <Divider />
@@ -111,25 +81,17 @@ const TechSinglePage: FC = () => {
                 <Grid item xs={12} md={6}>
                     <Box sx={styles.aboutBox}>
                         <Typography variant="h5">О технологии</Typography>
-                        <Button variant="text" sx={styles.aboutBtn} onClick={onClickHandler}>
-                            {clickToSaveContent}
-                        </Button>
                     </Box>
 
-                    <TextField
-                        id="outlined-read-only-input"
-                        defaultValue={descrTech}
-                        InputProps={InputProps}
-                        multiline
-                        placeholder="Внесите информацию о технологии..."
-                        maxRows={10}
-                        sx={styles.textField}
-                    />
+                    <Typography sx={styles.textField} variant="subtitle1" gutterBottom>
+                        {techData.description}
+                    </Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <LogList boxWidth="100%" boxMaxHeight="72vh" blipEvents={mock} />
                 </Grid>
             </Grid>
+            {showEditTechModal && <EditTechModal />}
         </Container>
     );
 };

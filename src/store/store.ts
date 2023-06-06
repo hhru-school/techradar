@@ -11,6 +11,8 @@ import displayRadarReducer from './displayRadarSlice';
 import editRadarReducer from './editRadarSlice';
 import { authMiddleware } from './middleware/authMiddleware';
 import myRadarsReducer from './myRadarsSlice';
+// eslint-disable-next-line import/no-named-as-default
+import techSinglePageSlice from './techSinglePageSlice';
 
 const rootReducer = combineReducers({
     activeBlip: activeBlipReducer,
@@ -19,6 +21,7 @@ const rootReducer = combineReducers({
     constructorRadar: constructorRadarReducer,
     myRadars: myRadarsReducer,
     auth: authReducer,
+    techSinglePage: techSinglePageSlice,
     [apiSlice.reducerPath]: apiSlice.reducer,
     [companyRadarsApi.reducerPath]: companyRadarsApi.reducer,
     [radarsGridApi.reducerPath]: radarsGridApi.reducer,

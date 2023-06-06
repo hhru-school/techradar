@@ -1,21 +1,8 @@
 // import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { apiSlice } from './authApi';
+import { BlipResponse, UpdateBlipRequest } from './types';
 
-type BlipResponse = {
-    id: number;
-    name: string;
-    description: string;
-    radarId: number;
-};
-
-type UpdateBlipRequest = { blipId: number; body: { name: string; description: string } };
-type UpdateBlipResponse = {
-    id: number;
-    name: string;
-    description: string;
-    radarId: number;
-};
 // const baseUrl = '/api';
 
 // export const singlePageBlipApi = createApi({
@@ -35,10 +22,10 @@ export const singlePageBlipApi = apiSlice.injectEndpoints({
         getBlip: builder.query<BlipResponse, number>({
             query: (blipId) => `/blips/${blipId}`,
         }),
-        updateBlip: builder.mutation<UpdateBlipResponse, UpdateBlipRequest>({
+        updateBlip: builder.mutation<BlipResponse, UpdateBlipRequest>({
             query: ({ blipId, body }) => ({
                 url: `/blips/${blipId}`,
-                method: 'POST',
+                method: 'PUT',
                 body,
             }),
         }),

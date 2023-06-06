@@ -195,6 +195,18 @@ export interface NewVersionError {
     };
 }
 
+export interface BlipResponse {
+    id?: number;
+    name: string;
+    description: string;
+    radarId?: number;
+}
+
+export interface UpdateBlipRequest {
+    blipId: number;
+    body: { name: string; description: string; id?: number; radarId?: number };
+}
+
 export type RadarVersionData = Array<VersionData>;
 
 export interface RenameContainerItemApi {
