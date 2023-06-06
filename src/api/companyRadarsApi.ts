@@ -150,6 +150,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'GET',
                 url: `blip-events/radar-log?blip-event-id=${blipEventId}`,
             }),
+            providesTags: ['Log'],
         }),
 
         updateSector: builder.mutation<RenameContainerItemApi, RenameContainerItemApi>({
@@ -178,6 +179,14 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['Radar'],
         }),
+
+        deleteBlipEvent: builder.mutation<void, number>({
+            query: (blipEventId) => ({
+                method: 'DELETE',
+                url: `blips-events/${blipEventId}`,
+            }),
+            invalidatesTags: ['Log'],
+        }),
     }),
 });
 
@@ -198,4 +207,5 @@ export const {
     useUpdateSectorMutation,
     useUpdateRadarMutation,
     useUpdateRingMutation,
+    useDeleteBlipEventMutation,
 } = companyRadarsApi;

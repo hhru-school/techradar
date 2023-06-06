@@ -1,4 +1,5 @@
 import { FC, useCallback, useState } from 'react';
+import { Delete } from '@mui/icons-material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import PreviewIcon from '@mui/icons-material/Preview';
@@ -7,6 +8,7 @@ import {
     AccordionDetails,
     AccordionSummary,
     Box,
+    IconButton,
     Popover,
     PopoverOrigin,
     SxProps,
@@ -14,6 +16,8 @@ import {
 } from '@mui/material';
 
 import { IndexBlipEventApi } from '../../../../../api/types';
+import { openDeleteBlipEventModal } from '../../../../../store/editRadarSlice';
+import { useAppDispatch } from '../../../../../store/hooks';
 
 const styles: Record<string, SxProps> = {
     showRadarBtnBox: { cursor: 'pointer', width: '24px', display: 'flex' },
@@ -55,6 +59,7 @@ const getDate = (dateString: string): string => {
 type LogListItemProps = {
     blipEvent: IndexBlipEventApi;
     color?: string;
+    isEditable: boolean;
 };
 
 const ShowRadarBtn: FC = () => {
@@ -97,10 +102,21 @@ const ShowRadarBtn: FC = () => {
     );
 };
 
-const LogListItem: FC<LogListItemProps> = ({ blipEvent }) => {
+const LogListItem: FC<LogListItemProps> = ({ blipEvent, isEditable }) => {
+    const dispatch = useAppDispatch();
+
+    const deleteBtnClickHandler = useCallback(() => {
+        dispatch(openDeleteBlipEventModal(blipEvent.id));
+    }, [dispatch, blipEvent.id]);
+
     return (
         <Box sx={styles.logListItemBox}>
             <Box sx={styles.logListItemHeader}>
+                {isEditable && (
+                    <IconButton color="warning" onClick={deleteBtnClickHandler}>
+                        <Delete />
+                    </IconButton>
+                )}
                 <Box sx={styles.headerBtnAndText}>
                     <ShowRadarBtn />
                     <Typography align={'right'}>{getDate(blipEvent.lastChangeTime)}</Typography>

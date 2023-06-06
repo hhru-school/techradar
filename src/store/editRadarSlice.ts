@@ -72,9 +72,11 @@ export interface EditRadarState {
     showAddNewRingModal: boolean;
     showSaveRadarDialog: boolean;
     showSwitchReleaseModal: boolean;
+    showDeleteBlipEventModal: boolean;
     editingSector: Sector | null;
     editingRing: Ring | null;
     showEditIcon: boolean;
+    editingBlipEventId: number;
 }
 
 const initialState: EditRadarState = {
@@ -85,7 +87,6 @@ const initialState: EditRadarState = {
     hasError: false,
     version: defaultVersionAsset,
     blipEvent: null,
-    // currentVersionName: defaultVersionName,
     currentBlipEventId: null,
     mode: ConstructorMode.NewRadarCreation,
     isDragging: false,
@@ -104,6 +105,7 @@ const initialState: EditRadarState = {
     showDeleteRingModal: false,
     showEditRadarNameModal: false,
     showEditVersionNameModal: false,
+    showDeleteBlipEventModal: false,
     editingSector: null,
     editingRing: null,
     showAddNewSectorModal: false,
@@ -111,6 +113,7 @@ const initialState: EditRadarState = {
     showSaveRadarDialog: false,
     showSwitchReleaseModal: false,
     showEditIcon: false,
+    editingBlipEventId: -1,
 };
 
 const getBlipById = (state: EditRadarState, id: number): Blip | null => {
@@ -441,6 +444,15 @@ export const editRadarSlice = createSlice({
         setBlipEvent: (state, action: PayloadAction<IndexBlipEventApi>) => {
             state.blipEvent = action.payload;
         },
+
+        openDeleteBlipEventModal: (state, action: PayloadAction<number>) => {
+            state.showDeleteBlipEventModal = true;
+            state.editingBlipEventId = action.payload;
+        },
+
+        closeDeleteBlipEventModal: (state) => {
+            state.showDeleteBlipEventModal = false;
+        },
     },
 });
 
@@ -482,8 +494,6 @@ export const {
     openAddNewRingModal,
     addNewSector,
     setShowSaveRadarDialog,
-    // setRadarName,
-    // setCurrentRadarVersionName,
     setEditMode,
     setIsLoading,
     setHasError,
@@ -499,6 +509,8 @@ export const {
     setVersionName,
     openEditVersionNameModal,
     closeEditVersionNameModal,
+    openDeleteBlipEventModal,
+    closeDeleteBlipEventModal,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;
