@@ -30,12 +30,22 @@ type LogProps = {
     blipEvents: IndexBlipEventApi[];
     hasHeader?: boolean;
     color?: string;
+    isEditable?: boolean;
 };
 
-const LogList: FC<LogProps> = ({ boxWidth = '100%', boxMaxHeight = '100%', blipEvents, hasHeader = true }) => {
+const LogList: FC<LogProps> = ({
+    boxWidth = '100%',
+    boxMaxHeight = '100%',
+    blipEvents,
+    hasHeader = true,
+    isEditable = true,
+}) => {
     const items = useMemo(
-        () => blipEvents.map((blipEvent, index) => <LogListItem key={index} blipEvent={blipEvent} />).reverse(),
-        [blipEvents]
+        () =>
+            blipEvents
+                .map((blipEvent, index) => <LogListItem key={index} blipEvent={blipEvent} isEditable={isEditable} />)
+                .reverse(),
+        [blipEvents, isEditable]
     );
 
     const logBoxStyle = useMemo(() => ({ ...styles.boxItems, maxHeight: boxMaxHeight }), [boxMaxHeight]);

@@ -1,12 +1,13 @@
 import { FC, useCallback, useState } from 'react';
+import { Delete } from '@mui/icons-material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import PreviewIcon from '@mui/icons-material/Preview';
 import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
     Box,
+    IconButton,
     Popover,
     PopoverOrigin,
     SxProps,
@@ -14,6 +15,8 @@ import {
 } from '@mui/material';
 
 import { IndexBlipEventApi } from '../../../../../api/types';
+import { openDeleteBlipEventModal } from '../../../../../store/editRadarSlice';
+import { useAppDispatch } from '../../../../../store/hooks';
 
 const styles: Record<string, SxProps> = {
     showRadarBtnBox: { cursor: 'pointer', width: '24px', display: 'flex' },
@@ -55,6 +58,7 @@ const getDate = (dateString: string): string => {
 type LogListItemProps = {
     blipEvent: IndexBlipEventApi;
     color?: string;
+    isEditable: boolean;
 };
 
 const ShowRadarBtn: FC = () => {
@@ -97,18 +101,30 @@ const ShowRadarBtn: FC = () => {
     );
 };
 
-const LogListItem: FC<LogListItemProps> = ({ blipEvent }) => {
+const LogListItem: FC<LogListItemProps> = ({ blipEvent, isEditable }) => {
+    const dispatch = useAppDispatch();
+
+    const deleteBtnClickHandler = useCallback(() => {
+        dispatch(openDeleteBlipEventModal(blipEvent.id));
+    }, [dispatch, blipEvent.id]);
+
     return (
         <Box sx={styles.logListItemBox}>
             <Box sx={styles.logListItemHeader}>
+                {isEditable && blipEvent.parentId && (
+                    <IconButton color="warning" onClick={deleteBtnClickHandler}>
+                        <Delete />
+                    </IconButton>
+                )}
                 <Box sx={styles.headerBtnAndText}>
                     <ShowRadarBtn />
                     <Typography align={'right'}>{getDate(blipEvent.lastChangeTime)}</Typography>
                 </Box>
-                <Typography align={'center'} variant={'h6'}>
-                    {/* После доработки бэкенда заменить на name */}
-                    {blipEvent.id}
-                </Typography>
+                {blipEvent.blip && (
+                    <Typography align={'center'} variant={'h6'}>
+                        {blipEvent.blip.name}
+                    </Typography>
+                )}
             </Box>
 
             <Accordion sx={styles.accordion}>
@@ -119,10 +135,9 @@ const LogListItem: FC<LogListItemProps> = ({ blipEvent }) => {
                     sx={styles.accordionSummary}
                 >
                     <Typography align="center" variant="body2" sx={styles.logText}>
-                        эксперимент
-                        <ArrowRightAltIcon />
-                        <ArrowRightAltIcon />
-                        используется
+                        {blipEvent.quadrant && blipEvent.ring
+                            ? `${blipEvent.quadrant.name} : ${blipEvent.ring.name}`
+                            : 'Создан радар'}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>

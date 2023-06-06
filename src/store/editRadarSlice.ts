@@ -45,12 +45,8 @@ export interface EditRadarState {
     isModalLoading: boolean;
     isPageLoading: boolean;
     hasError: boolean;
-    // version: VersionApiResponse | null;
     version: VersionApiResponse;
-    blipEvent: IndexBlipEventApi | null;
     log: IndexBlipEventApi[] | null;
-    // currentVersionName: string;
-    currentBlipEventId: number | null;
     mode: ConstructorMode;
     isDragging: boolean;
     editingBlip: Blip | null;
@@ -72,9 +68,11 @@ export interface EditRadarState {
     showAddNewRingModal: boolean;
     showSaveRadarDialog: boolean;
     showSwitchReleaseModal: boolean;
+    showDeleteBlipEventModal: boolean;
     editingSector: Sector | null;
     editingRing: Ring | null;
     showEditIcon: boolean;
+    editingBlipEventId: number;
 }
 
 const initialState: EditRadarState = {
@@ -84,9 +82,6 @@ const initialState: EditRadarState = {
     log: null,
     hasError: false,
     version: defaultVersionAsset,
-    blipEvent: null,
-    // currentVersionName: defaultVersionName,
-    currentBlipEventId: null,
     mode: ConstructorMode.NewRadarCreation,
     isDragging: false,
     editingBlip: null,
@@ -104,6 +99,7 @@ const initialState: EditRadarState = {
     showDeleteRingModal: false,
     showEditRadarNameModal: false,
     showEditVersionNameModal: false,
+    showDeleteBlipEventModal: false,
     editingSector: null,
     editingRing: null,
     showAddNewSectorModal: false,
@@ -111,6 +107,7 @@ const initialState: EditRadarState = {
     showSaveRadarDialog: false,
     showSwitchReleaseModal: false,
     showEditIcon: false,
+    editingBlipEventId: -1,
 };
 
 const getBlipById = (state: EditRadarState, id: number): Blip | null => {
@@ -397,10 +394,6 @@ export const editRadarSlice = createSlice({
             state.mode = action.payload;
         },
 
-        setBlipEventId: (state, action: PayloadAction<number>) => {
-            state.currentBlipEventId = action.payload;
-        },
-
         setIsLoading: (state, action: PayloadAction<boolean>) => {
             state.isModalLoading = action.payload;
         },
@@ -417,14 +410,6 @@ export const editRadarSlice = createSlice({
             state.version = action.payload;
         },
 
-        isetCurrentBlipEventId: (state, action: PayloadAction<number>) => {
-            state.currentBlipEventId = action.payload;
-        },
-
-        setCurrenBlipEventId: (state, action: PayloadAction<number>) => {
-            state.currentBlipEventId = action.payload;
-        },
-
         cleanUp: (state) => {
             state.isModalLoading = false;
             state.hasError = false;
@@ -438,8 +423,13 @@ export const editRadarSlice = createSlice({
             state.log = action.payload;
         },
 
-        setBlipEvent: (state, action: PayloadAction<IndexBlipEventApi>) => {
-            state.blipEvent = action.payload;
+        openDeleteBlipEventModal: (state, action: PayloadAction<number>) => {
+            state.showDeleteBlipEventModal = true;
+            state.editingBlipEventId = action.payload;
+        },
+
+        closeDeleteBlipEventModal: (state) => {
+            state.showDeleteBlipEventModal = false;
         },
     },
 });
@@ -482,15 +472,12 @@ export const {
     openAddNewRingModal,
     addNewSector,
     setShowSaveRadarDialog,
-    // setRadarName,
-    // setCurrentRadarVersionName,
     setEditMode,
     setIsLoading,
     setHasError,
     setRadar,
     setVersion,
     setRadarLog,
-    setBlipEvent,
     cleanUp,
     setShowSwitchReleaseModal,
     openEditRadarNameModal,
@@ -499,6 +486,8 @@ export const {
     setVersionName,
     openEditVersionNameModal,
     closeEditVersionNameModal,
+    openDeleteBlipEventModal,
+    closeDeleteBlipEventModal,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;

@@ -24,10 +24,27 @@ export const mock: IndexBlipEventApi[] = [
         id: 100500,
         comment:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque elementum neque et augue pharetra, id posuere diam fringilla. Mauris pharetra consectetur lobortis.',
-        blipId: 700,
-        quadrantId: 1,
-        ringId: 1,
-        authorId: 1,
+        parentId: 1,
+        blip: {
+            id: 700,
+            name: 'Java',
+            description: 'Hello world',
+            radarId: 1,
+        },
+        quadrant: {
+            id: 1,
+            name: 'Tools',
+            position: 1,
+        },
+        ring: {
+            id: 1,
+            name: 'Active',
+            position: 1,
+        },
+        author: {
+            id: 1,
+            username: 'John Doe',
+        },
         creationTime: '2023-05-30T12:09:41.606821Z',
         lastChangeTime: '2023-05-30T12:09:41.606821Z',
     },

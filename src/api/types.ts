@@ -132,10 +132,27 @@ export interface UpdateVersionRequest {
 export interface IndexBlipEventApi {
     id: number;
     comment: string;
-    blipId: number;
-    quadrantId?: number;
-    ringId?: number;
-    authorId: number;
+    parentId: number;
+    blip: {
+        id: number;
+        name: string;
+        description: string;
+        radarId: number;
+    } | null;
+    quadrant: {
+        id: number;
+        name: string;
+        position: number;
+    } | null;
+    ring: {
+        id: number;
+        name: string;
+        position: number;
+    } | null;
+    author: {
+        id: number;
+        username: string;
+    };
     creationTime: string;
     lastChangeTime: string;
 }

@@ -14,7 +14,7 @@ const EditVersionDispatcher: FC = () => {
 
     const { versionId } = useParams();
 
-    const currentVersrion = useAppSelector((state) => state.editRadar.version);
+    const currentVersion = useAppSelector((state) => state.editRadar.version);
 
     const {
         data: radar,
@@ -28,8 +28,8 @@ const EditVersionDispatcher: FC = () => {
         error: versionError,
     } = useGetVersionByIdQuery(Number(versionId));
 
-    const { data: log } = useGetBlipEventsForRadarQuery(currentVersrion.blipEventId, {
-        skip: currentVersrion.blipEventId < 0,
+    const { data: log } = useGetBlipEventsForRadarQuery(currentVersion.blipEventId, {
+        skip: currentVersion.blipEventId < 0,
     });
 
     const isLoading = radarIsLoading || versionIsLoading;
