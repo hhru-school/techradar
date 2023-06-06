@@ -183,7 +183,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
         deleteBlipEvent: builder.mutation<void, number>({
             query: (blipEventId) => ({
                 method: 'DELETE',
-                url: `blips-events/${blipEventId}`,
+                url: `blip-events/${blipEventId}`,
             }),
             invalidatesTags: ['Log'],
         }),

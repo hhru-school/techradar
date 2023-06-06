@@ -112,7 +112,7 @@ const LogListItem: FC<LogListItemProps> = ({ blipEvent, isEditable }) => {
     return (
         <Box sx={styles.logListItemBox}>
             <Box sx={styles.logListItemHeader}>
-                {isEditable && (
+                {isEditable && blipEvent.parentId && (
                     <IconButton color="warning" onClick={deleteBtnClickHandler}>
                         <Delete />
                     </IconButton>
@@ -122,8 +122,7 @@ const LogListItem: FC<LogListItemProps> = ({ blipEvent, isEditable }) => {
                     <Typography align={'right'}>{getDate(blipEvent.lastChangeTime)}</Typography>
                 </Box>
                 <Typography align={'center'} variant={'h6'}>
-                    {/* После доработки бэкенда заменить на name */}
-                    {blipEvent.id}
+                    {blipEvent.blip?.name || 'Радар создан'}
                 </Typography>
             </Box>
 
