@@ -13,6 +13,7 @@ type InputProps = {
     multiline?: boolean;
     rows?: number;
     defaultValue?: string;
+    value?: string;
 };
 
 const TextInputOutlined = ({ ...props }: InputProps): ReactElement => {

@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { Alert, Box, Button, CircularProgress, Modal, Typography } from '@mui/material';
 import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
@@ -16,14 +16,9 @@ export interface Values {
 }
 
 const validSchema = Yup.object({
-    name: Yup.string().required('Обязательное поле!'),
+    name: Yup.string(),
     description: Yup.string(),
 });
-
-const initialValues = {
-    name: '',
-    description: '',
-};
 
 const EditTechModal: FC = () => {
     const dispatch = useAppDispatch();
@@ -31,6 +26,14 @@ const EditTechModal: FC = () => {
     const techData = useAppSelector((state) => state.techSinglePage.techData);
     const [errMessage, setErrMessage] = useState<string | null>(null);
     const [updateBlip, { isLoading }] = useUpdateBlipMutation();
+
+    const initialValues = useMemo(
+        () => ({
+            name: techData.name,
+            description: techData.description,
+        }),
+        [techData.description, techData.name]
+    );
 
     const handleClose = useCallback(() => dispatch(setEditTechModalOpen(false)), [dispatch]);
 
@@ -77,7 +80,6 @@ const EditTechModal: FC = () => {
                             disabled={isLoading}
                             multiline
                             rows={2}
-                            defaultValue={techData.name}
                         />
                         <TextInputOutlined
                             label="Описание"
@@ -87,7 +89,6 @@ const EditTechModal: FC = () => {
                             disabled={isLoading}
                             multiline
                             rows={10}
-                            defaultValue={techData.description}
                         />
                         <Button
                             disabled={isLoading}
