@@ -1,22 +1,22 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import { Chip } from '@mui/material';
 
-import { Sector } from '../../../../components/radar/types';
-import { clearActiveBlip } from '../../../../store/activeBlipSlice';
+import { Sector } from '../../../../../components/radar/types';
+import { clearActiveBlip } from '../../../../../store/activeBlipSlice';
 import {
     clearActiveSector,
     clearHoveredSector,
     setActiveSector,
     setHoveredSector,
-} from '../../../../store/activeSectorSlice';
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+} from '../../../../../store/displayRadarSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
 
 import styles from './controls.module.less';
 
 type Props = { sector: Sector; color: string };
 
 const SectorControlChip: FC<Props> = ({ sector, color }) => {
-    const activeSectorId = useAppSelector((state) => state.activeSector.activeSectorId);
+    const activeSectorId = useAppSelector((state) => state.displayRadar.activeSectorId);
     const dispatch = useAppDispatch();
 
     const [hoverColor, setHoverColor] = useState('inherit');

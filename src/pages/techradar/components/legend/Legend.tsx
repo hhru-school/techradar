@@ -14,8 +14,8 @@ type Props = { radar: RadarInterface; colorScheme?: string[] };
 const suggestsHeight = 150;
 
 const Legend: FC<Props> = ({ radar, colorScheme = defaultColorScheme }) => {
-    const hoveredSectorId = useAppSelector((state) => state.activeSector.hoveredSectorId);
-    const activeSectorId = useAppSelector((state) => state.activeSector.activeSectorId);
+    const hoveredSectorId = useAppSelector((state) => state.displayRadar.hoveredSectorId);
+    const activeSectorId = useAppSelector((state) => state.displayRadar.activeSectorId);
 
     const sectorGroups = useMemo(
         () =>

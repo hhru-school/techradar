@@ -2,21 +2,20 @@ import { FC, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
-import { buildRadarViewerUrl } from '../../../../api/radarApiUtils';
-import { Version } from '../../TechRadar';
+import { buildRadarViewerUrl } from '../../../../../api/radarApiUtils';
+import { VersionApiResponse } from '../../../../../api/types';
 
 type Props = {
-    versions: Version[];
-    version: Version;
+    versions: VersionApiResponse[];
+    version: VersionApiResponse;
     companyId: number;
-    radarId: number;
 };
 
 const label = 'Версия радара';
 
-const getVersionById = (versions: Version[], id: string) => versions.find((version) => version.id === Number(id));
+const getVersionById = (versions: VersionApiResponse[], id: number) => versions.find((version) => version.id === id);
 
-const SelectVersion: FC<Props> = ({ versions, version, companyId, radarId }) => {
+const SelectVersion: FC<Props> = ({ versions, version, companyId }) => {
     const options = useMemo(
         () =>
             versions.map((version) => (
@@ -31,10 +30,10 @@ const SelectVersion: FC<Props> = ({ versions, version, companyId, radarId }) => 
 
     const changeHandler = useCallback(
         (event: SelectChangeEvent) => {
-            const version = getVersionById(versions, event.target.value) as Version;
-            navigate(buildRadarViewerUrl(companyId, radarId, version.id), { replace: true });
+            const version = getVersionById(versions, Number(event.target.value)) as VersionApiResponse;
+            navigate(buildRadarViewerUrl(companyId, version.radarId, version.id), { replace: true });
         },
-        [navigate, radarId, companyId, versions]
+        [navigate, companyId, versions]
     );
 
     return (

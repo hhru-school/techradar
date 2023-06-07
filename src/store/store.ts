@@ -4,16 +4,16 @@ import { apiSlice } from '../api/authApi';
 import { companyRadarsApi } from '../api/companyRadarsApi';
 import { radarsGridApi } from '../api/radarsGridApi';
 import activeBlipReducer from './activeBlipSlice';
-import activeSectorReducer from './activeSectorSlice';
 import authReducer from './authSlice/authSlice';
 import constructorRadarReducer from './constructorRadarSlice';
+import displayRadarReducer from './displayRadarSlice';
 import editRadarReducer from './editRadarSlice';
 import { authMiddleware } from './middleware/authMiddleware';
 import myRadarsReducer from './myRadarsSlice';
 
 const rootReducer = combineReducers({
     activeBlip: activeBlipReducer,
-    activeSector: activeSectorReducer,
+    displayRadar: displayRadarReducer,
     editRadar: editRadarReducer,
     constructorRadar: constructorRadarReducer,
     myRadars: myRadarsReducer,

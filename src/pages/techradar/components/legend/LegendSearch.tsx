@@ -3,7 +3,7 @@ import { Autocomplete, AutocompleteRenderInputParams, TextField } from '@mui/mat
 
 import { Blip } from '../../../../components/radar/types';
 import { clearActiveBlip, setActiveBlip, setOpenDescription } from '../../../../store/activeBlipSlice';
-import { setActiveSector } from '../../../../store/activeSectorSlice';
+import { setActiveSector } from '../../../../store/displayRadarSlice';
 import { useAppDispatch } from '../../../../store/hooks';
 
 type Props = {
