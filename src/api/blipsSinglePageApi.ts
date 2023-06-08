@@ -29,7 +29,13 @@ export const singlePageBlipApi = apiSlice.injectEndpoints({
                 body,
             }),
         }),
+        showTechLog: builder.query<BlipResponse, number>({
+            query: (blipId) => ({
+                method: 'GET',
+                url: `/blip-events?blip-id=${blipId}`,
+            }),
+        }),
     }),
 });
 
-export const { useGetBlipQuery, useUpdateBlipMutation } = singlePageBlipApi;
+export const { useGetBlipQuery, useUpdateBlipMutation, useShowTechLogQuery } = singlePageBlipApi;

@@ -2,7 +2,10 @@ import { FC, useCallback, useEffect } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, Container, Divider, Grid, SxProps, Typography } from '@mui/material';
 
-import { useGetBlipQuery } from '../../../api/blipsSinglePageApi';
+import {
+    useGetBlipQuery,
+    // , useShowTechLogQuery
+} from '../../../api/blipsSinglePageApi';
 import { IndexBlipEventApi } from '../../../api/types';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { setEditTechModalOpen, setTechData } from '../../../store/techSinglePageSlice';
@@ -54,11 +57,12 @@ const styles: Record<string, SxProps> = {
 };
 
 const TechSinglePage: FC = () => {
+    const { data } = useGetBlipQuery(154);
+    // const { data: logData } = useShowTechLogQuery(154);
     const dispatch = useAppDispatch();
     const showEditTechModal = useAppSelector((state) => state.techSinglePage.showEditTechModal);
     const techData = useAppSelector((state) => state.techSinglePage.techData);
-
-    const { data } = useGetBlipQuery(154);
+    // console.log(logData);
 
     const onEditTechNameHandler = useCallback(() => dispatch(setEditTechModalOpen(true)), [dispatch]);
 
