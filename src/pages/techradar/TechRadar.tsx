@@ -55,7 +55,7 @@ const TechRadar: FC = () => {
         if (companyRadars) {
             dispatch(setCompanyRadars(companyRadars));
         }
-    }, [dispatch, radar, companyId, companyRadars]);
+    }, [dispatch, companyId, companyRadars]);
 
     useEffect(() => {
         if (radar) {
@@ -75,7 +75,7 @@ const TechRadar: FC = () => {
 
             dispatch(setVersionAsset(versionAsset));
         }
-    }, [dispatch, versions, versionSlug]);
+    }, [dispatch, radar, versions, versionSlug]);
 
     const location = useLocation();
 
