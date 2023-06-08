@@ -1,11 +1,9 @@
 import { FC, useCallback, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Button, Container, Divider, Grid, SxProps, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Divider, Grid, SxProps, Typography } from '@mui/material';
 
-import {
-    useGetBlipQuery,
-    // , useShowTechLogQuery
-} from '../../../api/blipsSinglePageApi';
+import { useGetBlipQuery, useShowTechLogQuery } from '../../../api/blipsSinglePageApi';
 import { IndexBlipEventApi } from '../../../api/types';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { setEditTechModalOpen, setTechData } from '../../../store/techSinglePageSlice';
@@ -54,23 +52,25 @@ const styles: Record<string, SxProps> = {
     aboutBtn: { margin: '0 25px' },
     textField: { width: '100%', marginTop: '10px' },
     clickToSave: { ml: '3px' },
+    logLoading: { margin: '10px' },
+    logListGrid: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
 };
 
 const TechSinglePage: FC = () => {
-    const { data } = useGetBlipQuery(154);
-    // const { data: logData } = useShowTechLogQuery(154);
+    const { techId } = useParams<{ techId: string }>();
+    const { data: blipData, isLoading: blipLoading, isError: blipError } = useGetBlipQuery(Number(techId));
+    const { data: logData = [], isLoading: logLoading, isError: logError } = useShowTechLogQuery(Number(techId));
+
     const dispatch = useAppDispatch();
     const showEditTechModal = useAppSelector((state) => state.techSinglePage.showEditTechModal);
     const techData = useAppSelector((state) => state.techSinglePage.techData);
-    // console.log(logData);
-
     const onEditTechNameHandler = useCallback(() => dispatch(setEditTechModalOpen(true)), [dispatch]);
 
     useEffect(() => {
-        if (data) {
-            dispatch(setTechData({ ...data }));
+        if (blipData) {
+            dispatch(setTechData({ ...blipData }));
         }
-    }, [data, dispatch]);
+    }, [blipData, dispatch]);
 
     return (
         <Container maxWidth="xl">
@@ -90,9 +90,17 @@ const TechSinglePage: FC = () => {
                     <Typography sx={styles.textField} variant="subtitle1" gutterBottom>
                         {techData.description}
                     </Typography>
+                    {blipLoading && <CircularProgress color="inherit" sx={styles.logLoading} />}
+                    {blipError && (
+                        <Typography variant="body2">Произошла ошибка, попробуйте перезагрузить страницу</Typography>
+                    )}
                 </Grid>
-                <Grid item xs={12} md={6}>
-                    <LogList boxWidth="100%" boxMaxHeight="72vh" blipEvents={mock} />
+                <Grid item xs={12} md={6} sx={styles.logListGrid}>
+                    <LogList boxWidth="95%" boxMaxHeight="72vh" blipEvents={logData} isEditable={false} />
+                    {logLoading && <CircularProgress color="inherit" sx={styles.logLoading} />}
+                    {logError && (
+                        <Typography variant="body2">Произошла ошибка, попробуйте перезагрузить страницу</Typography>
+                    )}
                 </Grid>
             </Grid>
             {showEditTechModal && <EditTechModal />}

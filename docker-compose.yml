@@ -13,11 +13,7 @@ services:
             - radar
     techradar-api:
         container_name: techradar-api
-<<<<<<< HEAD
-        image: techradarapi/techradar-api:1.0.13
-=======
         image: techradarapi/techradar-api:1.0.14
->>>>>>> b4b005b (create useShowTechLogQuery)
         command: ["bash -c 'touch /app.jar'"]
         ports:
             - '8080:8080'

@@ -187,19 +187,15 @@ export interface NewVersionRequest {
     blipEventId?: number;
 }
 export interface NewVersionError {
-    error: {
-        data: string;
-        error: string;
-        originalStatus: number;
-        status: string;
-    };
+    error: string;
+    status: string;
 }
 
 export interface BlipResponse {
-    id?: number;
+    id: number;
     name: string;
     description: string;
-    radarId?: number;
+    radarId: number;
 }
 
 export interface UpdateBlipRequest {

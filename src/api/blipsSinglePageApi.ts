@@ -1,7 +1,7 @@
 // import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { apiSlice } from './authApi';
-import { BlipResponse, UpdateBlipRequest } from './types';
+import { BlipResponse, IndexBlipEventApi, UpdateBlipRequest } from './types';
 
 // const baseUrl = '/api';
 
@@ -29,7 +29,7 @@ export const singlePageBlipApi = apiSlice.injectEndpoints({
                 body,
             }),
         }),
-        showTechLog: builder.query<BlipResponse, number>({
+        showTechLog: builder.query<IndexBlipEventApi[], number>({
             query: (blipId) => ({
                 method: 'GET',
                 url: `/blip-events?blip-id=${blipId}`,

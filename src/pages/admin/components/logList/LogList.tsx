@@ -31,6 +31,7 @@ type LogProps = {
     hasHeader?: boolean;
     color?: string;
     isEditable?: boolean;
+    hasSearch?: boolean;
 };
 
 const LogList: FC<LogProps> = ({
@@ -39,6 +40,7 @@ const LogList: FC<LogProps> = ({
     blipEvents,
     hasHeader = true,
     isEditable = true,
+    hasSearch = false,
 }) => {
     const items = useMemo(
         () =>
@@ -57,13 +59,15 @@ const LogList: FC<LogProps> = ({
                     Лог событий
                 </Typography>
             )}
-            <TextField
-                sx={styles.textField}
-                size={'small'}
-                label="Поиск"
-                variant="outlined"
-                placeholder="Искать по логу..."
-            />
+            {hasSearch && (
+                <TextField
+                    sx={styles.textField}
+                    size={'small'}
+                    label="Поиск"
+                    variant="outlined"
+                    placeholder="Искать по логу..."
+                />
+            )}
             <Box sx={logBoxStyle}>{items}</Box>
         </Box>
     );

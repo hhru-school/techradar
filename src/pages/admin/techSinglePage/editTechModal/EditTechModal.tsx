@@ -16,8 +16,8 @@ export interface Values {
 }
 
 const validSchema = Yup.object({
-    name: Yup.string(),
-    description: Yup.string(),
+    name: Yup.string().required('Обязательно введите название!'),
+    description: Yup.string().required('Введите описание!'),
 });
 
 const EditTechModal: FC = () => {
@@ -40,7 +40,7 @@ const EditTechModal: FC = () => {
     const handleSubmit = useCallback(
         async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
             await updateBlip({
-                blipId: 154,
+                blipId: techData.id,
                 body: { name: values.name, description: values.description },
             })
                 .unwrap()
@@ -51,10 +51,10 @@ const EditTechModal: FC = () => {
                     setSubmitting(false);
                 })
                 .catch((err: NewVersionError) => {
-                    setErrMessage(err.error.error);
+                    setErrMessage(err.error);
                 });
         },
-        [dispatch, updateBlip]
+        [dispatch, techData.id, updateBlip]
     );
 
     const textSaveBtn = isLoading ? <CircularProgress color="inherit" sx={styles.progressCircle} /> : 'Сохранить';
