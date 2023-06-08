@@ -111,6 +111,8 @@ export const displayRadarSlice = createSlice({
         cleanUpRadar: (state) => {
             state.versionAsset = initialVersionAsset;
             state.radar = null;
+            state.activeSectorId = null;
+            state.hoveredSectorId = null;
         },
 
         cleanUpPage: () => {
