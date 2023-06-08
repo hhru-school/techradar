@@ -19,6 +19,4 @@ jobs:
           cd ~/server
           sed '/FRONTEND_TAG/d' .env -i
           echo "FRONTEND_TAG=F-latest" >> .env
-          docker compose down
-          docker compose up -d
-          docker image prune --all --force
+          ./frontend/deploy.sh
