@@ -1,4 +1,4 @@
-import { FC, useEffect, useLayoutEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 
 import {
@@ -86,7 +86,7 @@ const TechRadar: FC = () => {
         [dispatch]
     );
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         document.documentElement.scrollTo(0, scroll);
     }, [location]);
 

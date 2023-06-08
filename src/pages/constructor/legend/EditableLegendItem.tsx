@@ -5,8 +5,8 @@ import classNames from 'classnames';
 import { Blip } from '../../../components/radar/types';
 import { clearActiveBlip, setActiveBlip, setScrollOffset } from '../../../store/activeBlipSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { Bbox } from './EditableLegendMain';
 import LegendItemEditMenu from './LegendItemEditMenu';
+import { Bbox, getScrollOffset } from './utils';
 
 import styles from './legend.module.less';
 
@@ -16,19 +16,6 @@ type Props = {
 };
 
 const additionalOffset = 20;
-
-const getScrollOffset = (containerBbox: Bbox | null, itemBbox: Bbox | null): number => {
-    let scrollOffset = 0;
-    if (containerBbox && itemBbox) {
-        if (itemBbox.top < containerBbox.top) {
-            scrollOffset = itemBbox.top - containerBbox.top - additionalOffset;
-        }
-        if (itemBbox.bottom > containerBbox.bottom) {
-            scrollOffset = itemBbox.bottom - containerBbox.bottom + additionalOffset;
-        }
-    }
-    return scrollOffset;
-};
 
 const EditableLegendItem: FC<Props> = ({ blip, isSearching = false }) => {
     const activeBlipId = useAppSelector((state) => state.activeBlip.id);
@@ -55,7 +42,7 @@ const EditableLegendItem: FC<Props> = ({ blip, isSearching = false }) => {
     useEffect(() => {
         if (isActive) {
             const itemBbox = scrollRef.current?.getBoundingClientRect() as Bbox;
-            const scrollOffset = getScrollOffset(containerBbox, itemBbox);
+            const scrollOffset = getScrollOffset(containerBbox, itemBbox, additionalOffset);
             dispatch(setScrollOffset(scrollOffset));
         }
     }, [isActive, dispatch, containerBbox]);

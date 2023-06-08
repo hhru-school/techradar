@@ -1,8 +1,11 @@
+@import '../../../../styles/global.less';
+
 @containerSize: 600px;
 @controlHeight: 32px;
 
 .container {
     width: @containerSize;
+    margin-right: 50px;
 }
 
 .radarContainer {
@@ -17,9 +20,12 @@
     display: flex;
     justify-content: center;
     min-height: @controlHeight;
+    margin-top: 20px;
 }
 
 .selectContainer {
     display: flex;
     justify-content: center;
+    box-shadow: 0 0 5px rgb(156, 156, 156);
+    border-radius: 5px;
 }

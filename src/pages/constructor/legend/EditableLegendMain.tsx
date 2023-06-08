@@ -18,11 +18,6 @@ type Props = {
     isSearching?: boolean;
 };
 
-export interface Bbox {
-    top: number;
-    bottom: number;
-}
-
 const EditableLegendMain: FC<Props> = ({
     sectors,
     rings,

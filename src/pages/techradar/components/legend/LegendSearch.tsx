@@ -12,7 +12,7 @@ type Props = {
 
 const getOptionLabel = (blip: Blip) => blip.name;
 const groupBy = (blip: Blip) => blip.sector.name;
-const autoCompleteSx = { width: 300 };
+const autoCompleteSx = { width: 300, my: 2 };
 const renderInput = (params: AutocompleteRenderInputParams) => (
     <TextField {...params} label="Search" variant="standard" />
 );
