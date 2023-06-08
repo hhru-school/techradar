@@ -9,12 +9,6 @@ import SelectVersion from './selectMenu/SelectVersion';
 
 import styles from './radar.module.less';
 
-// type Props = {
-//     radar: RadarInterface | n;
-//     versions: VersionApiResponse[];
-//     currentVersion: VersionApiResponse;
-// };
-
 const style = {
     constrolSkeleton: { height: 32, width: 400, borderRadius: 16 },
     selectSceleton: { height: 50, width: 300, my: 1 },
@@ -24,16 +18,14 @@ const radius = 250;
 
 const RadarContainer: FC = () => {
     const radar = useAppSelector((state) => state.displayRadar.radar);
-    const version = useAppSelector((state) => state.displayRadar.version);
-    const versions = useAppSelector((state) => state.displayRadar.versions);
-
-    const areVersionsAvailable = version && versions;
+    const { versions, currentVersionId } = useAppSelector((state) => state.displayRadar.versionAsset);
+    const companyId = useAppSelector((state) => state.displayRadar.companyId);
 
     return (
         <div className={styles.container}>
             <div className={styles.selectContainer}>
-                {areVersionsAvailable ? (
-                    <SelectVersion versions={versions} version={version} companyId={1} />
+                {versions && currentVersionId >= 0 ? (
+                    <SelectVersion versions={versions} currentVersionId={currentVersionId} companyId={companyId} />
                 ) : (
                     <Skeleton variant="rectangular" sx={style.selectSceleton} />
                 )}

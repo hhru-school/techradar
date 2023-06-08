@@ -1,24 +1,24 @@
 import { FC, useEffect, useLayoutEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 import {
     useGetAllCompanyRadarsQuery,
     useGetAllRadarVersionsQuery,
-    useGetLastReleasedVersionQuery,
     useGetRadarByVersionIdQuery,
-    useGetVersionByIdQuery,
 } from '../../api/companyRadarsApi';
 import { isFetchBaseQueryError } from '../../api/helpers';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import Layout from '../../components/layout/Layout';
 import {
-    clearRadarDisplayAsset,
+    VersionSettingData,
+    cleanUpPage,
+    cleanUpRadar,
     setCompanyId,
     setCompanyRadars,
-    setRadarDisplayAsset,
+    setRadar,
+    setVersionAsset,
 } from '../../store/displayRadarSlice';
-import { useAppDispatch } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import LegendContainer from './components/legend/LegendContainer';
 import RadarContainer from './components/radar/RadarContainer';
 import TabContainer from './components/tab/TabContainer';
@@ -33,6 +33,8 @@ export interface Version {
 const scroll = 64;
 
 const TechRadar: FC = () => {
+    const currentVersionId = useAppSelector((state) => state.displayRadar.versionAsset.currentVersionId);
+
     const dispatch = useAppDispatch();
 
     const { companySlug, radarSlug, versionSlug } = useParams();
@@ -40,31 +42,53 @@ const TechRadar: FC = () => {
     const companyId = Number(companySlug);
     const radarId = Number(radarSlug);
 
-    const isLatestVersion = versionSlug === 'latest';
+    const { data: companyRadars } = useGetAllCompanyRadarsQuery(companyId);
 
-    const { data: radars } = useGetAllCompanyRadarsQuery(companyId);
-    const { data: lastReleaseVersion } = useGetLastReleasedVersionQuery(radarId, { skip: !isLatestVersion });
+    const { data: versions } = useGetAllRadarVersionsQuery(radarId);
 
-    const versionId = isLatestVersion ? lastReleaseVersion?.id : Number(versionSlug);
-
-    const { data: radar, error: radarError } = useGetRadarByVersionIdQuery(versionId ?? skipToken);
-
-    const { data: versions } = useGetAllRadarVersionsQuery(radarId, { skip: !radar });
-
-    const { data: version } = useGetVersionByIdQuery(versionId ?? skipToken);
+    const { data: radar, error: radarError } = useGetRadarByVersionIdQuery(currentVersionId, {
+        skip: currentVersionId <= 0,
+    });
 
     useEffect(() => {
-        dispatch(setRadarDisplayAsset({ radar, version, versions }));
         dispatch(setCompanyId(companyId));
-        dispatch(setCompanyRadars(radars || null));
-    }, [dispatch, radar, radars, companyId, version, versions]);
+        if (companyRadars) {
+            dispatch(setCompanyRadars(companyRadars));
+        }
+    }, [dispatch, companyId, companyRadars]);
+
+    useEffect(() => {
+        if (radar) {
+            dispatch(setRadar(radar));
+        }
+        return () => {
+            dispatch(cleanUpRadar());
+        };
+    }, [dispatch, radar]);
+
+    useEffect(() => {
+        if (versions) {
+            const versionAsset: VersionSettingData =
+                versionSlug === 'latest'
+                    ? { versions, displayLatest: true }
+                    : { versions, displayVersionId: Number(versionSlug) };
+
+            dispatch(setVersionAsset(versionAsset));
+        }
+    }, [dispatch, versions, versionSlug]);
 
     const location = useLocation();
 
+    useEffect(
+        () => () => {
+            dispatch(cleanUpPage());
+        },
+        [dispatch]
+    );
+
     useLayoutEffect(() => {
         document.documentElement.scrollTo(0, scroll);
-        dispatch(clearRadarDisplayAsset());
-    }, [location, dispatch]);
+    }, [location]);
 
     if (radarError) {
         return <ErrorMessage errorStatus={isFetchBaseQueryError(radarError) ? radarError.status : null} />;

@@ -7,15 +7,13 @@ import { VersionApiResponse } from '../../../../../api/types';
 
 type Props = {
     versions: VersionApiResponse[];
-    version: VersionApiResponse;
+    currentVersionId: number;
     companyId: number;
 };
 
 const label = 'Версия радара';
 
-const getVersionById = (versions: VersionApiResponse[], id: number) => versions.find((version) => version.id === id);
-
-const SelectVersion: FC<Props> = ({ versions, version, companyId }) => {
+const SelectVersion: FC<Props> = ({ versions, currentVersionId, companyId }) => {
     const options = useMemo(
         () =>
             versions.map((version) => (
@@ -26,20 +24,22 @@ const SelectVersion: FC<Props> = ({ versions, version, companyId }) => {
         [versions]
     );
 
+    const radarId = versions[0].radarId;
+
     const navigate = useNavigate();
 
-    const changeHandler = useCallback(
-        (event: SelectChangeEvent) => {
-            const version = getVersionById(versions, Number(event.target.value)) as VersionApiResponse;
-            navigate(buildRadarViewerUrl(companyId, version.radarId, version.id), { replace: true });
+    const handleChange = useCallback(
+        (event: SelectChangeEvent<number>) => {
+            const versionId = event.target.value as number;
+            navigate(buildRadarViewerUrl(companyId, radarId, versionId));
         },
-        [navigate, companyId, versions]
+        [navigate, companyId, radarId]
     );
 
     return (
         <FormControl sx={{ width: 300, my: 2 }}>
             <InputLabel>{label}</InputLabel>
-            <Select label={label} onChange={changeHandler} value={String(version.id)} variant="standard">
+            <Select label={label} variant="standard" onChange={handleChange} value={currentVersionId}>
                 {options}
             </Select>
         </FormControl>

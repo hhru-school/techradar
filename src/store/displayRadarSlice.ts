@@ -4,10 +4,15 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { VersionApiResponse } from '../api/types';
 import { RadarInterface } from '../components/radar/types';
 
-interface RadarDisplayAsset {
-    radar?: RadarInterface;
-    version?: VersionApiResponse;
-    versions?: VersionApiResponse[];
+interface VersionAsset {
+    versions: VersionApiResponse[] | null;
+    currentVersionId: number;
+}
+
+export interface VersionSettingData {
+    versions: VersionApiResponse[];
+    displayLatest?: boolean;
+    displayVersionId?: number;
 }
 
 interface CompanyRadarItem {
@@ -19,26 +24,42 @@ interface DisplayRadarState {
     radar: RadarInterface | null;
     companyRadars: CompanyRadarItem[] | null;
     companyId: number;
-    version: VersionApiResponse | null;
-    versions: VersionApiResponse[] | null;
+    versionAsset: VersionAsset;
     activeSectorId: number | null;
     hoveredSectorId: number | null;
     isTransforming: boolean;
 }
 
+const initialVersionAsset = {
+    versions: null,
+    currentVersionId: -1,
+};
+
 const initialState: DisplayRadarState = {
     radar: null,
     companyRadars: null,
     companyId: -1,
-    version: null,
-    versions: null,
+    versionAsset: initialVersionAsset,
     activeSectorId: null,
     hoveredSectorId: null,
     isTransforming: false,
 };
 
+const getLastVersion = (versions: VersionApiResponse[]): VersionApiResponse => {
+    const sorted = [...versions].sort((version1, version2) =>
+        version2.creationTime.localeCompare(version1.creationTime)
+    );
+    return sorted[0];
+};
+
+const getVersionById = (versions: VersionApiResponse[], id: number): VersionApiResponse => {
+    const res = versions.find((version) => version.id === id);
+    if (!res) throw new Error('Version not exist');
+    else return res;
+};
+
 export const displayRadarSlice = createSlice({
-    name: 'activeSector',
+    name: 'displayRadar',
     initialState,
     reducers: {
         setActiveSector: (state, action: PayloadAction<number>) => {
@@ -64,18 +85,6 @@ export const displayRadarSlice = createSlice({
             state.isTransforming = false;
         },
 
-        setRadarDisplayAsset: (state, action: PayloadAction<RadarDisplayAsset>) => {
-            state.radar = action.payload.radar || null;
-            state.version = action.payload.version || null;
-            state.versions = action.payload.versions || null;
-        },
-
-        clearRadarDisplayAsset: (state) => {
-            state.radar = null;
-            state.version = null;
-            state.versions = null;
-        },
-
         setCompanyRadars: (state, action: PayloadAction<CompanyRadarItem[] | null>) => {
             state.companyRadars = action.payload;
         },
@@ -84,11 +93,28 @@ export const displayRadarSlice = createSlice({
             state.companyId = action.payload;
         },
 
-        clearPageAsset: (state) => {
+        setVersionAsset: (state, action: PayloadAction<VersionSettingData>) => {
+            const data = action.payload;
+            if (data.versions.length === 0) throw new Error('Empty versions list');
+            state.versionAsset.versions = data.versions;
+            if (data.displayLatest) {
+                state.versionAsset.currentVersionId = getLastVersion(data.versions).id;
+            } else if (data.displayVersionId) {
+                state.versionAsset.currentVersionId = getVersionById(data.versions, data.displayVersionId).id;
+            }
+        },
+
+        setRadar: (state, action: PayloadAction<RadarInterface>) => {
+            state.radar = action.payload;
+        },
+
+        cleanUpRadar: (state) => {
+            state.versionAsset = initialVersionAsset;
             state.radar = null;
-            state.version = null;
-            state.versions = null;
-            state.companyRadars = null;
+        },
+
+        cleanUpPage: () => {
+            return initialState;
         },
     },
 });
@@ -100,10 +126,11 @@ export const {
     clearHoveredSector,
     clearActiveSector,
     setIsTransforming,
-    setRadarDisplayAsset,
-    clearRadarDisplayAsset,
     setCompanyRadars,
-    clearPageAsset,
+    setRadar,
+    setVersionAsset,
+    cleanUpRadar,
+    cleanUpPage,
 } = displayRadarSlice.actions;
 
 export default displayRadarSlice.reducer;
