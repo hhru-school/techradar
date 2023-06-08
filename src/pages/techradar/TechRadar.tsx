@@ -55,7 +55,7 @@ const TechRadar: FC = () => {
         if (companyRadars) {
             dispatch(setCompanyRadars(companyRadars));
         }
-    }, [dispatch, companyId, companyRadars]);
+    }, [dispatch, radar, companyId, companyRadars]);
 
     useEffect(() => {
         if (radar) {
