@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Chip, SxProps } from '@mui/material';
 
-import { buildRadarViewerUrl } from '../../../../api/radarApiUtils';
+import { buildRadarViewerUrl } from '../../api/radarApiUtils';
 
 import styles from './selectRadarPanel.module.less';
 

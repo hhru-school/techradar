@@ -215,6 +215,11 @@ export const editRadarSlice = createSlice({
             state.showEditBlipModal = false;
         },
 
+        openCreateBlipModal: (state) => {
+            state.activeSegment = { sector: state.radar.sectors[0], ring: state.radar.rings[0] };
+            state.showCreateBlipModal = true;
+        },
+
         closeCreateBlipModal: (state) => {
             state.showCreateBlipModal = false;
         },
@@ -410,9 +415,8 @@ export const editRadarSlice = createSlice({
             state.version = action.payload;
         },
 
-        cleanUp: (state) => {
-            state.isModalLoading = false;
-            state.hasError = false;
+        cleanUp: () => {
+            return initialState;
         },
 
         setShowSwitchReleaseModal: (state, action: PayloadAction<boolean>) => {
@@ -445,6 +449,7 @@ export const {
     setIsCreating,
     openEditBlipModal,
     closeEditBlipModal,
+    openCreateBlipModal,
     closeCreateBlipModal,
     openMoveBlipModal,
     closeMoveBlipModal,

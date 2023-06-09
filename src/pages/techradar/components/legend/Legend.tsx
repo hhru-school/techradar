@@ -1,9 +1,10 @@
-import { FC, memo, useMemo } from 'react';
+import { FC, memo, useEffect, useMemo, useRef } from 'react';
 
 import { defaultColorScheme } from '../../../../components/radar/styleConfig';
 import { RadarInterface } from '../../../../components/radar/types';
 import { getRingNames } from '../../../../components/radar/utils';
-import { useAppSelector } from '../../../../store/hooks';
+import { setLegendBbox } from '../../../../store/activeBlipSlice';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import LegendSearch from './LegendSearch';
 import LegendSectorGroup from './LegendSectorGroup';
 
@@ -13,9 +14,33 @@ type Props = { radar: RadarInterface; colorScheme?: string[] };
 
 const suggestsHeight = 150;
 
+export interface Bbox {
+    top: number;
+    bottom: number;
+}
+
+const offset = 10;
+
 const Legend: FC<Props> = ({ radar, colorScheme = defaultColorScheme }) => {
-    const hoveredSectorId = useAppSelector((state) => state.activeSector.hoveredSectorId);
-    const activeSectorId = useAppSelector((state) => state.activeSector.activeSectorId);
+    const hoveredSectorId = useAppSelector((state) => state.displayRadar.hoveredSectorId);
+    const activeSectorId = useAppSelector((state) => state.displayRadar.activeSectorId);
+
+    const scrollOffset = useAppSelector((state) => state.activeBlip.scrollOffset);
+
+    const dispatch = useAppDispatch();
+
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (ref.current) {
+            const bbox = ref.current.getBoundingClientRect();
+            dispatch(setLegendBbox({ top: bbox.top, bottom: bbox.bottom }));
+            ref.current.scrollBy({
+                top: scrollOffset,
+                behavior: 'smooth',
+            });
+        }
+    }, [ref, dispatch, scrollOffset]);
 
     const sectorGroups = useMemo(
         () =>
@@ -38,14 +63,16 @@ const Legend: FC<Props> = ({ radar, colorScheme = defaultColorScheme }) => {
     const isActiveSector = Boolean(activeSectorId);
 
     const legendContainerStyle = useMemo(
-        () => ({ marginTop: isActiveSector ? suggestsHeight + 30 : 0 }),
+        () => ({
+            marginTop: isActiveSector ? suggestsHeight + offset : offset,
+        }),
         [isActiveSector]
     );
 
     return (
         <div>
             <LegendSearch blips={radar.blips} />
-            <div className={styles.legendContainer} style={legendContainerStyle}>
+            <div className={styles.legendContainer} style={legendContainerStyle} ref={ref}>
                 {sectorGroups}
             </div>
         </div>

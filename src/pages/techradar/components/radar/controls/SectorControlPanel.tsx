@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-import { defaultColorScheme } from '../../../../components/radar/styleConfig';
-import { Sector } from '../../../../components/radar/types';
+import { defaultColorScheme } from '../../../../../components/radar/styleConfig';
+import { Sector } from '../../../../../components/radar/types';
 import SectorControlChip from './SectorControlChip';
 
 import styles from './controls.module.less';

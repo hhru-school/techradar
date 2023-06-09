@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Tabs, Tab } from '@mui/material';
 
 import { clearActiveBlip } from '../../../../store/activeBlipSlice';
-import { clearActiveSector } from '../../../../store/activeSectorSlice';
+import { clearActiveSector } from '../../../../store/displayRadarSlice';
 import { useAppDispatch } from '../../../../store/hooks';
 
 type Props = { radarId: number; companyId: number; radars: { id: number; name: string }[] };

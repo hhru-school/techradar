@@ -1,5 +1,6 @@
 import { FC, useEffect } from 'react';
 
+import Layout from '../../components/layout/Layout';
 import { ConstructorMode, setEditMode } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import MainContainer from './MainContainer';
@@ -19,12 +20,12 @@ const Constructor: FC<Props> = ({ mode = ConstructorMode.NewRadarCreation }) => 
     }, [dispatch, mode]);
 
     return (
-        <>
+        <Layout>
             <Modals />
             <MainEditPanel mode={mode} />
             <MainContainer radar={radar} />
             <ModeDispatcher mode={mode} />
-        </>
+        </Layout>
     );
 };
 

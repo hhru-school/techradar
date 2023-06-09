@@ -1,4 +1,4 @@
-@label-color: rgb(150, 150, 150);
+@import '../../../../styles/global.less';
 @item-max-width: 130px;
 
 .item {
@@ -13,11 +13,19 @@
     padding: 0;
     margin: 0;
     width: @item-max-width;
+    min-height: 50px;
 }
 
 .ringGroupHeader {
     margin: 5px 0;
     color: @label-color;
+}
+
+.emptyContainer {
+    width: @item-max-width;
+    color: @empty-container-color;
+    margin-top: 20px;
+    font-size: 12px;
 }
 
 .sectorGroup {
@@ -26,6 +34,7 @@
     padding: 0;
     margin: 0;
     display: flex;
+    flex-wrap: wrap;
     gap: 20px;
 }
 
@@ -41,6 +50,7 @@
 }
 
 .legendContainer {
-    min-height: 500px;
+    height: 600px;
+    overflow: auto;
     transition: margin-top 0.5s ease-out;
 }

@@ -3,7 +3,7 @@ import { FC, useCallback } from 'react';
 import { useUpdateVersionMutation } from '../../../api/companyRadarsApi';
 import { closeEditVersionNameModal, setVersionName } from '../../../store/editRadarSlice';
 import { useAppSelector } from '../../../store/hooks';
-import ModalRename from './ModalBasic';
+import ModalBasic from './ModalBasic';
 
 const ModalEditVersionName: FC = () => {
     const version = useAppSelector((state) => state.editRadar.version);
@@ -18,7 +18,7 @@ const ModalEditVersionName: FC = () => {
     );
 
     return (
-        <ModalRename
+        <ModalBasic
             open={true}
             name={version.name}
             names={[]}
@@ -27,7 +27,7 @@ const ModalEditVersionName: FC = () => {
             closeModalActionCreator={closeEditVersionNameModal}
             submitBtnActionCreator={setVersionName}
             submitBtnMutationHandler={submitBtnMutationHandler}
-        ></ModalRename>
+        ></ModalBasic>
     );
 };
 

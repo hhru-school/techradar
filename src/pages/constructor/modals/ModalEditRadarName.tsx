@@ -3,7 +3,7 @@ import { FC, useCallback } from 'react';
 import { useUpdateRadarMutation } from '../../../api/companyRadarsApi';
 import { closeEditRadarNameModal, setRadarName } from '../../../store/editRadarSlice';
 import { useAppSelector } from '../../../store/hooks';
-import ModalRename from './ModalBasic';
+import ModalBasic from './ModalBasic';
 
 const ModalEditRadarName: FC = () => {
     const radar = useAppSelector((state) => state.editRadar.radar);
@@ -18,7 +18,7 @@ const ModalEditRadarName: FC = () => {
     );
 
     return (
-        <ModalRename
+        <ModalBasic
             open={true}
             name={radar.name}
             names={[]}
@@ -27,7 +27,7 @@ const ModalEditRadarName: FC = () => {
             closeModalActionCreator={closeEditRadarNameModal}
             submitBtnActionCreator={setRadarName}
             submitBtnMutationHandler={submitBtnMutationHandler}
-        ></ModalRename>
+        ></ModalBasic>
     );
 };
 

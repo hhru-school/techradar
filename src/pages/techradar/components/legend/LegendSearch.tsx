@@ -3,7 +3,7 @@ import { Autocomplete, AutocompleteRenderInputParams, TextField } from '@mui/mat
 
 import { Blip } from '../../../../components/radar/types';
 import { clearActiveBlip, setActiveBlip, setOpenDescription } from '../../../../store/activeBlipSlice';
-import { setActiveSector } from '../../../../store/activeSectorSlice';
+import { setActiveSector } from '../../../../store/displayRadarSlice';
 import { useAppDispatch } from '../../../../store/hooks';
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 
 const getOptionLabel = (blip: Blip) => blip.name;
 const groupBy = (blip: Blip) => blip.sector.name;
-const autoCompleteSx = { width: 300 };
+const autoCompleteSx = { width: 300, my: 2 };
 const renderInput = (params: AutocompleteRenderInputParams) => (
     <TextField {...params} label="Search" variant="standard" />
 );

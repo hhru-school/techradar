@@ -8,7 +8,7 @@ import {
     setActiveSector,
     setHoveredSector,
     setIsTransforming,
-} from '../../store/activeSectorSlice';
+} from '../../store/displayRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import RadarSectorLabel from './RadarSectorLabel';
 import RadarSegment from './RadarSegment';
@@ -56,8 +56,8 @@ const RadarSector: FC<Props> = ({
 
     const endAngle = startAngle + sweepAngle;
 
-    const activeSectorId = useAppSelector((state) => state.activeSector.activeSectorId);
-    const hoveredSectorId = useAppSelector((state) => state.activeSector.hoveredSectorId);
+    const activeSectorId = useAppSelector((state) => state.displayRadar.activeSectorId);
+    const hoveredSectorId = useAppSelector((state) => state.displayRadar.hoveredSectorId);
 
     const dispatch = useAppDispatch();
 

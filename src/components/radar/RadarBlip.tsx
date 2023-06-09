@@ -23,7 +23,7 @@ type Props = {
 const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarVariant.Demonstrative }) => {
     const activeId = useAppSelector((state) => state.activeBlip.id);
 
-    const isTransforming = useAppSelector((state) => state.activeSector.isTransforming);
+    const isTransforming = useAppSelector((state) => state.displayRadar.isTransforming);
 
     const dispatch = useAppDispatch();
 
