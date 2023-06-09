@@ -3,12 +3,12 @@ import { Alert, Box, Button, CircularProgress, Modal, Typography } from '@mui/ma
 import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 
-import { useUpdateBlipMutation } from '../../../../api/blipsSinglePageApi';
-import { NewVersionError, BlipResponse } from '../../../../api/types';
-import { styles } from '../../../../components/modals/authFormModal/AuthFormModal';
-import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { setEditTechModalOpen, setTechData } from '../../../../store/techSinglePageSlice';
+import { useUpdateBlipMutation } from '../../../api/blipsSinglePageApi';
+import { BlipResponse, NewVersionError } from '../../../api/types';
+import { styles } from '../../../components/modals/authFormModal/AuthFormModal';
+import TextInputOutlined from '../../../components/textInputOutlined/TextInputOutlined';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { setEditTechModalOpen, setTechData } from '../../../store/techSinglePageSlice';
 
 export interface Values {
     name: string;

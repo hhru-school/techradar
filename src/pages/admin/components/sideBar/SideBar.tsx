@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from 'react';
 import { Button, Drawer } from '@mui/material';
 
-import { mock } from '../../techSinglePage/TechSinglePage';
+import { mock } from '../../../techSinglePage/TechSinglePage';
 import LogList from '../logList/LogList';
 
 const SideBar: FC = () => {

@@ -3,11 +3,11 @@ import { useParams } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, CircularProgress, Container, Divider, Grid, SxProps, Typography } from '@mui/material';
 
-import { useGetBlipQuery, useShowTechLogQuery } from '../../../api/blipsSinglePageApi';
-import { IndexBlipEventApi } from '../../../api/types';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { setEditTechModalOpen, setTechData } from '../../../store/techSinglePageSlice';
-import LogList from '../components/logList/LogList';
+import { useGetBlipQuery, useShowTechLogQuery } from '../../api/blipsSinglePageApi';
+import { IndexBlipEventApi } from '../../api/types';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { setEditTechModalOpen, setTechData } from '../../store/techSinglePageSlice';
+import LogList from '../admin/components/logList/LogList';
 import EditTechModal from './editTechModal/EditTechModal';
 
 export const mock: IndexBlipEventApi[] = [
