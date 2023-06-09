@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Button, CircularProgress, Container, Divider, Grid, SxProps, Typography } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, Container, Divider, Grid, SxProps, Typography } from '@mui/material';
 
 import { useGetBlipQuery, useShowTechLogQuery } from '../../api/blipsSinglePageApi';
 import { IndexBlipEventApi } from '../../api/types';
@@ -58,8 +58,13 @@ const styles: Record<string, SxProps> = {
 
 const TechSinglePage: FC = () => {
     const { techId } = useParams<{ techId: string }>();
-    const { data: blipData, isLoading: blipLoading, isError: blipError } = useGetBlipQuery(Number(techId));
-    const { data: logData = [], isLoading: logLoading, isError: logError } = useShowTechLogQuery(Number(techId));
+    const {
+        data: blipData,
+        error: blipErrorMessage,
+        isLoading: blipLoading,
+        isError: blipError,
+    } = useGetBlipQuery(Number(techId));
+    const { data: logData = [], isLoading: logLoading } = useShowTechLogQuery(Number(techId));
 
     const dispatch = useAppDispatch();
     const showEditTechModal = useAppSelector((state) => state.techSinglePage.showEditTechModal);
@@ -92,15 +97,26 @@ const TechSinglePage: FC = () => {
                     </Typography>
                     {blipLoading && <CircularProgress color="inherit" sx={styles.logLoading} />}
                     {blipError && (
-                        <Typography variant="body2">Произошла ошибка, попробуйте перезагрузить страницу</Typography>
+                        <Alert severity="error">
+                            {
+                                (
+                                    blipErrorMessage as {
+                                        status: number;
+                                        data: {
+                                            message: string;
+                                            status: string;
+                                            timestamp: string;
+                                            type: string;
+                                        };
+                                    }
+                                ).data.message
+                            }
+                        </Alert>
                     )}
                 </Grid>
                 <Grid item xs={12} md={6} sx={styles.logListGrid}>
                     <LogList boxWidth="95%" boxMaxHeight="72vh" blipEvents={logData} isEditable={false} />
                     {logLoading && <CircularProgress color="inherit" sx={styles.logLoading} />}
-                    {logError && (
-                        <Typography variant="body2">Произошла ошибка, попробуйте перезагрузить страницу</Typography>
-                    )}
                 </Grid>
             </Grid>
             {showEditTechModal && <EditTechModal />}
