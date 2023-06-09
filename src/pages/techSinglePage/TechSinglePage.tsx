@@ -69,6 +69,8 @@ const TechSinglePage: FC = () => {
     const dispatch = useAppDispatch();
     const showEditTechModal = useAppSelector((state) => state.techSinglePage.showEditTechModal);
     const techData = useAppSelector((state) => state.techSinglePage.techData);
+    const accessToken = useAppSelector((state) => state.auth.accessToken);
+
     const onEditTechNameHandler = useCallback(() => dispatch(setEditTechModalOpen(true)), [dispatch]);
 
     useEffect(() => {
@@ -81,9 +83,11 @@ const TechSinglePage: FC = () => {
         <Container maxWidth="xl">
             <Box sx={styles.headerBox}>
                 <Box sx={styles.nameTech}>{techData.name}</Box>
-                <Button variant="text" sx={styles.headerBtn} onClick={onEditTechNameHandler}>
-                    <EditIcon id="editTextAboutTech" color="primary" />
-                </Button>
+                {accessToken && (
+                    <Button variant="text" sx={styles.headerBtn} onClick={onEditTechNameHandler}>
+                        <EditIcon id="editTextAboutTech" color="primary" />
+                    </Button>
+                )}
             </Box>
             <Divider />
             <Grid container spacing={2} sx={styles.grid}>
