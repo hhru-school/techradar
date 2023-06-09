@@ -18,7 +18,6 @@ import * as Yup from 'yup';
 
 import { setRadarConstrTechModalOpen } from '../../../store/constructorRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import SideBar from '../components/sideBar/SideBar';
 import AddTechModal from './addTechModal/AddTechModal';
 import RadarConstructorGrid from './radarConstructorGrid/RadarConstructorGrid';
 import RadarPublishBtn from './radarPublishBtn/RadarPublishBtn';
@@ -145,7 +144,6 @@ const RadarConstructor: FC = () => {
                                 label="Название радара"
                                 placeholder="Введите название радара"
                             />
-                            <SideBar />
                         </Grid>
                         <Grid item sm={4}>
                             <RadarPublishBtn />
