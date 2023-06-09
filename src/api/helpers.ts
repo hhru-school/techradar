@@ -29,7 +29,9 @@ export function isErrorWithType(error: unknown): error is ErrorWithType {
         typeof error.data === 'object' &&
         error.data != null &&
         'type' in error.data &&
+        'message' in error.data &&
         typeof (error.data as any).type === 'string' &&
+        typeof (error.data as any).message === 'string' &&
         'status' in error
         /* eslint-enable  @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access*/
     );

@@ -4,6 +4,8 @@ import { ActionCreatorWithPayload, ActionCreatorWithoutPayload } from '@reduxjs/
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
+import { isErrorWithType } from '../../../api/helpers';
+import { ErrorType } from '../../../api/types';
 import { ConstructorMode } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import ModalTextField from './ModalTextField';
@@ -19,6 +21,8 @@ type Props = {
     closeModalActionCreator: ActionCreatorWithoutPayload;
     submitBtnActionCreator: ActionCreatorWithPayload<string>;
     submitBtnMutationHandler?: (value: string) => Promise<unknown>;
+    confirmBtnLabel?: string;
+    cancelBtnLabel?: string;
 };
 
 const btnSx = { width: 140 };
@@ -26,6 +30,14 @@ const btnSx = { width: 140 };
 interface Values {
     name: string;
 }
+
+const getErrorMessage = (error: unknown): string => {
+    if (isErrorWithType(error)) {
+        if (error.data.type === ErrorType.EntityExists) return 'Название уже существует!';
+        return error.data.message;
+    }
+    return 'Неизвестная ошибка. Сохранение не удалось!..';
+};
 
 const getValidationSchema = (values: string[]) =>
     Yup.object({
@@ -41,6 +53,8 @@ const ModalBasic: FC<Props> = ({
     closeModalActionCreator,
     submitBtnActionCreator,
     submitBtnMutationHandler,
+    confirmBtnLabel = 'Сохранить',
+    cancelBtnLabel = 'Отмена',
 }) => {
     const mode = useAppSelector((state) => state.editRadar.mode);
 
@@ -61,8 +75,12 @@ const ModalBasic: FC<Props> = ({
                 dispatch(submitBtnActionCreator(values.name));
             } else if (submitBtnMutationHandler) {
                 submitBtnMutationHandler(values.name)
-                    .then(() => dispatch(closeModalActionCreator()))
-                    .catch(() => setErrors({ name: 'Переименование не удалось' }));
+                    .then(() => {
+                        dispatch(closeModalActionCreator());
+                    })
+                    .catch((error) => {
+                        setErrors({ name: getErrorMessage(error) });
+                    });
             }
 
             setSubmitting(false);
@@ -85,15 +103,15 @@ const ModalBasic: FC<Props> = ({
                                 type="submit"
                                 disabled={!dirty || !isValid}
                             >
-                                Принять
+                                {confirmBtnLabel}
                             </Button>
                             <Button sx={btnSx} variant="outlined" onClick={() => dispatch(closeModalActionCreator())}>
-                                Отмена
+                                {cancelBtnLabel}
                             </Button>
                         </div>
                     </Form>
                 ),
-        [closeModalActionCreator, inputLabel, dispatch]
+        [closeModalActionCreator, inputLabel, cancelBtnLabel, confirmBtnLabel, dispatch]
     );
 
     return (
