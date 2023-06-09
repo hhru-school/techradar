@@ -214,3 +214,31 @@ export interface UpdateRadarApiResponse {
     authorId: number;
     companyId: number;
 }
+
+export enum ErrorType {
+    BadCredentials = 'BAD_CREDENTIALS',
+    ConstraintViolation = 'CONSTRAINT_VIOLATION',
+    EntityExists = 'ENTITY_EXISTS',
+    NotFound = 'NOT_FOUND',
+    Param = 'PARAM',
+    Unique = 'UNIQUE',
+    Unauthorized = 'UNAUTHORIZED',
+    Base = 'BASE',
+}
+
+export interface ErrorWithTypeData {
+    message: string;
+    status: string;
+    timestamp: string;
+    type: ErrorType;
+}
+
+export interface ErrorWithType {
+    data: {
+        message: string;
+        status: string;
+        timestamp: string;
+        type: ErrorType;
+    };
+    status: number;
+}

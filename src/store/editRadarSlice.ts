@@ -410,9 +410,8 @@ export const editRadarSlice = createSlice({
             state.version = action.payload;
         },
 
-        cleanUp: (state) => {
-            state.isModalLoading = false;
-            state.hasError = false;
+        cleanUp: () => {
+            return initialState;
         },
 
         setShowSwitchReleaseModal: (state, action: PayloadAction<boolean>) => {

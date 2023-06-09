@@ -47,11 +47,14 @@ const EditVersionDispatcher: FC = () => {
         if (log) {
             dispatch(setRadarLog(log));
         }
-
-        return () => {
-            dispatch(cleanUp());
-        };
     }, [dispatch, isLoading, radar, version, hasError, log]);
+
+    useEffect(
+        () => () => {
+            dispatch(cleanUp());
+        },
+        [dispatch]
+    );
 
     return null;
 };
