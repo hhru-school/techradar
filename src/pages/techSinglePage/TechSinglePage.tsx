@@ -4,6 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Alert, Box, Button, CircularProgress, Container, Divider, Grid, SxProps, Typography } from '@mui/material';
 
 import { useGetBlipQuery, useShowTechLogQuery } from '../../api/blipsSinglePageApi';
+import { TechSinglePageErrorResponse } from '../../api/types';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setEditTechModalOpen, setTechData } from '../../store/techSinglePageSlice';
 import LogList from '../admin/components/logList/LogList';
@@ -69,21 +70,7 @@ const TechSinglePage: FC = () => {
                     </Typography>
                     {blipLoading && <CircularProgress color="inherit" sx={styles.logLoading} />}
                     {blipError && (
-                        <Alert severity="error">
-                            {
-                                (
-                                    blipErrorMessage as {
-                                        status: number;
-                                        data: {
-                                            message: string;
-                                            status: string;
-                                            timestamp: string;
-                                            type: string;
-                                        };
-                                    }
-                                ).data.message
-                            }
-                        </Alert>
+                        <Alert severity="error">{(blipErrorMessage as TechSinglePageErrorResponse).data.message}</Alert>
                     )}
                 </Grid>
                 <Grid item xs={12} md={6} sx={styles.logListGrid}>

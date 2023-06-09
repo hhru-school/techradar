@@ -250,3 +250,13 @@ export interface ErrorWithType {
     };
     status: number;
 }
+
+export interface TechSinglePageErrorResponse {
+    data: {
+        message: string;
+        status: string;
+        timestamp: string;
+        type: string;
+    };
+    status: number;
+}
