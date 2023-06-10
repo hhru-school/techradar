@@ -5,7 +5,6 @@ import { ruRU } from '@mui/x-data-grid';
 
 import Header from './components/header/Header';
 import RequireAuth from './components/requireAuth.tsx/RequireAuth';
-import RadarConstructor from './pages/admin/radarConstructor/RadarConstructor';
 import Constructor from './pages/constructor/Constructor';
 import Main from './pages/main/Main';
 import TechSinglePage from './pages/techSinglePage/TechSinglePage';
@@ -59,7 +58,6 @@ const App: FC = () => {
                         element={<Constructor mode={ConstructorMode.NewVersionCreation} />}
                     />
                 </Route>
-                <Route path="/my-radars/radar-constructor" element={<RadarConstructor />} />
                 <Route path="/admin/*" element={<RequireAuth />} />
             </Routes>
         </ThemeProvider>
