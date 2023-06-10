@@ -1,6 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Backdrop, Box, Button, CircularProgress, Fade, Link, Modal, SxProps, Typography } from '@mui/material';
+import { Alert, Backdrop, Box, Button, CircularProgress, Fade, Modal, SxProps, Typography } from '@mui/material';
 import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
@@ -15,7 +15,7 @@ import './AuthFormModal.less';
 
 export const styles: Record<string, SxProps> = {
     btnSuccess: { marginTop: '20px' },
-    linkRegistr: { textAlign: 'center', mt: 3, cursor: 'pointer' },
+    linkRegistr: { mt: 3 },
     progressCircle: { height: '100%' },
     modal: {
         position: 'absolute',
@@ -97,11 +97,6 @@ const AuthFormModal: FC = () => {
     );
 
     const textSignInBtn = isLoading ? <CircularProgress color="inherit" sx={styles.progressCircle} /> : 'Войти';
-    const textSignUpBtn = isLoading ? (
-        <CircularProgress color="inherit" sx={styles.progressCircle} />
-    ) : (
-        'Зарегистрироваться'
-    );
 
     return (
         <Modal
@@ -146,9 +141,14 @@ const AuthFormModal: FC = () => {
                             </Button>
                             {message && <Alert severity="success">{message}</Alert>}
                             {errMessage && <Alert severity="error">{errMessage}</Alert>}
-                            <Link sx={styles.linkRegistr} onClick={handleRegistr}>
-                                {textSignUpBtn}
-                            </Link>
+                            <Button
+                                disabled={isLoading}
+                                variant="outlined"
+                                onClick={handleRegistr}
+                                sx={styles.linkRegistr}
+                            >
+                                Зарегистрироваться
+                            </Button>
                         </Form>
                     </Formik>
                 </Box>
