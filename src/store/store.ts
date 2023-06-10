@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { apiSlice } from '../api/authApi';
+import { singlePageBlipApi } from '../api/blipsSinglePageApi';
 import { companyRadarsApi } from '../api/companyRadarsApi';
 import { radarsGridApi } from '../api/radarsGridApi';
 import activeBlipReducer from './activeBlipSlice';
@@ -10,6 +11,7 @@ import displayRadarReducer from './displayRadarSlice';
 import editRadarReducer from './editRadarSlice';
 import { authMiddleware } from './middleware/authMiddleware';
 import myRadarsReducer from './myRadarsSlice';
+import techSinglePageReducer from './techSinglePageSlice';
 
 const rootReducer = combineReducers({
     activeBlip: activeBlipReducer,
@@ -18,9 +20,11 @@ const rootReducer = combineReducers({
     constructorRadar: constructorRadarReducer,
     myRadars: myRadarsReducer,
     auth: authReducer,
+    techSinglePage: techSinglePageReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
     [companyRadarsApi.reducerPath]: companyRadarsApi.reducer,
     [radarsGridApi.reducerPath]: radarsGridApi.reducer,
+    [singlePageBlipApi.reducerPath]: singlePageBlipApi.reducer,
 });
 
 export const store = configureStore({
@@ -30,6 +34,7 @@ export const store = configureStore({
             apiSlice.middleware,
             companyRadarsApi.middleware,
             radarsGridApi.middleware,
+            singlePageBlipApi.middleware,
             authMiddleware,
         ]),
 });

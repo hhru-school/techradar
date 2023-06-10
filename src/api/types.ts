@@ -187,12 +187,20 @@ export interface NewVersionRequest {
     blipEventId?: number;
 }
 export interface NewVersionError {
-    error: {
-        data: string;
-        error: string;
-        originalStatus: number;
-        status: string;
-    };
+    error: string;
+    status: string;
+}
+
+export interface BlipResponse {
+    id: number;
+    name: string;
+    description: string;
+    radarId: number;
+}
+
+export interface UpdateBlipRequest {
+    blipId: number;
+    body: { name: string; description: string; id?: number; radarId?: number };
 }
 
 export type RadarVersionData = Array<VersionData>;
@@ -239,6 +247,16 @@ export interface ErrorWithType {
         status: string;
         timestamp: string;
         type: ErrorType;
+    };
+    status: number;
+}
+
+export interface TechSinglePageErrorResponse {
+    data: {
+        message: string;
+        status: string;
+        timestamp: string;
+        type: string;
     };
     status: number;
 }

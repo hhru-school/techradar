@@ -1,3 +1,4 @@
+import { BlipResponse } from '../api/types';
 import { Blip } from '../components/radar/types';
 
 type Input = { label: string; id: string; name: string; type: string; autoComplete: string };
@@ -25,6 +26,8 @@ interface State {
     ringNames: string[];
     sectorNames: string[];
     blips: Blip[];
+    showEditTechModal: boolean;
+    techData: BlipResponse;
 }
 
 export const initialState: State = {
@@ -72,6 +75,8 @@ export const initialState: State = {
             autoComplete: 'off',
         },
     ],
+    showEditTechModal: false,
+    techData: { name: 'Имя не указано', description: 'Описание не указано', id: 0, radarId: 0 },
     showCreateVersionModal: false,
     createVersionId: null,
     showTechCreateModal: false,

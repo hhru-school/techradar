@@ -48,7 +48,7 @@ const MyRadarCreateModal: FC = () => {
                     setSubmitting(false);
                 })
                 .catch((err: NewVersionError) => {
-                    setErrMessage(err.error.error);
+                    setErrMessage(err.error);
                 });
         },
         [createVersion, dispatch, navigate, radarIdValue]
