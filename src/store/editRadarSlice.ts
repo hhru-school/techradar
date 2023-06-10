@@ -296,6 +296,7 @@ export const editRadarSlice = createSlice({
                     sector.name = action.payload;
                 }
             });
+            state.showEditSectorNameModal = false;
         },
 
         renameRing: (state, action: PayloadAction<string>) => {
@@ -304,6 +305,7 @@ export const editRadarSlice = createSlice({
                     ring.name = action.payload;
                 }
             });
+            state.showEditRingNameModal = false;
         },
 
         deleteSector: (state, action: PayloadAction<Sector>) => {
