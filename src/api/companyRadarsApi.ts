@@ -140,7 +140,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
 
         createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApiRequest>({
             query: (body) => ({
-                url: 'blip-events?is-insert=false',
+                url: 'blip-events?is-insert=true',
                 method: 'POST',
                 body,
             }),

@@ -308,6 +308,7 @@ export const editRadarSlice = createSlice({
 
         deleteSector: (state, action: PayloadAction<Sector>) => {
             state.radar.sectors = [...state.radar.sectors.filter((sector) => sector.id !== action.payload.id)];
+            state.showDeleteSectorModal = false;
         },
 
         openEditRingNameModal: (state, action: PayloadAction<Ring>) => {
@@ -321,6 +322,7 @@ export const editRadarSlice = createSlice({
 
         deleteRing: (state, action: PayloadAction<Ring>) => {
             state.radar.rings = state.radar.rings.filter((ring) => ring.id !== action.payload.id);
+            state.showDeleteRingModal = false;
         },
 
         openDeleteRingModal: (state, action: PayloadAction<Ring>) => {
@@ -342,10 +344,12 @@ export const editRadarSlice = createSlice({
 
         setRadarName: (state, action: PayloadAction<string>) => {
             state.radar.name = action.payload;
+            state.showEditRadarNameModal = false;
         },
 
         setVersionName: (state, action: PayloadAction<string>) => {
             state.version.name = action.payload;
+            state.showEditVersionNameModal = false;
         },
 
         openEditVersionNameModal: (state) => {
