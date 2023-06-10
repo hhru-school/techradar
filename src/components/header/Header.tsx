@@ -1,5 +1,5 @@
 import { FC, useState, MouseEvent, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Logout from '@mui/icons-material/Logout';
 import RadarIcon from '@mui/icons-material/Radar';
@@ -18,6 +18,7 @@ import {
     Tooltip,
     Typography,
     SxProps,
+    Button,
 } from '@mui/material';
 
 import { signOut, setAuthFormOpen } from '../../store/authSlice/authSlice';
@@ -69,6 +70,20 @@ const PaperProps = {
 const transformOrigin: PopoverOrigin = { horizontal: 'right', vertical: 'top' };
 const anchorOrigin: PopoverOrigin = { horizontal: 'right', vertical: 'bottom' };
 
+const CreateRadarBtn: FC = () => {
+    const navigate = useNavigate();
+
+    const handleCreateRadar = useCallback(() => {
+        navigate('/constructor/new/radar');
+    }, [navigate]);
+
+    return (
+        <Button onClick={handleCreateRadar} variant="outlined" color="secondary">
+            Создать радар
+        </Button>
+    );
+};
+
 const Header: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -107,6 +122,10 @@ const Header: FC = () => {
                         <Typography variant="h6" component="div" sx={styles.label}>
                             <Link to="/">TechRadar</Link>
                         </Typography>
+                        <Routes>
+                            <Route path="/admin/my-radars/grid/:radarId" element={<CreateRadarBtn />} />
+                            <Route path="/admin/my-radars" element={<CreateRadarBtn />} />
+                        </Routes>
                         <Box sx={styles.iconBox}>
                             <Tooltip title="Account settings">
                                 {username ? (

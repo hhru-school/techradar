@@ -1,7 +1,7 @@
-import { FC, SyntheticEvent, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { Routes, Route } from 'react-router';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Typography, Box, Container, Tab, Tabs, Button, SxProps } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Typography, Box, Container, Button, SxProps, Chip } from '@mui/material';
 
 import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
 import { useAppDispatch } from '../../../store/hooks';
@@ -14,75 +14,58 @@ import './MyRadars.less';
 const styles: Record<string, SxProps> = {
     tabs: { display: 'flex', alignItems: 'center', height: '48px' },
     tab: { minHeight: '48px' },
-    newRadarBtn: { height: '25px', mt: '11px', width: '240px' },
-    title: { textAlign: 'left', margin: '15px 0 0 40px' },
     newVersionBtn: { textAlign: 'left', margin: '15px 0 15px 40px' },
+    title: { textAlign: 'left', margin: '15px 0 0 40px' },
     box: { display: 'flex' },
+    defaultChip: { borderRadius: 1, fontSize: 14 },
 };
-
-type Tab = { id: number; label: string };
 
 const MyRadar: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { paramRadarId } = useParams();
     const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(1);
-    const [value, setValue] = useState<number>(0);
-
-    const handleChange = useCallback((event: SyntheticEvent, newValue: number) => {
-        setValue(newValue);
-    }, []);
 
     const handleCreateVersionModalOpen = useCallback(() => {
         if (paramRadarId) dispatch(setCreateVersionModalOpen({ show: true, radarId: +paramRadarId }));
     }, [dispatch, paramRadarId]);
 
-    const handleCreateRadar = useCallback(() => {
-        navigate('/constructor/new/radar');
-    }, [navigate]);
-
     const tabsItems = useMemo(
         () =>
             allCompanyRadars &&
-            allCompanyRadars.map((item, i) => {
-                if (paramRadarId && item.id === +paramRadarId) {
-                    setValue(i);
+            allCompanyRadars.map((radar, index) => {
+                const isActive = Number(paramRadarId) === radar.id;
+
+                if (!paramRadarId && index === 0) {
+                    navigate(`grid/${radar.id}`);
                 }
 
                 return (
-                    <Tab
-                        key={item.id}
-                        sx={styles.tab}
-                        label={item.name}
-                        icon={
-                            <Link key={item.id} to={`grid/${item.id}`} id={'tab-link'}>
-                                {item.name}
-                            </Link>
-                        }
+                    <Chip
+                        color={isActive ? 'success' : 'default'}
+                        sx={styles.defaultChip}
+                        key={radar.id}
+                        label={radar.name.toUpperCase()}
+                        onClick={() => {
+                            navigate(`grid/${radar.id}`);
+                        }}
                     />
                 );
             }),
-        [allCompanyRadars, paramRadarId]
+        [allCompanyRadars, navigate, paramRadarId]
     );
 
     return (
         <>
             <Container maxWidth="xl">
-                <Box sx={styles.box}>
-                    <Tabs
-                        sx={styles.tabs}
-                        value={value}
-                        onChange={handleChange}
-                        scrollButtons
-                        variant="scrollable"
-                        allowScrollButtonsMobile
-                    >
-                        {tabsItems}
-                    </Tabs>
-
-                    <Button onClick={handleCreateRadar} variant="outlined" color="secondary" sx={styles.newRadarBtn}>
-                        Создать радар
-                    </Button>
+                <Box sx={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', gap: '10px' }} className="container">
+                    {allCompanyRadars?.length ? (
+                        tabsItems
+                    ) : (
+                        <Typography variant="h6" sx={{ margin: '0 auto' }}>
+                            Здесь можно будет переключаться по радарам
+                        </Typography>
+                    )}
                 </Box>
                 <Typography variant="h5" sx={styles.title}>
                     Радары
@@ -90,16 +73,17 @@ const MyRadar: FC = () => {
                 <Button
                     onClick={handleCreateVersionModalOpen}
                     variant="outlined"
-                    color="secondary"
+                    color="primary"
                     sx={styles.newVersionBtn}
                 >
                     Сделать следующую версию +
                 </Button>
                 <Routes>
+                    <Route path="/" element={<MyRadarsDataGrid />} />
                     <Route path="/grid/:radarId" element={<MyRadarsDataGrid />} />
                 </Routes>
-                <MyRadarCreateModal />
             </Container>
+            <MyRadarCreateModal />
         </>
     );
 };

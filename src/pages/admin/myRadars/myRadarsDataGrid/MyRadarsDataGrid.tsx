@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Alert, Box, Skeleton, SxProps } from '@mui/material';
+import { Alert, Box, Button, Skeleton, SxProps, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, ruRU } from '@mui/x-data-grid';
 
 import { useDeleteRadarVersionMutation, useGetRadarVersionsQuery } from '../../../../api/radarsGridApi';
@@ -11,6 +11,12 @@ import { RadarVersionData, VersionData } from './types';
 
 const styles: Record<string, SxProps> = {
     box: { height: 'calc(100vh - 240px)', width: '100%' },
+    boxText: {
+        height: 'calc(100vh - 240px)',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+    },
 };
 
 type GridRadar = Array<RadarVersionData>;
@@ -18,6 +24,21 @@ type GridRadar = Array<RadarVersionData>;
 export interface GridRadarObj {
     [index: string]: GridRadar;
 }
+
+const NoRadarsMock: FC = () => {
+    return (
+        <Box sx={styles.boxText}>
+            <Typography sx={{ marginRight: '5px' }} variant="h6">
+                Кажется, у Вас нет радаров! Это не страшно, попробуйте
+            </Typography>
+            <Link to="/constructor/new/radar" style={{ textDecoration: 'underline' }}>
+                <Button variant="contained" color="success">
+                    СОЗДАТЬ СВОЙ ПЕРВЫЙ!
+                </Button>
+            </Link>
+        </Box>
+    );
+};
 
 const initialState = {
     pagination: {
@@ -29,7 +50,8 @@ const initialState = {
 
 const MyRadarsDataGrid: FC = () => {
     const { radarId } = useParams();
-    const id = Number(radarId);
+    const id = Number(radarId) || 0;
+
     const { data: radarVersions, isError, isLoading } = useGetRadarVersionsQuery(id);
     const [deleteRadarVersion] = useDeleteRadarVersionMutation();
 
@@ -135,9 +157,11 @@ const MyRadarsDataGrid: FC = () => {
     return (
         <Box sx={styles.box}>
             {isError && <Alert severity="error">Произошла ошибка попробуйте перезагрузить страницу</Alert>}
-            {isLoading ? (
+            {isLoading && (
                 <Skeleton sx={{ bgcolor: 'grey.900' }} variant="rectangular" width={'100%'} height={'100%'} />
-            ) : (
+            )}
+            {!rows.length && <NoRadarsMock />}
+            {!!rows.length && (
                 <DataGrid
                     rows={rows}
                     columns={columns}
