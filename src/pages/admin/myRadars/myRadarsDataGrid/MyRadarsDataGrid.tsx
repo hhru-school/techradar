@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Alert, Box, Button, Skeleton, SxProps, Typography, darken, lighten, styled } from '@mui/material';
@@ -18,6 +18,8 @@ const styles: Record<string, SxProps> = {
         display: 'flex',
         justifyContent: 'center',
     },
+    newRadarBtn: { height: '36px' },
+    mockText: { marginRight: '5px' },
 };
 
 type GridRadar = Array<RadarVersionData>;
@@ -27,16 +29,21 @@ export interface GridRadarObj {
 }
 
 const NoRadarsMock: FC = () => {
+    const navigate = useNavigate();
     return (
         <Box sx={styles.boxText}>
-            <Typography sx={{ marginRight: '5px' }} variant="h6">
+            <Typography sx={styles.mockText} variant="h6">
                 Кажется, у Вас нет радаров! Это не страшно, попробуйте
             </Typography>
-            <Link to="/constructor/new/radar" style={{ textDecoration: 'underline' }}>
-                <Button variant="contained" color="success">
-                    СОЗДАТЬ СВОЙ ПЕРВЫЙ!
-                </Button>
-            </Link>
+
+            <Button
+                variant="contained"
+                color="success"
+                sx={styles.newRadarBtn}
+                onClick={() => navigate('/constructor/new/radar')}
+            >
+                СОЗДАТЬ СВОЙ ПЕРВЫЙ!
+            </Button>
         </Box>
     );
 };
@@ -59,9 +66,7 @@ const MyRadarsDataGrid: FC = () => {
     const filteredVersionsList = useAppSelector((state) => state.myRadars.filteredVersionsList);
 
     const onlyPublicAndLastDraft = radarVersions?.filter((version) => version.release || version.toggleAvailable);
-
     const versionRows = filteredVersionsList ? onlyPublicAndLastDraft : radarVersions;
-
     const rows: RadarVersionData | [] = useMemo(
         () =>
             radarVersions && versionRows
@@ -186,11 +191,9 @@ const MyRadarsDataGrid: FC = () => {
     return (
         <Box sx={styles.box}>
             {isError && <Alert severity="error">Произошла ошибка попробуйте перезагрузить страницу</Alert>}
-            {isLoading && (
-                <Skeleton sx={{ bgcolor: 'grey.900' }} variant="rectangular" width={'100%'} height={'100%'} />
-            )}
+            {isLoading && <Skeleton variant="rounded" width={'100%'} height={'100%'} />}
             {!rows.length && <NoRadarsMock />}
-            {!!rows.length && (
+            {rows.length && (
                 <StyledDataGrid
                     rows={rows}
                     columns={columns}

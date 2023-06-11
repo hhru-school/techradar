@@ -19,6 +19,10 @@ const styles: Record<string, SxProps> = {
     title: { textAlign: 'left', margin: '15px 0 0 40px' },
     box: { display: 'flex' },
     defaultChip: { borderRadius: 1, fontSize: 14 },
+    formControlLabel: { margin: '0 0 0 5px' },
+    checkboxBox: { display: 'flex', alignItems: 'center' },
+    chipsItemsBox: { marginTop: '10px', display: 'flex', flexWrap: 'wrap', gap: '10px' },
+    insteadChipsTypo: { margin: '0 auto' },
 };
 
 const InfoBtn: FC = () => {
@@ -89,12 +93,8 @@ const MyRadar: FC = () => {
     const tabsItems = useMemo(
         () =>
             allCompanyRadars &&
-            allCompanyRadars.map((radar, index) => {
+            allCompanyRadars.map((radar) => {
                 const isActive = Number(paramRadarId) === radar.id;
-
-                if (!paramRadarId && index === 0) {
-                    navigate(`grid/${radar.id}`);
-                }
 
                 return (
                     <Chip
@@ -119,11 +119,11 @@ const MyRadar: FC = () => {
     return (
         <>
             <Container maxWidth="xl">
-                <Box sx={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', gap: '10px' }} className="container">
+                <Box sx={styles.chipsItemsBox} className="container">
                     {allCompanyRadars?.length ? (
                         tabsItems
                     ) : (
-                        <Typography variant="h6" sx={{ margin: '0 auto' }}>
+                        <Typography variant="h6" sx={styles.insteadChipsTypo}>
                             Здесь можно будет переключаться по радарам
                         </Typography>
                     )}
@@ -131,7 +131,7 @@ const MyRadar: FC = () => {
                 <Typography variant="h5" sx={styles.title}>
                     Радары
                 </Typography>
-                <Box sx={{ display: 'flex' }}>
+                <Box sx={styles.box}>
                     <Button
                         onClick={handleCreateVersionModalOpen}
                         variant="outlined"
@@ -141,9 +141,9 @@ const MyRadar: FC = () => {
                     >
                         Сделать следующую версию +
                     </Button>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Box sx={styles.checkboxBox}>
                         <FormControlLabel
-                            sx={{ margin: '0 0 0 5px' }}
+                            sx={styles.formControlLabel}
                             control={<Checkbox onChange={handleChange} checked={!filteredVersionsList} />}
                             label="Показать все версии"
                         />
