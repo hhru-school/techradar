@@ -10,6 +10,7 @@ import constructorRadarReducer from './constructorRadarSlice';
 import displayRadarReducer from './displayRadarSlice';
 import editRadarReducer from './editRadarSlice';
 import { authMiddleware } from './middleware/authMiddleware';
+import { logOutMiddleware } from './middleware/logOutMiddleware';
 import myRadarsReducer from './myRadarsSlice';
 import techSinglePageReducer from './techSinglePageSlice';
 
@@ -36,6 +37,7 @@ export const store = configureStore({
             radarsGridApi.middleware,
             singlePageBlipApi.middleware,
             authMiddleware,
+            logOutMiddleware,
         ]),
 });
 
