@@ -21,6 +21,54 @@ const styles: Record<string, SxProps> = {
     defaultChip: { borderRadius: 1, fontSize: 14 },
 };
 
+const InfoBtn: FC = () => {
+    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+    const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    }, []);
+
+    const handleClose = useCallback(() => {
+        setAnchorEl(null);
+    }, []);
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
+    return (
+        <>
+            <Button
+                aria-describedby={id}
+                onClick={handleClick}
+                sx={{
+                    borderRadius: '100%',
+                    height: '17px',
+                    minWidth: '0px',
+                    padding: '0',
+                    width: '17px',
+                    ml: '4px',
+                }}
+            >
+                <InfoIcon fontSize="small" />
+            </Button>
+            <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+            >
+                <Typography sx={{ p: 2 }}>
+                    Если чекбокс неактивен, скрыты все черновики, не связанные с последней публичной версией
+                </Typography>
+            </Popover>
+        </>
+    );
+};
+
 const MyRadar: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -56,19 +104,6 @@ const MyRadar: FC = () => {
             }),
         [allCompanyRadars, navigate, paramRadarId]
     );
-
-    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
-    const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    }, []);
-
-    const handleClose = useCallback(() => {
-        setAnchorEl(null);
-    }, []);
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
 
     const handleChange = useCallback(
         () => dispatch(setFilteredListVersions(!filteredVersionsList)),
@@ -106,34 +141,7 @@ const MyRadar: FC = () => {
                             control={<Checkbox onChange={handleChange} checked={!filteredVersionsList} />}
                             label="Показать все версии"
                         />
-                        <Button
-                            aria-describedby={id}
-                            onClick={handleClick}
-                            sx={{
-                                borderRadius: '100%',
-                                height: '17px',
-                                minWidth: '0px',
-                                padding: '0',
-                                width: '17px',
-                                ml: '4px',
-                            }}
-                        >
-                            <InfoIcon fontSize="small" />
-                        </Button>
-                        <Popover
-                            id={id}
-                            open={open}
-                            anchorEl={anchorEl}
-                            onClose={handleClose}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                        >
-                            <Typography sx={{ p: 2 }}>
-                                Если чекбокс неактивен, скрыты все черновики, не связанные с последней публичной версией
-                            </Typography>
-                        </Popover>
+                        <InfoBtn />
                     </Box>
                 </Box>
                 <Routes>
