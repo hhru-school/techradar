@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Alert, Box, Button, Skeleton, SxProps, Typography } from '@mui/material';
+import { Alert, Box, Button, Skeleton, SxProps, Typography, darken, lighten, styled } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, ruRU } from '@mui/x-data-grid';
 
 import { useDeleteRadarVersionMutation, useGetRadarVersionsQuery } from '../../../../api/radarsGridApi';
@@ -11,7 +11,7 @@ import { useAppSelector } from '../../../../store/hooks';
 import { RadarVersionData, VersionData } from './types';
 
 const styles: Record<string, SxProps> = {
-    box: { height: 'calc(100vh - 240px)', width: '100%' },
+    box: { height: 'calc(100vh - 280px)', width: '100%' },
     boxText: {
         height: 'calc(100vh - 240px)',
         width: '100%',
@@ -160,6 +160,27 @@ const MyRadarsDataGrid: FC = () => {
         [deleteVersionRow, editVersion]
     );
 
+    const getBackgroundColor = (color: string, mode: string) =>
+        mode === 'dark' ? darken(color, 0.6) : lighten(color, 0.7);
+
+    const getHoverBackgroundColor = (color: string, mode: string) =>
+        mode === 'dark' ? darken(color, 0.6) : lighten(color, 0.6);
+
+    const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+        '& .super-app-theme--да': {
+            backgroundColor: getBackgroundColor(theme.palette.success.main, theme.palette.mode),
+            '&:hover': {
+                backgroundColor: getHoverBackgroundColor(theme.palette.success.main, theme.palette.mode),
+            },
+        },
+        '& .super-app-theme--нет': {
+            backgroundColor: getBackgroundColor(theme.palette.primary.main, theme.palette.mode),
+            '&:hover': {
+                backgroundColor: getHoverBackgroundColor(theme.palette.primary.main, theme.palette.mode),
+            },
+        },
+    }));
+
     return (
         <Box sx={styles.box}>
             {isError && <Alert severity="error">Произошла ошибка попробуйте перезагрузить страницу</Alert>}
@@ -168,13 +189,14 @@ const MyRadarsDataGrid: FC = () => {
             )}
             {!rows.length && <NoRadarsMock />}
             {!!rows.length && (
-                <DataGrid
+                <StyledDataGrid
                     rows={rows}
                     columns={columns}
                     initialState={initialState}
                     pageSizeOptions={[5]}
                     disableRowSelectionOnClick
                     localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
+                    getRowClassName={(params) => `super-app-theme--${params.row.release as string}`}
                 />
             )}
         </Box>
