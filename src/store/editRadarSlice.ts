@@ -386,13 +386,11 @@ export const editRadarSlice = createSlice({
         },
 
         addNewSector: (state, action: PayloadAction<string>) => {
-            // Рефакторить при подключении API
             state.radar.sectors.push({ id: state.radar.sectors.length, name: action.payload });
             state.showAddNewSectorModal = false;
         },
 
         addNewRing: (state, action: PayloadAction<string>) => {
-            // Рефакторить при подключении API
             state.radar.rings.push({ id: state.radar.rings.length, name: action.payload });
             state.showAddNewSectorModal = false;
         },

@@ -1,4 +1,4 @@
-import { FC, memo, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -6,7 +6,16 @@ import {
     useGetRadarByVersionIdQuery,
     useGetVersionByIdQuery,
 } from '../../../api/companyRadarsApi';
-import { cleanUp, setHasError, setRadar, setIsLoading, setRadarLog, setVersion } from '../../../store/editRadarSlice';
+import {
+    cleanUp,
+    setHasError,
+    setRadar,
+    setIsLoading,
+    setRadarLog,
+    setVersion,
+    setEditMode,
+    ConstructorMode,
+} from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
 const EditVersionDispatcher: FC = () => {
@@ -38,6 +47,7 @@ const EditVersionDispatcher: FC = () => {
     useEffect(() => {
         dispatch(setIsLoading(isLoading));
         dispatch(setHasError(hasError));
+        dispatch(setEditMode(ConstructorMode.VersionEditing));
         if (version) {
             dispatch(setVersion(version));
         }
@@ -59,4 +69,4 @@ const EditVersionDispatcher: FC = () => {
     return null;
 };
 
-export default memo(EditVersionDispatcher);
+export default EditVersionDispatcher;

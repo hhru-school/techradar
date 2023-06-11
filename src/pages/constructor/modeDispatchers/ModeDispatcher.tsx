@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC } from 'react';
 
 import { ConstructorMode } from '../../../store/editRadarSlice';
 import EditVersionDispatcher from './EditVersionDispatcher';
@@ -12,4 +12,4 @@ const ModeDispatcher: FC<Props> = ({ mode }) => {
     return null;
 };
 
-export default memo(ModeDispatcher);
+export default ModeDispatcher;
