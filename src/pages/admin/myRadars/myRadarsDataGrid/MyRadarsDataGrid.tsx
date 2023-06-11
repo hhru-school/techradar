@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Alert, Box, Button, Skeleton, SxProps, Typography, darken, lighten, styled } from '@mui/material';
@@ -50,6 +50,7 @@ const initialState = {
 };
 
 const MyRadarsDataGrid: FC = () => {
+    const navigate = useNavigate();
     const { radarId } = useParams();
     const id = Number(radarId) || 0;
 
@@ -78,11 +79,13 @@ const MyRadarsDataGrid: FC = () => {
 
     const editVersion = useCallback(
         (params: { id: GridRowId }) => [
-            <Link to={`/constructor/edit/version/${params.id}`}>
-                <GridActionsCellItem icon={<EditIcon />} label="edit" />
-            </Link>,
+            <GridActionsCellItem
+                icon={<EditIcon />}
+                label="edit"
+                onClick={() => navigate(`/constructor/edit/version/${params.id}`)}
+            />,
         ],
-        []
+        [navigate]
     );
     const deleteRow = useCallback((id: GridRowId) => deleteRadarVersion(id), [deleteRadarVersion]);
     const deleteVersionRow = useCallback(
@@ -143,7 +146,6 @@ const MyRadarsDataGrid: FC = () => {
                 width: 100,
                 editable: false,
             },
-
             {
                 field: 'edit',
                 type: 'actions',
