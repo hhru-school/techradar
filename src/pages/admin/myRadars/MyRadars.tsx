@@ -103,7 +103,7 @@ const MyRadar: FC = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <FormControlLabel
                             sx={{ margin: '0 0 0 5px' }}
-                            control={<Checkbox onChange={handleChange} />}
+                            control={<Checkbox onChange={handleChange} checked={!filteredVersionsList} />}
                             label="Показать все версии"
                         />
                         <Button
