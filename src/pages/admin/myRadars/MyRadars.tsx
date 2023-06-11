@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Routes, Route } from 'react-router';
 import { useNavigate, useParams } from 'react-router-dom';
 import InfoIcon from '@mui/icons-material/Info';
@@ -79,6 +79,12 @@ const MyRadar: FC = () => {
     const handleCreateVersionModalOpen = useCallback(() => {
         if (paramRadarId) dispatch(setCreateVersionModalOpen({ show: true, radarId: +paramRadarId }));
     }, [dispatch, paramRadarId]);
+
+    useEffect(() => {
+        if (!paramRadarId && allCompanyRadars) {
+            navigate(`grid/${allCompanyRadars[0].id}`);
+        }
+    });
 
     const tabsItems = useMemo(
         () =>
