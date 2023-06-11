@@ -39,7 +39,6 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
     const handler = useCallback(
         async (blip: Blip, comment: string, distSegment?: Segment) => {
             try {
-                // if (!parentId || !version || !radarId) throw new Error();
                 setState({ isLoading: true, hasError: false });
                 let blipEventRequest: CreateBlipEventApiRequest = buildBlipEventRequest(
                     blip,
@@ -68,7 +67,7 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
                     }
                 }
 
-                const blipEvent = await createBlipEvent(blipEventRequest).unwrap();
+                const blipEvent = await createBlipEvent({ body: blipEventRequest, versionId: version.id }).unwrap();
                 const updatedVersion = await updateVersion({ ...version, blipEventId: blipEvent.id }).unwrap();
                 dispatch(setVersion(updatedVersion));
                 setState({ isLoading: false, hasError: false });

@@ -4,7 +4,7 @@ import { apiSlice } from './authApi';
 import { CreateRadarApiRequest, formatApiData } from './radarApiUtils';
 import {
     CreateBlipApiResponse,
-    CreateBlipEventApiRequest,
+    CreateBlipEventApiRequestParams,
     CreateBlipEventApiResponse,
     CreateRadarVersionDataApi,
     IndexBlipEventApi,
@@ -138,9 +138,9 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
             invalidatesTags: ['Radar', 'Version'],
         }),
 
-        createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApiRequest>({
-            query: (body) => ({
-                url: 'blip-events?is-insert=true',
+        createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApiRequestParams>({
+            query: ({ body, versionId }) => ({
+                url: `blip-events?radar-version-id=${versionId}`,
                 method: 'POST',
                 body,
             }),
