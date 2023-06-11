@@ -28,6 +28,7 @@ interface State {
     blips: Blip[];
     showEditTechModal: boolean;
     techData: BlipResponse;
+    filteredVersionsList: boolean;
 }
 
 export const initialState: State = {
@@ -86,4 +87,5 @@ export const initialState: State = {
     ringNames: defaultRingsNames.slice(0, defaultRingNumber),
     sectorNames: defaultSectorNames.slice(0, defaultSectorNumber),
     blips: [],
+    filteredVersionsList: true,
 };

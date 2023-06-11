@@ -6,7 +6,7 @@ import { NewVersionRequest, NewVersionResponse } from './types';
 
 export const radarsGridApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getRadarVersions: builder.query<RadarVersionData, number>({
+        getRadarVersions: builder.query<NewVersionResponse[], number>({
             query: (radarId) => ({
                 url: `/radar-versions?radar-id=${radarId}`,
             }),

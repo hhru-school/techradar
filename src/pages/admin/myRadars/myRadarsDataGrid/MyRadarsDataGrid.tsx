@@ -7,6 +7,7 @@ import { Alert, Box, Button, Skeleton, SxProps, Typography } from '@mui/material
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, ruRU } from '@mui/x-data-grid';
 
 import { useDeleteRadarVersionMutation, useGetRadarVersionsQuery } from '../../../../api/radarsGridApi';
+import { useAppSelector } from '../../../../store/hooks';
 import { RadarVersionData, VersionData } from './types';
 
 const styles: Record<string, SxProps> = {
@@ -54,11 +55,16 @@ const MyRadarsDataGrid: FC = () => {
 
     const { data: radarVersions, isError, isLoading } = useGetRadarVersionsQuery(id);
     const [deleteRadarVersion] = useDeleteRadarVersionMutation();
+    const filteredVersionsList = useAppSelector((state) => state.myRadars.filteredVersionsList);
+
+    const onlyPublicAndLastDraft = radarVersions?.filter((version) => version.release || version.toggleAvailable);
+
+    const versionRows = filteredVersionsList ? onlyPublicAndLastDraft : radarVersions;
 
     const rows: RadarVersionData | [] = useMemo(
         () =>
-            radarVersions !== undefined
-                ? radarVersions.map((item: VersionData) => {
+            radarVersions && versionRows
+                ? versionRows.map((item: VersionData) => {
                       return {
                           ...item,
                           release: item.release ? 'да' : 'нет',
@@ -67,7 +73,7 @@ const MyRadarsDataGrid: FC = () => {
                       };
                   })
                 : [],
-        [radarVersions]
+        [radarVersions, versionRows]
     );
 
     const editVersion = useCallback(
