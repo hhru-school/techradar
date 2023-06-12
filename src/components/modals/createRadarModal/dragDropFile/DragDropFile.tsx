@@ -16,10 +16,7 @@ import './DragDropFile.less';
 // };
 
 const DragDropFile: FC = () => {
-    const [
-        createFromFile,
-        // , { isLoading }
-    ] = useCreateFromFileMutation();
+    const [createFromFile, { isLoading }] = useCreateFromFileMutation();
     const [dragActive, setDragActive] = useState<boolean>(false);
     const inputRef = useRef(null);
     const [message, setMessage] = useState<string | null>(null);
@@ -40,7 +37,7 @@ const DragDropFile: FC = () => {
         [createFromFile]
     );
 
-    const handleDrag: DragEventHandler<HTMLDivElement | HTMLFormElement> = (e) => {
+    const handleDrag: DragEventHandler<HTMLDivElement | HTMLFormElement> = useCallback((e) => {
         e.preventDefault();
         e.stopPropagation();
         if (e.type === 'dragenter' || e.type === 'dragover') {
@@ -48,29 +45,35 @@ const DragDropFile: FC = () => {
         } else if (e.type === 'dragleave') {
             setDragActive(false);
         }
-    };
+    }, []);
 
-    const handleDrop: DragEventHandler<HTMLDivElement> = async (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragActive(false);
-        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
-            await onUploadHandler(e.dataTransfer.files[0]);
-        }
-    };
+    const handleDrop: DragEventHandler<HTMLDivElement> = useCallback(
+        async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setDragActive(false);
+            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+                await onUploadHandler(e.dataTransfer.files[0]);
+            }
+        },
+        [onUploadHandler]
+    );
 
-    const handleChange: ChangeEventHandler<HTMLInputElement> = async (e) => {
-        e.preventDefault();
-        if (e.target.files && e.target.files[0]) {
-            await onUploadHandler(e.target.files[0]);
-        }
-    };
+    const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+        async (e) => {
+            e.preventDefault();
+            if (e.target.files && e.target.files[0]) {
+                await onUploadHandler(e.target.files[0]);
+            }
+        },
+        [onUploadHandler]
+    );
 
-    const onButtonClick = () => {
+    const onButtonClick = useCallback(() => {
         if (inputRef.current) {
             (inputRef.current as HTMLButtonElement).click();
         }
-    };
+    }, []);
 
     return (
         <>
@@ -79,7 +82,7 @@ const DragDropFile: FC = () => {
                 <label id="label-file-upload" htmlFor="input-file-upload" className={dragActive ? 'drag-active' : ''}>
                     <Box>
                         <Typography>Перетащите свой файл (в формате .csv или .xls) сюда или</Typography>
-                        <Button variant="contained" sx={styles.btn} onClick={onButtonClick}>
+                        <Button variant="contained" sx={styles.btn} onClick={onButtonClick} disabled={isLoading}>
                             Загрузите файл
                         </Button>
                     </Box>
