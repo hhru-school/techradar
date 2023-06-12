@@ -1,8 +1,7 @@
 import { FC, ReactNode, useCallback } from 'react';
 import { Alert, Button, Modal } from '@mui/material';
-import { ActionCreatorWithPayload, ActionCreatorWithoutPayload } from '@reduxjs/toolkit';
+import { ActionCreatorWithoutPayload } from '@reduxjs/toolkit';
 
-import { Ring, Sector } from '../../../components/radar/types';
 import { useAppDispatch } from '../../../store/hooks';
 
 import styles from './modal.module.less';
@@ -10,22 +9,14 @@ import styles from './modal.module.less';
 const style = { btnSx: { width: 140 } };
 
 type Props = {
-    item: Sector | Ring;
     closeBtnActionCreator: ActionCreatorWithoutPayload;
-    deleteBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
+    deleteBtnActionCreator: ActionCreatorWithoutPayload;
     header: string | ReactNode;
     message: string | ReactNode;
     warningMessage?: string;
 };
 
-const ModalDelete: FC<Props> = ({
-    item: itemId,
-    closeBtnActionCreator,
-    deleteBtnActionCreator,
-    header,
-    message,
-    warningMessage,
-}) => {
+const ModalDelete: FC<Props> = ({ closeBtnActionCreator, deleteBtnActionCreator, header, message, warningMessage }) => {
     const dispatch = useAppDispatch();
 
     const cancelBtnClickHandler = useCallback(() => {
@@ -33,8 +24,8 @@ const ModalDelete: FC<Props> = ({
     }, [dispatch, closeBtnActionCreator]);
 
     const confirmBtnClickHandler = useCallback(() => {
-        dispatch(deleteBtnActionCreator(itemId));
-    }, [dispatch, deleteBtnActionCreator, itemId]);
+        dispatch(deleteBtnActionCreator());
+    }, [dispatch, deleteBtnActionCreator]);
 
     return (
         <Modal open={true}>
@@ -50,10 +41,10 @@ const ModalDelete: FC<Props> = ({
                         onClick={confirmBtnClickHandler}
                         type="button"
                     >
-                        Delete
+                        Удалить
                     </Button>
                     <Button sx={style.btnSx} variant="outlined" onClick={cancelBtnClickHandler} type="button">
-                        Cancel
+                        Отмена
                     </Button>
                 </div>
             </div>

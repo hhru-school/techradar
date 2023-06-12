@@ -1,39 +1,31 @@
 import { FC } from 'react';
-import { Delete, Edit } from '@mui/icons-material';
-import { IconButton, MenuItem } from '@mui/material';
+import { MenuItem } from '@mui/material';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 
-import { Ring, Sector } from '../../../components/radar/types';
 import { useAppDispatch } from '../../../store/hooks';
 
-type Props = {
-    item: Sector | Ring;
-    deleteBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
-    editBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
-    isOnlyItem: boolean;
+const style = {
+    menuItem: {
+        minWidth: 200,
+    },
 };
 
-const EditMenuItem: FC<Props> = ({ item, deleteBtnActionCreator, editBtnActionCreator, isOnlyItem }) => {
+type Props = {
+    item: { id: number; name: string };
+    openModalActionCreator: ActionCreatorWithPayload<{ id: number; name: string }>;
+    closeHandler: () => void;
+};
+
+const EditMenuItem: FC<Props> = ({ item, openModalActionCreator, closeHandler }) => {
     const dispatch = useAppDispatch();
 
-    const editClickHandler = () => {
-        dispatch(editBtnActionCreator(item));
-    };
-
-    const deleteClickHandler = () => {
-        dispatch(deleteBtnActionCreator(item));
+    const clickHandler = () => {
+        dispatch(openModalActionCreator(item));
+        closeHandler();
     };
 
     return (
-        <MenuItem>
-            <IconButton onClick={editClickHandler}>
-                <Edit />
-            </IconButton>
-            {!isOnlyItem && (
-                <IconButton onClick={deleteClickHandler}>
-                    <Delete />
-                </IconButton>
-            )}
+        <MenuItem sx={style.menuItem} onClick={clickHandler}>
             {item.name}
         </MenuItem>
     );

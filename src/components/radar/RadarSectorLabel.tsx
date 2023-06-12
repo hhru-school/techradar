@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from 'react';
 import classNames from 'classnames';
 
-import { openEditSectorNameModal, setShowEditIcon } from '../../store/editRadarSlice';
+import { openEditSectorModal, setShowEditIcon } from '../../store/editRadarSlice';
 import { useAppDispatch } from '../../store/hooks';
 import { sectorNameFontSize, sectorNameTextOffset } from './styleConfig';
 import { RadarVariant, Sector } from './types';
@@ -29,7 +29,7 @@ const RadarSectorLabel: FC<Props> = ({
     const dispatch = useAppDispatch();
 
     const clickHandler = () => {
-        dispatch(openEditSectorNameModal(sector));
+        dispatch(openEditSectorModal(sector));
     };
 
     const [isActive, setIsActive] = useState(false);

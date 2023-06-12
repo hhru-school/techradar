@@ -16,7 +16,6 @@ const ModalDeleteRing: FC = () => {
 
         return (
             <ModalDelete
-                item={editingRing}
                 closeBtnActionCreator={closeDeleteRingModal}
                 deleteBtnActionCreator={deleteRing}
                 header="Delete sector"

@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from 'react';
 import classNames from 'classnames';
 
-import { openEditRingNameModal, setShowEditIcon } from '../../store/editRadarSlice';
+import { openEditRingModal, setShowEditIcon } from '../../store/editRadarSlice';
 import { useAppDispatch } from '../../store/hooks';
 import { RadarVariant, Ring, Segment } from './types';
 import { convertRadToDeg } from './utils';
@@ -29,8 +29,8 @@ const RadarRingLabel: FC<Props> = ({ x, y, segment, ring, variant = RadarVariant
 
     const dispatch = useAppDispatch();
 
-    const doubleClickHandler = () => {
-        dispatch(openEditRingNameModal(ring));
+    const clickHandler = () => {
+        dispatch(openEditRingModal(ring));
     };
 
     const [isActive, setIsActive] = useState(false);
@@ -51,7 +51,7 @@ const RadarRingLabel: FC<Props> = ({ x, y, segment, ring, variant = RadarVariant
 
     return (
         <text
-            onDoubleClick={isEditable ? doubleClickHandler : undefined}
+            onClick={isEditable ? clickHandler : undefined}
             onMouseEnter={isEditable ? mouseEnterHandler : undefined}
             onMouseLeave={isEditable ? mouseLeaveHandler : undefined}
             className={classes}

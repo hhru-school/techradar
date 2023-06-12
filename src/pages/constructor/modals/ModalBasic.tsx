@@ -1,5 +1,6 @@
 import { FC, useCallback, useMemo } from 'react';
-import { Button, Modal } from '@mui/material';
+import { Delete } from '@mui/icons-material';
+import { Button, IconButton, Modal } from '@mui/material';
 import { ActionCreatorWithPayload, ActionCreatorWithoutPayload } from '@reduxjs/toolkit';
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
@@ -23,6 +24,8 @@ type Props = {
     submitBtnMutationHandler?: (value: string) => Promise<unknown>;
     confirmBtnLabel?: string;
     cancelBtnLabel?: string;
+    hasDeleteButton?: boolean;
+    deleteBtnActionCreator?: ActionCreatorWithoutPayload;
 };
 
 const btnSx = { width: 140 };
@@ -55,6 +58,8 @@ const ModalBasic: FC<Props> = ({
     submitBtnMutationHandler,
     confirmBtnLabel = 'Сохранить',
     cancelBtnLabel = 'Отмена',
+    hasDeleteButton = false,
+    deleteBtnActionCreator,
 }) => {
     const mode = useAppSelector((state) => state.editRadar.mode);
 
@@ -88,6 +93,11 @@ const ModalBasic: FC<Props> = ({
         [dispatch, submitBtnActionCreator, closeModalActionCreator, submitBtnMutationHandler, isNewRadar]
     );
 
+    const deleteHandler = useCallback(() => {
+        if (!deleteBtnActionCreator) throw new Error('Delete action creator not assigned!');
+        dispatch(deleteBtnActionCreator());
+    }, [dispatch, deleteBtnActionCreator]);
+
     const form = useMemo(
         () =>
             ({ dirty, isValid }: { dirty: boolean; isValid: boolean }) =>
@@ -118,7 +128,14 @@ const ModalBasic: FC<Props> = ({
         <Modal open={open}>
             <>
                 <div className={styles.modal}>
-                    <h3 className={styles.header}>{header}</h3>
+                    <div className={styles.headerContainer}>
+                        <h3 className={styles.header}>{header}</h3>
+                        {hasDeleteButton && (
+                            <IconButton onClick={deleteHandler}>
+                                <Delete />
+                            </IconButton>
+                        )}
+                    </div>
                     <Formik
                         initialValues={initialValues}
                         validationSchema={getValidationSchema(names)}

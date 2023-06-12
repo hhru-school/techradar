@@ -2,12 +2,10 @@ import { FC } from 'react';
 
 import { Ring, Sector } from '../../../components/radar/types';
 import {
-    deleteRing,
     openAddNewRingModal,
     openAddNewSectorModal,
-    openDeleteSectorModal,
-    openEditRingNameModal,
-    openEditSectorNameModal,
+    openEditRingModal,
+    openEditSectorModal,
 } from '../../../store/editRadarSlice';
 import EditItemsDropDown from './EditItemsDropDown';
 
@@ -24,15 +22,13 @@ const RadarBaseEditPanel: FC<Props> = ({ sectors, rings }) => {
             <EditItemsDropDown
                 label="Секторы"
                 items={sectors}
-                editBtnActionCreator={openEditSectorNameModal}
-                deleteBtnActionCreator={openDeleteSectorModal}
+                openModalActionCreator={openEditSectorModal}
                 addItemActionCreator={openAddNewSectorModal}
             />
             <EditItemsDropDown
                 label="Кольца"
                 items={rings}
-                editBtnActionCreator={openEditRingNameModal}
-                deleteBtnActionCreator={deleteRing}
+                openModalActionCreator={openEditRingModal}
                 addItemActionCreator={openAddNewRingModal}
             />
         </div>

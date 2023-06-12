@@ -1,7 +1,7 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import { Add } from '@mui/icons-material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Button, IconButton, Menu, MenuItem } from '@mui/material';
+import { Button, Menu, MenuItem } from '@mui/material';
 import { ActionCreatorWithPayload, ActionCreatorWithoutPayload } from '@reduxjs/toolkit';
 
 import { Ring, Sector } from '../../../components/radar/types';
@@ -11,20 +11,13 @@ import EditMenuItem from './EditMenuItem';
 type Props = {
     items: Ring[] | Sector[];
     label: string;
-    deleteBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
-    editBtnActionCreator: ActionCreatorWithPayload<Sector | Ring>;
+    openModalActionCreator: ActionCreatorWithPayload<Ring | Sector>;
     addItemActionCreator: ActionCreatorWithoutPayload;
 };
 
 const style = { btnSx: { width: 130 } };
 
-const EditItemsDropDown: FC<Props> = ({
-    items,
-    label,
-    deleteBtnActionCreator,
-    editBtnActionCreator,
-    addItemActionCreator,
-}) => {
+const EditItemsDropDown: FC<Props> = ({ items, label, openModalActionCreator, addItemActionCreator }) => {
     const dispatch = useAppDispatch();
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -42,12 +35,11 @@ const EditItemsDropDown: FC<Props> = ({
                 <EditMenuItem
                     key={item.id}
                     item={item}
-                    deleteBtnActionCreator={deleteBtnActionCreator}
-                    editBtnActionCreator={editBtnActionCreator}
-                    isOnlyItem={items.length === 1}
+                    openModalActionCreator={openModalActionCreator}
+                    closeHandler={handleClose}
                 />
             )),
-        [items, deleteBtnActionCreator, editBtnActionCreator]
+        [items, openModalActionCreator]
     );
 
     const addItemClickHandler = useCallback(() => {
@@ -59,9 +51,6 @@ const EditItemsDropDown: FC<Props> = ({
         <div>
             <Button
                 id="basic-button"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
                 variant="outlined"
                 endIcon={<ArrowDropDownIcon />}
@@ -69,20 +58,10 @@ const EditItemsDropDown: FC<Props> = ({
             >
                 {label}
             </Button>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
-            >
+            <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
                 {menuItems}
-                <MenuItem>
-                    <IconButton color="success" onClick={addItemClickHandler}>
-                        <Add />
-                    </IconButton>
+                <MenuItem onClick={addItemClickHandler}>
+                    <Add color="success" />
                 </MenuItem>
             </Menu>
         </div>
