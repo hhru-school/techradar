@@ -76,10 +76,11 @@ const ModalBasic: FC<Props> = ({
 
     const submitHandler = useCallback(
         (values: Values, { setSubmitting, setErrors }: FormikHelpers<Values>) => {
+            const value = values.name.trim();
             if (isNewRadar) {
-                dispatch(submitBtnActionCreator(values.name));
+                dispatch(submitBtnActionCreator(value));
             } else if (submitBtnMutationHandler) {
-                submitBtnMutationHandler(values.name)
+                submitBtnMutationHandler(value)
                     .then(() => {
                         dispatch(closeModalActionCreator());
                     })

@@ -1,12 +1,12 @@
 import { FC } from 'react';
 
-import { Ring, Sector } from '../../../components/radar/types';
+import { Ring, Sector } from '../../../../components/radar/types';
 import {
     openAddNewRingModal,
     openAddNewSectorModal,
     openEditRingModal,
     openEditSectorModal,
-} from '../../../store/editRadarSlice';
+} from '../../../../store/editRadarSlice';
 import EditItemsDropDown from './EditItemsDropDown';
 
 import styles from './radarBaseEditPanel.module.less';

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { MenuItem } from '@mui/material';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 
-import { useAppDispatch } from '../../../store/hooks';
+import { useAppDispatch } from '../../../../store/hooks';
 
 const style = {
     menuItem: {

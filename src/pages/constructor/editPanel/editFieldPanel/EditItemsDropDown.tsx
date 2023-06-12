@@ -4,8 +4,8 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Button, Menu, MenuItem } from '@mui/material';
 import { ActionCreatorWithPayload, ActionCreatorWithoutPayload } from '@reduxjs/toolkit';
 
-import { Ring, Sector } from '../../../components/radar/types';
-import { useAppDispatch } from '../../../store/hooks';
+import { Ring, Sector } from '../../../../components/radar/types';
+import { useAppDispatch } from '../../../../store/hooks';
 import EditMenuItem from './EditMenuItem';
 
 type Props = {
