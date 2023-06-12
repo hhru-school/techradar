@@ -2,6 +2,8 @@ import { FC, useState, useRef, useCallback, DragEventHandler, ChangeEventHandler
 import { Box, Typography, Button, Alert } from '@mui/material';
 
 import { UploadFileResponse, useCreateFromFileMutation } from '../../../../api/createRadarFromFileApi';
+import { useAppDispatch } from '../../../../store/hooks';
+import { setCreateRadarModalOpen } from '../../../../store/myRadarsSlice';
 import { styles } from '../CreateRadarModal';
 
 import './DragDropFile.less';
@@ -16,10 +18,11 @@ import './DragDropFile.less';
 // };
 
 const DragDropFile: FC = () => {
+    const dispatch = useAppDispatch();
     const [createFromFile, { isLoading }] = useCreateFromFileMutation();
     const [dragActive, setDragActive] = useState<boolean>(false);
     const inputRef = useRef(null);
-    const [message, setMessage] = useState<string | null>(null);
+    // const [message, setMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const onUploadHandler = useCallback(
@@ -28,16 +31,18 @@ const DragDropFile: FC = () => {
             formdata.append('file', file);
             await createFromFile(formdata)
                 .unwrap()
-                .then((res: UploadFileResponse) => {
+                .then(() => {
+                    // res: UploadFileResponse
                     setError(null);
-                    setMessage(res.data.message);
+                    // setMessage(res.data.message);
+                    dispatch(setCreateRadarModalOpen(false));
                 })
                 .catch((e: UploadFileResponse) => {
-                    setMessage(null);
+                    // setMessage(null);
                     setError(e.data.message);
                 });
         },
-        [createFromFile]
+        [createFromFile, dispatch]
     );
 
     const handleDrag: DragEventHandler<HTMLDivElement | HTMLFormElement> = useCallback((e) => {
@@ -100,7 +105,7 @@ const DragDropFile: FC = () => {
                     ></div>
                 )}
             </form>
-            {message && <Alert severity="warning">{message}</Alert>}
+            {/* {message && <Alert severity="warning">{message}</Alert>} */}
             {error && <Alert severity="error">{error}</Alert>}
         </>
     );

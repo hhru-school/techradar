@@ -89,5 +89,5 @@ export const initialState: State = {
     sectorNames: defaultSectorNames.slice(0, defaultSectorNumber),
     blips: [],
     filteredVersionsList: true,
-    showCreateRadarModal: true,
+    showCreateRadarModal: false,
 };

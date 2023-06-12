@@ -11,7 +11,7 @@ import { useAppSelector } from '../../../../store/hooks';
 import { RadarVersionData, VersionData } from './types';
 
 const styles: Record<string, SxProps> = {
-    box: { height: 'calc(100vh - 280px)', width: '100%' },
+    box: { height: 'calc(100vh - 320px)', width: '100%' },
     boxText: {
         height: 'calc(100vh - 240px)',
         width: '100%',

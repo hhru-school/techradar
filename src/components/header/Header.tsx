@@ -73,11 +73,9 @@ const transformOrigin: PopoverOrigin = { horizontal: 'right', vertical: 'top' };
 const anchorOrigin: PopoverOrigin = { horizontal: 'right', vertical: 'bottom' };
 
 const CreateRadarBtn: FC = () => {
-    // const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const handleCreateRadar = useCallback(() => {
-        // navigate('/constructor/new/radar');
 
+    const handleCreateRadar = useCallback(() => {
         dispatch(setCreateRadarModalOpen(true));
     }, [dispatch]);
 

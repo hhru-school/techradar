@@ -27,10 +27,12 @@ export const styles: Record<string, SxProps> = {
 };
 
 const CreateRadarInConstructorBtn: FC = () => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const handleCreateRadar = useCallback(() => {
         navigate('/constructor/new/radar');
-    }, [navigate]);
+        dispatch(setCreateRadarModalOpen(false));
+    }, [dispatch, navigate]);
 
     return (
         <Button onClick={handleCreateRadar} variant="contained" sx={styles.btn}>
