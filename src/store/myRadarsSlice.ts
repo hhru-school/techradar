@@ -12,12 +12,15 @@ export const myRadarsSlice = createSlice({
             state.showCreateVersionModal = action.payload.show;
             state.createVersionId = action.payload.radarId;
         },
+        setCreateRadarModalOpen: (state, action: PayloadAction<boolean>) => {
+            state.showCreateRadarModal = action.payload;
+        },
         setFilteredListVersions: (state, action: PayloadAction<boolean>) => {
             state.filteredVersionsList = action.payload;
         },
     },
 });
 
-export const { setCreateVersionModalOpen, setFilteredListVersions } = myRadarsSlice.actions;
+export const { setCreateVersionModalOpen, setFilteredListVersions, setCreateRadarModalOpen } = myRadarsSlice.actions;
 
 export default myRadarsSlice.reducer;

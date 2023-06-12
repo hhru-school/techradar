@@ -29,6 +29,7 @@ interface State {
     showEditTechModal: boolean;
     techData: BlipResponse;
     filteredVersionsList: boolean;
+    showCreateRadarModal: boolean;
 }
 
 export const initialState: State = {
@@ -88,4 +89,5 @@ export const initialState: State = {
     sectorNames: defaultSectorNames.slice(0, defaultSectorNumber),
     blips: [],
     filteredVersionsList: true,
+    showCreateRadarModal: true,
 };

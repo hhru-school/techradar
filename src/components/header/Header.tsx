@@ -23,7 +23,9 @@ import {
 
 import { signOut, setAuthFormOpen } from '../../store/authSlice/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { setCreateRadarModalOpen } from '../../store/myRadarsSlice';
 import AuthFormModal from '../modals/authFormModal/AuthFormModal';
+import CreateRadarModal from '../modals/createRadarModal/CreateRadarModal';
 import RegistrationFormModal from '../modals/registrationFormModal/RegistrationFormModal';
 
 const styles: Record<string, SxProps> = {
@@ -71,11 +73,13 @@ const transformOrigin: PopoverOrigin = { horizontal: 'right', vertical: 'top' };
 const anchorOrigin: PopoverOrigin = { horizontal: 'right', vertical: 'bottom' };
 
 const CreateRadarBtn: FC = () => {
-    const navigate = useNavigate();
-
+    // const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const handleCreateRadar = useCallback(() => {
-        navigate('/constructor/new/radar');
-    }, [navigate]);
+        // navigate('/constructor/new/radar');
+
+        dispatch(setCreateRadarModalOpen(true));
+    }, [dispatch]);
 
     return (
         <Button onClick={handleCreateRadar} variant="outlined" color="secondary">
@@ -177,6 +181,7 @@ const Header: FC = () => {
             </AppBar>
             <RegistrationFormModal />
             <AuthFormModal />
+            <CreateRadarModal />
         </>
     );
 };
