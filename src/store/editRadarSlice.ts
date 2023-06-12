@@ -124,11 +124,6 @@ const moveBlipTosegment = (state: EditRadarState, blip: Blip, segment: Segment |
     state.radar.blips.push({ ...blip, ring: segment.ring, sector: segment.sector });
 };
 
-const repalceBlip = (state: EditRadarState, blip: Blip) => {
-    removeBlipById(state, blip.id);
-    state.radar.blips.push(blip);
-};
-
 export const editRadarSlice = createSlice({
     name: 'editRadar',
     initialState,
@@ -249,11 +244,6 @@ export const editRadarSlice = createSlice({
             state.radar.blips.push({ ...action.payload, id: maxId, label: maxId + 1 });
             state.showCreateBlipModal = false;
             state.activeSegment = null;
-        },
-
-        editBlip: (state, action: PayloadAction<Blip>) => {
-            repalceBlip(state, action.payload);
-            state.showEditBlipModal = false;
         },
 
         moveBlip: (state) => {
@@ -470,7 +460,6 @@ export const {
     openDeleteSectorModal,
     closeDeleteSectorModal,
     addNewBlip,
-    editBlip,
     moveBlip,
     deleteBlip,
     renameSector,
