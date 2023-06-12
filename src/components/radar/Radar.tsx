@@ -37,7 +37,7 @@ const Radar: FC<Props> = ({
         let currentAngle = 0;
         return radar.sectors.map((sectorItem, i) => {
             const ofstXY = getOffsetXY(gap, currentAngle, sweepAngle);
-            const sectorBlips = radar.blips && radar.blips.filter((item) => item.sector.name === sectorItem.name);
+            const sectorBlips = radar.blips && radar.blips.filter((blip) => blip.sector.id === sectorItem.id);
             const sector = (
                 <g key={sectorItem.id} transform={`translate (${svgRadius + ofstXY.x} ${svgRadius + ofstXY.y})`}>
                     <RadarSector
