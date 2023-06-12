@@ -33,7 +33,7 @@ const ModalEditSector: FC = () => {
                 closeModalActionCreator={closeEditSectorModal}
                 submitBtnActionCreator={renameSector}
                 submitBtnMutationHandler={submitBtnMutationHandler}
-                hasDeleteButton={true}
+                hasDeleteButton={sectors.length > 1}
                 deleteBtnActionCreator={openDeleteSectorModal}
             />
         );

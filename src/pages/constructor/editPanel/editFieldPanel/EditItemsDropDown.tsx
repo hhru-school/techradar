@@ -13,11 +13,20 @@ type Props = {
     label: string;
     openModalActionCreator: ActionCreatorWithPayload<Ring | Sector>;
     addItemActionCreator: ActionCreatorWithoutPayload;
+    maxNumber?: number;
 };
+
+const defaultMaxNumber = 8;
 
 const style = { btnSx: { width: 130 } };
 
-const EditItemsDropDown: FC<Props> = ({ items, label, openModalActionCreator, addItemActionCreator }) => {
+const EditItemsDropDown: FC<Props> = ({
+    items,
+    label,
+    openModalActionCreator,
+    addItemActionCreator,
+    maxNumber = defaultMaxNumber,
+}) => {
     const dispatch = useAppDispatch();
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -60,9 +69,11 @@ const EditItemsDropDown: FC<Props> = ({ items, label, openModalActionCreator, ad
             </Button>
             <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
                 {menuItems}
-                <MenuItem onClick={addItemClickHandler}>
-                    <Add color="success" />
-                </MenuItem>
+                {items.length < maxNumber && (
+                    <MenuItem onClick={addItemClickHandler}>
+                        <Add color="success" />
+                    </MenuItem>
+                )}
             </Menu>
         </div>
     );

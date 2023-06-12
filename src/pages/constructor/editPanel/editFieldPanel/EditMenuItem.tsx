@@ -1,5 +1,6 @@
-import { FC } from 'react';
-import { MenuItem } from '@mui/material';
+import { FC, useState } from 'react';
+import { Edit } from '@mui/icons-material';
+import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 
 import { useAppDispatch } from '../../../../store/hooks';
@@ -17,6 +18,8 @@ type Props = {
 };
 
 const EditMenuItem: FC<Props> = ({ item, openModalActionCreator, closeHandler }) => {
+    const [icon, setIcon] = useState(false);
+
     const dispatch = useAppDispatch();
 
     const clickHandler = () => {
@@ -25,8 +28,16 @@ const EditMenuItem: FC<Props> = ({ item, openModalActionCreator, closeHandler })
     };
 
     return (
-        <MenuItem sx={style.menuItem} onClick={clickHandler}>
-            {item.name}
+        <MenuItem
+            sx={style.menuItem}
+            onClick={clickHandler}
+            onMouseOver={() => {
+                setIcon(true);
+            }}
+            onMouseOut={() => setIcon(false)}
+        >
+            <ListItemText> {item.name}</ListItemText>
+            <ListItemIcon>{icon && <Edit />} </ListItemIcon>
         </MenuItem>
     );
 };

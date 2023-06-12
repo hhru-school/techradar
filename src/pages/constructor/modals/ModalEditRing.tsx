@@ -33,7 +33,7 @@ const ModalEditRing: FC = () => {
                 closeModalActionCreator={closeEditRingModal}
                 submitBtnActionCreator={renameRing}
                 submitBtnMutationHandler={submitBtnMutationHandler}
-                hasDeleteButton={true}
+                hasDeleteButton={rings.length > 1}
                 deleteBtnActionCreator={openDeleteRingModal}
             ></ModalBasic>
         );
