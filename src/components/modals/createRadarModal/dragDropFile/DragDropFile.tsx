@@ -32,7 +32,10 @@ const DragDropFile: FC = () => {
                     setError(null);
                     setMessage(res.data.message);
                 })
-                .catch((e: UploadFileResponse) => setError(e.data.message));
+                .catch((e: UploadFileResponse) => {
+                    setMessage(null);
+                    setError(e.data.message);
+                });
         },
         [createFromFile]
     );

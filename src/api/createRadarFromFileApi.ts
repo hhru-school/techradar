@@ -13,7 +13,7 @@ export const createRadarFromFileApi = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: formdata,
             }),
-            invalidatesTags: ['CreateRadarByFile'],
+            invalidatesTags: ['Radar'],
         }),
     }),
 });

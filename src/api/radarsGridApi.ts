@@ -10,7 +10,7 @@ export const radarsGridApi = apiSlice.injectEndpoints({
             query: (radarId) => ({
                 url: `/radar-versions?radar-id=${radarId}`,
             }),
-            providesTags: ['VersionsList', 'CreateVersion', 'Version', 'CreateRadarByFile'],
+            providesTags: ['VersionsList', 'CreateVersion', 'Version'],
         }),
         deleteRadarVersion: builder.mutation<RadarVersionData, GridRowId>({
             query: (versionId) => ({
