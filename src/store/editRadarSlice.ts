@@ -302,6 +302,7 @@ export const editRadarSlice = createSlice({
         deleteSector: (state) => {
             if (!state.editingSector) throw new Error('Cannot delete cause has not editing sector');
             state.radar.sectors = state.radar.sectors.filter((sector) => sector.id !== state.editingSector?.id);
+            state.radar.blips = state.radar.blips.filter((blip) => blip.sector.id !== state.editingSector?.id);
             state.showDeleteSectorModal = false;
             state.showEditSectorModal = false;
         },
@@ -318,6 +319,11 @@ export const editRadarSlice = createSlice({
         deleteRing: (state) => {
             if (!state.editingRing) throw new Error('Cannot delete cause has not editing ring');
             state.radar.rings = state.radar.rings.filter((ring) => ring.id !== state.editingRing?.id);
+            state.radar.blips.forEach((blip) => {
+                if (blip.ring.id === state.editingRing?.id) {
+                    blip.ring = state.radar.rings[state.radar.rings.length - 1];
+                }
+            });
             state.showDeleteRingModal = false;
             state.showEditRingModal = false;
         },

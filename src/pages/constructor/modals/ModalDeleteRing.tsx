@@ -20,6 +20,7 @@ const ModalDeleteRing: FC = () => {
                 deleteBtnActionCreator={deleteRing}
                 header="Delete sector"
                 message={message}
+                warningMessage="Это действие переместит все технологии, принадлежащие удаляемому кольцу, на внешнее кольцо!"
             />
         );
     }
