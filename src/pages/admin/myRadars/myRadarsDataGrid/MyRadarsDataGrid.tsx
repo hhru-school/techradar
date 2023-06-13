@@ -3,23 +3,16 @@ import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Alert, Box, Button, Skeleton, SxProps, Typography, darken, lighten, styled } from '@mui/material';
+import { Alert, Box, Skeleton, SxProps, darken, lighten, styled } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, ruRU } from '@mui/x-data-grid';
 
 import { useDeleteRadarVersionMutation, useGetRadarVersionsQuery } from '../../../../api/radarsGridApi';
 import { useAppSelector } from '../../../../store/hooks';
+import NoRadarsMock from '../noRadarsMock/NoRadarsMock';
 import { RadarVersionData, VersionData } from './types';
 
 const styles: Record<string, SxProps> = {
     box: { height: 'calc(100vh - 320px)', width: '100%' },
-    boxText: {
-        height: 'calc(100vh - 240px)',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    newRadarBtn: { height: '36px' },
-    mockText: { marginRight: '5px' },
 };
 
 type GridRadar = Array<RadarVersionData>;
@@ -27,26 +20,6 @@ type GridRadar = Array<RadarVersionData>;
 export interface GridRadarObj {
     [index: string]: GridRadar;
 }
-
-const NoRadarsMock: FC = () => {
-    const navigate = useNavigate();
-    return (
-        <Box sx={styles.boxText}>
-            <Typography sx={styles.mockText} variant="h6">
-                Кажется, у Вас нет радаров! Это не страшно, попробуйте
-            </Typography>
-
-            <Button
-                variant="contained"
-                color="success"
-                sx={styles.newRadarBtn}
-                onClick={() => navigate('/constructor/new/radar')}
-            >
-                СОЗДАТЬ СВОЙ ПЕРВЫЙ!
-            </Button>
-        </Box>
-    );
-};
 
 const initialState = {
     pagination: {
@@ -190,7 +163,9 @@ const MyRadarsDataGrid: FC = () => {
 
     return (
         <Box sx={styles.box}>
-            {isError && <Alert severity="error">Произошла ошибка попробуйте перезагрузить страницу</Alert>}
+            {isError && (
+                <Alert severity="error">Произошла ошибка попробуйте перезагрузить страницу или зайти позже</Alert>
+            )}
             {isLoading && <Skeleton variant="rounded" width={'100%'} height={'100%'} />}
             {!rows.length && <NoRadarsMock />}
             {rows.length && (

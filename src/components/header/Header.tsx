@@ -125,8 +125,7 @@ const Header: FC = () => {
                             <Link to="/">TechRadar</Link>
                         </Typography>
                         <Routes>
-                            <Route path="/admin/my-radars/grid/:radarId" element={<CreateRadarBtn />} />
-                            <Route path="/admin/my-radars" element={<CreateRadarBtn />} />
+                            <Route path="/admin/my-radars/*" element={<CreateRadarBtn />} />
                         </Routes>
                         <Box sx={styles.iconBox}>
                             <Tooltip title="Account settings">

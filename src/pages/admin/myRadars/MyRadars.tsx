@@ -85,7 +85,7 @@ const MyRadar: FC = () => {
     }, [dispatch, paramRadarId]);
 
     useEffect(() => {
-        if (!paramRadarId && allCompanyRadars) {
+        if (!paramRadarId && allCompanyRadars && allCompanyRadars.length) {
             navigate(`grid/${allCompanyRadars[0].id}`);
         }
     });
@@ -124,7 +124,7 @@ const MyRadar: FC = () => {
                         tabsItems
                     ) : (
                         <Typography variant="h6" sx={styles.insteadChipsTypo}>
-                            Здесь можно будет переключаться по радарам
+                            Здесь можно будет переключаться между радарами
                         </Typography>
                     )}
                 </Box>
