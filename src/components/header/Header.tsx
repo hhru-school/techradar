@@ -14,7 +14,7 @@ import {
     ListItemIcon,
     Menu,
     MenuItem,
-    Toolbar,
+    // Toolbar,
     Tooltip,
     Typography,
     SxProps,
@@ -63,6 +63,14 @@ const styles: Record<string, SxProps> = {
     },
     circleIcon: { color: 'white', fontSize: 49 },
     iconBtnAuth: { ml: 2 },
+    toolbar: { display: 'flex', alignItems: 'center', flexWrap: 'wrap', minHeight: '70px' },
+    toolbarRight: {
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+    },
+    icon: { mr: '3px' },
 };
 
 const PaperProps = {
@@ -115,70 +123,70 @@ const Header: FC = () => {
     return (
         <>
             <AppBar position="static">
-                <Container maxWidth="xl" sx={{ padding: '0' }}>
-                    <Toolbar>
-                        <IconButton edge="start" color="inherit" aria-label="menu" sx={styles.iconBtn}>
-                            <Link to="/">
-                                <RadarIcon />
-                            </Link>
-                        </IconButton>
+                <Container maxWidth="xl">
+                    <Box sx={styles.toolbar}>
+                        <Link to="/">
+                            <RadarIcon sx={styles.icon} />
+                        </Link>
                         <Typography variant="h6" component="div" sx={styles.label}>
                             <Link to="/">TechRadar</Link>
                         </Typography>
-                        <Routes>
-                            <Route path="/admin/my-radars/*" element={<CompanySelect />} />
-                        </Routes>
-                        <Routes>
-                            <Route path="/admin/my-radars/*" element={<CreateRadarBtn />} />
-                        </Routes>
-                        <Box sx={styles.iconBox}>
-                            <Tooltip title="Админ панель">
-                                {username ? (
-                                    <IconButton
-                                        onClick={handleClick}
-                                        size="small"
-                                        sx={styles.iconBtnAuth}
-                                        aria-controls={ariaControlsIconBtn}
-                                        aria-haspopup="true"
-                                        aria-expanded={ariaExpandedIconBtn}
-                                    >
-                                        <Avatar>{username[0]}</Avatar>
-                                    </IconButton>
-                                ) : (
-                                    <IconButton onClick={handleAuthFormOpen} size="small" sx={styles.iconBtnUnauth}>
-                                        <AccountCircleIcon sx={styles.circleIcon} />
-                                    </IconButton>
-                                )}
-                            </Tooltip>
-                        </Box>
-                        <Menu
-                            anchorEl={anchorEl}
-                            id="account-menu"
-                            open={open}
-                            onClose={handleClose}
-                            onClick={handleClose}
-                            PaperProps={PaperProps}
-                            transformOrigin={transformOrigin}
-                            anchorOrigin={anchorOrigin}
-                        >
-                            <Link to="/admin/my-radars">
-                                <MenuItem onClick={handleClose}>
-                                    <ListItemIcon>
-                                        <RadarIcon fontSize="small" />
-                                    </ListItemIcon>
-                                    Мои радары
-                                </MenuItem>
-                            </Link>
+                        <Box sx={styles.toolbarRight}>
+                            <Routes>
+                                <Route path="/admin/my-radars/*" element={<CompanySelect />} />
+                            </Routes>
+                            <Routes>
+                                <Route path="/admin/my-radars/*" element={<CreateRadarBtn />} />
+                            </Routes>
+                            <Box sx={styles.iconBox}>
+                                <Tooltip title="Админ панель">
+                                    {username ? (
+                                        <IconButton
+                                            onClick={handleClick}
+                                            size="small"
+                                            sx={styles.iconBtnAuth}
+                                            aria-controls={ariaControlsIconBtn}
+                                            aria-haspopup="true"
+                                            aria-expanded={ariaExpandedIconBtn}
+                                        >
+                                            <Avatar>{username[0]}</Avatar>
+                                        </IconButton>
+                                    ) : (
+                                        <IconButton onClick={handleAuthFormOpen} size="small" sx={styles.iconBtnUnauth}>
+                                            <AccountCircleIcon sx={styles.circleIcon} />
+                                        </IconButton>
+                                    )}
+                                </Tooltip>
+                            </Box>
+                            <Menu
+                                anchorEl={anchorEl}
+                                id="account-menu"
+                                open={open}
+                                onClose={handleClose}
+                                onClick={handleClose}
+                                PaperProps={PaperProps}
+                                transformOrigin={transformOrigin}
+                                anchorOrigin={anchorOrigin}
+                            >
+                                <Link to="/admin/my-radars">
+                                    <MenuItem onClick={handleClose}>
+                                        <ListItemIcon>
+                                            <RadarIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        Мои радары
+                                    </MenuItem>
+                                </Link>
 
-                            <Divider />
-                            <MenuItem onClick={handleUnauthorization}>
-                                <ListItemIcon>
-                                    <Logout fontSize="small" />
-                                </ListItemIcon>
-                                Выйти
-                            </MenuItem>
-                        </Menu>
-                    </Toolbar>
+                                <Divider />
+                                <MenuItem onClick={handleUnauthorization}>
+                                    <ListItemIcon>
+                                        <Logout fontSize="small" />
+                                    </ListItemIcon>
+                                    Выйти
+                                </MenuItem>
+                            </Menu>
+                        </Box>
+                    </Box>
                 </Container>
             </AppBar>
             <RegistrationFormModal />
