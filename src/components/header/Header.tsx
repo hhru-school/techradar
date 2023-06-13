@@ -27,6 +27,7 @@ import { setCreateRadarModalOpen } from '../../store/myRadarsSlice';
 import AuthFormModal from '../modals/authFormModal/AuthFormModal';
 import CreateRadarModal from '../modals/createRadarModal/CreateRadarModal';
 import RegistrationFormModal from '../modals/registrationFormModal/RegistrationFormModal';
+import CompanySelect from './companySelect/CompanySelect';
 
 const styles: Record<string, SxProps> = {
     iconBtnUnauth: { ml: 2 },
@@ -80,7 +81,7 @@ const CreateRadarBtn: FC = () => {
     }, [dispatch]);
 
     return (
-        <Button onClick={handleCreateRadar} variant="outlined" color="secondary">
+        <Button onClick={handleCreateRadar} variant="contained" color="secondary">
             Создать радар
         </Button>
     );
@@ -124,6 +125,9 @@ const Header: FC = () => {
                         <Typography variant="h6" component="div" sx={styles.label}>
                             <Link to="/">TechRadar</Link>
                         </Typography>
+                        <Routes>
+                            <Route path="/admin/my-radars/*" element={<CompanySelect />} />
+                        </Routes>
                         <Routes>
                             <Route path="/admin/my-radars/*" element={<CreateRadarBtn />} />
                         </Routes>
