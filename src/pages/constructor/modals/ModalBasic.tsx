@@ -42,9 +42,15 @@ const getErrorMessage = (error: unknown): string => {
     return 'Неизвестная ошибка. Сохранение не удалось!..';
 };
 
+const valuesToLowerCase = (values: string[]): string[] => values.map((value) => value.toLocaleLowerCase());
+
 const getValidationSchema = (values: string[]) =>
     Yup.object({
-        name: Yup.string().trim().notOneOf(values, 'Название уже существует').required('Обязательное поле'),
+        name: Yup.string()
+            .trim()
+            .lowercase()
+            .notOneOf(valuesToLowerCase(values), 'Название уже существует')
+            .required('Обязательное поле'),
     });
 
 const ModalBasic: FC<Props> = ({
