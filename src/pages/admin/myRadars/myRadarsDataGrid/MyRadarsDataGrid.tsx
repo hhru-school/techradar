@@ -15,12 +15,6 @@ const styles: Record<string, SxProps> = {
     box: { height: 'calc(100vh - 320px)', width: '100%' },
 };
 
-type GridRadar = Array<RadarVersionData>;
-
-export interface GridRadarObj {
-    [index: string]: GridRadar;
-}
-
 const initialState = {
     pagination: {
         paginationModel: {

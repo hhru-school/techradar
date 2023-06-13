@@ -1,5 +1,5 @@
 import { FC, useState, useRef, useCallback, DragEventHandler, ChangeEventHandler } from 'react';
-import { Box, Typography, Button, Alert } from '@mui/material';
+import { Box, Typography, Button, Alert, SxProps } from '@mui/material';
 
 import { UploadFileResponse, useCreateFromFileMutation } from '../../../../api/createRadarFromFileApi';
 import { useAppDispatch } from '../../../../store/hooks';
@@ -16,6 +16,10 @@ import './DragDropFile.less';
 //     type: string;
 //     webkitRelativePath: string;
 // };
+
+const stylesDnd: Record<string, SxProps> = {
+    warning: { width: '300px', margin: '10px auto' },
+};
 
 const DragDropFile: FC = () => {
     const dispatch = useAppDispatch();
@@ -93,6 +97,10 @@ const DragDropFile: FC = () => {
                         <Button variant="contained" sx={styles.btn} onClick={onButtonClick} disabled={isLoading}>
                             Загрузите файл
                         </Button>
+                        <Alert severity="warning" sx={stylesDnd.warning}>
+                            Внимание! В файле формата .xls вкладки необходимо расположить последовательно от поздней
+                            версии к ранней
+                        </Alert>
                     </Box>
                 </label>
                 {dragActive && (
