@@ -1,14 +1,11 @@
-import { FC, useCallback, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { Alert, Box, Skeleton, SxProps, darken, lighten, styled } from '@mui/material';
-import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, ruRU } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, ruRU } from '@mui/x-data-grid';
 
 import { useGetRadarVersionsQuery } from '../../../../api/radarsGridApi';
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { setConfirmDeleteVesionModal } from '../../../../store/myRadarsSlice';
+import { useAppSelector } from '../../../../store/hooks';
 import NoRadarsMock from '../noRadarsMock/NoRadarsMock';
 import { RadarVersionData, VersionData } from './types';
 
@@ -25,7 +22,6 @@ const initialState = {
 };
 
 const MyRadarsDataGrid: FC = () => {
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { radarId } = useParams();
     const id = Number(radarId) || 0;
@@ -48,31 +44,6 @@ const MyRadarsDataGrid: FC = () => {
                   })
                 : [],
         [radarVersions, versionRows]
-    );
-
-    const editVersion = useCallback(
-        (params: { id: GridRowId }) => [
-            <GridActionsCellItem
-                icon={<EditIcon />}
-                label="edit"
-                onClick={() => navigate(`/constructor/edit/version/${params.id}`)}
-            />,
-        ],
-        [navigate]
-    );
-
-    const deleteRow = useCallback(
-        (version: VersionData) => {
-            dispatch(setConfirmDeleteVesionModal({ show: true, data: version }));
-        },
-        [dispatch]
-    );
-
-    const deleteVersionRow = useCallback(
-        (params: { row: VersionData }) => [
-            <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => deleteRow(params.row)} />,
-        ],
-        [deleteRow]
     );
 
     const columns: GridColDef[] = useMemo(
@@ -126,35 +97,17 @@ const MyRadarsDataGrid: FC = () => {
                 width: 100,
                 editable: false,
             },
-            {
-                field: 'edit',
-                type: 'actions',
-                width: 30,
-                getActions: editVersion,
-            },
-            {
-                field: 'delete',
-                type: 'actions',
-                width: 30,
-                getActions: deleteVersionRow,
-            },
         ],
-        [deleteVersionRow, editVersion]
+        []
     );
 
     const getBackgroundColor = (color: string, mode: string) =>
-        mode === 'dark' ? darken(color, 0.6) : lighten(color, 0.7);
+        mode === 'dark' ? darken(color, 0.6) : lighten(color, 0.9);
 
     const getHoverBackgroundColor = (color: string, mode: string) =>
-        mode === 'dark' ? darken(color, 0.6) : lighten(color, 0.6);
+        mode === 'dark' ? darken(color, 0.6) : lighten(color, 0.8);
 
     const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
-        '& .super-app-theme--да': {
-            backgroundColor: getBackgroundColor(theme.palette.success.main, theme.palette.mode),
-            '&:hover': {
-                backgroundColor: getHoverBackgroundColor(theme.palette.success.main, theme.palette.mode),
-            },
-        },
         '& .super-app-theme--нет': {
             backgroundColor: getBackgroundColor(theme.palette.primary.main, theme.palette.mode),
             '&:hover': {
@@ -179,6 +132,7 @@ const MyRadarsDataGrid: FC = () => {
                     disableRowSelectionOnClick
                     localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
                     getRowClassName={(params) => `super-app-theme--${params.row.release as string}`}
+                    onRowClick={(params) => navigate(`/constructor/edit/version/${(params.row as VersionData).id}`)}
                 />
             )}
         </Box>

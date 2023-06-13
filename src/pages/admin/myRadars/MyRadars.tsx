@@ -7,7 +7,6 @@ import { Typography, Box, Container, Button, SxProps, Chip, Checkbox, FormContro
 import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { setCreateVersionModalOpen, setFilteredListVersions } from '../../../store/myRadarsSlice';
-import DeleteVersionDialog from './deleteVersionDialogModal/DeleteVersionDialog';
 import MyRadarCreateModal from './myRadarCreateModal/MyRadarCreateModal';
 import MyRadarsDataGrid from './myRadarsDataGrid/MyRadarsDataGrid';
 
@@ -16,8 +15,8 @@ import './MyRadars.less';
 const styles: Record<string, SxProps> = {
     tabs: { display: 'flex', alignItems: 'center', height: '48px' },
     tab: { minHeight: '48px' },
-    newVersionBtn: { textAlign: 'left', margin: '15px 0 15px 40px' },
-    title: { textAlign: 'left', margin: '15px 0 0 40px' },
+    newVersionBtn: { textAlign: 'left', margin: '15px 0 15px 0' },
+    title: { textAlign: 'left', margin: '15px 0 0 0' },
     box: { display: 'flex' },
     defaultChip: { borderRadius: 1, fontSize: 14 },
     formControlLabel: { margin: '0 0 0 5px' },
@@ -157,7 +156,6 @@ const MyRadar: FC = () => {
                 </Routes>
             </Container>
             <MyRadarCreateModal />
-            <DeleteVersionDialog />
         </>
     );
 };

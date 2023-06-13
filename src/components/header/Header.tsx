@@ -115,7 +115,7 @@ const Header: FC = () => {
     return (
         <>
             <AppBar position="static">
-                <Container maxWidth="xl">
+                <Container maxWidth="xl" sx={{ padding: '0' }}>
                     <Toolbar>
                         <IconButton edge="start" color="inherit" aria-label="menu" sx={styles.iconBtn}>
                             <Link to="/">
@@ -169,6 +169,7 @@ const Header: FC = () => {
                                     Мои радары
                                 </MenuItem>
                             </Link>
+
                             <Divider />
                             <MenuItem onClick={handleUnauthorization}>
                                 <ListItemIcon>

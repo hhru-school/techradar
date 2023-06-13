@@ -3,7 +3,7 @@ import {
     // useEffect,
     useState,
 } from 'react';
-import { SelectChangeEvent, FormControl, Select, MenuItem } from '@mui/material';
+import { SelectChangeEvent, FormControl, Select, MenuItem, Button } from '@mui/material';
 
 // import { useGetCompaniesQuery } from '../../../api/companiesApi';
 
@@ -43,6 +43,11 @@ const CompanySelect: FC = () => {
             >
                 {/* {renderItems} */}
                 <MenuItem value={'0'}>компания HeadHunter</MenuItem>
+                <MenuItem>
+                    <Button variant="contained" color="secondary">
+                        Создать компанию
+                    </Button>
+                </MenuItem>
             </Select>
         </FormControl>
     );
