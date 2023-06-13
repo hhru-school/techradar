@@ -31,11 +31,10 @@ const MyRadarsDataGrid: FC = () => {
     const id = Number(radarId) || 0;
 
     const { data: radarVersions, isError, isLoading } = useGetRadarVersionsQuery(id);
-    // const [deleteRadarVersion] = useDeleteRadarVersionMutation();
-    const filteredVersionsList = useAppSelector((state) => state.myRadars.filteredVersionsList);
+    const isfilteredVersionsList = useAppSelector((state) => state.myRadars.isfilteredVersionsList);
 
     const onlyPublicAndLastDraft = radarVersions?.filter((version) => version.release || version.toggleAvailable);
-    const versionRows = filteredVersionsList ? onlyPublicAndLastDraft : radarVersions;
+    const versionRows = isfilteredVersionsList ? onlyPublicAndLastDraft : radarVersions;
     const rows: RadarVersionData | [] = useMemo(
         () =>
             radarVersions && versionRows
@@ -61,19 +60,13 @@ const MyRadarsDataGrid: FC = () => {
         ],
         [navigate]
     );
-    // const deleteRow = useCallback((id: GridRowId) => deleteRadarVersion(id), [deleteRadarVersion]);
+
     const deleteRow = useCallback(
         (version: VersionData) => {
             dispatch(setConfirmDeleteVesionModal({ show: true, data: version }));
         },
         [dispatch]
     );
-    // const deleteVersionRow = useCallback(
-    //     (params: { id: GridRowId }) => [
-    //         <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => deleteRow(params.id)} />,
-    //     ],
-    //     [deleteRow]
-    // );
 
     const deleteVersionRow = useCallback(
         (params: { row: VersionData }) => [

@@ -7,7 +7,7 @@ import { Typography, Box, Container, Button, SxProps, Chip, Checkbox, FormContro
 import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { setCreateVersionModalOpen, setFilteredListVersions } from '../../../store/myRadarsSlice';
-import DeleteVersionDialog from './deleteVersionDialogModal/DeleteVearsionDialog';
+import DeleteVersionDialog from './deleteVersionDialogModal/DeleteVersionDialog';
 import MyRadarCreateModal from './myRadarCreateModal/MyRadarCreateModal';
 import MyRadarsDataGrid from './myRadarsDataGrid/MyRadarsDataGrid';
 
@@ -79,7 +79,7 @@ const MyRadar: FC = () => {
     const navigate = useNavigate();
     const { paramRadarId } = useParams();
     const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(1);
-    const filteredVersionsList = useAppSelector((state) => state.myRadars.filteredVersionsList);
+    const isfilteredVersionsList = useAppSelector((state) => state.myRadars.isfilteredVersionsList);
 
     const handleCreateVersionModalOpen = useCallback(() => {
         if (paramRadarId) dispatch(setCreateVersionModalOpen({ show: true, radarId: +paramRadarId }));
@@ -113,8 +113,8 @@ const MyRadar: FC = () => {
     );
 
     const handleChange = useCallback(
-        () => dispatch(setFilteredListVersions(!filteredVersionsList)),
-        [dispatch, filteredVersionsList]
+        () => dispatch(setFilteredListVersions(!isfilteredVersionsList)),
+        [dispatch, isfilteredVersionsList]
     );
 
     return (
@@ -145,7 +145,7 @@ const MyRadar: FC = () => {
                     <Box sx={styles.checkboxBox}>
                         <FormControlLabel
                             sx={styles.formControlLabel}
-                            control={<Checkbox onChange={handleChange} checked={!filteredVersionsList} />}
+                            control={<Checkbox onChange={handleChange} checked={!isfilteredVersionsList} />}
                             label="Показать все версии"
                         />
                         <InfoBtn />

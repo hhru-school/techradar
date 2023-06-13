@@ -17,7 +17,7 @@ export const myRadarsSlice = createSlice({
             state.showCreateRadarModal = action.payload;
         },
         setFilteredListVersions: (state, action: PayloadAction<boolean>) => {
-            state.filteredVersionsList = action.payload;
+            state.isfilteredVersionsList = action.payload;
         },
         setConfirmDeleteVesionModal: (state, action: PayloadAction<GridDeleteVersion>) => {
             state.showConfirmDeleteVesionModal = action.payload.show;

@@ -28,7 +28,7 @@ interface State {
     blips: Blip[];
     showEditTechModal: boolean;
     techData: BlipResponse;
-    filteredVersionsList: boolean;
+    isfilteredVersionsList: boolean;
     showCreateRadarModal: boolean;
     showConfirmDeleteVesionModal: boolean;
     deleteGridVersionData: VersionData | null;
@@ -90,7 +90,7 @@ export const initialState: State = {
     ringNames: defaultRingsNames.slice(0, defaultRingNumber),
     sectorNames: defaultSectorNames.slice(0, defaultSectorNumber),
     blips: [],
-    filteredVersionsList: true,
+    isfilteredVersionsList: true,
     showCreateRadarModal: false,
     showConfirmDeleteVesionModal: false,
     deleteGridVersionData: null,
