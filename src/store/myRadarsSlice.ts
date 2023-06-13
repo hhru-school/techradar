@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { VersionData } from '../api/types';
 import { initialState } from './mock';
 
 type CreateVersionPayload = { show: boolean; radarId: number | null };
-
+type GridDeleteVersion = { show: boolean; data: VersionData | null };
 export const myRadarsSlice = createSlice({
     name: 'myRadars',
     initialState,
@@ -18,9 +19,18 @@ export const myRadarsSlice = createSlice({
         setFilteredListVersions: (state, action: PayloadAction<boolean>) => {
             state.filteredVersionsList = action.payload;
         },
+        setConfirmDeleteVesionModal: (state, action: PayloadAction<GridDeleteVersion>) => {
+            state.showConfirmDeleteVesionModal = action.payload.show;
+            state.deleteGridVersionData = action.payload.data;
+        },
     },
 });
 
-export const { setCreateVersionModalOpen, setFilteredListVersions, setCreateRadarModalOpen } = myRadarsSlice.actions;
+export const {
+    setCreateVersionModalOpen,
+    setFilteredListVersions,
+    setCreateRadarModalOpen,
+    setConfirmDeleteVesionModal,
+} = myRadarsSlice.actions;
 
 export default myRadarsSlice.reducer;

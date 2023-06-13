@@ -1,4 +1,4 @@
-import { BlipResponse } from '../api/types';
+import { BlipResponse, VersionData } from '../api/types';
 import { Blip } from '../components/radar/types';
 
 type Input = { label: string; id: string; name: string; type: string; autoComplete: string };
@@ -30,6 +30,8 @@ interface State {
     techData: BlipResponse;
     filteredVersionsList: boolean;
     showCreateRadarModal: boolean;
+    showConfirmDeleteVesionModal: boolean;
+    deleteGridVersionData: VersionData | null;
 }
 
 export const initialState: State = {
@@ -90,4 +92,6 @@ export const initialState: State = {
     blips: [],
     filteredVersionsList: true,
     showCreateRadarModal: false,
+    showConfirmDeleteVesionModal: false,
+    deleteGridVersionData: null,
 };

@@ -128,7 +128,7 @@ const Header: FC = () => {
                             <Route path="/admin/my-radars/*" element={<CreateRadarBtn />} />
                         </Routes>
                         <Box sx={styles.iconBox}>
-                            <Tooltip title="Account settings">
+                            <Tooltip title="Админ панель">
                                 {username ? (
                                     <IconButton
                                         onClick={handleClick}

@@ -6,8 +6,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Alert, Box, Skeleton, SxProps, darken, lighten, styled } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, ruRU } from '@mui/x-data-grid';
 
-import { useDeleteRadarVersionMutation, useGetRadarVersionsQuery } from '../../../../api/radarsGridApi';
-import { useAppSelector } from '../../../../store/hooks';
+import { useGetRadarVersionsQuery } from '../../../../api/radarsGridApi';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import { setConfirmDeleteVesionModal } from '../../../../store/myRadarsSlice';
 import NoRadarsMock from '../noRadarsMock/NoRadarsMock';
 import { RadarVersionData, VersionData } from './types';
 
@@ -24,12 +25,13 @@ const initialState = {
 };
 
 const MyRadarsDataGrid: FC = () => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { radarId } = useParams();
     const id = Number(radarId) || 0;
 
     const { data: radarVersions, isError, isLoading } = useGetRadarVersionsQuery(id);
-    const [deleteRadarVersion] = useDeleteRadarVersionMutation();
+    // const [deleteRadarVersion] = useDeleteRadarVersionMutation();
     const filteredVersionsList = useAppSelector((state) => state.myRadars.filteredVersionsList);
 
     const onlyPublicAndLastDraft = radarVersions?.filter((version) => version.release || version.toggleAvailable);
@@ -59,10 +61,23 @@ const MyRadarsDataGrid: FC = () => {
         ],
         [navigate]
     );
-    const deleteRow = useCallback((id: GridRowId) => deleteRadarVersion(id), [deleteRadarVersion]);
+    // const deleteRow = useCallback((id: GridRowId) => deleteRadarVersion(id), [deleteRadarVersion]);
+    const deleteRow = useCallback(
+        (version: VersionData) => {
+            dispatch(setConfirmDeleteVesionModal({ show: true, data: version }));
+        },
+        [dispatch]
+    );
+    // const deleteVersionRow = useCallback(
+    //     (params: { id: GridRowId }) => [
+    //         <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => deleteRow(params.id)} />,
+    //     ],
+    //     [deleteRow]
+    // );
+
     const deleteVersionRow = useCallback(
-        (params: { id: GridRowId }) => [
-            <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => deleteRow(params.id)} />,
+        (params: { row: VersionData }) => [
+            <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => deleteRow(params.row)} />,
         ],
         [deleteRow]
     );
