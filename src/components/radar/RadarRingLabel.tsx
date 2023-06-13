@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 import { openEditRingModal, setShowEditIcon } from '../../store/editRadarSlice';
@@ -49,20 +49,36 @@ const RadarRingLabel: FC<Props> = ({ x, y, segment, ring, variant = RadarVariant
         dispatch(setShowEditIcon(false));
     }, [dispatch]);
 
+    const segmentWidth = segment.outerRadius - segment.innerRadius;
+
+    const ref = useRef<SVGTextElement>(null);
+
+    const [textValue, setTextValue] = useState(ring.name);
+
+    useEffect(() => {
+        if (ref.current) {
+            if (ref.current.getComputedTextLength() > segmentWidth - 20) {
+                setTextValue(`${ring.name.slice(0, 3)}...`);
+            } else setTextValue(ring.name);
+        }
+    }, [ring.name, segmentWidth]);
+
     return (
-        <text
-            onClick={isEditable ? clickHandler : undefined}
-            onMouseEnter={isEditable ? mouseEnterHandler : undefined}
-            onMouseLeave={isEditable ? mouseLeaveHandler : undefined}
-            className={classes}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            x={x}
-            y={y}
-            transform={getTransform(segment.startAngle, x, y)}
-        >
-            {ring.name}
-        </text>
+        <g transform={getTransform(segment.startAngle, x, y)}>
+            <text
+                ref={ref}
+                onClick={isEditable ? clickHandler : undefined}
+                onMouseEnter={isEditable ? mouseEnterHandler : undefined}
+                onMouseLeave={isEditable ? mouseLeaveHandler : undefined}
+                className={classes}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                x={x}
+                y={y}
+            >
+                {textValue}
+            </text>
+        </g>
     );
 };
 

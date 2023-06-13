@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { Edit } from '@mui/icons-material';
 import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
@@ -27,14 +27,20 @@ const EditMenuItem: FC<Props> = ({ item, openModalActionCreator, closeHandler })
         closeHandler();
     };
 
+    const mouseOverHandler = useCallback(() => {
+        setIcon(true);
+    }, [setIcon]);
+
+    const mouseOutHandler = useCallback(() => {
+        setIcon(false);
+    }, [setIcon]);
+
     return (
         <MenuItem
             sx={style.menuItem}
             onClick={clickHandler}
-            onMouseOver={() => {
-                setIcon(true);
-            }}
-            onMouseOut={() => setIcon(false)}
+            onMouseOver={mouseOverHandler}
+            onMouseOut={mouseOutHandler}
         >
             <ListItemText> {item.name}</ListItemText>
             <ListItemIcon>{icon && <Edit />} </ListItemIcon>
