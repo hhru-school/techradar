@@ -16,11 +16,11 @@ const ModalDeleteRing: FC = () => {
 
         return (
             <ModalDelete
-                item={editingRing}
                 closeBtnActionCreator={closeDeleteRingModal}
                 deleteBtnActionCreator={deleteRing}
                 header="Delete sector"
                 message={message}
+                warningMessage="Это действие переместит все технологии, принадлежащие удаляемому кольцу, на внешнее кольцо!"
             />
         );
     }

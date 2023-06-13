@@ -3,12 +3,12 @@ import { FC } from 'react';
 import { getSectorNames } from '../../../components/radar/utils';
 import { addNewSector, closeAddNewSectorModal } from '../../../store/editRadarSlice';
 import { useAppSelector } from '../../../store/hooks';
-import ModalRename from './ModalBasic';
+import ModalBasic from './ModalBasic';
 
 const ModalAddNewSector: FC = () => {
     const sectorNames = useAppSelector((state) => getSectorNames(state.editRadar.radar));
     return (
-        <ModalRename
+        <ModalBasic
             open={true}
             name={''}
             names={sectorNames}
@@ -16,7 +16,7 @@ const ModalAddNewSector: FC = () => {
             inputLabel={'Название сектора'}
             closeModalActionCreator={closeAddNewSectorModal}
             submitBtnActionCreator={addNewSector}
-        ></ModalRename>
+        ></ModalBasic>
     );
 };
 

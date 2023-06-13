@@ -1,11 +1,11 @@
 import { FC, useCallback, useMemo } from 'react';
 
 import { useUpdateRingMutation } from '../../../api/companyRadarsApi';
-import { closeEditRingNameModal, renameRing } from '../../../store/editRadarSlice';
+import { closeEditRingModal, openDeleteRingModal, renameRing } from '../../../store/editRadarSlice';
 import { useAppSelector } from '../../../store/hooks';
 import ModalBasic from './ModalBasic';
 
-const ModalEditRingName: FC = () => {
+const ModalEditRing: FC = () => {
     const editingRing = useAppSelector((state) => state.editRadar.editingRing);
     const rings = useAppSelector((state) => state.editRadar.radar.rings);
 
@@ -28,15 +28,17 @@ const ModalEditRingName: FC = () => {
                 open={true}
                 name={editingRing.name}
                 names={ringNames}
-                header={'Изменить название кольца'}
+                header={'Редактировать кольцо'}
                 inputLabel={'Название кольца'}
-                closeModalActionCreator={closeEditRingNameModal}
+                closeModalActionCreator={closeEditRingModal}
                 submitBtnActionCreator={renameRing}
                 submitBtnMutationHandler={submitBtnMutationHandler}
+                hasDeleteButton={rings.length > 1}
+                deleteBtnActionCreator={openDeleteRingModal}
             ></ModalBasic>
         );
     }
     return null;
 };
 
-export default ModalEditRingName;
+export default ModalEditRing;

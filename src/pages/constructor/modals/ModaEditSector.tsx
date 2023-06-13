@@ -1,11 +1,11 @@
 import { FC, useCallback, useMemo } from 'react';
 
 import { useUpdateSectorMutation } from '../../../api/companyRadarsApi';
-import { closeEditSectorNameModal, renameSector } from '../../../store/editRadarSlice';
+import { closeEditSectorModal, openDeleteSectorModal, renameSector } from '../../../store/editRadarSlice';
 import { useAppSelector } from '../../../store/hooks';
-import ModalRename from './ModalBasic';
+import ModalBasic from './ModalBasic';
 
-const ModalEditSectorName: FC = () => {
+const ModalEditSector: FC = () => {
     const editingSector = useAppSelector((state) => state.editRadar.editingSector);
     const sectors = useAppSelector((state) => state.editRadar.radar.sectors);
 
@@ -24,19 +24,21 @@ const ModalEditSectorName: FC = () => {
 
     if (editingSector) {
         return (
-            <ModalRename
+            <ModalBasic
                 open={true}
                 name={editingSector.name}
                 names={sectorNames}
-                header={'Переименовать сектор'}
+                header={'Редактировать сектор'}
                 inputLabel={'Название сектора'}
-                closeModalActionCreator={closeEditSectorNameModal}
+                closeModalActionCreator={closeEditSectorModal}
                 submitBtnActionCreator={renameSector}
                 submitBtnMutationHandler={submitBtnMutationHandler}
+                hasDeleteButton={sectors.length > 1}
+                deleteBtnActionCreator={openDeleteSectorModal}
             />
         );
     }
     return null;
 };
 
-export default ModalEditSectorName;
+export default ModalEditSector;

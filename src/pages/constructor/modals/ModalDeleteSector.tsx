@@ -16,7 +16,6 @@ const ModalDeleteSector: FC = () => {
 
         return (
             <ModalDelete
-                item={editingSector}
                 closeBtnActionCreator={closeDeleteSectorModal}
                 deleteBtnActionCreator={deleteSector}
                 header="Удаление сектора"

@@ -113,6 +113,11 @@ export interface CreateBlipEventApiRequest {
     radarId: number;
 }
 
+export interface CreateBlipEventApiRequestParams {
+    body: CreateBlipEventApiRequest;
+    versionId: number;
+}
+
 export interface CreateBlipEventApiResponse {
     id: number;
     comment: string;
