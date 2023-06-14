@@ -54,11 +54,11 @@ export const formatApiData = (apiData: RadarApiDataResponse): RadarInterface => 
         .sort((blip1, blip2) => (blip1.name < blip2.name ? -1 : 1))
         .map((blip) => ({
             id: blip.id,
-            legendId: -1,
             name: blip.name,
             description: blip.description,
             sector: apiData.quadrants.find((quadrant) => blip.quadrantId === quadrant.id) as Sector,
             ring: apiData.rings.find((ring) => blip.ringId === ring.id) as Ring,
+            drawInfo: blip.drawInfo,
         }));
 
     const groupedByRings = rings.map((ring) =>

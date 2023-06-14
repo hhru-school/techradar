@@ -1,3 +1,5 @@
+import { DrawInfo } from '../components/radar/types';
+
 interface ErrorResponseData {
     message: string;
     status: string;
@@ -62,6 +64,7 @@ export interface RadarApiDataResponse {
         quadrantId: number;
         ringId: number;
         radarId: number;
+        drawInfo?: keyof typeof DrawInfo;
     }[];
 }
 

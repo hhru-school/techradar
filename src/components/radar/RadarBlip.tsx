@@ -6,7 +6,8 @@ import { mouseUpHandler } from '../../pages/constructor/utils';
 import { clearActiveBlip, setActiveBlip } from '../../store/activeBlipSlice';
 import { setDraggingBlip } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { RadarVariant } from './types';
+import RadarBlipShape from './RadarBlipShape';
+import { DrawInfo, RadarVariant } from './types';
 
 import styles from './blip.module.less';
 
@@ -18,9 +19,10 @@ type Props = {
     x: number;
     y: number;
     variant?: RadarVariant;
+    drawInfo?: keyof typeof DrawInfo;
 };
 
-const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarVariant.Demonstrative }) => {
+const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarVariant.Demonstrative, drawInfo }) => {
     const activeId = useAppSelector((state) => state.activeBlip.id);
 
     const isTransforming = useAppSelector((state) => state.displayRadar.isTransforming);
@@ -48,17 +50,10 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarVariant
         [styles.blipEditable]: isEditable,
     });
 
-    const blipFieldClasses = classNames({
-        [styles.blipFieldActive]: isActive,
-        [styles.blipField]: !isActive,
-    });
-
     const blipTextClasses = classNames({
         [styles.blipTextActive]: isActive,
         [styles.blipText]: !isActive,
     });
-
-    const strokeWidth = r / 8;
 
     const isDragging = useAppSelector((state) => state.editRadar.isDragging);
     const draggingId = useAppSelector((state) => state.editRadar.blipAsset?.id);
@@ -90,7 +85,7 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarVariant
                 pointerEvents={isDragging ? 'none' : 'auto'}
                 opacity={id === draggingId ? 0.5 : 1}
             >
-                <circle cx={x} cy={y} r={r - strokeWidth} strokeWidth={strokeWidth} className={blipFieldClasses} />
+                <RadarBlipShape x={x} y={y} r={r} drawInfo={drawInfo} isActive={isActive} />
                 <text
                     x={x}
                     y={y}
@@ -109,15 +104,15 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarVariant
             x,
             y,
             r,
-            strokeWidth,
             blipClasses,
-            blipFieldClasses,
+            isActive,
             blipTextClasses,
             draggingId,
             isDragging,
             mouseDownHandler,
             mouseEnterHandler,
             mouseLeaveHandler,
+            drawInfo,
         ]
     );
 

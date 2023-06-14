@@ -58,6 +58,7 @@ const RadarSegment: FC<Props> = ({
                     x={entry.x}
                     y={entry.y}
                     variant={variant}
+                    drawInfo={blips[i].drawInfo}
                 />
             );
         });
