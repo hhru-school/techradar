@@ -50,7 +50,7 @@ const CompanyCreateModal: FC = () => {
     const textCreateVersionBtn = isLoading ? (
         <CircularProgress color="inherit" sx={styles.progressCircle} />
     ) : (
-        'сохранить'
+        'добавить'
     );
 
     return (

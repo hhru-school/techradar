@@ -1,7 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { BlipResponse } from '../api/types';
-import { initialState } from './mock';
+
+interface State {
+    showEditTechModal: boolean;
+    techData: BlipResponse;
+}
+
+export const initialState: State = {
+    showEditTechModal: false,
+    techData: { name: 'Имя не указано', description: 'Описание не указано', id: 0, radarId: 0 },
+};
 
 export const techSinglePageSlice = createSlice({
     name: 'techSinglePage',

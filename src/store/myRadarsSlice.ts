@@ -1,8 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { initialState } from './mock';
-
 type CreateVersionPayload = { show: boolean; radarId: number | null };
+
+interface State {
+    showCreateVersionModal: boolean;
+    createVersionId: number | null;
+    isfilteredVersionsList: boolean;
+    showCreateRadarModal: boolean;
+}
+
+export const initialState: State = {
+    showCreateVersionModal: false,
+    createVersionId: null,
+    isfilteredVersionsList: true,
+    showCreateRadarModal: false,
+};
 
 export const myRadarsSlice = createSlice({
     name: 'myRadars',

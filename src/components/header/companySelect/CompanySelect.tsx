@@ -27,11 +27,13 @@ const CompanySelect: FC = () => {
     const handleChange = useCallback(
         (event: SelectChangeEvent) => {
             setAge(event.target.value);
-            companies?.forEach((company) => {
-                if (company.id === +event.target.value) {
-                    dispatch(setCurrentCompany(company));
+            if (companies) {
+                for (let i = 0; i < companies.length; i++) {
+                    if (companies[i].id === +event.target.value) {
+                        dispatch(setCurrentCompany(companies[i]));
+                    }
                 }
-            });
+            }
         },
         [companies, dispatch]
     );

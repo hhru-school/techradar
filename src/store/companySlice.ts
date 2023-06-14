@@ -1,7 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { CreateNewCompanyResponse } from '../api/types';
-import { initialState } from './mock';
+
+interface State {
+    showCreateCompanyModal: boolean;
+    currentCompany: null | CreateNewCompanyResponse;
+}
+
+export const initialState: State = {
+    showCreateCompanyModal: false,
+    currentCompany: null,
+};
 
 export const companySlice = createSlice({
     name: 'company',
