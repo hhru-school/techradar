@@ -32,6 +32,7 @@ const CreateRadarInConstructorBtn: FC = () => {
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
 
     const handleCreateRadar = useCallback(() => {
+        // if (currentCompany) navigate(`/constructor/new/radar`);
         if (currentCompany) navigate(`/constructor/new/radar/company/${currentCompany.id}`);
         dispatch(setCreateRadarModalOpen(false));
     }, [currentCompany, dispatch, navigate]);

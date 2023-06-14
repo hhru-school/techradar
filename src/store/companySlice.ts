@@ -9,7 +9,7 @@ interface State {
 
 export const initialState: State = {
     showCreateCompanyModal: false,
-    currentCompany: { id: 1, name: 'dfd' },
+    currentCompany: null,
 };
 
 export const companySlice = createSlice({

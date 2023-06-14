@@ -41,9 +41,7 @@ const MyRadar: FC = () => {
     }, [dispatch, paramRadarId]);
 
     useEffect(() => {
-        if (!paramRadarId && allCompanyRadars && !allCompanyRadars.length && currentCompany) {
-            navigate(`company/${currentCompany.id}`);
-        } else if (!paramRadarId && allCompanyRadars && allCompanyRadars.length && currentCompany) {
+        if (!paramRadarId && allCompanyRadars && allCompanyRadars.length && currentCompany) {
             navigate(`company/${currentCompany.id}/grid/${allCompanyRadars[0].id}`);
         }
     });

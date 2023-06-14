@@ -72,12 +72,19 @@ const Header: FC = () => {
                             <Link to="/">TechRadar</Link>
                         </Typography>
                         <Box sx={styles.toolbarRight}>
-                            <Routes>
-                                <Route path="/admin/my-radars/*" element={<CompanySelect />} />
-                            </Routes>
-                            <Routes>
-                                <Route path="/admin/my-radars/*" element={<CreateRadarBtn />} />
-                            </Routes>
+                            {username ? (
+                                <>
+                                    <Routes>
+                                        <Route path="/admin/my-radars/*" element={<CompanySelect />} />
+                                    </Routes>
+                                    <Routes>
+                                        <Route path="/admin/my-radars/*" element={<CreateRadarBtn />} />
+                                    </Routes>
+                                </>
+                            ) : (
+                                <></>
+                            )}
+
                             <Box sx={styles.iconBox}>
                                 <Tooltip title="Админ панель">
                                     {username ? (
