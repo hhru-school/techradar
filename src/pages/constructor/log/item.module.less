@@ -1,0 +1,24 @@
+@import '../../../styles/global.less';
+
+.container {
+    padding: 10px;
+    box-sizing: border-box;
+    margin-top: 8px;
+    border-radius: 5px;
+    animation: AnimationName 30s ease infinite;
+    box-shadow: 1px 1px 3px rgb(166, 166, 166);
+    &:hover {
+        box-shadow: 1px 1px 10px rgb(129, 129, 129);
+    }
+}
+
+.name {
+    margin: 0 8px;
+    font-size: 14px;
+}
+
+.date {
+    text-align: end;
+    font-size: 9px;
+    color: @label-color;
+}
