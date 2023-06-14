@@ -1,8 +1,12 @@
 import { apiSlice } from './authApi';
 
-export interface UploadFileResponse {
+export interface UploadFileError {
     status: number;
     data: { message: string; status: string; timestamp: string; type: string };
+}
+
+export interface UploadFileResponse {
+    radarId: number;
 }
 
 export interface UploadFileRequest {

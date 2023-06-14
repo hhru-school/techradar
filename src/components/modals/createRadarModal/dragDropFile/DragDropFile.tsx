@@ -1,7 +1,8 @@
 import { FC, useState, useRef, useCallback, DragEventHandler, ChangeEventHandler } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Alert, SxProps } from '@mui/material';
 
-import { UploadFileResponse, useCreateFromFileMutation } from '../../../../api/createRadarFromFileApi';
+import { UploadFileError, UploadFileResponse, useCreateFromFileMutation } from '../../../../api/createRadarFromFileApi';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { setCreateRadarModalOpen } from '../../../../store/myRadarsSlice';
 import { styles } from '../CreateRadarModal';
@@ -23,12 +24,12 @@ const stylesDnd: Record<string, SxProps> = {
 
 const DragDropFile: FC = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const [createFromFile, { isLoading }] = useCreateFromFileMutation();
     const [dragActive, setDragActive] = useState<boolean>(false);
-    const inputRef = useRef(null);
-    // const [message, setMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const inputRef = useRef(null);
 
     const onUploadHandler = useCallback(
         async (file: Blob) => {
@@ -37,20 +38,18 @@ const DragDropFile: FC = () => {
                 formdata.append('file', file);
                 await createFromFile({ formdata, companyId: currentCompany.id })
                     .unwrap()
-                    .then(() => {
-                        // res: UploadFileResponse
+                    .then(({ radarId }: UploadFileResponse) => {
                         setError(null);
-                        // setMessage(res.data.message);
+                        navigate(`/admin/my-radars/company/${currentCompany.id}/grid/${radarId}`);
                         dispatch(setCreateRadarModalOpen(false));
                     })
-                    .catch((e: UploadFileResponse) => {
-                        // setMessage(null);
+                    .catch((e: UploadFileError) => {
                         setError(e.data.message);
                     });
             }
         },
 
-        [createFromFile, currentCompany, dispatch]
+        [createFromFile, currentCompany, dispatch, navigate]
     );
 
     const handleDrag: DragEventHandler<HTMLDivElement | HTMLFormElement> = useCallback((e) => {
@@ -117,7 +116,6 @@ const DragDropFile: FC = () => {
                     ></div>
                 )}
             </form>
-            {/* {message && <Alert severity="warning">{message}</Alert>} */}
             {error && <Alert severity="error">{error}</Alert>}
         </>
     );

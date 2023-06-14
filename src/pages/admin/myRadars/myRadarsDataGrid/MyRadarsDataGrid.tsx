@@ -25,7 +25,6 @@ const MyRadarsDataGrid: FC = () => {
     const navigate = useNavigate();
     const { radarId } = useParams();
     const id = Number(radarId) || 0;
-
     const { data: radarVersions, isError, isLoading } = useGetRadarVersionsQuery(id);
     const isfilteredVersionsList = useAppSelector((state) => state.myRadars.isfilteredVersionsList);
 

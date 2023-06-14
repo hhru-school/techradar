@@ -54,15 +54,7 @@ const MyRadar: FC = () => {
         } else if (currentCompany && allCompanyRadars && !allCompanyRadars.length) {
             navigate(`company/${currentCompany.id}`);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [allCompanyRadars, currentCompany, navigate]);
-
-    useEffect(() => {
-        if (allCompanyRadars && allCompanyRadars.length && currentCompany) {
-            navigate(`company/${currentCompany.id}/grid/${allCompanyRadars[0].id}`);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentCompany]);
+    }, [allCompanyRadars, currentCompany, navigate, paramRadarId]);
 
     const tabsItems = useMemo(
         () =>
