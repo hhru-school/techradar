@@ -49,12 +49,20 @@ const MyRadar: FC = () => {
     });
 
     useEffect(() => {
-        if (allCompanyRadars && allCompanyRadars.length && currentCompany) {
-            navigate(`company/${currentCompany.id}/grid/${allCompanyRadars[0].id}`);
+        if (allCompanyRadars && allCompanyRadars.length && currentCompany && paramRadarId) {
+            navigate(`company/${currentCompany.id}/grid/${paramRadarId}`);
         } else if (currentCompany && allCompanyRadars && !allCompanyRadars.length) {
             navigate(`company/${currentCompany.id}`);
         }
-    }, [allCompanyRadars, currentCompany, navigate, paramRadarId]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [allCompanyRadars, currentCompany, navigate]);
+
+    useEffect(() => {
+        if (allCompanyRadars && allCompanyRadars.length && currentCompany) {
+            navigate(`company/${currentCompany.id}/grid/${allCompanyRadars[0].id}`);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentCompany]);
 
     const tabsItems = useMemo(
         () =>
