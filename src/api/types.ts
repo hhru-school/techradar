@@ -265,3 +265,12 @@ export interface TechSinglePageErrorResponse {
     };
     status: number;
 }
+
+export interface CreateNewCompanyResponse {
+    id: number;
+    name: string;
+}
+
+export interface CreateNewCompanyRequest {
+    name: string;
+}

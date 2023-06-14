@@ -1,4 +1,5 @@
 import { apiSlice } from './authApi';
+import { CreateNewCompanyResponse, CreateNewCompanyRequest } from './types';
 
 export interface CompanyData {
     id: number;
@@ -13,8 +14,17 @@ export const companiesApi = apiSlice.injectEndpoints({
                 url: `/users/companies`,
                 method: 'GET',
             }),
+            providesTags: ['CreateCompany'],
+        }),
+        createNewCompany: builder.mutation<CreateNewCompanyResponse, CreateNewCompanyRequest>({
+            query: (body) => ({
+                url: `/companies`,
+                method: 'POST',
+                body,
+            }),
+            invalidatesTags: ['CreateCompany'],
         }),
     }),
 });
 
-export const { useGetCompaniesQuery } = companiesApi;
+export const { useGetCompaniesQuery, useCreateNewCompanyMutation } = companiesApi;

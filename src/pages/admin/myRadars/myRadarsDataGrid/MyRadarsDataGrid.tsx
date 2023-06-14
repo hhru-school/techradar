@@ -130,7 +130,7 @@ const MyRadarsDataGrid: FC = () => {
             )}
             {isLoading && <Skeleton variant="rounded" width={'100%'} height={'100%'} />}
             {!rows.length && <NoRadarsMock />}
-            {rows.length && (
+            {!!rows.length && (
                 <StyledDataGrid
                     rows={rows}
                     columns={columns}

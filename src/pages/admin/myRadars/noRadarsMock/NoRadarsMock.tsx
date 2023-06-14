@@ -6,8 +6,7 @@ import { setCreateRadarModalOpen } from '../../../../store/myRadarsSlice';
 
 const styles: Record<string, SxProps> = {
     boxText: {
-        marginTop: '20px',
-        height: 'calc(100vh - 240px)',
+        margin: '20px 0 20px 0',
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
@@ -27,7 +26,7 @@ const NoRadarsMock: FC = () => {
             </Typography>
 
             <Button variant="contained" color="success" sx={styles.newRadarBtn} onClick={handleClick}>
-                СОЗДАТЬ СВОЙ ПЕРВЫЙ!
+                СОЗДАТЬ!
             </Button>
         </Box>
     );

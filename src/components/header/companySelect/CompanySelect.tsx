@@ -1,53 +1,78 @@
-import {
-    FC,
-    // useEffect,
-    useState,
-} from 'react';
-import { SelectChangeEvent, FormControl, Select, MenuItem, Button } from '@mui/material';
+import { FC, useCallback, useEffect, useState } from 'react';
+import { SelectChangeEvent, FormControl, Select, MenuItem, SxProps } from '@mui/material';
 
-// import { useGetCompaniesQuery } from '../../../api/companiesApi';
+import { useGetCompaniesQuery } from '../../../api/companiesApi';
+import { setCurrentCompany } from '../../../store/companySlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import CreateCompanyBtn from '../createCompanyBtn/CreateCompanyBtn';
+
+const styles: Record<string, SxProps> = {
+    formControl: { m: 1, minWidth: 120 },
+    select: {
+        m: 1,
+        minWidth: 120,
+        backgroundColor: 'white',
+        height: '38px',
+        display: 'flex',
+    },
+};
 
 const CompanySelect: FC = () => {
-    // const { data: companies } = useGetCompaniesQuery();
+    const dispatch = useAppDispatch();
+    const { data: companies } = useGetCompaniesQuery();
+    const currentCompany = useAppSelector((state) => state.company.currentCompany);
 
     const [age, setAge] = useState('0');
 
-    const handleChange = (event: SelectChangeEvent) => {
-        setAge(event.target.value);
-    };
+    const handleChange = useCallback(
+        (event: SelectChangeEvent) => {
+            setAge(event.target.value);
+            companies?.forEach((company) => {
+                if (company.id === +event.target.value) {
+                    dispatch(setCurrentCompany(company));
+                }
+            });
+        },
+        [companies, dispatch]
+    );
 
-    // useEffect(() => {
-    //     if (companies) setAge(`${companies[0].id}`);
-    // }, [companies]);
+    useEffect(() => {
+        if (companies) {
+            if (currentCompany) {
+                setAge(`${currentCompany.id}`);
+            } else {
+                setAge(`${companies[0].id}`);
+                dispatch(setCurrentCompany(companies[0]));
+            }
+        }
+    }, [companies, currentCompany, dispatch]);
 
-    // const renderItems = companies ? (
-    //     companies.map((company) => {
-    //         return (
-    //             <MenuItem key={company.id} value={company.id}>
-    //                 {`компания ${company.name}`}
-    //             </MenuItem>
-    //         );
-    //     })
-    // ) : (
-    //     <MenuItem value={'0'}>Нет компаний</MenuItem>
-    // );
+    const renderItems = companies ? (
+        companies.map((company) => {
+            return (
+                <MenuItem key={company.id} value={company.id}>
+                    {`компания ${company.name}`}
+                </MenuItem>
+            );
+        })
+    ) : (
+        <MenuItem value={'0'}>Нет компаний</MenuItem>
+    );
 
     return (
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
+        <FormControl sx={styles.formControl}>
             <Select
+                name={'company'}
                 value={age}
                 onChange={handleChange}
                 displayEmpty
                 inputProps={{ 'aria-label': 'Without label' }}
-                sx={{ m: 1, minWidth: 120, backgroundColor: 'white', height: '38px' }}
+                sx={styles.select}
             >
-                {/* {renderItems} */}
-                <MenuItem value={'0'}>компания HeadHunter</MenuItem>
-                <MenuItem>
-                    <Button variant="contained" color="secondary">
-                        Создать компанию
-                    </Button>
-                </MenuItem>
+                {renderItems}
+                {/* <MenuItem value={'0'}>компания HeadHunter</MenuItem> */}
+
+                <CreateCompanyBtn />
             </Select>
         </FormControl>
     );

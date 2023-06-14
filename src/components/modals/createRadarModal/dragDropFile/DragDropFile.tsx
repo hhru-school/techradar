@@ -2,7 +2,7 @@ import { FC, useState, useRef, useCallback, DragEventHandler, ChangeEventHandler
 import { Box, Typography, Button, Alert, SxProps } from '@mui/material';
 
 import { UploadFileResponse, useCreateFromFileMutation } from '../../../../api/createRadarFromFileApi';
-import { useAppDispatch } from '../../../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { setCreateRadarModalOpen } from '../../../../store/myRadarsSlice';
 import { styles } from '../CreateRadarModal';
 
@@ -23,6 +23,7 @@ const stylesDnd: Record<string, SxProps> = {
 
 const DragDropFile: FC = () => {
     const dispatch = useAppDispatch();
+    const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const [createFromFile, { isLoading }] = useCreateFromFileMutation();
     const [dragActive, setDragActive] = useState<boolean>(false);
     const inputRef = useRef(null);
@@ -31,22 +32,25 @@ const DragDropFile: FC = () => {
 
     const onUploadHandler = useCallback(
         async (file: Blob) => {
-            const formdata = new FormData();
-            formdata.append('file', file);
-            await createFromFile(formdata)
-                .unwrap()
-                .then(() => {
-                    // res: UploadFileResponse
-                    setError(null);
-                    // setMessage(res.data.message);
-                    dispatch(setCreateRadarModalOpen(false));
-                })
-                .catch((e: UploadFileResponse) => {
-                    // setMessage(null);
-                    setError(e.data.message);
-                });
+            if (currentCompany) {
+                const formdata = new FormData();
+                formdata.append('file', file);
+                await createFromFile({ formdata, companyId: currentCompany.id })
+                    .unwrap()
+                    .then(() => {
+                        // res: UploadFileResponse
+                        setError(null);
+                        // setMessage(res.data.message);
+                        dispatch(setCreateRadarModalOpen(false));
+                    })
+                    .catch((e: UploadFileResponse) => {
+                        // setMessage(null);
+                        setError(e.data.message);
+                    });
+            }
         },
-        [createFromFile, dispatch]
+
+        [createFromFile, currentCompany, dispatch]
     );
 
     const handleDrag: DragEventHandler<HTMLDivElement | HTMLFormElement> = useCallback((e) => {

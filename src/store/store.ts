@@ -8,6 +8,7 @@ import { createRadarFromFileApi } from '../api/createRadarFromFileApi';
 import { radarsGridApi } from '../api/radarsGridApi';
 import activeBlipReducer from './activeBlipSlice';
 import authReducer from './authSlice/authSlice';
+import companySliceReducer from './companySlice';
 import constructorRadarReducer from './constructorRadarSlice';
 import displayRadarReducer from './displayRadarSlice';
 import editRadarReducer from './editRadarSlice';
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
     myRadars: myRadarsReducer,
     auth: authReducer,
     techSinglePage: techSinglePageReducer,
+    company: companySliceReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
     [companyRadarsApi.reducerPath]: companyRadarsApi.reducer,
     [radarsGridApi.reducerPath]: radarsGridApi.reducer,

@@ -1,12 +1,13 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo } from 'react';
 import { Routes, Route } from 'react-router';
 import { useNavigate, useParams } from 'react-router-dom';
-import InfoIcon from '@mui/icons-material/Info';
-import { Typography, Box, Container, Button, SxProps, Chip, Checkbox, FormControlLabel, Popover } from '@mui/material';
+import { Typography, Box, Container, Button, SxProps, Chip, Checkbox, FormControlLabel } from '@mui/material';
 
 import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { setCreateVersionModalOpen, setFilteredListVersions } from '../../../store/myRadarsSlice';
+import CompanyCreateModal from './companyCreateModal/CompanyCreateModal';
+import InfoBtn from './infoBtn/InfoBtn';
 import MyRadarCreateModal from './myRadarCreateModal/MyRadarCreateModal';
 import MyRadarsDataGrid from './myRadarsDataGrid/MyRadarsDataGrid';
 
@@ -25,59 +26,14 @@ const styles: Record<string, SxProps> = {
     insteadChipsTypo: { margin: '0 auto' },
 };
 
-const InfoBtn: FC = () => {
-    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
-    const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    }, []);
-
-    const handleClose = useCallback(() => {
-        setAnchorEl(null);
-    }, []);
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
-
-    return (
-        <>
-            <Button
-                aria-describedby={id}
-                onClick={handleClick}
-                sx={{
-                    borderRadius: '100%',
-                    height: '17px',
-                    minWidth: '0px',
-                    padding: '0',
-                    width: '17px',
-                    ml: '4px',
-                }}
-            >
-                <InfoIcon fontSize="small" />
-            </Button>
-            <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-            >
-                <Typography sx={{ p: 2 }}>
-                    Если чекбокс неактивен, скрыты все черновики, не связанные с последней публичной версией
-                </Typography>
-            </Popover>
-        </>
-    );
-};
-
 const MyRadar: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { paramRadarId } = useParams();
-    const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(1);
+    const currentCompany = useAppSelector((state) => state.company.currentCompany);
+
+    const companyId = currentCompany ? currentCompany.id : 0;
+    const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(companyId);
     const isfilteredVersionsList = useAppSelector((state) => state.myRadars.isfilteredVersionsList);
 
     const handleCreateVersionModalOpen = useCallback(() => {
@@ -85,14 +41,23 @@ const MyRadar: FC = () => {
     }, [dispatch, paramRadarId]);
 
     useEffect(() => {
-        if (!paramRadarId && allCompanyRadars && allCompanyRadars.length) {
-            navigate(`grid/${allCompanyRadars[0].id}`);
+        if (!paramRadarId && allCompanyRadars && !allCompanyRadars.length && currentCompany) {
+            navigate(`company/${currentCompany.id}`);
+        } else if (!paramRadarId && allCompanyRadars && allCompanyRadars.length && currentCompany) {
+            navigate(`company/${currentCompany.id}/grid/${allCompanyRadars[0].id}`);
         }
     });
+
+    useEffect(() => {
+        if (currentCompany && allCompanyRadars && !allCompanyRadars.length) {
+            navigate(`company/${currentCompany.id}`);
+        }
+    }, [allCompanyRadars, currentCompany, navigate, paramRadarId]);
 
     const tabsItems = useMemo(
         () =>
             allCompanyRadars &&
+            currentCompany &&
             allCompanyRadars.map((radar) => {
                 const isActive = Number(paramRadarId) === radar.id;
 
@@ -103,12 +68,12 @@ const MyRadar: FC = () => {
                         key={radar.id}
                         label={radar.name.toUpperCase()}
                         onClick={() => {
-                            navigate(`grid/${radar.id}`);
+                            navigate(`company/${currentCompany.id}/grid/${radar.id}`);
                         }}
                     />
                 );
             }),
-        [allCompanyRadars, navigate, paramRadarId]
+        [allCompanyRadars, navigate, paramRadarId, currentCompany]
     );
 
     const handleChange = useCallback(
@@ -144,7 +109,13 @@ const MyRadar: FC = () => {
                     <Box sx={styles.checkboxBox}>
                         <FormControlLabel
                             sx={styles.formControlLabel}
-                            control={<Checkbox onChange={handleChange} checked={!isfilteredVersionsList} />}
+                            control={
+                                <Checkbox
+                                    onChange={handleChange}
+                                    checked={!isfilteredVersionsList}
+                                    disabled={!allCompanyRadars?.length}
+                                />
+                            }
                             label="Показать все версии"
                         />
                         <InfoBtn />
@@ -152,10 +123,12 @@ const MyRadar: FC = () => {
                 </Box>
                 <Routes>
                     <Route path="/" element={<MyRadarsDataGrid />} />
-                    <Route path="/grid/:radarId" element={<MyRadarsDataGrid />} />
+                    <Route path="/company/:companyId" element={<MyRadarsDataGrid />} />
+                    <Route path="/company/:companyId/grid/:radarId" element={<MyRadarsDataGrid />} />
                 </Routes>
             </Container>
             <MyRadarCreateModal />
+            <CompanyCreateModal />
         </>
     );
 };

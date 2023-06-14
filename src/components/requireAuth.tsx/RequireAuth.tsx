@@ -11,7 +11,7 @@ const RequireAuth: FC = () => {
     const content = accessToken ? (
         <Routes>
             <Route path="/my-radars/*" element={<MyRadars />}>
-                <Route path="grid/:paramRadarId" element={<MyRadars />} />
+                <Route path="company/:companyId/grid/:paramRadarId" element={<MyRadars />} />
             </Route>
         </Routes>
     ) : (
