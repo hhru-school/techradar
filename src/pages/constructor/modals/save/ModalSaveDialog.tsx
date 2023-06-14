@@ -11,7 +11,7 @@ import SuccessDialog from './SuccessDialog';
 import styles from '../modal.module.less';
 
 // mock
-const companyId = 1;
+const companyId = 2;
 
 const ModalSaveDialog: FC = () => {
     const radar = useAppSelector((state) => state.editRadar.radar);
@@ -20,7 +20,7 @@ const ModalSaveDialog: FC = () => {
     const [saveRadar, { data, isLoading, isSuccess, error }] = useSaveNewRadarMutation();
 
     const submitHandler = useCallback(async () => {
-        await saveRadar(formatCreateRadarData({ ...radar, authorId: 1, companyId: 1, name: radar.name }));
+        await saveRadar(formatCreateRadarData({ ...radar, authorId: 1, companyId: 2, name: radar.name }));
     }, [saveRadar, radar]);
 
     return (
