@@ -25,11 +25,11 @@ const CompanySelect: FC = () => {
     const { data: companies } = useGetCompaniesQuery();
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
 
-    const [age, setAge] = useState('0');
+    const [activeCompany, setActiveCompany] = useState('0');
 
     const handleChange = useCallback(
         (event: SelectChangeEvent) => {
-            setAge(event.target.value);
+            setActiveCompany(event.target.value);
             if (companies) {
                 for (let i = 0; i < companies.length; i++) {
                     if (companies[i].id === +event.target.value) {
@@ -44,10 +44,10 @@ const CompanySelect: FC = () => {
 
     useEffect(() => {
         if (currentCompany) {
-            setAge(`${currentCompany.id}`);
+            setActiveCompany(`${currentCompany.id}`);
             dispatch(setCurrentCompany(currentCompany));
         } else if (companies?.length) {
-            setAge(`${companies[0].id}`);
+            setActiveCompany(`${companies[0].id}`);
             dispatch(setCurrentCompany(companies[0]));
         }
     }, [companies, companyId, currentCompany, dispatch, navigate]);
@@ -70,14 +70,13 @@ const CompanySelect: FC = () => {
                 <FormControl sx={styles.formControl}>
                     <Select
                         name={'company'}
-                        value={age}
+                        value={activeCompany}
                         onChange={handleChange}
                         displayEmpty
                         inputProps={{ 'aria-label': 'Without label' }}
                         sx={styles.select}
                     >
                         {renderItems}
-                        {/* <MenuItem value={'0'}>компания HeadHunter</MenuItem> */}
 
                         <MenuItem value={'0'}>
                             <CreateCompanyBtn />

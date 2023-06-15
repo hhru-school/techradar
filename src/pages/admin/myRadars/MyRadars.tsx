@@ -46,11 +46,9 @@ const MyRadar: FC = () => {
         } else if (allCompanyRadars && !allCompanyRadars.length && paramCompanyId) {
             navigate(`company/${paramCompanyId}`);
         } else if (paramRadarId && allCompanyRadars && allCompanyRadars.length) {
-            const match = new Set();
-            for (let i = 0; i < allCompanyRadars.length; i++) {
-                match.add(allCompanyRadars[i].id === +paramRadarId);
-            }
-            if (!match.has(true)) {
+            const match = allCompanyRadars.find((radar) => radar.id === +paramRadarId);
+
+            if (!match) {
                 navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
             }
         }
