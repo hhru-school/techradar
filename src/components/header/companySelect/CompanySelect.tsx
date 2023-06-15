@@ -46,7 +46,7 @@ const CompanySelect: FC = () => {
         if (currentCompany) {
             setAge(`${currentCompany.id}`);
             dispatch(setCurrentCompany(currentCompany));
-        } else if (companies) {
+        } else if (companies?.length) {
             setAge(`${companies[0].id}`);
             dispatch(setCurrentCompany(companies[0]));
         }
@@ -65,21 +65,29 @@ const CompanySelect: FC = () => {
     );
 
     return (
-        <FormControl sx={styles.formControl}>
-            <Select
-                name={'company'}
-                value={age}
-                onChange={handleChange}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
-                sx={styles.select}
-            >
-                {renderItems}
-                {/* <MenuItem value={'0'}>компания HeadHunter</MenuItem> */}
+        <>
+            {companies && companies.length ? (
+                <FormControl sx={styles.formControl}>
+                    <Select
+                        name={'company'}
+                        value={age}
+                        onChange={handleChange}
+                        displayEmpty
+                        inputProps={{ 'aria-label': 'Without label' }}
+                        sx={styles.select}
+                    >
+                        {renderItems}
+                        {/* <MenuItem value={'0'}>компания HeadHunter</MenuItem> */}
 
+                        <MenuItem value={'0'}>
+                            <CreateCompanyBtn />
+                        </MenuItem>
+                    </Select>
+                </FormControl>
+            ) : (
                 <CreateCompanyBtn />
-            </Select>
-        </FormControl>
+            )}
+        </>
     );
 };
 

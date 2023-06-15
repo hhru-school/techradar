@@ -18,6 +18,7 @@ import {
     Typography,
 } from '@mui/material';
 
+import { useGetCompaniesQuery } from '../../api/companiesApi';
 import { signOut, setAuthFormOpen } from '../../store/authSlice/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AuthFormModal from '../modals/authFormModal/AuthFormModal';
@@ -41,6 +42,7 @@ const Header: FC = () => {
     const username = useAppSelector((state) => state.auth.username);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+    const { data: companies } = useGetCompaniesQuery();
 
     const handleClick = useCallback((event: MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -81,9 +83,14 @@ const Header: FC = () => {
                                         />
                                         <Route path="/admin/my-radars/*" element={<CompanySelect />} />
                                     </Routes>
-                                    <Routes>
-                                        <Route path="/admin/my-radars/*" element={<CreateRadarBtn />} />
-                                    </Routes>
+
+                                    {companies && companies.length ? (
+                                        <Routes>
+                                            <Route path="/admin/my-radars/*" element={<CreateRadarBtn />} />
+                                        </Routes>
+                                    ) : (
+                                        <></>
+                                    )}
                                 </>
                             ) : (
                                 <></>
