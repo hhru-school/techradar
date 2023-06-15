@@ -39,13 +39,12 @@ const CompanySelect: FC = () => {
     );
 
     useEffect(() => {
-        if (companies) {
-            if (currentCompany) {
-                setAge(`${currentCompany.id}`);
-            } else {
-                setAge(`${companies[0].id}`);
-                dispatch(setCurrentCompany(companies[0]));
-            }
+        if (currentCompany) {
+            setAge(`${currentCompany.id}`);
+            dispatch(setCurrentCompany(currentCompany));
+        } else if (companies) {
+            setAge(`${companies[0].id}`);
+            dispatch(setCurrentCompany(companies[0]));
         }
     }, [companies, currentCompany, dispatch]);
 

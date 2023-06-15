@@ -30,10 +30,10 @@ const MyRadar: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { paramRadarId } = useParams();
+    const { companyId } = useParams();
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
-
-    const companyId = currentCompany ? currentCompany.id : 0;
-    const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(companyId);
+    const paramCompanyId = currentCompany ? currentCompany.id : 0;
+    const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(paramCompanyId);
     const isfilteredVersionsList = useAppSelector((state) => state.myRadars.isfilteredVersionsList);
 
     const handleCreateVersionModalOpen = useCallback(() => {
@@ -41,23 +41,17 @@ const MyRadar: FC = () => {
     }, [dispatch, paramRadarId]);
 
     useEffect(() => {
-        if (!paramRadarId && allCompanyRadars && allCompanyRadars.length && currentCompany) {
-            navigate(`company/${currentCompany.id}/grid/${allCompanyRadars[0].id}`);
+        if (!paramRadarId && allCompanyRadars && allCompanyRadars.length && paramCompanyId) {
+            navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
+        } else if (allCompanyRadars && !allCompanyRadars.length && paramCompanyId) {
+            navigate(`company/${paramCompanyId}`);
         }
-    });
-
-    useEffect(() => {
-        if (allCompanyRadars && allCompanyRadars.length && currentCompany && paramRadarId) {
-            navigate(`company/${currentCompany.id}/grid/${paramRadarId}`);
-        } else if (currentCompany && allCompanyRadars && !allCompanyRadars.length) {
-            navigate(`company/${currentCompany.id}`);
-        }
-    }, [allCompanyRadars, currentCompany, navigate, paramRadarId]);
+    }, [allCompanyRadars, paramCompanyId, navigate, paramRadarId]);
 
     const tabsItems = useMemo(
         () =>
             allCompanyRadars &&
-            currentCompany &&
+            companyId &&
             allCompanyRadars.map((radar) => {
                 const isActive = Number(paramRadarId) === radar.id;
 
@@ -68,12 +62,12 @@ const MyRadar: FC = () => {
                         key={radar.id}
                         label={radar.name.toUpperCase()}
                         onClick={() => {
-                            navigate(`company/${currentCompany.id}/grid/${radar.id}`);
+                            navigate(`company/${companyId}/grid/${radar.id}`);
                         }}
                     />
                 );
             }),
-        [allCompanyRadars, navigate, paramRadarId, currentCompany]
+        [allCompanyRadars, navigate, paramRadarId, companyId]
     );
 
     const handleChange = useCallback(
