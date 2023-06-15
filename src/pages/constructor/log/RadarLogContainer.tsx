@@ -20,12 +20,7 @@ const RadarLogContainer: FC = () => {
             </div>
         );
     }
-    return (
-        <div className={styles.container}>
-            {/* {logData && <LogList blipEvents={logData} boxWidth={'90%'} boxMaxHeight={'500px'} hasHeader={false} />} */}
-            {logData && <Log blipEvents={logData} />}
-        </div>
-    );
+    return <div className={styles.container}>{logData && <Log blipEvents={logData} />}</div>;
 };
 
 export default RadarLogContainer;

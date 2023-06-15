@@ -129,6 +129,18 @@ export interface CreateBlipEventApiResponse {
     lastChangeTime: string;
 }
 
+export interface UpdateBlipEventApiResponse {
+    comment: string;
+    parentId: number;
+    blipId: number;
+    quadrantId: number;
+    ringId: number;
+    authorId: number;
+    radarId: number;
+    creationTime: string;
+    lastChangeTime: string;
+}
+
 export interface UpdateVersionRequest {
     id: number;
     name: string;

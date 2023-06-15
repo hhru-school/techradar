@@ -11,7 +11,7 @@ import SuccessDialog from './SuccessDialog';
 import styles from '../modal.module.less';
 
 // mock
-const companyId = 1;
+const companyId = 2;
 
 const ModalSaveDialog: FC = () => {
     const radar = useAppSelector((state) => state.editRadar.radar);

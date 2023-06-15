@@ -10,6 +10,7 @@ import {
     IndexBlipEventApi,
     RadarApiDataResponse,
     RenameContainerItemApi,
+    UpdateBlipEventApiResponse,
     UpdateRadarApiRequest,
     UpdateRadarApiResponse,
     UpdateVersionRequest,
@@ -185,7 +186,16 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'DELETE',
                 url: `blip-events/${blipEventId}`,
             }),
-            invalidatesTags: ['Radar', 'Version'],
+            invalidatesTags: ['Radar', 'Version', 'Log'],
+        }),
+
+        updateBlipEventComment: builder.mutation<UpdateBlipEventApiResponse, { id: number; comment: string }>({
+            query: ({ id, comment }) => ({
+                method: 'PUT',
+                url: `blip-events/${id}`,
+                body: { comment },
+            }),
+            invalidatesTags: ['Log'],
         }),
     }),
 });
@@ -208,4 +218,5 @@ export const {
     useUpdateRadarMutation,
     useUpdateRingMutation,
     useDeleteBlipEventMutation,
+    useUpdateBlipEventCommentMutation,
 } = companyRadarsApi;

@@ -69,10 +69,12 @@ export interface EditRadarState {
     showSaveRadarDialog: boolean;
     showSwitchReleaseModal: boolean;
     showDeleteBlipEventModal: boolean;
+    showBlipEventModal: boolean;
     editingSector: Sector | null;
     editingRing: Ring | null;
     showEditIcon: boolean;
-    editingBlipEventId: number;
+    editingBlipEvent: IndexBlipEventApi | null;
+    newBlipEventId: number;
 }
 
 const initialState: EditRadarState = {
@@ -100,6 +102,7 @@ const initialState: EditRadarState = {
     showEditRadarNameModal: false,
     showEditVersionNameModal: false,
     showDeleteBlipEventModal: false,
+    showBlipEventModal: false,
     editingSector: null,
     editingRing: null,
     showAddNewSectorModal: false,
@@ -107,7 +110,8 @@ const initialState: EditRadarState = {
     showSaveRadarDialog: false,
     showSwitchReleaseModal: false,
     showEditIcon: false,
-    editingBlipEventId: -1,
+    editingBlipEvent: null,
+    newBlipEventId: -1,
 };
 
 const getBlipById = (state: EditRadarState, id: number): Blip | null => {
@@ -433,13 +437,33 @@ export const editRadarSlice = createSlice({
             state.log = action.payload;
         },
 
-        openDeleteBlipEventModal: (state, action: PayloadAction<number>) => {
+        openDeleteBlipEventModal: (state) => {
             state.showDeleteBlipEventModal = true;
-            state.editingBlipEventId = action.payload;
+            state.showBlipEventModal = false;
         },
 
         closeDeleteBlipEventModal: (state) => {
+            state.showBlipEventModal = true;
             state.showDeleteBlipEventModal = false;
+        },
+
+        openBlipEventModal: (state, action: PayloadAction<IndexBlipEventApi>) => {
+            state.showBlipEventModal = true;
+            state.editingBlipEvent = action.payload;
+        },
+
+        closeBlipEventModal: (state) => {
+            state.showBlipEventModal = false;
+            state.editingBlipEvent = null;
+        },
+
+        setNewBlipEventId: (state, action: PayloadAction<number>) => {
+            state.newBlipEventId = action.payload;
+        },
+
+        updateBlipEventComment: (state, action: PayloadAction<string>) => {
+            if (!state.editingBlipEvent) throw new Error('Editing blipEvent not assigned');
+            state.editingBlipEvent.comment = action.payload;
         },
     },
 });
@@ -498,8 +522,12 @@ export const {
     setVersionName,
     openEditVersionNameModal,
     closeEditVersionNameModal,
+    openBlipEventModal,
+    closeBlipEventModal,
     openDeleteBlipEventModal,
     closeDeleteBlipEventModal,
+    setNewBlipEventId,
+    updateBlipEventComment,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;
