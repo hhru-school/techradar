@@ -1,7 +1,7 @@
-import { FC, useCallback, useEffect, useMemo } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { Routes, Route } from 'react-router';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Typography, Box, Container, Button, SxProps, Chip, Checkbox, FormControlLabel } from '@mui/material';
+import { Typography, Box, Container, Button, SxProps, Checkbox, FormControlLabel } from '@mui/material';
 
 import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -10,6 +10,7 @@ import CompanyCreateModal from './companyCreateModal/CompanyCreateModal';
 import InfoBtn from './infoBtn/InfoBtn';
 import MyRadarCreateModal from './myRadarCreateModal/MyRadarCreateModal';
 import MyRadarsDataGrid from './myRadarsDataGrid/MyRadarsDataGrid';
+import RadarsChips from './radarsChips/RadarsChips';
 
 import './MyRadars.less';
 
@@ -30,7 +31,6 @@ const MyRadar: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { paramRadarId } = useParams();
-    const { companyId } = useParams();
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const paramCompanyId = currentCompany ? currentCompany.id : 0;
     const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(paramCompanyId);
@@ -45,30 +45,16 @@ const MyRadar: FC = () => {
             navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
         } else if (allCompanyRadars && !allCompanyRadars.length && paramCompanyId) {
             navigate(`company/${paramCompanyId}`);
+        } else if (paramRadarId && allCompanyRadars && allCompanyRadars.length) {
+            const match = new Set();
+            for (let i = 0; i < allCompanyRadars.length; i++) {
+                match.add(allCompanyRadars[i].id === +paramRadarId);
+            }
+            if (!match.has(true)) {
+                navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
+            }
         }
     }, [allCompanyRadars, paramCompanyId, navigate, paramRadarId]);
-
-    const tabsItems = useMemo(
-        () =>
-            allCompanyRadars &&
-            companyId &&
-            allCompanyRadars.map((radar) => {
-                const isActive = Number(paramRadarId) === radar.id;
-
-                return (
-                    <Chip
-                        color={isActive ? 'success' : 'default'}
-                        sx={styles.defaultChip}
-                        key={radar.id}
-                        label={radar.name.toUpperCase()}
-                        onClick={() => {
-                            navigate(`company/${companyId}/grid/${radar.id}`);
-                        }}
-                    />
-                );
-            }),
-        [allCompanyRadars, navigate, paramRadarId, companyId]
-    );
 
     const handleChange = useCallback(
         () => dispatch(setFilteredListVersions(!isfilteredVersionsList)),
@@ -78,15 +64,7 @@ const MyRadar: FC = () => {
     return (
         <>
             <Container maxWidth="xl">
-                <Box sx={styles.chipsItemsBox} className="container">
-                    {allCompanyRadars?.length ? (
-                        tabsItems
-                    ) : (
-                        <Typography variant="h6" sx={styles.insteadChipsTypo}>
-                            Здесь можно будет переключаться между радарами
-                        </Typography>
-                    )}
-                </Box>
+                <RadarsChips />
                 <Typography variant="h5" sx={styles.title}>
                     Радары
                 </Typography>
