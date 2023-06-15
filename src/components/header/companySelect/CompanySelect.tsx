@@ -1,4 +1,5 @@
 import { FC, useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { SelectChangeEvent, FormControl, Select, MenuItem, SxProps } from '@mui/material';
 
 import { useGetCompaniesQuery } from '../../../api/companiesApi';
@@ -19,6 +20,8 @@ const styles: Record<string, SxProps> = {
 
 const CompanySelect: FC = () => {
     const dispatch = useAppDispatch();
+    const { companyId } = useParams();
+    const navigate = useNavigate();
     const { data: companies } = useGetCompaniesQuery();
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
 
@@ -31,11 +34,12 @@ const CompanySelect: FC = () => {
                 for (let i = 0; i < companies.length; i++) {
                     if (companies[i].id === +event.target.value) {
                         dispatch(setCurrentCompany(companies[i]));
+                        navigate(`company/${companies[i].id}`);
                     }
                 }
             }
         },
-        [companies, dispatch]
+        [companies, dispatch, navigate]
     );
 
     useEffect(() => {
@@ -46,7 +50,7 @@ const CompanySelect: FC = () => {
             setAge(`${companies[0].id}`);
             dispatch(setCurrentCompany(companies[0]));
         }
-    }, [companies, currentCompany, dispatch]);
+    }, [companies, companyId, currentCompany, dispatch, navigate]);
 
     const renderItems = companies ? (
         companies.map((company) => {

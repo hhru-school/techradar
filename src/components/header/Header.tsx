@@ -75,6 +75,10 @@ const Header: FC = () => {
                             {username ? (
                                 <>
                                     <Routes>
+                                        <Route
+                                            path="/admin/my-radars/company/:companyId/*"
+                                            element={<CompanySelect />}
+                                        />
                                         <Route path="/admin/my-radars/*" element={<CompanySelect />} />
                                     </Routes>
                                     <Routes>
