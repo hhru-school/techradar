@@ -165,7 +165,7 @@ export interface IndexBlipEventApi {
 export interface VersionData {
     id: number;
     name: string;
-    release: boolean;
+    release: boolean | string;
     radarId: number;
     blipEventId: number;
     creationTime: string | Date;
@@ -264,4 +264,13 @@ export interface TechSinglePageErrorResponse {
         type: string;
     };
     status: number;
+}
+
+export interface CreateNewCompanyResponse {
+    id: number;
+    name: string;
+}
+
+export interface CreateNewCompanyRequest {
+    name: string;
 }
