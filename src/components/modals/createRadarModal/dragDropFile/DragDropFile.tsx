@@ -96,12 +96,12 @@ const DragDropFile: FC = () => {
                 <input ref={inputRef} type="file" id="input-file-upload" onChange={handleChange} />
                 <label id="label-file-upload" htmlFor="input-file-upload" className={dragActive ? 'drag-active' : ''}>
                     <Box>
-                        <Typography>Перетащите свой файл (в формате .csv или .xls) сюда или</Typography>
+                        <Typography>Перетащите свой файл (в формате .csv или .xlsx) сюда или</Typography>
                         <Button variant="contained" sx={styles.btn} onClick={onButtonClick} disabled={isLoading}>
                             Загрузите файл
                         </Button>
                         <Alert severity="warning" sx={stylesDnd.warning}>
-                            Внимание! В файле формата .xls вкладки необходимо расположить последовательно от поздней
+                            Внимание! В файле формата .xlsx вкладки необходимо расположить последовательно от поздней
                             версии к ранней
                         </Alert>
                     </Box>

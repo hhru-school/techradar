@@ -39,6 +39,7 @@ const MyRadarsDataGrid: FC = () => {
                           release: item.release ? 'да' : 'нет',
                           creationTime: new Date(item.creationTime).toLocaleString(),
                           lastChangeTime: new Date(item.lastChangeTime).toLocaleString(),
+                          parentName: item.parentName === '_init_' ? '' : item.parentName,
                       };
                   })
                 : [],
@@ -76,8 +77,8 @@ const MyRadarsDataGrid: FC = () => {
                 editable: false,
             },
             {
-                field: 'parentId',
-                headerName: 'Родительская версия',
+                field: 'parentName',
+                headerName: 'Прошлая версия',
                 type: 'string',
                 width: 350,
                 editable: false,

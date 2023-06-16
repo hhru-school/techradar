@@ -6,6 +6,7 @@ export interface VersionData {
     blipEventId: number;
     creationTime: string | Date;
     lastChangeTime: string | Date;
+    parentName: string;
 }
 
 export type RadarVersionData = Array<VersionData>;
