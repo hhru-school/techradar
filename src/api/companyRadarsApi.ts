@@ -146,7 +146,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 body,
             }),
         }),
-        getBlipEventsForRadar: builder.query<IndexBlipEventApi[], number>({
+        getRadarLog: builder.query<IndexBlipEventApi[], number>({
             query: (blipEventId) => ({
                 method: 'GET',
                 url: `blip-events/radar-log?blip-event-id=${blipEventId}`,
@@ -186,7 +186,24 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'DELETE',
                 url: `blip-events/${blipEventId}`,
             }),
-            invalidatesTags: ['Radar', 'Version', 'Log'],
+
+            async onQueryStarted(blipEventId, { getState, dispatch, queryFulfilled }) {
+                const state = (getState() as RootState).editRadar;
+                if (!state.log) throw new Error('Empty log on delete blipEvent');
+                const currentBlipEventId = state.version.blipEventId;
+                const updatedLog = state.log.filter((blipEvent) => blipEventId !== blipEvent.id);
+
+                const result = dispatch(
+                    companyRadarsApi.util.updateQueryData('getRadarLog', currentBlipEventId, () => updatedLog)
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    result.undo();
+                }
+            },
+
+            invalidatesTags: ['Radar', 'Version'],
         }),
 
         updateBlipEventComment: builder.mutation<UpdateBlipEventApiResponse, { id: number; comment: string }>({
@@ -195,6 +212,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 url: `blip-events/${id}`,
                 body: { comment },
             }),
+
             invalidatesTags: ['Log'],
         }),
     }),
@@ -213,7 +231,7 @@ export const {
     useCreateBlipEventMutation,
     useUpdateVersionMutation,
     useSaveNewRadarMutation,
-    useGetBlipEventsForRadarQuery,
+    useGetRadarLogQuery,
     useUpdateSectorMutation,
     useUpdateRadarMutation,
     useUpdateRingMutation,

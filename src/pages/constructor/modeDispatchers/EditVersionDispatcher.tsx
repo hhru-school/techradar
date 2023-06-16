@@ -2,8 +2,8 @@ import { FC, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import {
-    useGetBlipEventsForRadarQuery,
     useGetRadarByVersionIdQuery,
+    useGetRadarLogQuery,
     useGetVersionByIdQuery,
 } from '../../../api/companyRadarsApi';
 import {
@@ -37,7 +37,7 @@ const EditVersionDispatcher: FC = () => {
         error: versionError,
     } = useGetVersionByIdQuery(Number(versionId));
 
-    const { data: log } = useGetBlipEventsForRadarQuery(currentVersion.blipEventId, {
+    const { data: log } = useGetRadarLogQuery(currentVersion.blipEventId, {
         skip: currentVersion.blipEventId < 0,
     });
 
