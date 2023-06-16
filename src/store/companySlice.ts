@@ -1,15 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { CompanyStaff } from '../api/companiesApi';
 import { CreateNewCompanyResponse } from '../api/types';
 
 interface State {
     showCreateCompanyModal: boolean;
     currentCompany: null | CreateNewCompanyResponse;
+    showStaffModal: boolean;
+    showSetStaffItemModal: boolean;
+    showDeleteStaffItemModal: boolean;
+    deleteStaffItemData: CompanyStaff | null;
 }
 
 export const initialState: State = {
     showCreateCompanyModal: false,
     currentCompany: null,
+    showStaffModal: false,
+    showSetStaffItemModal: false,
+    showDeleteStaffItemModal: false,
+    deleteStaffItemData: null,
 };
 
 export const companySlice = createSlice({
@@ -22,9 +31,28 @@ export const companySlice = createSlice({
         setCurrentCompany: (state, action: PayloadAction<CreateNewCompanyResponse>) => {
             state.currentCompany = action.payload;
         },
+        setStaffModalOpen: (state, action: PayloadAction<boolean>) => {
+            state.showStaffModal = action.payload;
+        },
+        setSetStaffItemModalOpen: (state, action: PayloadAction<boolean>) => {
+            state.showSetStaffItemModal = action.payload;
+        },
+        setDeleteStaffItemModalOpen: (
+            state,
+            action: PayloadAction<{ show: boolean; username: CompanyStaff | null }>
+        ) => {
+            state.showDeleteStaffItemModal = action.payload.show;
+            state.deleteStaffItemData = action.payload.username;
+        },
     },
 });
 
-export const { setCreateCompanyModalOpen, setCurrentCompany } = companySlice.actions;
+export const {
+    setCreateCompanyModalOpen,
+    setCurrentCompany,
+    setStaffModalOpen,
+    setSetStaffItemModalOpen,
+    setDeleteStaffItemModalOpen,
+} = companySlice.actions;
 
 export default companySlice.reducer;

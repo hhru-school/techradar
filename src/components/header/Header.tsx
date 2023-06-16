@@ -1,6 +1,7 @@
 import { FC, useState, MouseEvent, useCallback } from 'react';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import GroupIcon from '@mui/icons-material/Group';
 import Logout from '@mui/icons-material/Logout';
 import RadarIcon from '@mui/icons-material/Radar';
 import {
@@ -20,10 +21,12 @@ import {
 
 import { useGetCompaniesQuery } from '../../api/companiesApi';
 import { signOut, setAuthFormOpen } from '../../store/authSlice/authSlice';
+import { setStaffModalOpen } from '../../store/companySlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AuthFormModal from '../modals/authFormModal/AuthFormModal';
 import CreateRadarModal from '../modals/createRadarModal/CreateRadarModal';
 import RegistrationFormModal from '../modals/registrationFormModal/RegistrationFormModal';
+import StaffModal from '../modals/staffModal/StaffModal';
 import CompanySelect from './companySelect/CompanySelect';
 import CreateRadarBtn from './createRadarBtn/CreateRadarBtn';
 import { styles } from './styles';
@@ -40,6 +43,7 @@ const Header: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const username = useAppSelector((state) => state.auth.username);
+    const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const { data: companies } = useGetCompaniesQuery();
@@ -59,6 +63,11 @@ const Header: FC = () => {
     }, [dispatch, navigate]);
 
     const handleAuthFormOpen = useCallback(() => dispatch(setAuthFormOpen(true)), [dispatch]);
+
+    const handleOpenStaffModal = useCallback(() => {
+        dispatch(setStaffModalOpen(true));
+        setAnchorEl(null);
+    }, [dispatch]);
 
     const ariaControlsIconBtn = open ? 'account-menu' : undefined;
     const ariaExpandedIconBtn = open ? 'true' : undefined;
@@ -135,6 +144,17 @@ const Header: FC = () => {
                                     </MenuItem>
                                 </Link>
 
+                                {currentCompany ? (
+                                    <MenuItem onClick={handleOpenStaffModal}>
+                                        <ListItemIcon>
+                                            <GroupIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        Сотрудники
+                                    </MenuItem>
+                                ) : (
+                                    <></>
+                                )}
+
                                 <Divider />
                                 <MenuItem onClick={handleUnauthorization}>
                                     <ListItemIcon>
@@ -150,6 +170,7 @@ const Header: FC = () => {
             <RegistrationFormModal />
             <AuthFormModal />
             <CreateRadarModal />
+            <StaffModal />
         </>
     );
 };

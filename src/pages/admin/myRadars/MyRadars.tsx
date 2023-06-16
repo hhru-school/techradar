@@ -32,6 +32,7 @@ const MyRadar: FC = () => {
     const navigate = useNavigate();
     const { paramRadarId } = useParams();
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
+    const showCreateRadarModal = useAppSelector((state) => state.myRadars.showCreateRadarModal);
     const paramCompanyId = currentCompany ? currentCompany.id : 0;
     const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(paramCompanyId);
     const isfilteredVersionsList = useAppSelector((state) => state.myRadars.isfilteredVersionsList);
@@ -52,7 +53,7 @@ const MyRadar: FC = () => {
                 navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
             }
         }
-    }, [allCompanyRadars, paramCompanyId, navigate, paramRadarId]);
+    }, [allCompanyRadars, paramCompanyId, navigate, paramRadarId, showCreateRadarModal]);
 
     const handleChange = useCallback(
         () => dispatch(setFilteredListVersions(!isfilteredVersionsList)),
