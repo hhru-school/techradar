@@ -78,9 +78,7 @@ const CompanySelect: FC = () => {
                     >
                         {renderItems}
 
-                        <MenuItem value={'0'}>
-                            <CreateCompanyBtn />
-                        </MenuItem>
+                        <CreateCompanyBtn />
                     </Select>
                 </FormControl>
             ) : (

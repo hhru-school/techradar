@@ -98,11 +98,11 @@ const Header: FC = () => {
                                             <Route path="/admin/my-radars/*" element={<CreateRadarBtn />} />
                                         </Routes>
                                     ) : (
-                                        <></>
+                                        <div></div>
                                     )}
                                 </>
                             ) : (
-                                <></>
+                                <div></div>
                             )}
 
                             <Box sx={styles.iconBox}>
@@ -152,7 +152,7 @@ const Header: FC = () => {
                                         Сотрудники
                                     </MenuItem>
                                 ) : (
-                                    <></>
+                                    <div></div>
                                 )}
 
                                 <Divider />

@@ -1,8 +1,7 @@
 import { FC, useState, useRef, useCallback, DragEventHandler, ChangeEventHandler } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Alert, SxProps } from '@mui/material';
 
-import { UploadFileError, UploadFileResponse, useCreateFromFileMutation } from '../../../../api/createRadarFromFileApi';
+import { UploadFileError, useCreateFromFileMutation } from '../../../../api/createRadarFromFileApi';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { setCreateRadarModalOpen } from '../../../../store/myRadarsSlice';
 import { styles } from '../CreateRadarModal';
@@ -24,7 +23,6 @@ const stylesDnd: Record<string, SxProps> = {
 
 const DragDropFile: FC = () => {
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const [createFromFile, { isLoading }] = useCreateFromFileMutation();
     const [dragActive, setDragActive] = useState<boolean>(false);
@@ -38,9 +36,8 @@ const DragDropFile: FC = () => {
                 formdata.append('file', file);
                 await createFromFile({ formdata, companyId: currentCompany.id })
                     .unwrap()
-                    .then(({ radarId }: UploadFileResponse) => {
+                    .then(() => {
                         setError(null);
-                        navigate(`/admin/my-radars/company/${currentCompany.id}/grid/${radarId}`);
                         dispatch(setCreateRadarModalOpen(false));
                     })
                     .catch((e: UploadFileError) => {
@@ -49,7 +46,7 @@ const DragDropFile: FC = () => {
             }
         },
 
-        [createFromFile, currentCompany, dispatch, navigate]
+        [createFromFile, currentCompany, dispatch]
     );
 
     const handleDrag: DragEventHandler<HTMLDivElement | HTMLFormElement> = useCallback((e) => {

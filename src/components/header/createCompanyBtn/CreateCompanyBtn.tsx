@@ -5,7 +5,7 @@ import { setCreateCompanyModalOpen } from '../../../store/companySlice';
 import { useAppDispatch } from '../../../store/hooks';
 
 const styles: Record<string, SxProps> = {
-    btn: { width: '203px' },
+    btn: { width: '100%' },
 };
 
 const CreateCompanyBtn: FC = () => {
