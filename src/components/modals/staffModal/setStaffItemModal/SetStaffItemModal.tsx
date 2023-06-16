@@ -14,10 +14,13 @@ export interface Values {
 }
 
 export interface Error {
-    message: string;
-    status: string;
-    timestamp: string;
-    type: string;
+    data: {
+        message: string;
+        status: string;
+        timestamp: string;
+        type: string;
+    };
+    status: number;
 }
 
 const validSchema = Yup.object({
@@ -48,7 +51,7 @@ const SetStaffItemModal: FC = () => {
                         setSubmitting(false);
                     })
                     .catch((err: Error) => {
-                        setErrMessage(err.message);
+                        setErrMessage(err.data.message);
                     });
             }
         },

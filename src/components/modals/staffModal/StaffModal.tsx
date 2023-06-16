@@ -60,6 +60,8 @@ const StaffModal: FC = () => {
 
     const handleClose = useCallback(() => dispatch(setStaffModalOpen(false)), [dispatch]);
 
+    const handleClick = useCallback(() => dispatch(setSetStaffItemModalOpen(true)), [dispatch]);
+
     const staffTitle = currentCompany ? `Сотрудники компании ${currentCompany.name}` : `Сотрудники компании`;
 
     return (
@@ -98,13 +100,7 @@ const StaffModal: FC = () => {
                             <></>
                         )}
                     </List>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="success"
-                        sx={styles.btn}
-                        onClick={() => dispatch(setSetStaffItemModalOpen(true))}
-                    >
+                    <Button type="submit" variant="contained" color="success" sx={styles.btn} onClick={handleClick}>
                         Добавить сотрудника
                     </Button>
                     {isError && <Alert severity="error">{(error as Error).data.message}</Alert>}
