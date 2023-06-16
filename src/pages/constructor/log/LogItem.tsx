@@ -33,6 +33,7 @@ const LogItem: FC<Props> = ({ blipEvent }) => {
 
     return (
         <li className={classes} onClick={clickHandler}>
+            {blipEvent.drawInfo && <div className={styles.date}>{blipEvent.drawInfo}</div>}
             <div className={styles.date}>{formatDate(blipEvent.creationTime)}</div>
             <div className={styles.name}> {blipEvent.blip?.name} </div>
         </li>

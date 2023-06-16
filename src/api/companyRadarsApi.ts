@@ -187,23 +187,28 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 url: `blip-events/${blipEventId}`,
             }),
 
-            async onQueryStarted(blipEventId, { getState, dispatch, queryFulfilled }) {
-                const state = (getState() as RootState).editRadar;
-                if (!state.log) throw new Error('Empty log on delete blipEvent');
-                const currentBlipEventId = state.version.blipEventId;
-                const updatedLog = state.log.filter((blipEvent) => blipEventId !== blipEvent.id);
+            // async onQueryStarted(blipEventId, { getState, dispatch, queryFulfilled }) {
+            //     const state = (getState() as RootState).editRadar;
+            //     if (!state.log) throw new Error('Empty log on delete blipEvent');
+            //     const currentBlipEventId = state.version.blipEventId;
+            //     const updatedLog = state.log.filter((blipEvent) => blipEventId !== blipEvent.id);
 
-                const result = dispatch(
-                    companyRadarsApi.util.updateQueryData('getRadarLog', currentBlipEventId, () => updatedLog)
-                );
-                try {
-                    await queryFulfilled;
-                } catch {
-                    result.undo();
-                }
-            },
+            //     const result = dispatch(
+            //         companyRadarsApi.util.updateQueryData('getRadarLog', currentBlipEventId, (draftLog) => {
+            //             draftLog = draftLog.filter((blipEvent) => blipEvent.id !== blipEventId);
+            //         })
+            //     );
 
-            invalidatesTags: ['Radar', 'Version'],
+            //     try {
+            //         console.log('1');
+            //         const { data } = await queryFulfilled;
+            //         console.log('2', data);
+            //     } catch {
+            //         result.undo();
+            //     }
+            // },
+
+            invalidatesTags: ['Radar', 'Version', 'Log'],
         }),
 
         updateBlipEventComment: builder.mutation<UpdateBlipEventApiResponse, { id: number; comment: string }>({

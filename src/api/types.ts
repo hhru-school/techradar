@@ -175,6 +175,7 @@ export interface IndexBlipEventApi {
     };
     creationTime: string;
     lastChangeTime: string;
+    drawInfo?: string;
 }
 
 export interface VersionData {
