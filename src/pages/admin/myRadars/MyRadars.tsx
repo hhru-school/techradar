@@ -18,6 +18,7 @@ const styles: Record<string, SxProps> = {
     tabs: { display: 'flex', alignItems: 'center', height: '48px' },
     tab: { minHeight: '48px' },
     newVersionBtn: { textAlign: 'left', margin: '15px 0 15px 0' },
+    reset: { textAlign: 'left', margin: '15px 0 15px 15px' },
     title: { textAlign: 'left', margin: '15px 0 0 0' },
     box: { display: 'flex' },
     defaultChip: { borderRadius: 1, fontSize: 14 },
@@ -34,7 +35,7 @@ const MyRadar: FC = () => {
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const showCreateRadarModal = useAppSelector((state) => state.myRadars.showCreateRadarModal);
     const paramCompanyId = currentCompany ? currentCompany.id : 0;
-    const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(paramCompanyId);
+    const { data: allCompanyRadars, refetch } = useGetAllCompanyRadarsQuery(paramCompanyId);
     const isfilteredVersionsList = useAppSelector((state) => state.myRadars.isfilteredVersionsList);
 
     const handleCreateVersionModalOpen = useCallback(() => {
@@ -59,6 +60,8 @@ const MyRadar: FC = () => {
         () => dispatch(setFilteredListVersions(!isfilteredVersionsList)),
         [dispatch, isfilteredVersionsList]
     );
+
+    const handleReset = useCallback(() => refetch(), [refetch]);
 
     return (
         <>
@@ -91,6 +94,15 @@ const MyRadar: FC = () => {
                         />
                         <InfoBtn />
                     </Box>
+                    <Button
+                        onClick={handleReset}
+                        variant="outlined"
+                        color="primary"
+                        sx={styles.reset}
+                        disabled={!allCompanyRadars?.length}
+                    >
+                        Сбросить таблицу
+                    </Button>
                 </Box>
                 <Routes>
                     <Route path="/" element={<MyRadarsDataGrid />} />
