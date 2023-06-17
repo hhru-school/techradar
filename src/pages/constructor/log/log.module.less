@@ -1,12 +1,12 @@
 @import '../../../../src/styles/global.less';
 
 .container {
-    width: 250px;
-    padding-top: 20px;
-    border-radius: 10px;
-    flex: 1 0 auto;
-    box-shadow: 5px 5px 5px rgb(214, 214, 214);
-    overflow: auto;
+    margin-left: 10px;
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 0 5px 5px 5px;
+    height: 600px;
 }
 
 .emptyContainer {
@@ -19,4 +19,10 @@
     align-items: center;
     color: @empty-container-color;
     text-align: center;
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }

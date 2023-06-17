@@ -10,6 +10,7 @@ import {
     IndexBlipEventApi,
     RadarApiDataResponse,
     RenameContainerItemApi,
+    UpdateBlipEventApiResponse,
     UpdateRadarApiRequest,
     UpdateRadarApiResponse,
     UpdateVersionRequest,
@@ -135,7 +136,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'PUT',
                 body: version,
             }),
-            invalidatesTags: ['Radar', 'Version'],
+            invalidatesTags: ['Radar', 'Version', 'Log'],
         }),
 
         createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApiRequestParams>({
@@ -145,10 +146,10 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 body,
             }),
         }),
-        getBlipEventsForRadar: builder.query<IndexBlipEventApi[], number>({
-            query: (blipEventId) => ({
+        getRadarLog: builder.query<IndexBlipEventApi[], number>({
+            query: (versionId) => ({
                 method: 'GET',
-                url: `blip-events/radar-log?blip-event-id=${blipEventId}`,
+                url: `blip-events/radar-log?radar-version-id=${versionId}`,
             }),
             providesTags: ['Log'],
         }),
@@ -168,6 +169,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 url: `rings/${body.id}`,
                 body,
             }),
+
             invalidatesTags: ['Radar'],
         }),
 
@@ -177,6 +179,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 url: `radars/${body.id}`,
                 body,
             }),
+
             invalidatesTags: ['Radar'],
         }),
 
@@ -185,7 +188,18 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'DELETE',
                 url: `blip-events/${blipEventId}`,
             }),
-            invalidatesTags: ['Radar', 'Version'],
+
+            invalidatesTags: ['Radar', 'Version', 'Log'],
+        }),
+
+        updateBlipEventComment: builder.mutation<UpdateBlipEventApiResponse, { id: number; comment: string }>({
+            query: ({ id, comment }) => ({
+                method: 'PUT',
+                url: `blip-events/${id}`,
+                body: { comment },
+            }),
+
+            invalidatesTags: ['Log'],
         }),
     }),
 });
@@ -203,9 +217,10 @@ export const {
     useCreateBlipEventMutation,
     useUpdateVersionMutation,
     useSaveNewRadarMutation,
-    useGetBlipEventsForRadarQuery,
+    useGetRadarLogQuery,
     useUpdateSectorMutation,
     useUpdateRadarMutation,
     useUpdateRingMutation,
     useDeleteBlipEventMutation,
+    useUpdateBlipEventCommentMutation,
 } = companyRadarsApi;

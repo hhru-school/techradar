@@ -15,8 +15,6 @@ import {
 } from '@mui/material';
 
 import { IndexBlipEventApi } from '../../../../../api/types';
-import { openDeleteBlipEventModal } from '../../../../../store/editRadarSlice';
-import { useAppDispatch } from '../../../../../store/hooks';
 
 const styles: Record<string, SxProps> = {
     showRadarBtnBox: { cursor: 'pointer', width: '24px', display: 'flex' },
@@ -102,11 +100,13 @@ const ShowRadarBtn: FC = () => {
 };
 
 const LogListItem: FC<LogListItemProps> = ({ blipEvent, isEditable }) => {
-    const dispatch = useAppDispatch();
+    // То что закомментировано здесь, будет удалено в случае успеха с логом, примененным на странице конструктора
+
+    // const dispatch = useAppDispatch();
 
     const deleteBtnClickHandler = useCallback(() => {
-        dispatch(openDeleteBlipEventModal(blipEvent.id));
-    }, [dispatch, blipEvent.id]);
+        // dispatch(openDeleteBlipEventModal(blipEvent.id));
+    }, []);
 
     return (
         <Box sx={styles.logListItemBox}>

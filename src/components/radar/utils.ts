@@ -186,3 +186,15 @@ export const getRingByName = (radar: RadarInterface, name: string): Ring => {
     if (!ring) throw new Error('RingName not exist on radar');
     return ring;
 };
+
+export const buildTriangleUp = (x: number, y: number, r: number): string => {
+    const size = (2 * r) / Math.tan(Math.PI / 6);
+    const height = size * Math.sin(Math.PI / 3);
+    return `M ${x},${r - height + y} ${size / 2 + x},${r + y} ${-size / 2 + x},${r + y} Z`;
+};
+
+export const buildTriangleDown = (x: number, y: number, r: number): string => {
+    const size = (2 * r) / Math.tan(Math.PI / 6);
+    const height = size * Math.sin(Math.PI / 3);
+    return `M ${-size / 2 + x},${y - r} ${size / 2 + x},${y - r} ${x},${height - r + y} Z`;
+};

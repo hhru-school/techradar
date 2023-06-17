@@ -1,3 +1,5 @@
+import { DrawInfo } from '../components/radar/types';
+
 interface ErrorResponseData {
     message: string;
     status: string;
@@ -62,6 +64,7 @@ export interface RadarApiDataResponse {
         quadrantId: number;
         ringId: number;
         radarId: number;
+        drawInfo?: keyof typeof DrawInfo;
     }[];
 }
 
@@ -126,6 +129,18 @@ export interface CreateBlipEventApiResponse {
     lastChangeTime: string;
 }
 
+export interface UpdateBlipEventApiResponse {
+    comment: string;
+    parentId: number;
+    blipId: number;
+    quadrantId: number;
+    ringId: number;
+    authorId: number;
+    radarId: number;
+    creationTime: string;
+    lastChangeTime: string;
+}
+
 export interface UpdateVersionRequest {
     id: number;
     name: string;
@@ -160,6 +175,7 @@ export interface IndexBlipEventApi {
     };
     creationTime: string;
     lastChangeTime: string;
+    drawInfo?: string;
 }
 
 export interface VersionData {

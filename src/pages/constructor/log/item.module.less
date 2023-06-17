@@ -1,0 +1,58 @@
+@import '../../../styles/global.less';
+
+.container {
+    padding: 10px;
+    box-sizing: border-box;
+    margin-top: 8px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgb(166, 166, 166);
+    background-color: white;
+    cursor: pointer;
+
+    &:hover:not(.init) {
+        box-shadow: 1px 1px 10px rgb(129, 129, 129);
+    }
+    &:active:not(.init) {
+        background-color: rgb(185, 185, 185);
+        transition: background-color 0.1s ease-out;
+    }
+}
+
+.new {
+    animation-duration: 1s;
+    animation-name: slide;
+    animation-iteration-count: 1;
+}
+
+@keyframes slide {
+    from {
+        transform: translate(100%, 0);
+        background-color: rgb(203, 237, 255);
+    }
+
+    50% {
+        transform: translate(0, 0);
+        background-color: rgb(203, 237, 255);
+    }
+
+    to {
+        background-color: white;
+    }
+}
+
+.name {
+    margin: 0 8px;
+    font-size: 14px;
+}
+
+.date {
+    text-align: end;
+    font-size: 9px;
+    color: @label-color;
+}
+
+.init {
+    background-color: @gray-hh-color;
+    cursor: auto;
+    user-select: none;
+}

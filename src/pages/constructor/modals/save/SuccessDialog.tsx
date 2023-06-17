@@ -42,13 +42,7 @@ const SuccessDialog: FC<Props> = ({ radarName, radarVersion, radarId, versionId,
                 успешно сохранён.
             </Alert>
             <Stack spacing={2} sx={style.stack}>
-                <Button
-                    fullWidth={true}
-                    endIcon={<ArrowForward />}
-                    variant="contained"
-                    color="secondary"
-                    onClick={radarViewerLinkBtn}
-                >
+                <Button fullWidth={true} endIcon={<ArrowForward />} variant="contained" onClick={radarViewerLinkBtn}>
                     К просмотру радара
                 </Button>
                 <Button fullWidth={true} startIcon={<Edit />} variant="outlined" onClick={radarEditLinkBtn}>

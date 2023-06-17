@@ -8,7 +8,7 @@ import {
 import { buildBlipEventRequest } from '../../api/radarApiUtils';
 import { CreateBlipEventApiRequest, UpdateVersionRequest } from '../../api/types';
 import { Blip } from '../../components/radar/types';
-import { Segment, setVersion } from '../../store/editRadarSlice';
+import { Segment, setNewBlipEventId, setVersion } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 interface EditRadarMutationState {
@@ -68,6 +68,7 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
                 }
 
                 const blipEvent = await createBlipEvent({ body: blipEventRequest, versionId: version.id }).unwrap();
+                dispatch(setNewBlipEventId(blipEvent.id));
                 const versionRequest: UpdateVersionRequest = {
                     id: version.id,
                     name: version.name,

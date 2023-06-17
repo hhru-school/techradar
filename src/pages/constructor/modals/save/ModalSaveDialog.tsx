@@ -1,4 +1,5 @@
 import { FC, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import { Modal } from '@mui/material';
 
 import { useSaveNewRadarMutation } from '../../../../api/companyRadarsApi';
@@ -10,18 +11,19 @@ import SuccessDialog from './SuccessDialog';
 
 import styles from '../modal.module.less';
 
-// mock
-const companyId = 2;
-
 const ModalSaveDialog: FC = () => {
     const radar = useAppSelector((state) => state.editRadar.radar);
     const versionName = useAppSelector((state) => state.editRadar.version.name);
 
+    const { companyId: companyIdSlug } = useParams();
+
+    const companyId = Number(companyIdSlug);
+
     const [saveRadar, { data, isLoading, isSuccess, error }] = useSaveNewRadarMutation();
 
     const submitHandler = useCallback(async () => {
-        await saveRadar(formatCreateRadarData({ ...radar, authorId: 1, companyId: 2, name: radar.name }));
-    }, [saveRadar, radar]);
+        await saveRadar(formatCreateRadarData({ ...radar, authorId: 1, companyId, name: radar.name }));
+    }, [saveRadar, radar, companyId]);
 
     return (
         <Modal open={true}>
