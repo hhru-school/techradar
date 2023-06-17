@@ -48,7 +48,7 @@ const App: FC = () => {
                 </Route>
                 <Route path="/tech/:techId" element={<TechSinglePage />} />
                 <Route path="/constructor">
-                    <Route path="new/radar" element={<Constructor />} />
+                    <Route path="new/radar/company/:companyId" element={<Constructor />} />
                     <Route
                         path="edit/version/:versionId"
                         element={<Constructor mode={ConstructorMode.VersionEditing} />}

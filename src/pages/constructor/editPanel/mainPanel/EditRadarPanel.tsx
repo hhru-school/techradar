@@ -34,7 +34,7 @@ const EditRadarPanel: FC = () => {
     return (
         <>
             {version && <PropertiesContainer radarName={radarName} versionName={version.name} />}
-            <Button variant="outlined" color="secondary" onClick={navigateClickHandeler} endIcon={<ArrowForward />}>
+            <Button variant="outlined" onClick={navigateClickHandeler} endIcon={<ArrowForward />}>
                 На страницу просмотра
             </Button>
             <div className={styles.spacer}></div>
