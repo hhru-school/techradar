@@ -27,6 +27,7 @@ const MyRadarsDataGrid: FC = () => {
     const id = Number(radarId) || 0;
     const { data: radarVersions, isError, isLoading } = useGetRadarVersionsQuery(id);
     const isfilteredVersionsList = useAppSelector((state) => state.myRadars.isfilteredVersionsList);
+    const currentCompany = useAppSelector((state) => state.company.currentCompany);
 
     const onlyPublicAndLastDraft = radarVersions?.filter((version) => version.release || version.toggleAvailable);
     const versionRows = isfilteredVersionsList ? onlyPublicAndLastDraft : radarVersions;
@@ -129,8 +130,9 @@ const MyRadarsDataGrid: FC = () => {
                 <Alert severity="error">Произошла ошибка попробуйте перезагрузить страницу или зайти позже</Alert>
             )}
             {isLoading && <Skeleton variant="rounded" width={'100%'} height={'100%'} />}
-            {!rows.length && <NoRadarsMock />}
-            {!!rows.length && (
+            {!rows.length && !currentCompany && <NoRadarsMock />}
+            {!currentCompany && radarId && <NoRadarsMock />}
+            {!!rows.length && currentCompany && (
                 <StyledDataGrid
                     rows={rows}
                     columns={columns}
