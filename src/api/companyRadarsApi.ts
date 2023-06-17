@@ -136,7 +136,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'PUT',
                 body: version,
             }),
-            invalidatesTags: ['Radar', 'Version'],
+            invalidatesTags: ['Radar', 'Version', 'Log'],
         }),
 
         createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApiRequestParams>({
@@ -147,9 +147,9 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
             }),
         }),
         getRadarLog: builder.query<IndexBlipEventApi[], number>({
-            query: (blipEventId) => ({
+            query: (versionId) => ({
                 method: 'GET',
-                url: `blip-events/radar-log?blip-event-id=${blipEventId}`,
+                url: `blip-events/radar-log?radar-version-id=${versionId}`,
             }),
             providesTags: ['Log'],
         }),
@@ -169,6 +169,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 url: `rings/${body.id}`,
                 body,
             }),
+
             invalidatesTags: ['Radar'],
         }),
 
@@ -178,6 +179,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 url: `radars/${body.id}`,
                 body,
             }),
+
             invalidatesTags: ['Radar'],
         }),
 
@@ -186,27 +188,6 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'DELETE',
                 url: `blip-events/${blipEventId}`,
             }),
-
-            // async onQueryStarted(blipEventId, { getState, dispatch, queryFulfilled }) {
-            //     const state = (getState() as RootState).editRadar;
-            //     if (!state.log) throw new Error('Empty log on delete blipEvent');
-            //     const currentBlipEventId = state.version.blipEventId;
-            //     const updatedLog = state.log.filter((blipEvent) => blipEventId !== blipEvent.id);
-
-            //     const result = dispatch(
-            //         companyRadarsApi.util.updateQueryData('getRadarLog', currentBlipEventId, (draftLog) => {
-            //             draftLog = draftLog.filter((blipEvent) => blipEvent.id !== blipEventId);
-            //         })
-            //     );
-
-            //     try {
-            //         console.log('1');
-            //         const { data } = await queryFulfilled;
-            //         console.log('2', data);
-            //     } catch {
-            //         result.undo();
-            //     }
-            // },
 
             invalidatesTags: ['Radar', 'Version', 'Log'],
         }),

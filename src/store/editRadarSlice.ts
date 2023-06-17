@@ -465,10 +465,6 @@ export const editRadarSlice = createSlice({
             if (!state.editingBlipEvent) throw new Error('Editing blipEvent not assigned');
             state.editingBlipEvent.comment = action.payload;
         },
-
-        setCurrentBlipEventId: (state, action: PayloadAction<number>) => {
-            state.version.blipEventId = action.payload;
-        },
     },
 });
 
@@ -532,7 +528,6 @@ export const {
     closeDeleteBlipEventModal,
     setNewBlipEventId,
     updateBlipEventComment,
-    setCurrentBlipEventId,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;

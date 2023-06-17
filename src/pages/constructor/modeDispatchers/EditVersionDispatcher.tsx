@@ -37,8 +37,8 @@ const EditVersionDispatcher: FC = () => {
         error: versionError,
     } = useGetVersionByIdQuery(Number(versionId));
 
-    const { data: log } = useGetRadarLogQuery(currentVersion.blipEventId, {
-        skip: currentVersion.blipEventId < 0,
+    const { data: log } = useGetRadarLogQuery(currentVersion.id, {
+        skip: currentVersion.id < 0,
     });
 
     const isLoading = radarIsLoading || versionIsLoading;
