@@ -10,6 +10,7 @@ interface State {
     showSetStaffItemModal: boolean;
     showDeleteStaffItemModal: boolean;
     deleteStaffItemData: CompanyStaff | null;
+    showCompanyModal: boolean;
 }
 
 export const initialState: State = {
@@ -19,12 +20,16 @@ export const initialState: State = {
     showSetStaffItemModal: false,
     showDeleteStaffItemModal: false,
     deleteStaffItemData: null,
+    showCompanyModal: false,
 };
 
 export const companySlice = createSlice({
     name: 'company',
     initialState,
     reducers: {
+        setCompanyModalOpen: (state, action: PayloadAction<boolean>) => {
+            state.showCompanyModal = action.payload;
+        },
         setCreateCompanyModalOpen: (state, action: PayloadAction<boolean>) => {
             state.showCreateCompanyModal = action.payload;
         },
@@ -53,6 +58,7 @@ export const {
     setStaffModalOpen,
     setSetStaffItemModalOpen,
     setDeleteStaffItemModalOpen,
+    setCompanyModalOpen,
 } = companySlice.actions;
 
 export default companySlice.reducer;

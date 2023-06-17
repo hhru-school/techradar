@@ -1,41 +1,58 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
     Box,
+    Button,
     Container,
     Divider,
     Link,
+    SxProps,
     Typography,
 } from '@mui/material';
 
+import { setAuthFormOpen } from '../../store/authSlice/authSlice';
+import { useAppDispatch } from '../../store/hooks';
 import bachPic from './img/tech.png';
 
 import styles from './main.module.less';
 
+const style: Record<string, SxProps> = {
+    title: { margin: '20px 0 0 0', fontWeight: '800' },
+    madeBy: { margin: '2px 0 0 0' },
+    link: { fontWeight: '600' },
+    bgIMG: {
+        background: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${bachPic}) no-repeat center center fixed`,
+        padding: '30px 0 30px 0',
+        marginTop: '30px',
+    },
+    boxHowUse: { display: 'flex', flexDirection: 'column', padding: '30px 0' },
+    howUse: { marginBottom: '15px' },
+    imgRadar: { display: 'flex', justifyContent: 'space-between', padding: '50px 0' },
+    try: { maxWidth: '500px' },
+};
+
 const imgSrc = 'https://raw.githubusercontent.com/hhru-school/techradar/readme-asset/radarView.JPG';
 
 const Main: FC = () => {
+    const dispatch = useAppDispatch();
+
+    const handleAuthFormOpen = useCallback(() => dispatch(setAuthFormOpen(true)), [dispatch]);
+
     return (
         <Box>
-            <Typography variant="h2" component="h1" align="center" sx={{ margin: '20px 0 0 0', fontWeight: '800' }}>
+            <Typography variant="h2" component="h1" align="center" sx={style.title}>
                 TechRadar
             </Typography>
-            <Typography variant="body2" align="center" sx={{ margin: '2px 0 0 0' }}>
+            <Typography variant="body2" align="center" sx={style.madeBy}>
                 made by{' '}
-                <Link href="https://school.hh.ru/" variant="body2" underline="hover" sx={{ fontWeight: '600' }}>
+                <Link href="https://school.hh.ru/" variant="body2" underline="hover" sx={style.link}>
                     HH школа программистов
                 </Link>
             </Typography>
-            <Box
-                sx={{
-                    background: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${bachPic}) no-repeat center center fixed`,
-                    padding: '30px 0 30px 0',
-                    marginTop: '30px',
-                }}
-            >
+            <Box sx={style.bgIMG}>
                 <Container maxWidth="xl">
                     <Typography variant="h4" align="center" color={'secondary'}>
                         Сервис позволяющий оценить уровень адаптации технологии в&nbsp;Вашей компании. С&nbsp;помощью
@@ -47,14 +64,24 @@ const Main: FC = () => {
             </Box>
 
             <Container maxWidth="xl">
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '20px' }}>
-                    <img className={styles.img} src={imgSrc}></img>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box sx={style.imgRadar}>
+                        {/* МЕСТО ДЛЯ ДЕМОНСТРАТИВНОГО РАДАРА ДЛЯ ПОТЫКАТЬ */}
+                        <img className={styles.img} src={imgSrc}></img>
+                    </Box>
+                    <Typography paragraph={true} variant="h5" sx={style.try}>
+                        <Button variant="contained" color="secondary" onClick={handleAuthFormOpen}>
+                            Попробуйте
+                        </Button>{' '}
+                        создать свой радар с&nbsp;нуля в&nbsp;конструкторе или добавьте готовый в&nbsp;формате файла
+                        .xlsx или .csv
+                    </Typography>
                 </Box>
             </Container>
             <Divider />
             <Container maxWidth="xl">
-                <Box sx={{ display: 'flex', flexDirection: 'column', padding: '30px 0' }}>
-                    <Typography variant="h4" component="h1" sx={{ marginBottom: '15px' }} align={'center'}>
+                <Box sx={style.boxHowUse}>
+                    <Typography variant="h4" component="h1" sx={style.howUse} align={'center'}>
                         Как пользоваться?
                     </Typography>
                     <Accordion>
@@ -203,16 +230,6 @@ const Main: FC = () => {
                 </Box>
             </Container>
         </Box>
-
-        // <>
-        //     <NavContainer />
-        //     <div className={styles.layout}>
-        //         <h3 className={styles.header}>Техрадары компаний</h3>
-        //         <CompaniesBlock />
-        //         <h3 className={styles.header}>Что такое Техрадар?</h3>
-        //         <PresentationBlock />
-        //     </div>
-        // </>
     );
 };
 

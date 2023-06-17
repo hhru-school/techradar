@@ -17,13 +17,15 @@ import {
     MenuItem,
     Tooltip,
     Typography,
+    Button,
 } from '@mui/material';
 
 import { useGetCompaniesQuery } from '../../api/companiesApi';
 import { signOut, setAuthFormOpen } from '../../store/authSlice/authSlice';
-import { setStaffModalOpen } from '../../store/companySlice';
+import { setCompanyModalOpen, setStaffModalOpen } from '../../store/companySlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AuthFormModal from '../modals/authFormModal/AuthFormModal';
+import CompanyModal from '../modals/companyModal/CompanyModal';
 import CreateRadarModal from '../modals/createRadarModal/CreateRadarModal';
 import RegistrationFormModal from '../modals/registrationFormModal/RegistrationFormModal';
 import StaffModal from '../modals/staffModal/StaffModal';
@@ -63,6 +65,7 @@ const Header: FC = () => {
     }, [dispatch, navigate]);
 
     const handleAuthFormOpen = useCallback(() => dispatch(setAuthFormOpen(true)), [dispatch]);
+    const handleCompaniesOpen = useCallback(() => dispatch(setCompanyModalOpen(true)), [dispatch]);
 
     const handleOpenStaffModal = useCallback(() => {
         dispatch(setStaffModalOpen(true));
@@ -76,12 +79,26 @@ const Header: FC = () => {
             <AppBar position="static">
                 <Container maxWidth="xl">
                     <Box sx={styles.toolbar}>
-                        <Link to="/">
-                            <RadarIcon sx={styles.icon} />
-                        </Link>
-                        <Typography variant="h6" component="div" sx={styles.label}>
-                            <Link to="/">TechRadar</Link>
-                        </Typography>
+                        <Box sx={styles.boxLeft}>
+                            <Box sx={styles.boxLogo}>
+                                <Link to="/">
+                                    <RadarIcon sx={styles.icon} />
+                                </Link>
+                                <Typography variant="h6" component="div" sx={styles.label}>
+                                    <Link to="/">TechRadar</Link>
+                                </Typography>
+                            </Box>
+
+                            <Box sx={styles.boxLinks}>
+                                <Button color="secondary" sx={styles.generalBtn}>
+                                    <Link to="/">Главная</Link>
+                                </Button>
+                                <Button color="secondary" onClick={handleCompaniesOpen}>
+                                    Радары компаний
+                                </Button>
+                            </Box>
+                        </Box>
+
                         <Box sx={styles.toolbarRight}>
                             {username ? (
                                 <>
@@ -171,6 +188,7 @@ const Header: FC = () => {
             <AuthFormModal />
             <CreateRadarModal />
             <StaffModal />
+            <CompanyModal />
         </>
     );
 };

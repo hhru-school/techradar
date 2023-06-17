@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Box } from '@mui/material';
+import { createTheme, SxProps, ThemeProvider } from '@mui/material/styles';
 import { ruRU } from '@mui/x-data-grid';
 
 import Footer from './components/footer/Footer';
@@ -12,6 +13,10 @@ import TechSinglePage from './pages/techSinglePage/TechSinglePage';
 import TechRadar from './pages/techradar/TechRadar';
 import { ConstructorMode } from './store/editRadarSlice';
 import { useCredentials } from './store/hooks';
+
+const styles: Record<string, SxProps> = {
+    box: { padding: '0 0 80px 0', position: 'relative' },
+};
 
 const theme = createTheme(
     {
@@ -41,27 +46,32 @@ const App: FC = () => {
 
     return (
         <ThemeProvider theme={theme}>
-            <Header />
-            <Routes>
-                <Route path="/*" element={<Main />}></Route>
-                <Route path="/techradar">
-                    <Route path="company/:companySlug/radar/:radarSlug/version/:versionSlug" element={<TechRadar />} />
-                </Route>
-                <Route path="/tech/:techId" element={<TechSinglePage />} />
-                <Route path="/constructor">
-                    <Route path="new/radar/company/:companyId" element={<Constructor />} />
-                    <Route
-                        path="edit/version/:versionId"
-                        element={<Constructor mode={ConstructorMode.VersionEditing} />}
-                    />
-                    <Route
-                        path="new/version/radar/:radarId"
-                        element={<Constructor mode={ConstructorMode.NewVersionCreation} />}
-                    />
-                </Route>
-                <Route path="/admin/*" element={<RequireAuth />} />
-            </Routes>
-            <Footer />
+            <Box sx={styles.box}>
+                <Header />
+                <Routes>
+                    <Route path="/*" element={<Main />}></Route>
+                    <Route path="/techradar">
+                        <Route
+                            path="company/:companySlug/radar/:radarSlug/version/:versionSlug"
+                            element={<TechRadar />}
+                        />
+                    </Route>
+                    <Route path="/tech/:techId" element={<TechSinglePage />} />
+                    <Route path="/constructor">
+                        <Route path="new/radar/company/:companyId" element={<Constructor />} />
+                        <Route
+                            path="edit/version/:versionId"
+                            element={<Constructor mode={ConstructorMode.VersionEditing} />}
+                        />
+                        <Route
+                            path="new/version/radar/:radarId"
+                            element={<Constructor mode={ConstructorMode.NewVersionCreation} />}
+                        />
+                    </Route>
+                    <Route path="/admin/*" element={<RequireAuth />} />
+                </Routes>
+                <Footer />
+            </Box>
         </ThemeProvider>
     );
 };

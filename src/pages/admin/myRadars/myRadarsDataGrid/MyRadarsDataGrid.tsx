@@ -84,27 +84,6 @@ const MyRadarsDataGrid: FC = () => {
                 width: 350,
                 editable: false,
             },
-            // {
-            //     field: 'toggleAvailable',
-            //     headerName: 'toggleAvailable',
-            //     type: 'string',
-            //     width: 120,
-            //     editable: false,
-            // },
-            // {
-            //     field: 'id',
-            //     headerName: 'id',
-            //     type: 'string',
-            //     width: 100,
-            //     editable: false,
-            // },
-            // {
-            //     field: 'parentId',
-            //     headerName: 'parentId',
-            //     type: 'string',
-            //     width: 350,
-            //     editable: false,
-            // },
         ],
         []
     );

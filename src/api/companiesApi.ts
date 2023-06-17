@@ -4,7 +4,6 @@ import { CreateNewCompanyResponse, CreateNewCompanyRequest } from './types';
 export interface CompanyData {
     id: number;
     name: string;
-    lastSelected: boolean;
 }
 
 export interface CompanyStaff {
