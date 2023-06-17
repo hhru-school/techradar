@@ -51,7 +51,7 @@ const RegistrationFormModal: FC = () => {
     const showRegistrForm = useAppSelector((state) => state.auth.showRegistrForm);
     const [message, setMessage] = useState<string | null>(null);
     const [errMessage, setErrMessage] = useState<string | null>(null);
-    const [signUp, { isLoading, isSuccess }] = useSignUpMutation();
+    const [signUp, { isLoading }] = useSignUpMutation();
 
     const handleClose = useCallback(() => {
         dispatch(setRegistrFormOpen(false));
@@ -115,7 +115,7 @@ const RegistrationFormModal: FC = () => {
                                 variant="contained"
                                 color="success"
                                 sx={styles.btnSuccess}
-                                disabled={isLoading || isSuccess}
+                                disabled={isLoading || !!message}
                             >
                                 Зарегистрироваться
                             </Button>
