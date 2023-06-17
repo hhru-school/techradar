@@ -1,20 +1,9 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
-import {
-    Modal,
-    Box,
-    Typography,
-    Button,
-    SxProps,
-    IconButton,
-    List,
-    ListItem,
-    ListItemSecondaryAction,
-    ListItemText,
-    Alert,
-} from '@mui/material';
+import { Modal, Box, Typography, Button, SxProps, Alert } from '@mui/material';
+import { DataGrid, GridActionsCellItem, ruRU } from '@mui/x-data-grid';
 
-import { useGetStaffQuery } from '../../../api/companiesApi';
+import { CompanyStaff, useGetStaffQuery } from '../../../api/companiesApi';
 import { setDeleteStaffItemModalOpen, setSetStaffItemModalOpen, setStaffModalOpen } from '../../../store/companySlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import DeleteStaffItemModal from './deleteStaffItemModal/DeleteStaffItemModal';
@@ -38,7 +27,7 @@ export const styles: Record<string, SxProps> = {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        minWidth: 250,
+        minWidth: 300,
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
@@ -46,8 +35,18 @@ export const styles: Record<string, SxProps> = {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
+        minHeight: '400px',
     },
     list: { maxHeight: '400px', overflowY: 'auto', marginTop: '10px' },
+    title: { marginBottom: '10px' },
+};
+
+const initialState = {
+    pagination: {
+        paginationModel: {
+            pageSize: 8,
+        },
+    },
 };
 
 const StaffModal: FC = () => {
@@ -64,6 +63,38 @@ const StaffModal: FC = () => {
 
     const staffTitle = currentCompany ? `Сотрудники компании ${currentCompany.name}` : `Сотрудники компании`;
 
+    const rows = useMemo(() => staffList || [], [staffList]);
+
+    const deleteRow = useCallback(
+        (row: CompanyStaff) => dispatch(setDeleteStaffItemModalOpen({ show: true, username: row })),
+        [dispatch]
+    );
+    const deleteStaffItemRow = useCallback(
+        (params: { row: CompanyStaff }) => [
+            <GridActionsCellItem icon={<ClearIcon />} label="Delete" onClick={() => deleteRow(params.row)} />,
+        ],
+        [deleteRow]
+    );
+
+    const columns = useMemo(
+        () => [
+            {
+                field: 'username',
+                headerName: 'Сотрудник',
+                type: 'string',
+                width: 260,
+                editable: false,
+            },
+            {
+                field: 'delete',
+                type: 'actions',
+                width: 30,
+                getActions: deleteStaffItemRow,
+            },
+        ],
+        [deleteStaffItemRow]
+    );
+
     return (
         <>
             <Modal
@@ -73,33 +104,17 @@ const StaffModal: FC = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={styles.modal}>
-                    <Typography id="transition-modal-title" variant="h6" component="h2">
+                    <Typography id="transition-modal-title" variant="h6" component="h2" sx={styles.title}>
                         {staffTitle}
                     </Typography>
-                    <List dense={false} sx={styles.list}>
-                        {staffList ? (
-                            staffList.map((staffItem) => (
-                                <ListItem key={staffItem.id}>
-                                    <ListItemText primary={staffItem.username} />
-                                    <ListItemSecondaryAction>
-                                        <IconButton
-                                            edge="end"
-                                            aria-label="delete"
-                                            onClick={() =>
-                                                dispatch(
-                                                    setDeleteStaffItemModalOpen({ show: true, username: staffItem })
-                                                )
-                                            }
-                                        >
-                                            <ClearIcon />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            ))
-                        ) : (
-                            <></>
-                        )}
-                    </List>
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        initialState={initialState}
+                        pageSizeOptions={[5]}
+                        disableRowSelectionOnClick
+                        localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
+                    />
                     <Button type="submit" variant="contained" color="success" sx={styles.btn} onClick={handleClick}>
                         Добавить сотрудника
                     </Button>
