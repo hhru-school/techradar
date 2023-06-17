@@ -40,7 +40,7 @@ const NoRadarsMock: FC = () => {
                         Кажется, Вы не добавили компанию, без этого вы не сможете создать радар! Это не сложно,
                         попробуйте
                     </Typography>
-                    <CreateCompanyBtn />
+                    <CreateCompanyBtn width={'203px'} />
                 </Box>
             )}
         </Box>

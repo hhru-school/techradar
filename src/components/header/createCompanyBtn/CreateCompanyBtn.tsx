@@ -1,14 +1,12 @@
 import { FC, useCallback } from 'react';
-import { Button, SxProps } from '@mui/material';
+import { Button } from '@mui/material';
 
 import { setCreateCompanyModalOpen } from '../../../store/companySlice';
 import { useAppDispatch } from '../../../store/hooks';
 
-const styles: Record<string, SxProps> = {
-    btn: { width: '100%' },
-};
+type Props = { width: string };
 
-const CreateCompanyBtn: FC = () => {
+const CreateCompanyBtn: FC<Props> = ({ width }) => {
     const dispatch = useAppDispatch();
 
     const handleCreateCompany = useCallback(() => {
@@ -16,7 +14,7 @@ const CreateCompanyBtn: FC = () => {
     }, [dispatch]);
 
     return (
-        <Button onClick={handleCreateCompany} variant="contained" color="secondary" sx={styles.btn}>
+        <Button onClick={handleCreateCompany} variant="contained" color="secondary" sx={{ width }}>
             добавить компанию
         </Button>
     );

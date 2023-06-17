@@ -78,7 +78,7 @@ const MyRadarsDataGrid: FC = () => {
             },
             {
                 field: 'parentName',
-                headerName: 'Прошлая версия',
+                headerName: 'Предыдущая версия',
                 type: 'string',
                 width: 350,
                 editable: false,

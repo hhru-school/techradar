@@ -78,11 +78,13 @@ const CompanySelect: FC = () => {
                     >
                         {renderItems}
 
-                        <CreateCompanyBtn />
+                        <CreateCompanyBtn width={'100%'} />
                     </Select>
                 </FormControl>
             ) : (
-                <CreateCompanyBtn />
+                <FormControl sx={styles.formControl}>
+                    <CreateCompanyBtn width={'203px'} />
+                </FormControl>
             )}
         </>
     );
