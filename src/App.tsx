@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ruRU } from '@mui/x-data-grid';
 
+import Footer from './components/footer/Footer';
 import Header from './components/header/Header';
 import RequireAuth from './components/requireAuth.tsx/RequireAuth';
 import Constructor from './pages/constructor/Constructor';
@@ -60,6 +61,7 @@ const App: FC = () => {
                 </Route>
                 <Route path="/admin/*" element={<RequireAuth />} />
             </Routes>
+            <Footer />
         </ThemeProvider>
     );
 };
