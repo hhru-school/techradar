@@ -18,12 +18,13 @@ const LogItem: FC<Props> = ({ blipEvent }) => {
     const dispatch = useAppDispatch();
 
     const isNew = blipEvent.id === newBlipEventId;
+    const isInit = blipEvent.parentId === null;
 
     const clickHandler = useCallback(() => {
         dispatch(openBlipEventModal(blipEvent));
     }, [dispatch, blipEvent]);
 
-    const classes = classNames(styles.container, { [styles.new]: isNew });
+    const classes = classNames(styles.container, { [styles.new]: isNew, [styles.init]: isInit });
 
     useEffect(() => {
         setTimeout(() => {
@@ -32,7 +33,7 @@ const LogItem: FC<Props> = ({ blipEvent }) => {
     }, [isNew, dispatch]);
 
     return (
-        <li className={classes} onClick={clickHandler}>
+        <li className={classes} onClick={isInit ? undefined : clickHandler}>
             {blipEvent.drawInfo && <div className={styles.date}>{blipEvent.drawInfo}</div>}
             <div className={styles.date}>{formatDate(blipEvent.creationTime)}</div>
             <div className={styles.name}> {blipEvent.blip?.name} </div>

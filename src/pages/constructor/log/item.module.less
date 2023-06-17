@@ -9,10 +9,10 @@
     background-color: white;
     cursor: pointer;
 
-    &:hover {
+    &:hover:not(.init) {
         box-shadow: 1px 1px 10px rgb(129, 129, 129);
     }
-    &:active {
+    &:active:not(.init) {
         background-color: rgb(185, 185, 185);
         transition: background-color 0.1s ease-out;
     }
@@ -49,4 +49,10 @@
     text-align: end;
     font-size: 9px;
     color: @label-color;
+}
+
+.init {
+    background-color: @gray-hh-color;
+    cursor: auto;
+    user-select: none;
 }

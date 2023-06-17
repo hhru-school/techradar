@@ -137,7 +137,7 @@ const ModalBasic: FC<Props> = ({
                 <div className={styles.modal}>
                     <div className={styles.headerContainer}>
                         <h3 className={styles.header}>{header}</h3>
-                        {hasDeleteButton && (
+                        {hasDeleteButton && isNewRadar && (
                             <IconButton onClick={deleteHandler}>
                                 <Delete />
                             </IconButton>
