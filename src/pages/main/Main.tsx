@@ -32,6 +32,8 @@ const style: Record<string, SxProps> = {
     howUse: { marginBottom: '15px' },
     imgRadar: { display: 'flex', justifyContent: 'space-between', padding: '100px 0' },
     try: { maxWidth: '500px' },
+    useful: { backgroundColor: 'rgb(220,220,220)', padding: '100px 0' },
+    boxRightText: { display: 'flex', flexDirection: 'column', minWidth: '300px', marginTop: '15px' },
 };
 
 const imgSrc = 'https://raw.githubusercontent.com/hhru-school/techradar/readme-asset/radarView.JPG';
@@ -68,8 +70,8 @@ const Main: FC = () => {
                         {/* МЕСТО ДЛЯ ДЕМОНСТРАТИВНОГО РАДАРА ДЛЯ ПОТЫКАТЬ */}
                         <img className={styles.img} src={imgSrc}></img>
                     </Box>
-                    <Typography paragraph={true} variant="h5" sx={style.try}>
-                        <Button variant="contained" color="secondary" onClick={handleAuthFormOpen}>
+                    <Typography paragraph={true} variant="h6" sx={style.try}>
+                        <Button variant="contained" onClick={handleAuthFormOpen}>
                             Попробуйте
                         </Button>{' '}
                         создать свой радар с&nbsp;нуля в&nbsp;конструкторе или добавьте готовый в&nbsp;формате файла
@@ -78,12 +80,12 @@ const Main: FC = () => {
                 </Box>
             </Container>
             <Divider />
-            <Box sx={{ backgroundColor: 'rgb(220,220,220)', padding: '100px 0' }}>
+            <Box sx={style.useful}>
                 <Container maxWidth="xl">
                     <Typography variant="h4" align="center">
                         Чем радар полезен компании?
                     </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: '300px', marginTop: '15px' }}>
+                    <Box sx={style.boxRightText}>
                         <Typography variant="h6">Разработчики смогут:</Typography>
                         <ul>
                             <li>
@@ -133,10 +135,10 @@ const Main: FC = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography>
-                                Кольца в круге от центра до периферии означают статус использования технологии в
-                                продукте: в центре — самые эффективные, на периферии — наименее эффективные. 'Куски
-                                пирога' - большие сущности объединяющие технологии, инструменты, платформы, языки и
-                                фреймворки.
+                                Кольца в&nbsp;круге от&nbsp;центра до&nbsp;периферии означают статус использования
+                                технологии в продукте: в&nbsp;центре&nbsp;&mdash; самые эффективные,
+                                на&nbsp;периферии&nbsp;&mdash; наименее эффективные. &rsquo;Куски пирога&rsquo; -
+                                большие сущности объединяющие технологии, инструменты, платформы, языки и фреймворки.
                             </Typography>
                         </AccordionDetails>
                     </Accordion>
