@@ -31,7 +31,7 @@ export interface Ring {
     name: string;
 }
 
-export type DrawInfo = 'NEW' | 'FIXED' | 'BACKWARD' | 'FORWARD' | 'SEC_MOVE';
+export type DrawInfo = 'NEW' | 'FIXED' | 'BACKWARD' | 'FORWARD' | 'DELETE' | 'SEC_MOVE';
 
 export interface Blip {
     id: number;

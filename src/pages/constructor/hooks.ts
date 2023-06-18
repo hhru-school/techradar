@@ -26,7 +26,7 @@ export enum OperationType {
 }
 
 type OperationHandler = (blip: Blip, comment: string, distSegment?: Segment) => Promise<void>;
-type OperationEditHandler = (args: { blip: Blip; comment: string; distSegment: Segment }) => Promise<void>;
+type OperationEditHandler = (args: { blip: Blip; comment: string; distSegment?: Segment }) => Promise<void>;
 
 export const useOperationHandler = (
     operation: OperationType
@@ -101,9 +101,11 @@ export const useOperationHandler = (
                 setState({ isLoading: true, hasError: false });
                 const lastBlipEvents = getLastBlipEvents(log, version, blip);
                 const isPreviosPosition =
-                    distSegment.ring.id === lastBlipEvents.preLast.ring?.id &&
-                    distSegment.sector.id === lastBlipEvents.preLast.quadrant?.id;
+                    lastBlipEvents.preLast &&
+                    distSegment?.ring.id === lastBlipEvents.preLast.ring?.id &&
+                    distSegment?.sector.id === lastBlipEvents.preLast.quadrant?.id;
                 const updateBlipEventRequest = { id: lastBlipEvents.last.id, comment, segment: distSegment };
+                const isNewBlip = blip.drawInfo === 'NEW';
                 switch (operation) {
                     case OperationType.Move: {
                         if (isPreviosPosition) {
@@ -115,6 +117,12 @@ export const useOperationHandler = (
                         break;
                     }
                     case OperationType.Delete: {
+                        if (isNewBlip) {
+                            await deleteBlipEvent(lastBlipEvents.last.id);
+                        } else {
+                            await updateBlipEvent(updateBlipEventRequest);
+                        }
+
                         break;
                     }
                 }

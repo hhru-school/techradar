@@ -43,6 +43,9 @@ const LogItem: FC<Props> = ({ blipEvent }) => {
             case 'FIXED': {
                 return 'создана ранее';
             }
+            case 'DELETE': {
+                return 'удаление';
+            }
             default:
                 return 'неизвестно';
         }
@@ -58,7 +61,7 @@ const LogItem: FC<Props> = ({ blipEvent }) => {
         <li className={classes} onClick={isInit ? undefined : clickHandler}>
             <div className={styles.date}>{formatDate(blipEvent.creationTime)}</div>
             {blipEvent.drawInfo && <div className={styles.drawInfo}>{infoMessage}</div>}
-            <div className={styles.name}> {blipEvent.id} </div>
+            <div className={styles.name}> {blipEvent.blip?.name} </div>
         </li>
     );
 };

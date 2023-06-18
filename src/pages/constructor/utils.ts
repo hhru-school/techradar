@@ -12,7 +12,7 @@ export const mouseUpHandler = (): void => {
 
 interface LastBlipEvents {
     last: IndexBlipEventApi;
-    preLast: IndexBlipEventApi;
+    preLast: IndexBlipEventApi | null;
 }
 
 export const getLastBlipEvents = (
@@ -40,6 +40,6 @@ export const getLastBlipEvents = (
         }
     }
 
-    if (!last || !preLast) throw new Error('Missing associated blipEvent');
+    if (!last) throw new Error('Missing associated blipEvent');
     return { last, preLast };
 };
