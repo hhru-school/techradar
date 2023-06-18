@@ -10,9 +10,9 @@ import {
 import { buildBlipEventRequest } from '../../api/radarApiUtils';
 import { CreateBlipEventApiRequest, UpdateVersionRequest } from '../../api/types';
 import { Blip } from '../../components/radar/types';
-import { Segment, setNewBlipEventId, setVersion } from '../../store/editRadarSlice';
+import { Segment, setNewBlipEventId, setVersion, updateDict } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { getLastBlipEvents } from './utils';
+import { getLastBlipEvents, getNextBlipLabel } from './utils';
 
 interface EditRadarMutationState {
     isLoading: boolean;
@@ -38,6 +38,7 @@ export const useOperationHandler = (
     const radarId = useAppSelector((state) => state.editRadar.radar.id);
     const version = useAppSelector((state) => state.editRadar.version);
     const log = useAppSelector((state) => state.editRadar.log);
+    const nextLabel = useAppSelector((state) => getNextBlipLabel(state.editRadar.idToLabelDict));
 
     const [createBlip] = useCreateBlipMutation();
     const [createBlipEvent] = useCreateBlipEventMutation();
@@ -59,6 +60,7 @@ export const useOperationHandler = (
                 switch (operation) {
                     case OperationType.Add: {
                         const newBlipResp = await createBlip({ blip, radarId }).unwrap();
+                        dispatch(updateDict({ [newBlipResp.id]: nextLabel }));
                         blipEventRequest = { ...blipEventRequest, blipId: newBlipResp.id };
                         break;
                     }
@@ -92,7 +94,7 @@ export const useOperationHandler = (
                 setState({ isLoading: false, hasError: true });
             }
         },
-        [setState, updateVersion, createBlip, createBlipEvent, version, dispatch, operation, radarId]
+        [setState, updateVersion, createBlip, createBlipEvent, version, dispatch, operation, radarId, nextLabel]
     );
 
     const editHandler: OperationEditHandler = useCallback(
@@ -122,7 +124,6 @@ export const useOperationHandler = (
                         } else {
                             await updateBlipEvent(updateBlipEventRequest);
                         }
-
                         break;
                     }
                 }

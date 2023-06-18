@@ -26,6 +26,10 @@ interface MoveBlipAsset {
     ring: Ring;
 }
 
+export interface IdToLabelDict {
+    [apiId: number]: number;
+}
+
 export enum EventSuggest {
     Delete = 'delete',
     Add = 'add',
@@ -75,6 +79,7 @@ export interface EditRadarState {
     showEditIcon: boolean;
     editingBlipEvent: IndexBlipEventApi | null;
     newBlipEventId: number;
+    idToLabelDict: IdToLabelDict | null;
 }
 
 const initialState: EditRadarState = {
@@ -112,6 +117,7 @@ const initialState: EditRadarState = {
     showEditIcon: false,
     editingBlipEvent: null,
     newBlipEventId: -1,
+    idToLabelDict: null,
 };
 
 const getBlipById = (state: EditRadarState, id: number): Blip | null => {
@@ -418,11 +424,30 @@ export const editRadarSlice = createSlice({
         },
 
         setRadar: (state, action: PayloadAction<RadarInterface>) => {
-            state.radar = action.payload;
+            if (state.idToLabelDict === null) {
+                const dict = <IdToLabelDict>{};
+                action.payload.blips.forEach((blip) => (dict[blip.id] = Number(blip.label)));
+                state.idToLabelDict = dict;
+                state.radar = action.payload;
+            } else {
+                const blips = action.payload.blips.map((blip) => ({
+                    ...blip,
+                    label: state.idToLabelDict?.[blip.id] || -1,
+                }));
+                state.radar.blips = blips;
+            }
         },
 
         setVersion: (state, action: PayloadAction<VersionApiResponse>) => {
             state.version = action.payload;
+        },
+
+        updateDict: (state, action: PayloadAction<IdToLabelDict>) => {
+            if (state.idToLabelDict === null) {
+                state.idToLabelDict = action.payload;
+            } else {
+                state.idToLabelDict = Object.assign(state.idToLabelDict, action.payload);
+            }
         },
 
         cleanUp: () => {
@@ -528,6 +553,7 @@ export const {
     closeDeleteBlipEventModal,
     setNewBlipEventId,
     updateBlipEventComment,
+    updateDict,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;

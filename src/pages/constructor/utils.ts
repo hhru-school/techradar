@@ -1,7 +1,7 @@
 import { IndexBlipEventApi, VersionApiResponse } from '../../api/types';
 import { Blip } from '../../components/radar/types';
 import { clearActiveBlip } from '../../store/activeBlipSlice';
-import { drop } from '../../store/editRadarSlice';
+import { IdToLabelDict, drop } from '../../store/editRadarSlice';
 import { store } from '../../store/store';
 
 export const mouseUpHandler = (): void => {
@@ -42,4 +42,9 @@ export const getLastBlipEvents = (
 
     if (!last) throw new Error('Missing associated blipEvent');
     return { last, preLast };
+};
+
+export const getNextBlipLabel = (dict: IdToLabelDict | null): number => {
+    if (!dict) return 1;
+    return Math.max(...(Object.values(dict) as number[])) + 1;
 };
