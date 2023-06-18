@@ -176,6 +176,7 @@ export interface IndexBlipEventApi {
     creationTime: string;
     lastChangeTime: string;
     drawInfo?: DrawInfo;
+    radarVersion: string;
 }
 
 export interface VersionData {

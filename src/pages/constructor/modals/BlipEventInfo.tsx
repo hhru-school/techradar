@@ -1,19 +1,25 @@
 import { FC } from 'react';
 import { Alert } from '@mui/material';
 
-import { IndexBlipEventApi } from '../../../api/types';
+import { Blip } from '../../../components/radar/types';
+import { useAppSelector } from '../../../store/hooks';
+import { getLastBlipEvents } from '../utils';
 
 type Props = {
-    blipEvent?: IndexBlipEventApi;
+    blip: Blip;
     message: string;
 };
 
-const BlipEventInfo: FC<Props> = ({ blipEvent, message }) => {
-    if (!blipEvent) return <div>Loading...</div>;
+const BlipEventInfo: FC<Props> = ({ blip, message }) => {
+    const version = useAppSelector((state) => state.editRadar.version);
+    const log = useAppSelector((state) => state.editRadar.log);
+
+    const lastBlipEvent = getLastBlipEvents(log, version, blip).last;
+    if (!lastBlipEvent) return null;
     return (
         <div>
-            <div>{blipEvent.id}</div>
-            <div>{blipEvent.blip?.name}</div>
+            <div>{lastBlipEvent.id}</div>
+            <div>{lastBlipEvent.blip?.name}</div>
             <Alert severity="warning">{message}</Alert>
         </div>
     );

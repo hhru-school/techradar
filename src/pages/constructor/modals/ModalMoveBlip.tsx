@@ -2,7 +2,6 @@ import { FC, useCallback, useMemo } from 'react';
 import { Modal } from '@mui/material';
 import { Form, Formik } from 'formik';
 
-import { useGetLastBlipEventQuery } from '../../../api/companyRadarsApi';
 import { ConstructorMode, closeMoveBlipModal, moveBlip } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { OperationType, useOperationHandler } from '../hooks';
@@ -20,24 +19,15 @@ const ModalMoveBlip: FC = () => {
 
     const blip = useAppSelector((state) => state.editRadar.editingBlip);
 
-    const versionId = useAppSelector((state) => state.editRadar.version.id);
-
     const mode = useAppSelector((state) => state.editRadar.mode);
 
     const isNewRadar = mode === ConstructorMode.NewRadarCreation;
 
     const isFixed = blip?.drawInfo === 'FIXED';
 
-    const blipId = blip?.id || -1;
-
-    const { data: lastBlipEvent, isLoading: isBlipEventLoading } = useGetLastBlipEventQuery(
-        { blipId, versionId },
-        { skip: isNewRadar || isFixed }
-    );
-
     const dispatch = useAppDispatch();
 
-    const [{ isLoading }, move, moveEdit] = useOperationHandler(OperationType.Move);
+    const [{ isLoading }, move, moveEditHandler] = useOperationHandler(OperationType.Move);
 
     const cancelBtnHandler = useCallback(() => {
         dispatch(closeMoveBlipModal());
@@ -53,17 +43,12 @@ const ModalMoveBlip: FC = () => {
                 if (isFixed) {
                     await move(blip, values.comment, activeSegment);
                 } else {
-                    if (!lastBlipEvent) throw new Error('Last blip event not provided');
-                    await moveEdit({
-                        comment: values.comment,
-                        notFixedBlipEventId: lastBlipEvent.id,
-                        distSegment: activeSegment,
-                    });
+                    await moveEditHandler({ blip, comment: values.comment, distSegment: activeSegment });
                 }
                 dispatch(closeMoveBlipModal());
             }
         },
-        [dispatch, move, activeSegment, blip, lastBlipEvent, isFixed, moveEdit]
+        [dispatch, move, moveEditHandler, activeSegment, blip, isFixed]
     );
 
     const controls = useMemo(() => {
@@ -72,7 +57,7 @@ const ModalMoveBlip: FC = () => {
                 <ControlContainer
                     confirmHandler={confirmBtnHandler}
                     cancelHandler={cancelBtnHandler}
-                    isLoading={isLoading || isBlipEventLoading}
+                    isLoading={isLoading}
                 />
             );
         }
@@ -87,7 +72,9 @@ const ModalMoveBlip: FC = () => {
                 )}
             </Formik>
         );
-    }, [cancelBtnHandler, confirmBtnHandler, isLoading, isNewRadar, submitBtnHandler, isBlipEventLoading]);
+    }, [cancelBtnHandler, confirmBtnHandler, isLoading, isNewRadar, submitBtnHandler]);
+
+    if (!blip) return null;
 
     return (
         <Modal open={true}>
@@ -99,9 +86,7 @@ const ModalMoveBlip: FC = () => {
                     Действительно переместить технологию в кольцо <span>{activeSegment?.ring.name}</span> сектора{' '}
                     <span>{activeSegment?.sector.name}</span>?
                 </div>
-                {!isNewRadar && !isFixed && (
-                    <BlipEventInfo blipEvent={lastBlipEvent} message={nonFixedBlipWarningUpdateMessage} />
-                )}
+                {!isNewRadar && !isFixed && <BlipEventInfo blip={blip} message={nonFixedBlipWarningUpdateMessage} />}
 
                 {controls}
             </div>
