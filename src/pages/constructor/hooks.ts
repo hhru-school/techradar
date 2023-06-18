@@ -82,7 +82,7 @@ export const useOperationHandler = (operation: OperationType): [EditRadarMutatio
                 setState({ isLoading: false, hasError: true });
             }
         },
-        [setState, createBlip, createBlipEvent, updateVersion, version, dispatch, operation, radarId]
+        [setState, updateVersion, createBlip, createBlipEvent, version, dispatch, operation, radarId]
     );
     return [state, handler];
 };

@@ -19,7 +19,7 @@ type Props = {
     x: number;
     y: number;
     variant?: RadarVariant;
-    drawInfo?: keyof typeof DrawInfo;
+    drawInfo?: DrawInfo;
 };
 
 const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarVariant.Demonstrative, drawInfo }) => {

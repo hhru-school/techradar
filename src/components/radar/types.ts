@@ -31,12 +31,7 @@ export interface Ring {
     name: string;
 }
 
-export enum DrawInfo {
-    NEW,
-    FIXED,
-    BACKWARD,
-    FORWARD,
-}
+export type DrawInfo = 'NEW' | 'FIXED' | 'BACKWARD' | 'FORWARD' | 'SEC_MOVE';
 
 export interface Blip {
     id: number;
@@ -45,7 +40,7 @@ export interface Blip {
     ring: Ring;
     sector: Sector;
     description: string | null;
-    drawInfo?: keyof typeof DrawInfo;
+    drawInfo?: DrawInfo;
 }
 
 export interface RadarInterface {

@@ -10,7 +10,7 @@ type Props = {
     x: number;
     y: number;
     r: number;
-    drawInfo?: keyof typeof DrawInfo;
+    drawInfo?: DrawInfo;
     isActive?: boolean;
 };
 

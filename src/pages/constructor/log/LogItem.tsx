@@ -1,4 +1,4 @@
-import { FC, useEffect, useCallback } from 'react';
+import { FC, useEffect, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 
 import { IndexBlipEventApi } from '../../../api/types';
@@ -26,6 +26,28 @@ const LogItem: FC<Props> = ({ blipEvent }) => {
 
     const classes = classNames(styles.container, { [styles.new]: isNew, [styles.init]: isInit });
 
+    const infoMessage = useMemo(() => {
+        switch (blipEvent.drawInfo) {
+            case 'NEW': {
+                return 'Новая';
+            }
+            case 'BACKWARD': {
+                return `от центра в ${blipEvent.ring?.name || ''}`;
+            }
+            case 'FORWARD': {
+                return `к центру в ${blipEvent.ring?.name || ''}`;
+            }
+            case 'SEC_MOVE': {
+                return `перемещена в сектор ${blipEvent.quadrant?.name || ''}`;
+            }
+            case 'FIXED': {
+                return 'создана ранее';
+            }
+            default:
+                return 'неизвестно';
+        }
+    }, [blipEvent]);
+
     useEffect(() => {
         setTimeout(() => {
             dispatch(setNewBlipEventId(-1));
@@ -34,9 +56,9 @@ const LogItem: FC<Props> = ({ blipEvent }) => {
 
     return (
         <li className={classes} onClick={isInit ? undefined : clickHandler}>
-            {blipEvent.drawInfo && <div className={styles.date}>{blipEvent.drawInfo}</div>}
             <div className={styles.date}>{formatDate(blipEvent.creationTime)}</div>
-            <div className={styles.name}> {blipEvent.blip?.name} </div>
+            {blipEvent.drawInfo && <div className={styles.drawInfo}>{infoMessage}</div>}
+            <div className={styles.name}> {blipEvent.id} </div>
         </li>
     );
 };

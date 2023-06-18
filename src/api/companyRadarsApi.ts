@@ -1,4 +1,5 @@
 import { Blip, RadarInterface } from '../components/radar/types';
+import { Segment } from '../store/editRadarSlice';
 import { RootState } from '../store/store';
 import { apiSlice } from './authApi';
 import { CreateRadarApiRequest, formatApiData } from './radarApiUtils';
@@ -145,7 +146,9 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'POST',
                 body,
             }),
+            invalidatesTags: ['LastBlipEvent'],
         }),
+
         getRadarLog: builder.query<IndexBlipEventApi[], number>({
             query: (versionId) => ({
                 method: 'GET',
@@ -201,6 +204,27 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
 
             invalidatesTags: ['Log'],
         }),
+
+        updateBlipEventSegment: builder.mutation<
+            UpdateBlipEventApiResponse,
+            { id: number; segment?: Segment; comment?: string }
+        >({
+            query: ({ id, segment, comment }) => ({
+                method: 'PUT',
+                url: `blip-events/${id}`,
+                body: { quadrantId: segment?.sector.id || null, ringId: segment?.ring.id || null, comment },
+            }),
+
+            invalidatesTags: ['Radar', 'Log'],
+        }),
+
+        getLastBlipEvent: builder.query<IndexBlipEventApi, { blipId: number; versionId: number }>({
+            query: ({ blipId, versionId }) => ({
+                method: 'GET',
+                url: `blip-events/last-blip-event?blip-id=${blipId}&radar-version-id=${versionId}`,
+            }),
+            providesTags: ['LastBlipEvent'],
+        }),
     }),
 });
 
@@ -223,4 +247,6 @@ export const {
     useUpdateRingMutation,
     useDeleteBlipEventMutation,
     useUpdateBlipEventCommentMutation,
+    useUpdateBlipEventSegmentMutation,
+    useGetLastBlipEventQuery,
 } = companyRadarsApi;
