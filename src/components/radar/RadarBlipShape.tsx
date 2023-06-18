@@ -38,6 +38,23 @@ const RadarBlipShape: FC<Props> = ({ x, y, r, drawInfo, isActive = false }) => {
             );
         }
 
+        case 'SEC_MOVE': {
+            const size = 2.6 * r;
+            return (
+                <>
+                    <rect
+                        x={x - size / 2}
+                        y={y - size / 2}
+                        width={size}
+                        height={size}
+                        strokeWidth={r / 5}
+                        className={styles.newBlipFrame}
+                    />
+                    <circle cx={x} cy={y} r={r} className={blipFieldClasses} />
+                </>
+            );
+        }
+
         default: {
             return <circle cx={x} cy={y} r={r} className={blipFieldClasses} />;
         }
