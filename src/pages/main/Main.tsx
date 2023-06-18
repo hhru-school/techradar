@@ -15,22 +15,22 @@ import {
 
 import { setAuthFormOpen } from '../../store/authSlice/authSlice';
 import { useAppDispatch } from '../../store/hooks';
-import bachPic from './img/tech.png';
+import bachPic from './img/circles.png';
 
 import styles from './main.module.less';
 
 const style: Record<string, SxProps> = {
-    title: { margin: '20px 0 0 0', fontWeight: '800' },
-    madeBy: { margin: '2px 0 0 0' },
+    title: { margin: '50px 0 0 0', fontWeight: '800' },
+    madeBy: { margin: '2px 0 50px 0' },
     link: { fontWeight: '600' },
     bgIMG: {
-        background: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${bachPic}) no-repeat center center fixed`,
-        padding: '30px 0 30px 0',
+        background: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${bachPic}) no-repeat center center fixed`,
+        padding: '50px 0',
         marginTop: '30px',
     },
-    boxHowUse: { display: 'flex', flexDirection: 'column', padding: '30px 0' },
+    boxHowUse: { display: 'flex', flexDirection: 'column', padding: '100px 0' },
     howUse: { marginBottom: '15px' },
-    imgRadar: { display: 'flex', justifyContent: 'space-between', padding: '50px 0' },
+    imgRadar: { display: 'flex', justifyContent: 'space-between', padding: '100px 0' },
     try: { maxWidth: '500px' },
 };
 
@@ -54,11 +54,10 @@ const Main: FC = () => {
             </Typography>
             <Box sx={style.bgIMG}>
                 <Container maxWidth="xl">
-                    <Typography variant="h4" align="center" color={'secondary'}>
-                        Сервис позволяющий оценить уровень адаптации технологии в&nbsp;Вашей компании. С&nbsp;помощью
-                        радара можно выявить технологические тренды, которые могут повлиять
-                        на&nbsp;конкурентоспособность компании и&nbsp;определить потенциальные возможности для
-                        ее&nbsp;развития.
+                    <Typography variant="h4" align="justify" color={'secondary'}>
+                        Сервис, позволяющий оценить уровень адаптации используемых компанией технологий, выявить
+                        технологические тренды, влияющие на&nbsp;ее&nbsp;конкурентоспособность, и&nbsp;определить
+                        потенциальные возможности ее&nbsp;развития.
                     </Typography>
                 </Container>
             </Box>
@@ -79,6 +78,46 @@ const Main: FC = () => {
                 </Box>
             </Container>
             <Divider />
+            <Box sx={{ backgroundColor: 'rgb(220,220,220)', padding: '100px 0' }}>
+                <Container maxWidth="xl">
+                    <Typography variant="h4" align="center">
+                        Чем радар полезен компании?
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: '300px', marginTop: '15px' }}>
+                        <Typography variant="h6">Разработчики смогут:</Typography>
+                        <ul>
+                            <li>
+                                <Typography variant="h6">выбирать подходящие для нового проекта технологии;</Typography>
+                            </li>
+                            <li>
+                                <Typography variant="h6">понимать, какие скиллы качать;</Typography>
+                            </li>
+                            <li>
+                                <Typography variant="h6">быстро ознакомиться с акутальным стеком компании;</Typography>
+                            </li>
+                            <li>
+                                <Typography variant="h6">
+                                    оперативно решать, затаскивать ли новую технологию в проект.
+                                </Typography>
+                            </li>
+                        </ul>
+                        <Typography variant="h6">Кроме того:</Typography>
+                        <ul>
+                            <li>
+                                <Typography variant="h6">
+                                    рекрутёры смогут ориентироваться на технологии с радара при поиске кандидатов;
+                                </Typography>
+                            </li>
+                            <li>
+                                <Typography variant="h6">
+                                    соискатели получат возможность ознакомиться с используемыми в компании технологиями.
+                                </Typography>
+                            </li>
+                        </ul>
+                    </Box>
+                </Container>
+            </Box>
+            <Divider />
             <Container maxWidth="xl">
                 <Box sx={style.boxHowUse}>
                     <Typography variant="h4" component="h1" sx={style.howUse} align={'center'}>
@@ -96,7 +135,8 @@ const Main: FC = () => {
                             <Typography>
                                 Кольца в круге от центра до периферии означают статус использования технологии в
                                 продукте: в центре — самые эффективные, на периферии — наименее эффективные. 'Куски
-                                пирога' - технологий, инструментов, платформ, языков и фреймворков.
+                                пирога' - большие сущности объединяющие технологии, инструменты, платформы, языки и
+                                фреймворки.
                             </Typography>
                         </AccordionDetails>
                     </Accordion>
