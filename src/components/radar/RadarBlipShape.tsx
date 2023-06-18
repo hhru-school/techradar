@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import classNames from 'classnames';
 
 import { DrawInfo } from './types';
-import { buildTriangleDown, buildTriangleUp } from './utils';
+import { buildArrowDown, buildArrowUp } from './utils';
 
 import styles from './blip.module.less';
 
@@ -20,26 +20,39 @@ const RadarBlipShape: FC<Props> = ({ x, y, r, drawInfo, isActive = false }) => {
         [styles.blipField]: !isActive,
     });
 
+    const strokeWidth = r / 8;
+
+    const circle = <circle cx={x} cy={y} r={r - strokeWidth} strokeWidth={strokeWidth} className={blipFieldClasses} />;
+
     switch (drawInfo) {
         case 'FORWARD': {
-            return <path d={buildTriangleUp(x, y, r * 0.8)} className={blipFieldClasses} />;
+            return (
+                <>
+                    <path d={buildArrowUp(x, y, r)} className={blipFieldClasses} />
+                    {circle}
+                </>
+            );
         }
 
         case 'BACKWARD': {
-            return <path d={buildTriangleDown(x, y, r * 0.8)} className={blipFieldClasses} />;
+            return (
+                <>
+                    <path d={buildArrowDown(x, y, r)} className={blipFieldClasses} />;{circle}
+                </>
+            );
         }
 
         case 'NEW': {
             return (
                 <>
                     <circle cx={x} cy={y} r={r * 1.3} strokeWidth={r / 7} className={styles.newBlipFrame} />
-                    <circle cx={x} cy={y} r={r} className={blipFieldClasses} />
+                    {circle}
                 </>
             );
         }
 
         case 'SEC_MOVE': {
-            const size = 2.6 * r;
+            const size = 2.2 * r;
             return (
                 <>
                     <rect
@@ -50,15 +63,15 @@ const RadarBlipShape: FC<Props> = ({ x, y, r, drawInfo, isActive = false }) => {
                         strokeWidth={r / 5}
                         className={styles.newBlipFrame}
                     />
-                    <circle cx={x} cy={y} r={r} className={blipFieldClasses} />
+                    {circle}
                 </>
             );
         }
 
         default: {
-            return <circle cx={x} cy={y} r={r} className={blipFieldClasses} />;
+            return <>{circle}</>;
         }
     }
 };
 
-export default RadarBlipShape;
+export default memo(RadarBlipShape);

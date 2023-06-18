@@ -198,3 +198,23 @@ export const buildTriangleDown = (x: number, y: number, r: number): string => {
     const height = size * Math.sin(Math.PI / 3);
     return `M ${-size / 2 + x},${y - r} ${size / 2 + x},${y - r} ${x},${height - r + y} Z`;
 };
+
+const getArrowDimensions = (r: number): { size: number; height: number; offset: number } => {
+    const size = r * 1.1;
+    const height = size * Math.sin(Math.PI / 3);
+    return {
+        size,
+        height,
+        offset: r * 1.2,
+    };
+};
+
+export const buildArrowUp = (x: number, y: number, r: number): string => {
+    const { size, height, offset } = getArrowDimensions(r);
+    return `M ${x - size / 2},${y - offset} l${size},${0} l${-size / 2},${-height} Z`;
+};
+
+export const buildArrowDown = (x: number, y: number, r: number): string => {
+    const { size, height, offset } = getArrowDimensions(r);
+    return `M ${x - size / 2},${y + offset} l${size},${0} l${-size / 2},${height} Z`;
+};

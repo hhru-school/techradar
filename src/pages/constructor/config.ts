@@ -39,3 +39,5 @@ function getVersionName(): string {
 
     return `Q${quarter}-${year}`;
 }
+
+export const blipRadius = 9;
