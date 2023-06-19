@@ -21,7 +21,9 @@ const ModalDeleteBlip: FC = () => {
 
     const dispatch = useAppDispatch();
 
-    const [{ isLoading }, deleteBlipHandler] = useOperationHandler(OperationType.Delete);
+    const [{ isLoading }, deleteBlipHandler, deleteEditHandler] = useOperationHandler(OperationType.Delete);
+
+    const isFixed = blip?.drawInfo === 'FIXED';
 
     const cancelBtnHandler = useCallback(() => {
         dispatch(closeDeleteBlipModal());
@@ -31,14 +33,21 @@ const ModalDeleteBlip: FC = () => {
         dispatch(deleteBlip());
     }, [dispatch]);
 
+    // Удаление перемещенной точки не работает
+
     const submitBtnHandler = useCallback(
         async (values: Values) => {
             if (!isNewRadar && blip) {
-                await deleteBlipHandler(blip, values.comment);
+                if (isFixed) {
+                    await deleteBlipHandler(blip, values.comment);
+                } else {
+                    await deleteEditHandler({ blip, comment: values.comment });
+                }
+
                 dispatch(closeDeleteBlipModal());
             }
         },
-        [dispatch, deleteBlipHandler, blip, isNewRadar]
+        [dispatch, deleteBlipHandler, blip, isNewRadar, deleteEditHandler, isFixed]
     );
 
     const controls = useMemo(() => {

@@ -7,6 +7,7 @@ import { defaultBlipRadius } from '../../../components/radar/styleConfig';
 import { RadarInterface, RadarVariant } from '../../../components/radar/types';
 import { setDraggingBlip, setIsCreating } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { blipRadius } from '../config';
 import { mouseUpHandler } from '../utils';
 import BlipGenerator from './BlipGenerator';
 import Cursor from './Cursor';
@@ -72,7 +73,7 @@ const EditWrapper: FC<Props> = ({ radar }) => {
             ref={ref}
         >
             <BlipGenerator onMouseDown={mouseDownHandler} />
-            <Radar radar={radar} radius={250} variant={RadarVariant.Editable} />
+            <Radar radar={radar} radius={250} variant={RadarVariant.Editable} blipRadus={blipRadius} />
             {position && blipAsset && (
                 <div
                     className={styles.ghost}

@@ -187,14 +187,38 @@ export const getRingByName = (radar: RadarInterface, name: string): Ring => {
     return ring;
 };
 
-export const buildTriangleUp = (x: number, y: number, r: number): string => {
-    const size = (2 * r) / Math.tan(Math.PI / 6);
+const getTriangleDimensions = (r: number): { size: number; height: number } => {
+    const size = ((2 * r) / Math.tan(Math.PI / 6)) * 0.95;
     const height = size * Math.sin(Math.PI / 3);
+    return { size, height };
+};
+
+export const buildTriangleUp = (x: number, y: number, r: number): string => {
+    const { size, height } = getTriangleDimensions(r);
     return `M ${x},${r - height + y} ${size / 2 + x},${r + y} ${-size / 2 + x},${r + y} Z`;
 };
 
 export const buildTriangleDown = (x: number, y: number, r: number): string => {
-    const size = (2 * r) / Math.tan(Math.PI / 6);
-    const height = size * Math.sin(Math.PI / 3);
+    const { size, height } = getTriangleDimensions(r);
     return `M ${-size / 2 + x},${y - r} ${size / 2 + x},${y - r} ${x},${height - r + y} Z`;
+};
+
+const getArrowDimensions = (r: number): { size: number; height: number; offset: number } => {
+    const size = r * 1.5;
+    const height = size * Math.sin(Math.PI / 3);
+    return {
+        size,
+        height,
+        offset: 0,
+    };
+};
+
+export const buildArrowUp = (x: number, y: number, r: number): string => {
+    const { size, height, offset } = getArrowDimensions(r);
+    return `M ${x - size / 2},${y - offset} l${size},${0} l${-size / 2},${-height} Z`;
+};
+
+export const buildArrowDown = (x: number, y: number, r: number): string => {
+    const { size, height, offset } = getArrowDimensions(r);
+    return `M ${x - size / 2},${y + offset} l${size},${0} l${-size / 2},${height} Z`;
 };

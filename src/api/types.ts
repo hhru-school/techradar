@@ -64,7 +64,7 @@ export interface RadarApiDataResponse {
         quadrantId: number;
         ringId: number;
         radarId: number;
-        drawInfo?: keyof typeof DrawInfo;
+        drawInfo?: DrawInfo;
     }[];
 }
 
@@ -175,7 +175,8 @@ export interface IndexBlipEventApi {
     };
     creationTime: string;
     lastChangeTime: string;
-    drawInfo?: string;
+    drawInfo?: DrawInfo;
+    radarVersion: string;
 }
 
 export interface VersionData {

@@ -5,8 +5,10 @@ import { Form, Formik } from 'formik';
 import { ConstructorMode, closeMoveBlipModal, moveBlip } from '../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { OperationType, useOperationHandler } from '../hooks';
+import BlipEventInfo from './BlipEventInfo';
 import ControlContainer, { Values } from './ControlContainer';
 import ModalTextField from './ModalTextField';
+import { nonFixedBlipWarningUpdateMessage } from './messages';
 
 import styles from './modal.module.less';
 
@@ -14,13 +16,18 @@ const initialValues = { comment: '' };
 
 const ModalMoveBlip: FC = () => {
     const activeSegment = useAppSelector((state) => state.editRadar.activeSegment);
+
     const blip = useAppSelector((state) => state.editRadar.editingBlip);
+
     const mode = useAppSelector((state) => state.editRadar.mode);
+
     const isNewRadar = mode === ConstructorMode.NewRadarCreation;
+
+    const isFixed = blip?.drawInfo === 'FIXED';
 
     const dispatch = useAppDispatch();
 
-    const [{ isLoading }, move] = useOperationHandler(OperationType.Move);
+    const [{ isLoading }, move, moveEditHandler] = useOperationHandler(OperationType.Move);
 
     const cancelBtnHandler = useCallback(() => {
         dispatch(closeMoveBlipModal());
@@ -32,12 +39,16 @@ const ModalMoveBlip: FC = () => {
 
     const submitBtnHandler = useCallback(
         async (values: Values) => {
-            if (!isNewRadar && blip && activeSegment) {
-                await move(blip, values.comment, activeSegment);
+            if (blip && activeSegment) {
+                if (isFixed) {
+                    await move(blip, values.comment, activeSegment);
+                } else {
+                    await moveEditHandler({ blip, comment: values.comment, distSegment: activeSegment });
+                }
                 dispatch(closeMoveBlipModal());
             }
         },
-        [dispatch, move, activeSegment, blip, isNewRadar]
+        [dispatch, move, moveEditHandler, activeSegment, blip, isFixed]
     );
 
     const controls = useMemo(() => {
@@ -63,6 +74,8 @@ const ModalMoveBlip: FC = () => {
         );
     }, [cancelBtnHandler, confirmBtnHandler, isLoading, isNewRadar, submitBtnHandler]);
 
+    if (!blip) return null;
+
     return (
         <Modal open={true}>
             <div className={styles.modal}>
@@ -73,6 +86,8 @@ const ModalMoveBlip: FC = () => {
                     Действительно переместить технологию в кольцо <span>{activeSegment?.ring.name}</span> сектора{' '}
                     <span>{activeSegment?.sector.name}</span>?
                 </div>
+                {!isNewRadar && !isFixed && <BlipEventInfo blip={blip} message={nonFixedBlipWarningUpdateMessage} />}
+
                 {controls}
             </div>
         </Modal>
