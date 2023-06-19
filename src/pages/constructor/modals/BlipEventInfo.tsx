@@ -3,7 +3,9 @@ import { Alert } from '@mui/material';
 
 import { Blip } from '../../../components/radar/types';
 import { useAppSelector } from '../../../store/hooks';
-import { getLastBlipEvents } from '../utils';
+import { getBlipEventStatus, getLastBlipEvents } from '../utils';
+
+import styles from './blipEventInfo.module.less';
 
 type Props = {
     blip: Blip;
@@ -18,9 +20,10 @@ const BlipEventInfo: FC<Props> = ({ blip, message }) => {
     if (!lastBlipEvent) return null;
     return (
         <div>
-            <div>{lastBlipEvent.id}</div>
-            <div>{lastBlipEvent.blip?.name}</div>
-            <Alert severity="warning">{message}</Alert>
+            <Alert severity="warning">
+                {message}
+                <div className={styles.statusMessage}>{getBlipEventStatus(lastBlipEvent)}</div>
+            </Alert>
         </div>
     );
 };
