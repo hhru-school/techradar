@@ -68,7 +68,7 @@ const MyRadar: FC = () => {
             <Container maxWidth="xl">
                 <RadarsChips />
                 <Typography variant="h5" sx={styles.title}>
-                    Радары
+                    Все версии
                 </Typography>
                 <Box sx={styles.box}>
                     <Button
@@ -78,7 +78,7 @@ const MyRadar: FC = () => {
                         sx={styles.newVersionBtn}
                         disabled={!allCompanyRadars?.length}
                     >
-                        Сделать следующую версию +
+                        Сделать следующую +
                     </Button>
                     <Box sx={styles.checkboxBox}>
                         <FormControlLabel
@@ -101,7 +101,7 @@ const MyRadar: FC = () => {
                         sx={styles.reset}
                         disabled={!allCompanyRadars?.length}
                     >
-                        Сбросить таблицу
+                        Сбросить
                     </Button>
                 </Box>
                 <Routes>
