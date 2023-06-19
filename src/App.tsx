@@ -15,7 +15,7 @@ import { ConstructorMode } from './store/editRadarSlice';
 import { useCredentials } from './store/hooks';
 
 const styles: Record<string, SxProps> = {
-    box: { padding: '0 0 80px 0', position: 'relative' },
+    box: { padding: '0 0 80px 0', position: 'relative', minHeight: 'calc(100vh - 70px)' },
 };
 
 const theme = createTheme(

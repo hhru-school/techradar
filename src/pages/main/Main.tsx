@@ -61,8 +61,8 @@ const Main: FC = () => {
     }, [dispatch]);
 
     const renderText = (arr: Array<string>) =>
-        arr.map((text) => (
-            <li>
+        arr.map((text, id) => (
+            <li key={id}>
                 <Typography variant="h6">{text}</Typography>
             </li>
         ));

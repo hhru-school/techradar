@@ -1,8 +1,10 @@
-import { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Box, Typography, SxProps } from '@mui/material';
 import { DataGrid, ruRU } from '@mui/x-data-grid';
 
+import { CompanyData } from '../../../api/companiesApi';
+import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
 import { useGetAllCompaniesQuery } from '../../../api/publicCompaniesApi';
 import { setCompanyModalOpen } from '../../../store/companySlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -41,12 +43,27 @@ const CompanyModal: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const showCompanyModal = useAppSelector((state) => state.company.showCompanyModal);
+    const [idCompany, setIdCompany] = useState<number>(0);
 
     const { data: allCompanies } = useGetAllCompaniesQuery();
+    const { data: allCompanyRadars, refetch: allCompanyRadarsRefetch } = useGetAllCompanyRadarsQuery(idCompany);
 
     const handleClose = useCallback(() => dispatch(setCompanyModalOpen(false)), [dispatch]);
 
     const rows = useMemo(() => allCompanies || [], [allCompanies]);
+
+    const handleClick = useCallback(
+        async (params: { row: CompanyData }) => {
+            setIdCompany(params.row.id);
+
+            await allCompanyRadarsRefetch().then(() => {
+                if (idCompany && allCompanyRadars) {
+                    navigate(`/techradar/company/${idCompany}/radar/${allCompanyRadars[0].id}/version/latest`);
+                }
+            });
+        },
+        [allCompanyRadars, allCompanyRadarsRefetch, idCompany, navigate]
+    );
 
     const columns = useMemo(
         () => [
@@ -62,35 +79,27 @@ const CompanyModal: FC = () => {
     );
 
     return (
-        <>
-            <Modal
-                open={showCompanyModal}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={styles.modal}>
-                    <Typography
-                        id="transition-modal-title"
-                        variant="h6"
-                        component="h2"
-                        sx={styles.title}
-                        align="center"
-                    >
-                        Компании
-                    </Typography>
-                    <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        initialState={initialState}
-                        pageSizeOptions={[5]}
-                        disableRowSelectionOnClick
-                        localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
-                        onRowClick={() => navigate(`/constructor/edit/version/`)}
-                    />
-                </Box>
-            </Modal>
-        </>
+        <Modal
+            open={showCompanyModal}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box sx={styles.modal}>
+                <Typography id="transition-modal-title" variant="h6" component="h2" sx={styles.title} align="center">
+                    Компании
+                </Typography>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    initialState={initialState}
+                    pageSizeOptions={[5]}
+                    disableRowSelectionOnClick
+                    localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
+                    onRowClick={handleClick}
+                />
+            </Box>
+        </Modal>
     );
 };
 
