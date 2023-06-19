@@ -1,9 +1,10 @@
-import { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Box, Typography, SxProps } from '@mui/material';
 import { DataGrid, ruRU } from '@mui/x-data-grid';
 
 import { CompanyData } from '../../../api/companiesApi';
+import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
 import { useGetAllCompaniesQuery } from '../../../api/publicCompaniesApi';
 import { setCompanyModalOpen } from '../../../store/companySlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -42,19 +43,26 @@ const CompanyModal: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const showCompanyModal = useAppSelector((state) => state.company.showCompanyModal);
+    const [companyId, setCompanyId] = useState<number>(0);
 
     const { data: allCompanies } = useGetAllCompaniesQuery();
+    const { data: allCompanyRadars, refetch } = useGetAllCompanyRadarsQuery(companyId, { skip: !companyId });
 
     const handleClose = useCallback(() => dispatch(setCompanyModalOpen(false)), [dispatch]);
 
     const rows = useMemo(() => allCompanies || [], [allCompanies]);
 
     const handleClick = useCallback(
-        (params: { row: CompanyData }) => {
-            navigate(`/techradar/company/${params.row.id}/radar/1/version/latest`);
-            dispatch(setCompanyModalOpen(false));
+        async (params: { row: CompanyData }) => {
+            setCompanyId(params.row.id);
+            await refetch().then(() => {
+                if (allCompanyRadars && allCompanyRadars.length) {
+                    navigate(`/techradar/company/${params.row.id}/radar/${allCompanyRadars[0].id}/version/latest`);
+                    dispatch(setCompanyModalOpen(false));
+                }
+            });
         },
-        [dispatch, navigate]
+        [allCompanyRadars, dispatch, navigate, refetch]
     );
 
     const columns = useMemo(
