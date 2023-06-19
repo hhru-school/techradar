@@ -71,7 +71,7 @@ const RegistrationFormModal: FC = () => {
                         dispatch(setAuthFormOpen(true));
                         setMessage(null);
                         setErrMessage(null);
-                    }, 3000);
+                    }, 2000);
                 })
                 .catch((err: ErrorResponse) => setErrMessage(err.data.message));
         },
@@ -115,7 +115,7 @@ const RegistrationFormModal: FC = () => {
                                 variant="contained"
                                 color="success"
                                 sx={styles.btnSuccess}
-                                disabled={isLoading}
+                                disabled={isLoading || !!message}
                             >
                                 Зарегистрироваться
                             </Button>

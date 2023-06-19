@@ -42,4 +42,8 @@ export const styles: Record<string, SxProps> = {
         justifyContent: 'space-around',
     },
     icon: { mr: '3px' },
+    boxLeft: { flexGrow: 1, display: 'flex' },
+    boxLogo: { display: 'flex', mr: '60px' },
+    boxLinks: { display: 'flex', flexWrap: 'wrap' },
+    generalBtn: { marginRight: '50px' },
 };

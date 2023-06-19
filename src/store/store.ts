@@ -5,6 +5,7 @@ import { singlePageBlipApi } from '../api/blipsSinglePageApi';
 import { companiesApi } from '../api/companiesApi';
 import { companyRadarsApi } from '../api/companyRadarsApi';
 import { createRadarFromFileApi } from '../api/createRadarFromFileApi';
+import { publicCompaniesApi } from '../api/publicCompaniesApi';
 import { radarsGridApi } from '../api/radarsGridApi';
 import activeBlipReducer from './activeBlipSlice';
 import authReducer from './authSlice/authSlice';
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
     [singlePageBlipApi.reducerPath]: singlePageBlipApi.reducer,
     [createRadarFromFileApi.reducerPath]: createRadarFromFileApi.reducer,
     [companiesApi.reducerPath]: companiesApi.reducer,
+    [publicCompaniesApi.reducerPath]: publicCompaniesApi.reducer,
 });
 
 export const store = configureStore({
@@ -42,6 +44,7 @@ export const store = configureStore({
             companyRadarsApi.middleware,
             radarsGridApi.middleware,
             singlePageBlipApi.middleware,
+            publicCompaniesApi.middleware,
             authMiddleware,
             logOutMiddleware,
         ]),

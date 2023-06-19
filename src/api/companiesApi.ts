@@ -4,7 +4,11 @@ import { CreateNewCompanyResponse, CreateNewCompanyRequest } from './types';
 export interface CompanyData {
     id: number;
     name: string;
-    lastSelected: boolean;
+}
+
+export interface CompanyStaff {
+    id: number;
+    username: string;
 }
 
 export const companiesApi = apiSlice.injectEndpoints({
@@ -24,7 +28,34 @@ export const companiesApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['CreateCompany'],
         }),
+        getStaff: builder.query<CompanyStaff[], number>({
+            query: (companyId) => ({
+                url: `/companies/${companyId}/users`,
+                method: 'GET',
+            }),
+            providesTags: ['staff'],
+        }),
+        setStaffItem: builder.mutation<void, { username: string; companyId: number }>({
+            query: ({ username, companyId }) => ({
+                url: `/users/${username}/companies/${companyId}`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['staff'],
+        }),
+        deleteStaffItem: builder.mutation<void, { username: string; companyId: number }>({
+            query: ({ username, companyId }) => ({
+                url: `/users/${username}/companies/${companyId}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['staff'],
+        }),
     }),
 });
 
-export const { useGetCompaniesQuery, useCreateNewCompanyMutation } = companiesApi;
+export const {
+    useGetCompaniesQuery,
+    useCreateNewCompanyMutation,
+    useGetStaffQuery,
+    useDeleteStaffItemMutation,
+    useSetStaffItemMutation,
+} = companiesApi;

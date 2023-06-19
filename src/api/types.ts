@@ -200,6 +200,7 @@ export interface NewVersionResponse {
     toggleAvailable: boolean;
     creationTime: string | Date;
     lastChangeTime: string | Date;
+    parentName: string;
 }
 
 export interface NewVersionRequest {
