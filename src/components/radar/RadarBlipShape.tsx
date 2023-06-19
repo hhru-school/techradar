@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import classNames from 'classnames';
 
 import { DrawInfo } from './types';
-import { buildArrowDown, buildArrowUp } from './utils';
+import { buildTriangleDown, buildTriangleUp } from './utils';
 
 import styles from './blip.module.less';
 
@@ -28,7 +28,11 @@ const RadarBlipShape: FC<Props> = ({ x, y, r, drawInfo, isActive = false }) => {
         case 'FORWARD': {
             return (
                 <>
-                    <path d={buildArrowUp(x, y, r)} className={blipFieldClasses} />
+                    <path
+                        d={buildTriangleUp(x, y, r - strokeWidth)}
+                        strokeWidth={r / 7}
+                        className={styles.newBlipFrame}
+                    />
                     {circle}
                 </>
             );
@@ -37,7 +41,12 @@ const RadarBlipShape: FC<Props> = ({ x, y, r, drawInfo, isActive = false }) => {
         case 'BACKWARD': {
             return (
                 <>
-                    <path d={buildArrowDown(x, y, r)} className={blipFieldClasses} />;{circle}
+                    <path
+                        d={buildTriangleDown(x, y, r - strokeWidth)}
+                        strokeWidth={r / 7}
+                        className={styles.newBlipFrame}
+                    />
+                    {circle}
                 </>
             );
         }
