@@ -48,3 +48,28 @@ export const getNextBlipLabel = (dict: IdToLabelDict | null): number => {
     if (!dict) return 1;
     return Math.max(...(Object.values(dict) as number[])) + 1;
 };
+
+export const getBlipEventStatus = (blipEvent: IndexBlipEventApi): string => {
+    switch (blipEvent.drawInfo) {
+        case 'NEW': {
+            return 'Новая';
+        }
+        case 'BACKWARD': {
+            return `от центра в ${blipEvent.ring?.name || ''}`;
+        }
+        case 'FORWARD': {
+            return `к центру в ${blipEvent.ring?.name || ''}`;
+        }
+        case 'SEC_MOVE': {
+            return `перемещена в сектор ${blipEvent.quadrant?.name || ''}`;
+        }
+        case 'FIXED': {
+            return 'создана ранее';
+        }
+        case 'DELETE': {
+            return 'удаление';
+        }
+        default:
+            return 'неизвестно';
+    }
+};
