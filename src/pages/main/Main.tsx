@@ -14,8 +14,9 @@ import {
 } from '@mui/material';
 
 import { setAuthFormOpen } from '../../store/authSlice/authSlice';
-import { useAppDispatch } from '../../store/hooks';
-import bachPic from './img/circles.png';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { setCreateRadarModalOpen } from '../../store/myRadarsSlice';
+import backPic from './img/circles.png';
 
 import styles from './main.module.less';
 
@@ -24,7 +25,7 @@ const style: Record<string, SxProps> = {
     madeBy: { margin: '2px 0 50px 0' },
     link: { fontWeight: '600' },
     bgIMG: {
-        background: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${bachPic}) no-repeat center center fixed`,
+        background: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${backPic}) no-repeat center center fixed`,
         padding: '50px 0',
         marginTop: '30px',
     },
@@ -38,10 +39,33 @@ const style: Record<string, SxProps> = {
 
 const imgSrc = 'https://raw.githubusercontent.com/hhru-school/techradar/readme-asset/radarView.JPG';
 
+const forDevelopers: Array<string> = [
+    'выбирать подходящие для нового проекта технологии;',
+    'понимать, какие скиллы качать;',
+    'быстро ознакомиться с акутальным стеком компании;',
+    'оперативно решать, затаскивать ли новую технологию в проект.',
+];
+
+const besides: Array<string> = [
+    'рекрутёры смогут ориентироваться на технологии с радара при поиске кандидатов;',
+    'соискатели получат возможность ознакомиться с используемыми в компании технологиями.',
+];
+
 const Main: FC = () => {
     const dispatch = useAppDispatch();
+    const accessToken = useAppSelector((state) => state.auth.accessToken);
 
     const handleAuthFormOpen = useCallback(() => dispatch(setAuthFormOpen(true)), [dispatch]);
+    const handleCreateRadar = useCallback(() => {
+        dispatch(setCreateRadarModalOpen(true));
+    }, [dispatch]);
+
+    const renderText = (arr: Array<string>) =>
+        arr.map((text) => (
+            <li>
+                <Typography variant="h6">{text}</Typography>
+            </li>
+        ));
 
     return (
         <Box>
@@ -71,9 +95,15 @@ const Main: FC = () => {
                         <img className={styles.img} src={imgSrc}></img>
                     </Box>
                     <Typography paragraph={true} variant="h6" sx={style.try}>
-                        <Button variant="contained" onClick={handleAuthFormOpen}>
-                            Попробуйте
-                        </Button>{' '}
+                        {accessToken ? (
+                            <Button variant="contained" onClick={handleAuthFormOpen}>
+                                Попробуйте
+                            </Button>
+                        ) : (
+                            <Button variant="contained" onClick={handleCreateRadar}>
+                                Попробуйте
+                            </Button>
+                        )}{' '}
                         создать свой радар с&nbsp;нуля в&nbsp;конструкторе или добавьте готовый в&nbsp;формате файла
                         .xlsx или .csv
                     </Typography>
@@ -87,35 +117,9 @@ const Main: FC = () => {
                     </Typography>
                     <Box sx={style.boxRightText}>
                         <Typography variant="h6">Разработчики смогут:</Typography>
-                        <ul>
-                            <li>
-                                <Typography variant="h6">выбирать подходящие для нового проекта технологии;</Typography>
-                            </li>
-                            <li>
-                                <Typography variant="h6">понимать, какие скиллы качать;</Typography>
-                            </li>
-                            <li>
-                                <Typography variant="h6">быстро ознакомиться с акутальным стеком компании;</Typography>
-                            </li>
-                            <li>
-                                <Typography variant="h6">
-                                    оперативно решать, затаскивать ли новую технологию в проект.
-                                </Typography>
-                            </li>
-                        </ul>
+                        <ul>{renderText(forDevelopers)}</ul>
                         <Typography variant="h6">Кроме того:</Typography>
-                        <ul>
-                            <li>
-                                <Typography variant="h6">
-                                    рекрутёры смогут ориентироваться на технологии с радара при поиске кандидатов;
-                                </Typography>
-                            </li>
-                            <li>
-                                <Typography variant="h6">
-                                    соискатели получат возможность ознакомиться с используемыми в компании технологиями.
-                                </Typography>
-                            </li>
-                        </ul>
+                        <ul>{renderText(besides)}</ul>
                     </Box>
                 </Container>
             </Box>
