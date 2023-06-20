@@ -18,7 +18,7 @@ export const companiesApi = apiSlice.injectEndpoints({
                 url: `/users/companies`,
                 method: 'GET',
             }),
-            providesTags: ['CreateCompany'],
+            providesTags: ['CreateCompany', 'Auth'],
         }),
         createNewCompany: builder.mutation<CreateNewCompanyResponse, CreateNewCompanyRequest>({
             query: (body) => ({
@@ -33,7 +33,7 @@ export const companiesApi = apiSlice.injectEndpoints({
                 url: `/companies/${companyId}/users`,
                 method: 'GET',
             }),
-            providesTags: ['staff'],
+            providesTags: ['staff', 'Auth'],
         }),
         setStaffItem: builder.mutation<void, { username: string; companyId: number }>({
             query: ({ username, companyId }) => ({

@@ -40,8 +40,8 @@ const DragDropFile: FC = () => {
                     .unwrap()
                     .then(({ radarId }) => {
                         setError(null);
-                        dispatch(setCreateRadarModalOpen(false));
                         navigate(`admin/my-radars/company/${currentCompany.id}/grid/${radarId}`);
+                        dispatch(setCreateRadarModalOpen(false));
                     })
                     .catch((e: UploadFileError) => {
                         setError(e.data.message);
