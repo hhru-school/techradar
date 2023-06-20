@@ -54,8 +54,9 @@ const StaffModal: FC = () => {
     const showStaffModal = useAppSelector((state) => state.company.showStaffModal);
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const currentCompanyId = currentCompany ? currentCompany.id : 0;
+    const username = useAppSelector((state) => state.auth.username);
 
-    const { data: staffList, error, isError } = useGetStaffQuery(currentCompanyId);
+    const { data: staffList, error, isError } = useGetStaffQuery(currentCompanyId, { skip: !username });
 
     const handleClose = useCallback(() => dispatch(setStaffModalOpen(false)), [dispatch]);
 
