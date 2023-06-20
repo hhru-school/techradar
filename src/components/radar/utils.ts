@@ -188,7 +188,7 @@ export const getRingByName = (radar: RadarInterface, name: string): Ring => {
 };
 
 const getTriangleDimensions = (r: number): { size: number; height: number } => {
-    const size = ((2 * r) / Math.tan(Math.PI / 6)) * 0.95;
+    const size = ((2 * r) / Math.tan(Math.PI / 6)) * 0.9;
     const height = size * Math.sin(Math.PI / 3);
     return { size, height };
 };
