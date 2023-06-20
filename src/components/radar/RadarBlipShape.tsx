@@ -12,9 +12,10 @@ type Props = {
     r: number;
     drawInfo?: DrawInfo;
     isActive?: boolean;
+    color: string;
 };
 
-const RadarBlipShape: FC<Props> = ({ x, y, r, drawInfo, isActive = false }) => {
+const RadarBlipShape: FC<Props> = ({ x, y, r, drawInfo, isActive = false, color }) => {
     const blipFieldClasses = classNames({
         [styles.blipFieldActive]: isActive,
         [styles.blipField]: !isActive,
@@ -22,7 +23,9 @@ const RadarBlipShape: FC<Props> = ({ x, y, r, drawInfo, isActive = false }) => {
 
     const strokeWidth = r / 8;
 
-    const circle = <circle cx={x} cy={y} r={r - strokeWidth} strokeWidth={strokeWidth} className={blipFieldClasses} />;
+    const circle = (
+        <circle cx={x} cy={y} r={r - strokeWidth} strokeWidth={strokeWidth} fill={color} className={blipFieldClasses} />
+    );
 
     switch (drawInfo) {
         case 'FORWARD': {

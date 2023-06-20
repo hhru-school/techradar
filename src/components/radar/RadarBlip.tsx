@@ -7,6 +7,7 @@ import { clearActiveBlip, setActiveBlip } from '../../store/activeBlipSlice';
 import { setDraggingBlip } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import RadarBlipShape from './RadarBlipShape';
+import { defaultBlipColor, getlabelColor } from './styleConfig';
 import { DrawInfo, RadarVariant } from './types';
 
 import styles from './blip.module.less';
@@ -20,9 +21,20 @@ type Props = {
     y: number;
     variant?: RadarVariant;
     drawInfo?: DrawInfo;
+    color?: string;
 };
 
-const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarVariant.Demonstrative, drawInfo }) => {
+const RadarBlip: FC<Props> = ({
+    id,
+    label,
+    name,
+    x,
+    y,
+    r,
+    variant = RadarVariant.Demonstrative,
+    drawInfo,
+    color = defaultBlipColor,
+}) => {
     const activeId = useAppSelector((state) => state.activeBlip.id);
 
     const isTransforming = useAppSelector((state) => state.displayRadar.isTransforming);
@@ -85,14 +97,15 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarVariant
                 pointerEvents={isDragging ? 'none' : 'auto'}
                 opacity={id === draggingId ? 0.5 : 1}
             >
-                <RadarBlipShape x={x} y={y} r={r} drawInfo={drawInfo} isActive={isActive} />
+                <RadarBlipShape x={x} y={y} r={r} drawInfo={drawInfo} isActive={isActive} color={color} />
                 <text
                     x={x}
                     y={y}
-                    fontSize={`${0.7 * 2 * r}px`}
+                    fontSize={`${0.6 * 2 * r}px`}
                     textAnchor="middle"
                     dominantBaseline="middle"
                     className={blipTextClasses}
+                    fill={getlabelColor(color)}
                 >
                     {label}
                 </text>
@@ -113,6 +126,7 @@ const RadarBlip: FC<Props> = ({ id, label, name, x, y, r, variant = RadarVariant
             mouseEnterHandler,
             mouseLeaveHandler,
             drawInfo,
+            color,
         ]
     );
 

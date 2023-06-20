@@ -35,6 +35,18 @@ const EditWrapper: FC<Props> = ({ radar }) => {
 
     const mouseMoveHandler = (event: React.MouseEvent) => {
         if (bbox) {
+            // автоскролл если потянутый элемент внизу экрана и ещё есть место куда пролистывать
+            // if (event.clientY >= window.innerHeight - 10 && event.pageY < document.body.offsetHeight - 10) {
+            //     setScroll(150);
+            // }
+
+            // а это если элемент вверху
+            // if (event.clientY <= 10 && event.clientY !== event.pageY) {
+            //     setScroll(-150);
+            // }
+
+            // console.log(scroll);
+
             let x = event.clientX - bbox.left;
             let y = event.clientY - bbox.top;
             if (blipAsset) {
@@ -64,6 +76,15 @@ const EditWrapper: FC<Props> = ({ radar }) => {
         }
     }, [blipAsset, showEditIcon]);
 
+    // useEffect(() => {
+    //     if (blipAsset) {
+    //         window.scrollBy({
+    //             top: scroll,
+    //             behavior: 'smooth',
+    //         });
+    //     }
+    // }, [scroll, blipAsset]);
+
     const cursor = onDropEvent;
 
     return (
@@ -73,7 +94,7 @@ const EditWrapper: FC<Props> = ({ radar }) => {
             ref={ref}
         >
             <BlipGenerator onMouseDown={mouseDownHandler} />
-            <Radar radar={radar} radius={350} variant={RadarVariant.Editable} blipRadus={blipRadius} />
+            <Radar radar={radar} radius={400} variant={RadarVariant.Editable} blipRadus={blipRadius} />
             {position && blipAsset && (
                 <div
                     className={styles.ghost}
@@ -95,7 +116,7 @@ const EditWrapper: FC<Props> = ({ radar }) => {
                 </div>
             )}
 
-            {cursor && <Cursor onDropEvent={cursor} x={position?.x} y={position?.y} />}
+            {cursor && position && <Cursor onDropEvent={cursor} x={position?.x} y={position?.y} />}
         </div>
     );
 };

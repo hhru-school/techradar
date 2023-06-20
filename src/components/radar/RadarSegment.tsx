@@ -17,6 +17,7 @@ type Props = {
     ring: Ring;
     sector: Sector;
     blipRadius: number;
+    blipColor: string;
     gap?: number;
     blips: Blip[];
     seed?: number;
@@ -40,6 +41,7 @@ const RadarSegment: FC<Props> = ({
     seed = 0,
     gap = 0,
     blipRadius,
+    blipColor,
     variant = RadarVariant.Demonstrative,
 }) => {
     const blipItems = useMemo(() => {
@@ -59,10 +61,11 @@ const RadarSegment: FC<Props> = ({
                     y={entry.y}
                     variant={variant}
                     drawInfo={blips[i].drawInfo}
+                    color={blipColor}
                 />
             );
         });
-    }, [blips, blipRadius, seed, segment, variant]);
+    }, [blips, blipRadius, seed, segment, variant, blipColor]);
 
     const path: string = translateSegmentToD3(segment);
 
