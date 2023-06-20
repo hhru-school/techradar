@@ -20,6 +20,7 @@ const LogVersionGroup: FC<Props> = ({ blipEvents, versionName }) => {
         () => blipEvents.map((blipEvent) => <LogItem key={blipEvent.id} blipEvent={blipEvent} />),
         [blipEvents]
     );
+
     return (
         <>
             {versionName !== initVersionName && (

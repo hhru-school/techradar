@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import Layout from '../../components/layout/Layout';
 import { RadarInterface } from '../../components/radar/types';
 import RadarContainer from './RadarContainer';
 import RadarLogContainer from './log/RadarLogContainer';
@@ -13,11 +14,13 @@ type Props = {
 
 const MainContainer: FC<Props> = ({ radar }) => {
     return (
-        <div className={styles.main}>
-            <RadarContainer radar={radar} />
-            <TableContainer radar={radar} />
-            <RadarLogContainer />
-        </div>
+        <Layout>
+            <div className={styles.main}>
+                <RadarContainer radar={radar} />
+                <TableContainer radar={radar} />
+                <RadarLogContainer />
+            </div>
+        </Layout>
     );
 };
 
