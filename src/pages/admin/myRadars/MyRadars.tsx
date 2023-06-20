@@ -47,9 +47,8 @@ const MyRadar: FC = () => {
         if (!paramRadarId && allCompanyRadars && allCompanyRadars.length && paramCompanyId) {
             navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
         } else if (allCompanyRadars && !allCompanyRadars.length && paramCompanyId) {
-            navigate(`company/${paramCompanyId}`);
-        } else if (allCompanyRadars && allCompanyRadars.length < 2) {
             idCompany.current = paramCompanyId;
+            navigate(`company/${paramCompanyId}`);
         } else if (
             paramRadarId &&
             allCompanyRadars &&
