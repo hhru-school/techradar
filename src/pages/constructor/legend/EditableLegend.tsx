@@ -1,8 +1,13 @@
 import { FC, useCallback, useEffect, useState } from 'react';
+import { Button } from '@mui/material';
 
 import { Blip, RadarInterface } from '../../../components/radar/types';
+import { openCreateBlipModal } from '../../../store/editRadarSlice';
+import { useAppDispatch } from '../../../store/hooks';
 import EditableLegendMain from './EditableLegendMain';
 import SearchField from './SearchField';
+
+import styles from './legend.module.less';
 
 type Props = {
     radar: RadarInterface;
@@ -21,6 +26,12 @@ const EditableLegend: FC<Props> = ({ radar }) => {
     const [visibleBlips, setVisibleBlips] = useState(radar.blips);
     const [isSearching, setIsSearching] = useState(false);
     const [searchValue, setSearchValue] = useState('');
+
+    const dispatch = useAppDispatch();
+
+    const addBlipClickHandler = useCallback(() => {
+        dispatch(openCreateBlipModal());
+    }, [dispatch]);
 
     const changeHandler = useCallback(
         (value: string) => {
@@ -50,7 +61,12 @@ const EditableLegend: FC<Props> = ({ radar }) => {
     }, [setVisibleBlips, searchValue, radar, isSearching]);
 
     return (
-        <div>
+        <div className={styles.container}>
+            <div className={styles.buttonContainer}>
+                <Button color="success" variant="contained" size="small" onClick={addBlipClickHandler}>
+                    Добавить
+                </Button>
+            </div>
             <SearchField onChange={changeHandler} clear={clearHandler} value={searchValue} />
             <EditableLegendMain
                 rings={radar.rings}
