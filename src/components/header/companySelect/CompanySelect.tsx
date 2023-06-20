@@ -22,7 +22,7 @@ const CompanySelect: FC = () => {
     const dispatch = useAppDispatch();
     const { companyId } = useParams();
     const navigate = useNavigate();
-    const { data: companies } = useGetCompaniesQuery();
+    const { data: companies } = useGetCompaniesQuery(null, { refetchOnMountOrArgChange: true });
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
 
     const [activeCompany, setActiveCompany] = useState('0');
@@ -43,7 +43,9 @@ const CompanySelect: FC = () => {
     );
 
     useEffect(() => {
-        if (currentCompany) {
+        if (!companies?.length) {
+            dispatch(setCurrentCompany(null));
+        } else if (currentCompany) {
             setActiveCompany(`${currentCompany.id}`);
             dispatch(setCurrentCompany(currentCompany));
         } else if (companies?.length) {

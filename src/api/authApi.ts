@@ -10,6 +10,7 @@ import {
 import { Mutex } from 'async-mutex';
 
 import { signOut, setCredentials } from '../store/authSlice/authSlice';
+import { setCurrentCompany } from '../store/companySlice';
 import { RootState } from '../store/store';
 import { SignInResponse } from './types';
 
@@ -71,6 +72,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
                     result = await baseQuery(args, api, extraOptions);
                 } else {
                     await baseQuery('/auth/logout', api, extraOptions);
+                    api.dispatch(setCurrentCompany(null));
                     api.dispatch(signOut());
                 }
             } finally {
