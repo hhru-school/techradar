@@ -24,6 +24,14 @@ const scrollOffset = 50;
 const scrollValue = 300;
 const pageBorderOffset = 10;
 
+function getBBox(el: HTMLElement) {
+    const rect = el.getBoundingClientRect();
+    return {
+        left: rect.left + window.scrollX,
+        top: rect.top + window.scrollY,
+    };
+}
+
 const EditWrapper: FC<Props> = ({ radar }) => {
     const blipAsset = useAppSelector((state) => state.editRadar.blipAsset);
     const onDropEvent = useAppSelector((state) => state.editRadar.eventSuggest);
@@ -71,8 +79,8 @@ const EditWrapper: FC<Props> = ({ radar }) => {
         (event: React.MouseEvent) => {
             if (bbox) {
                 const r = defaultBlipRadius;
-                const x = event.clientX - bbox.left;
-                const y = event.clientY - bbox.top;
+                const x = event.pageX - bbox.left;
+                const y = event.pageY - bbox.top;
                 dispatch(setDraggingBlip({ id: -1, label: '+', r, x, y, offsetX: r / 2, offsetY: r / 2 }));
                 dispatch(setIsCreating());
                 document.addEventListener('mouseup', mouseUpHandler);
@@ -83,7 +91,12 @@ const EditWrapper: FC<Props> = ({ radar }) => {
     );
 
     useEffect(() => {
-        setBbox(ref.current?.getBoundingClientRect());
+        if (ref.current) {
+            const bbox = getBBox(ref.current);
+            setBbox(bbox);
+        }
+
+        // setBbox(ref.current?.getBoundingClientRect());
         if (!blipAsset || !showEditIcon) {
             setPosition(null);
         }
