@@ -97,7 +97,7 @@ const MyRadarCreateModal: FC = () => {
                             </Button>
                             <Button
                                 disabled={isLoading}
-                                type="submit"
+                                type="button"
                                 variant="outlined"
                                 sx={style.btnSuccess}
                                 onClick={handleClose}
