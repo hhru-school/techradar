@@ -73,7 +73,7 @@ const EditWrapper: FC<Props> = ({ radar }) => {
             ref={ref}
         >
             <BlipGenerator onMouseDown={mouseDownHandler} />
-            <Radar radar={radar} radius={250} variant={RadarVariant.Editable} blipRadus={blipRadius} />
+            <Radar radar={radar} radius={350} variant={RadarVariant.Editable} blipRadus={blipRadius} />
             {position && blipAsset && (
                 <div
                     className={styles.ghost}
