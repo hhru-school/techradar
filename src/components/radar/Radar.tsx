@@ -2,6 +2,7 @@ import { FC, useMemo } from 'react';
 
 import RadarSector from './RadarSector';
 import {
+    defaultBaseColor,
     defaultBlipRadius,
     defaultColorScheme,
     defaultGap,
@@ -19,6 +20,8 @@ type Props = {
     colorScheme?: string[];
     blipRadus?: number;
     variant?: RadarVariant;
+    hasGradient?: boolean;
+    baseColor?: string;
 };
 
 const Radar: FC<Props> = ({
@@ -28,6 +31,8 @@ const Radar: FC<Props> = ({
     colorScheme = defaultColorScheme,
     blipRadus: blipRadius = defaultBlipRadius,
     variant = RadarVariant.Demonstrative,
+    hasGradient = false,
+    baseColor = defaultBaseColor,
 }) => {
     const sweepAngle = (2 * Math.PI) / radar.sectors.length;
     const ofst = getOffset(gap, sweepAngle);
@@ -46,13 +51,15 @@ const Radar: FC<Props> = ({
                         radius={radius}
                         sector={sectorItem}
                         rings={radar.rings}
-                        baseColor={colorScheme[i]}
+                        baseColor={baseColor}
                         blips={sectorBlips}
                         seed={i}
                         gap={gap}
                         svgRadius={svgRadius}
                         blipRadius={blipRadius}
                         variant={variant}
+                        colorScheme={colorScheme}
+                        hasGradient={hasGradient}
                     />
                 </g>
             );
@@ -60,7 +67,7 @@ const Radar: FC<Props> = ({
 
             return sector;
         });
-    }, [radar, sweepAngle, radius, colorScheme, gap, svgRadius, blipRadius, variant]);
+    }, [radar, sweepAngle, radius, colorScheme, gap, svgRadius, blipRadius, variant, baseColor, hasGradient]);
 
     return (
         <>

@@ -40,4 +40,4 @@ function getVersionName(): string {
     return `Q${quarter}-${year}`;
 }
 
-export const blipRadius = 9;
+export const blipRadius = 10;
