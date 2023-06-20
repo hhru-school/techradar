@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect, useRef } from 'react';
 import { Routes, Route } from 'react-router';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Typography, Box, Container, Button, SxProps, Checkbox, FormControlLabel } from '@mui/material';
@@ -31,6 +31,8 @@ const styles: Record<string, SxProps> = {
 const MyRadar: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const idCompany = useRef<number>(0);
+    // const idRadar = useRef(null);
     const { paramRadarId } = useParams();
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const showCreateRadarModal = useAppSelector((state) => state.myRadars.showCreateRadarModal);
@@ -47,10 +49,16 @@ const MyRadar: FC = () => {
             navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
         } else if (allCompanyRadars && !allCompanyRadars.length && paramCompanyId) {
             navigate(`company/${paramCompanyId}`);
-        } else if (paramRadarId && allCompanyRadars && allCompanyRadars.length) {
+        } else if (
+            paramRadarId &&
+            allCompanyRadars &&
+            allCompanyRadars.length &&
+            idCompany.current !== paramCompanyId
+        ) {
             const match = allCompanyRadars.find((radar) => radar.id === +paramRadarId);
 
             if (!match) {
+                idCompany.current = paramCompanyId;
                 navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
             }
         }
