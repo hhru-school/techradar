@@ -1,5 +1,6 @@
 import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useDrag } from 'react-dnd';
+import { Popper } from '@mui/material';
 import classNames from 'classnames';
 
 import { Blip } from '../../../components/radar/types';
@@ -78,7 +79,9 @@ const EditableLegendItem: FC<Props> = ({ blip, isSearching = false }) => {
             ref={dragRef}
         >
             <div ref={scrollRef}> {`${blip.label}. ${blip.name}`}</div>
-            {openEditMenu && <LegendItemEditMenu id={blip.id} />}
+            <Popper open={openEditMenu} anchorEl={scrollRef.current} placement="right-start" transition={false}>
+                <LegendItemEditMenu id={blip.id} />
+            </Popper>
         </li>
     );
 };
