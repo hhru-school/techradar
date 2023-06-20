@@ -14,10 +14,10 @@ const ModalEditRing: FC = () => {
     const [updateRing] = useUpdateRingMutation();
 
     const submitBtnMutationHandler = useCallback(
-        (value: string) => {
+        async (value: string) => {
             if (!editingRing) throw new Error('Ring rename error');
             const position = rings.findIndex((ring) => ring.id === editingRing.id + 1);
-            return updateRing({ id: editingRing.id, name: value, position }).unwrap();
+            await updateRing({ id: editingRing.id, name: value, position }).unwrap();
         },
         [editingRing, rings, updateRing]
     );
