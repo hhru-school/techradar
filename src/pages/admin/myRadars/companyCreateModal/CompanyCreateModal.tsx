@@ -82,6 +82,9 @@ const CompanyCreateModal: FC = () => {
                         >
                             {textCreateVersionBtn}
                         </Button>
+                        <Button type="button" variant="outlined" sx={styles.btnSuccess} onClick={handleClose}>
+                            отмена
+                        </Button>
                         {errMessage && <Alert severity="error">{errMessage}</Alert>}
                     </Form>
                 </Formik>
