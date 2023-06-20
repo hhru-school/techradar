@@ -13,7 +13,7 @@ export interface CompanyStaff {
 
 export const companiesApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getCompanies: builder.query<CompanyData[], void>({
+        getCompanies: builder.query<CompanyData[], null | void>({
             query: () => ({
                 url: `/users/companies`,
                 method: 'GET',

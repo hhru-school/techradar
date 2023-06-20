@@ -48,7 +48,7 @@ const Header: FC = () => {
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const { data: companies } = useGetCompaniesQuery();
+    const { data: companies } = useGetCompaniesQuery(null, { skip: !username });
 
     const handleClick = useCallback((event: MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
