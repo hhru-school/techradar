@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Typography, Box, Container, Button, SxProps, Checkbox, FormControlLabel } from '@mui/material';
 
 import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { useAppDispatch, useAppSelector, useCurrentCompany } from '../../../store/hooks';
 import { setCreateVersionModalOpen, setFilteredListVersions } from '../../../store/myRadarsSlice';
 import CompanyCreateModal from './companyCreateModal/CompanyCreateModal';
 import InfoBtn from './infoBtn/InfoBtn';
@@ -32,7 +32,6 @@ const MyRadar: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const idCompany = useRef<number>(0);
-    // const idRadar = useRef(null);
     const { paramRadarId } = useParams();
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const showCreateRadarModal = useAppSelector((state) => state.myRadars.showCreateRadarModal);
@@ -63,6 +62,8 @@ const MyRadar: FC = () => {
             }
         }
     }, [allCompanyRadars, paramCompanyId, navigate, paramRadarId, showCreateRadarModal]);
+
+    useCurrentCompany();
 
     const handleChange = useCallback(
         () => dispatch(setFilteredListVersions(!isfilteredVersionsList)),
