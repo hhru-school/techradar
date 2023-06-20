@@ -16,8 +16,8 @@ const MainContainer: FC<Props> = ({ radar }) => {
     return (
         <Layout>
             <div className={styles.main}>
-                <RadarContainer radar={radar} />
                 <EditableLegend radar={radar} />
+                <RadarContainer radar={radar} />
                 <RadarLogContainer />
             </div>
         </Layout>
