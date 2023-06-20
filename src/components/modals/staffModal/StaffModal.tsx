@@ -118,6 +118,9 @@ const StaffModal: FC = () => {
                     <Button type="submit" variant="contained" color="success" sx={styles.btn} onClick={handleClick}>
                         Добавить сотрудника
                     </Button>
+                    <Button type="button" variant="outlined" sx={styles.btn} onClick={handleClose}>
+                        отмена
+                    </Button>
                     {isError && <Alert severity="error">{(error as Error).data.message}</Alert>}
                 </Box>
             </Modal>

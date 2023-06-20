@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Modal, Box, Typography, SxProps } from '@mui/material';
+import { Modal, Box, Typography, SxProps, Button } from '@mui/material';
 import { DataGrid, ruRU } from '@mui/x-data-grid';
 
 import { CompanyData } from '../../../api/companiesApi';
@@ -25,7 +25,7 @@ export const styles: Record<string, SxProps> = {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        minHeight: '700px',
+        minHeight: '70vh',
     },
     list: { maxHeight: '400px', overflowY: 'auto', marginTop: '10px' },
     title: { marginBottom: '10px' },
@@ -97,6 +97,9 @@ const CompanyModal: FC = () => {
                     localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
                     onRowClick={handleClick}
                 />
+                <Button type="button" variant="outlined" sx={styles.btn} onClick={handleClose}>
+                    закрыть
+                </Button>
             </Box>
         </Modal>
     );
