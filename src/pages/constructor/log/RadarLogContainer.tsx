@@ -4,7 +4,6 @@ import { ConstructorMode } from '../../../store/editRadarSlice';
 import { useAppSelector } from '../../../store/hooks';
 import Log from './Log';
 
-// import LogList from '../../admin/components/logList/LogList';
 import styles from './log.module.less';
 
 const RadarLogContainer: FC = () => {

@@ -4,6 +4,7 @@ import { Alert } from '@mui/material';
 import { Blip } from '../../../components/radar/types';
 import { useAppSelector } from '../../../store/hooks';
 import { getBlipEventStatus, getLastBlipEvents } from '../utils';
+import { nonFixedBlipWarningUpdateMessage } from './messages';
 
 import styles from './blipEventInfo.module.less';
 
@@ -12,7 +13,7 @@ type Props = {
     message: string;
 };
 
-const BlipEventInfo: FC<Props> = ({ blip, message }) => {
+const BlipEventInfo: FC<Props> = ({ blip }) => {
     const version = useAppSelector((state) => state.editRadar.version);
     const log = useAppSelector((state) => state.editRadar.log);
 
@@ -21,7 +22,7 @@ const BlipEventInfo: FC<Props> = ({ blip, message }) => {
     return (
         <div>
             <Alert severity="warning">
-                {message}
+                {nonFixedBlipWarningUpdateMessage}
                 <div className={styles.statusMessage}>{getBlipEventStatus(lastBlipEvent)}</div>
             </Alert>
         </div>
