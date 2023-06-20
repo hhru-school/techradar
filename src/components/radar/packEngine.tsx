@@ -9,8 +9,8 @@ interface Node extends SimulationNodeDatum {
     r: number;
 }
 
-const velocityDecay = 0.5;
-const strength = 0.3;
+const velocityDecay = 0.3;
+const strength = 1.5;
 
 function packEntries(entries: Entry[], segment: Segment): Node[] {
     const nodes: Node[] = entries.map((d) => ({ ...d }));

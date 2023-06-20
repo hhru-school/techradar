@@ -45,7 +45,7 @@ const RadarSegment: FC<Props> = ({
     const blipItems = useMemo(() => {
         if (blips.length === 0) return null;
         const entries = new Array<Entry>(blips.length);
-        entries.fill({ ...getRandomPoint(seed), r: blipRadius * 2 });
+        entries.fill({ ...getRandomPoint(seed), r: blipRadius * 1.5 });
         const packed = packEntries(entries, segment);
         return packed.map((entry, i) => {
             return (
