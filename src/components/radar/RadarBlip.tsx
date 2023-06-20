@@ -75,8 +75,8 @@ const RadarBlip: FC<Props> = ({
             event.preventDefault();
             if (variant === RadarVariant.Editable) {
                 const bbox = (event.target as HTMLElement).getBoundingClientRect();
-                const x = event.clientX;
-                const y = event.clientY;
+                const x = event.pageX;
+                const y = event.pageY;
                 const offsetX = x - bbox.left;
                 const offsetY = y - bbox.top;
                 dispatch(setDraggingBlip({ x, y, offsetX, offsetY, r, id }));

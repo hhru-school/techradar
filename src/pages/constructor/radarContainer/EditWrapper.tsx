@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useRef, useState } from 'react';
+import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 import Radar from '../../../components/radar/Radar';
@@ -20,6 +20,10 @@ type Props = {
     radar: RadarInterface;
 };
 
+const scrollOffset = 50;
+const scrollValue = 300;
+const pageBorderOffset = 10;
+
 const EditWrapper: FC<Props> = ({ radar }) => {
     const blipAsset = useAppSelector((state) => state.editRadar.blipAsset);
     const onDropEvent = useAppSelector((state) => state.editRadar.eventSuggest);
@@ -33,41 +37,50 @@ const EditWrapper: FC<Props> = ({ radar }) => {
 
     const [position, setPosition] = useState<Position | null>(null);
 
-    const mouseMoveHandler = (event: React.MouseEvent) => {
-        if (bbox) {
-            // автоскролл если потянутый элемент внизу экрана и ещё есть место куда пролистывать
-            // if (event.clientY >= window.innerHeight - 10 && event.pageY < document.body.offsetHeight - 10) {
-            //     setScroll(150);
-            // }
+    const [scroll, setScroll] = useState(0);
 
-            // а это если элемент вверху
-            // if (event.clientY <= 10 && event.clientY !== event.pageY) {
-            //     setScroll(-150);
-            // }
+    const mouseMoveHandler = useCallback(
+        (event: React.MouseEvent) => {
+            if (bbox) {
+                // автоскролл если потянутый элемент внизу экрана и ещё есть место куда пролистывать
+                if (
+                    event.clientY >= window.innerHeight - scrollOffset &&
+                    event.pageY < document.body.offsetHeight - pageBorderOffset
+                ) {
+                    setScroll(scrollValue);
+                }
 
-            // console.log(scroll);
+                // а это если элемент вверху
+                if (event.clientY <= scrollOffset && event.clientY !== event.pageY) {
+                    setScroll(-scrollValue);
+                }
 
-            let x = event.clientX - bbox.left;
-            let y = event.clientY - bbox.top;
-            if (blipAsset) {
-                x -= blipAsset.offsetX;
-                y -= blipAsset.offsetY;
+                let x = event.pageX - bbox.left;
+                let y = event.pageY - bbox.top;
+                if (blipAsset) {
+                    x -= blipAsset.offsetX;
+                    y -= blipAsset.offsetY;
+                }
+                setPosition({ x, y });
             }
-            setPosition({ x, y });
-        }
-    };
+        },
+        [bbox, blipAsset]
+    );
 
-    const mouseDownHandler = (event: React.MouseEvent) => {
-        if (bbox) {
-            const r = defaultBlipRadius;
-            const x = event.clientX - bbox.left;
-            const y = event.clientY - bbox.top;
-            dispatch(setDraggingBlip({ id: -1, label: '+', r, x, y, offsetX: r / 2, offsetY: r / 2 }));
-            dispatch(setIsCreating());
-            document.addEventListener('mouseup', mouseUpHandler);
-            setPosition({ x, y });
-        }
-    };
+    const mouseDownHandler = useCallback(
+        (event: React.MouseEvent) => {
+            if (bbox) {
+                const r = defaultBlipRadius;
+                const x = event.clientX - bbox.left;
+                const y = event.clientY - bbox.top;
+                dispatch(setDraggingBlip({ id: -1, label: '+', r, x, y, offsetX: r / 2, offsetY: r / 2 }));
+                dispatch(setIsCreating());
+                document.addEventListener('mouseup', mouseUpHandler);
+                setPosition({ x, y });
+            }
+        },
+        [bbox, dispatch]
+    );
 
     useEffect(() => {
         setBbox(ref.current?.getBoundingClientRect());
@@ -76,14 +89,21 @@ const EditWrapper: FC<Props> = ({ radar }) => {
         }
     }, [blipAsset, showEditIcon]);
 
-    // useEffect(() => {
-    //     if (blipAsset) {
-    //         window.scrollBy({
-    //             top: scroll,
-    //             behavior: 'smooth',
-    //         });
-    //     }
-    // }, [scroll, blipAsset]);
+    useEffect(() => {
+        if (blipAsset) {
+            window.scrollBy({
+                top: scroll,
+                behavior: 'smooth',
+            });
+        }
+    }, [scroll, blipAsset]);
+
+    useEffect(() => {
+        if (!blipAsset) setScroll(0);
+        return () => {
+            setScroll(0);
+        };
+    }, [blipAsset]);
 
     const cursor = onDropEvent;
 
