@@ -30,41 +30,44 @@ const RadarBlipShape: FC<Props> = ({ x, y, r, drawInfo, isActive = false, color 
     switch (drawInfo) {
         case 'FORWARD': {
             return (
-                <>
-                    <path
-                        d={buildTriangleUp(x, y, r - strokeWidth)}
-                        strokeWidth={r / 7}
-                        className={styles.newBlipFrame}
-                    />
-                    {circle}
-                </>
+                <path
+                    d={buildTriangleUp(x, y, r - strokeWidth)}
+                    className={blipFieldClasses}
+                    strokeWidth={strokeWidth}
+                    fill={color}
+                />
             );
         }
 
         case 'BACKWARD': {
             return (
-                <>
-                    <path
-                        d={buildTriangleDown(x, y, r - strokeWidth)}
-                        strokeWidth={r / 7}
-                        className={styles.newBlipFrame}
-                    />
-                    {circle}
-                </>
+                <path
+                    d={buildTriangleDown(x, y, r - strokeWidth)}
+                    className={blipFieldClasses}
+                    strokeWidth={strokeWidth}
+                    fill={color}
+                />
             );
         }
 
         case 'NEW': {
             return (
                 <>
-                    <circle cx={x} cy={y} r={r * 1.3} strokeWidth={r / 7} className={styles.newBlipFrame} />
+                    <circle
+                        cx={x}
+                        cy={y}
+                        r={r * 1.2}
+                        strokeWidth={r / 5}
+                        stroke={color}
+                        className={styles.newBlipFrame}
+                    />
                     {circle}
                 </>
             );
         }
 
         case 'SEC_MOVE': {
-            const size = 2.2 * r;
+            const size = 2 * r;
             return (
                 <>
                     <rect
@@ -72,10 +75,10 @@ const RadarBlipShape: FC<Props> = ({ x, y, r, drawInfo, isActive = false, color 
                         y={y - size / 2}
                         width={size}
                         height={size}
-                        strokeWidth={r / 5}
-                        className={styles.newBlipFrame}
+                        className={blipFieldClasses}
+                        strokeWidth={strokeWidth}
+                        fill={color}
                     />
-                    {circle}
                 </>
             );
         }
