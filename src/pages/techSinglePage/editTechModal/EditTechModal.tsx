@@ -4,7 +4,7 @@ import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { useUpdateBlipMutation } from '../../../api/blipsSinglePageApi';
-import { BlipResponse, NewVersionError } from '../../../api/types';
+import { BlipResponse, ErrorRes } from '../../../api/types';
 import { styles } from '../../../components/modals/authFormModal/AuthFormModal';
 import TextInputOutlined from '../../../components/textInputOutlined/TextInputOutlined';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -50,8 +50,8 @@ const EditTechModal: FC = () => {
                     dispatch(setEditTechModalOpen(false));
                     setSubmitting(false);
                 })
-                .catch((err: NewVersionError) => {
-                    setErrMessage(err.error);
+                .catch((err: ErrorRes) => {
+                    setErrMessage(err.data.message);
                 });
         },
         [dispatch, techData.id, updateBlip]

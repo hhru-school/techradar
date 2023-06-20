@@ -5,7 +5,7 @@ import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { useCreateNewVersionMutation } from '../../../../api/radarsGridApi';
-import { NewVersionError, NewVersionResponse } from '../../../../api/types';
+import { ErrorRes, NewVersionResponse } from '../../../../api/types';
 import { styles } from '../../../../components/modals/authFormModal/AuthFormModal';
 import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
@@ -52,8 +52,8 @@ const MyRadarCreateModal: FC = () => {
                     dispatch(setCreateVersionModalOpen({ show: false, radarId: null }));
                     setSubmitting(false);
                 })
-                .catch((err: NewVersionError) => {
-                    setErrMessage(err.error);
+                .catch((err: ErrorRes) => {
+                    setErrMessage(err.data.message);
                 });
         },
         [createVersion, dispatch, navigate, radarIdValue]

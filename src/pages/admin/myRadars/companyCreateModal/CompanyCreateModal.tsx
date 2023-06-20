@@ -4,7 +4,7 @@ import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { useCreateNewCompanyMutation } from '../../../../api/companiesApi';
-import { CreateNewCompanyResponse, NewVersionError } from '../../../../api/types';
+import { CreateNewCompanyResponse, ErrorRes } from '../../../../api/types';
 import { styles } from '../../../../components/modals/authFormModal/AuthFormModal';
 import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
 import { setCreateCompanyModalOpen, setCurrentCompany } from '../../../../store/companySlice';
@@ -40,8 +40,8 @@ const CompanyCreateModal: FC = () => {
                     dispatch(setCreateCompanyModalOpen(false));
                     setSubmitting(false);
                 })
-                .catch((err: NewVersionError) => {
-                    setErrMessage(err.error);
+                .catch((err: ErrorRes) => {
+                    setErrMessage(err.data.message);
                 });
         },
         [createNewCompany, dispatch]
