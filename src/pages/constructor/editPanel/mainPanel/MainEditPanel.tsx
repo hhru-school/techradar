@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import Layout from '../../../../components/layout/Layout';
 import { ConstructorMode } from '../../../../store/editRadarSlice';
 import EditRadarPanel from './EditRadarPanel';
 import NewRadarPanel from './NewRadarPanel';
@@ -15,9 +16,13 @@ const MainEditPanel: FC<Props> = ({ mode }) => {
     const isEditVersion = mode === ConstructorMode.VersionEditing;
 
     return (
-        <div className={styles.container}>
-            {isNewRadar && <NewRadarPanel />}
-            {isEditVersion && <EditRadarPanel />}
+        <div className={styles.background}>
+            <Layout>
+                <div className={styles.container}>
+                    {isNewRadar && <NewRadarPanel />}
+                    {isEditVersion && <EditRadarPanel />}
+                </div>
+            </Layout>
         </div>
     );
 };

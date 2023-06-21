@@ -434,7 +434,7 @@ export const editRadarSlice = createSlice({
                     ...blip,
                     label: state.idToLabelDict?.[blip.id] || -1,
                 }));
-                state.radar.blips = blips;
+                state.radar = { ...action.payload, blips };
             }
         },
 

@@ -30,6 +30,8 @@ type Props = {
     gap?: number;
     seed?: number;
     variant: RadarVariant;
+    colorScheme: string[];
+    hasGradient: boolean;
 };
 
 const defaultTransform = { x: 0, y: 0, scale: 1 };
@@ -38,6 +40,14 @@ const getDisplay = (activeSectorId: number | null, sectorId: number, variant: Ra
     if (variant === RadarVariant.Editable) return 'auto';
     return activeSectorId !== null && activeSectorId !== sectorId ? 'none' : 'auto';
 };
+
+const getColor = (color: string, hasGradient: boolean, i: number): string =>
+    hasGradient
+        ? d3
+              .color(color)
+              ?.brighter(i / 3)
+              .toString() || color
+        : color;
 
 const RadarSector: FC<Props> = ({
     sector,
@@ -51,6 +61,8 @@ const RadarSector: FC<Props> = ({
     seed = 0,
     gap = 0,
     variant = RadarVariant.Demonstrative,
+    colorScheme,
+    hasGradient,
 }) => {
     const isDemonsrtative = variant === RadarVariant.Demonstrative;
 
@@ -116,20 +128,31 @@ const RadarSector: FC<Props> = ({
                         sector={sector}
                         segment={segment}
                         blips={blips.filter((item) => item.ring.id === rings[i].id)}
-                        color={
-                            d3
-                                .color(baseColor)
-                                ?.brighter(i / 3)
-                                .toString() || ''
-                        }
+                        color={getColor(baseColor, hasGradient, i)}
                         seed={seed}
                         gap={gap}
                         blipRadius={blipRadius / transform.scale}
                         variant={variant}
+                        blipColor={colorScheme[i]}
                     />
                 );
             }),
-        [radiuses, blipRadius, rings, baseColor, startAngle, endAngle, transform, gap, blips, seed, sector, variant]
+        [
+            radiuses,
+            blipRadius,
+            rings,
+            baseColor,
+            startAngle,
+            endAngle,
+            transform,
+            gap,
+            blips,
+            seed,
+            sector,
+            variant,
+            colorScheme,
+            hasGradient,
+        ]
     );
 
     const classes = classNames({

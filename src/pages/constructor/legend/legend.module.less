@@ -4,7 +4,6 @@
 
 .item {
     font-size: 12px;
-    position: relative;
 }
 .itemActive {
     background-color: black;
@@ -12,15 +11,11 @@
 }
 
 .itemEditMenu {
-    position: absolute;
-    top: 0;
-    left: @item-max-width;
     padding: 5px;
     display: flex;
     background-color: white;
     border-radius: 3px;
     box-shadow: 0 0 10px gray;
-    z-index: 50;
 }
 
 .itemList {
@@ -64,10 +59,11 @@
 }
 
 .main {
-    height: 450px;
-    overflow: auto;
+    height: 745px;
+    width: 350px;
+    margin-top: 5px;
     scroll-behavior: smooth;
-    margin-top: 10px;
+    overflow: auto;
 }
 
 .emptyContainer {
@@ -77,4 +73,14 @@
     font-size: 12px;
     align-items: center;
     color: @empty-container-color;
+}
+
+.container {
+    flex-grow: 1 1 auto;
+    margin-top: 10px;
+    border-right: 1px solid @gray-hh-color;
+}
+
+.buttonContainer {
+    margin-bottom: 10px;
 }

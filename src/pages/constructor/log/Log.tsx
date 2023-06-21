@@ -20,7 +20,9 @@ const Log: FC<Props> = ({ blipEvents }) => {
         blipEventsReversed.filter((blipEvent) => blipEvent.radarVersion === version)
     );
 
-    const items = groups.map((group) => <LogVersionGroup versionName={group[0].radarVersion} blipEvents={group} />);
+    const items = groups.map((group, i) => (
+        <LogVersionGroup key={i} versionName={group[0].radarVersion} blipEvents={group} />
+    ));
 
     return <div className={styles.list}>{items}</div>;
 };

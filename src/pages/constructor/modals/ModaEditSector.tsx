@@ -16,10 +16,9 @@ const ModalEditSector: FC = () => {
     const submitBtnMutationHandler = useCallback(
         (value: string) => {
             if (!editingSector) throw new Error('Sector rename error');
-            const position = sectors.findIndex((sector) => sector.id === editingSector.id + 1);
-            return updateSector({ id: editingSector.id, name: value, position }).unwrap();
+            return updateSector({ id: editingSector.id, name: value }).unwrap();
         },
-        [editingSector, sectors, updateSector]
+        [editingSector, updateSector]
     );
 
     if (editingSector) {

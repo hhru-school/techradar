@@ -87,7 +87,6 @@ const ModalMoveBlip: FC = () => {
                     <span>{activeSegment?.sector.name}</span>?
                 </div>
                 {!isNewRadar && !isFixed && <BlipEventInfo blip={blip} message={nonFixedBlipWarningUpdateMessage} />}
-
                 {controls}
             </div>
         </Modal>
