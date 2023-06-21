@@ -33,6 +33,14 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
             providesTags: ['Radar'],
         }),
 
+        getCompanyName: builder.query<string, number>({
+            query: (companyId) => ({
+                method: 'GET',
+                url: `/companies/${companyId}`,
+            }),
+            transformResponse: (rawResult: { id: number; name: string }) => rawResult.name,
+        }),
+
         getRadar: builder.query<RadarInterface, number>({
             query: (blipEventId) => ({
                 method: 'GET',
@@ -258,4 +266,6 @@ export const {
     useUpdateBlipEventCommentMutation,
     useUpdateBlipEventSegmentMutation,
     useGetLastBlipEventQuery,
+    useDeleteVersionMutation,
+    useGetCompanyNameQuery,
 } = companyRadarsApi;
