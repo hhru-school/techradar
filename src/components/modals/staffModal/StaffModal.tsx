@@ -39,6 +39,9 @@ export const styles: Record<string, SxProps> = {
     },
     list: { maxHeight: '400px', overflowY: 'auto', marginTop: '10px' },
     title: { marginBottom: '10px' },
+    grid: {
+        '& .MuiDataGrid-row: hover': { cursor: 'pointer' },
+    },
 };
 
 const initialState = {
@@ -119,6 +122,7 @@ const StaffModal: FC = () => {
                         pageSizeOptions={[5]}
                         disableRowSelectionOnClick
                         localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
+                        sx={styles.grid}
                     />
                     <Button type="submit" variant="contained" color="success" sx={styles.btn} onClick={handleClick}>
                         Добавить сотрудника

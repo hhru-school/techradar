@@ -29,6 +29,9 @@ export const styles: Record<string, SxProps> = {
     },
     list: { maxHeight: '400px', overflowY: 'auto', marginTop: '10px' },
     title: { marginBottom: '10px' },
+    grid: {
+        '& .MuiDataGrid-row: hover': { cursor: 'pointer' },
+    },
 };
 
 const initialState = {
@@ -46,7 +49,10 @@ const CompanyModal: FC = () => {
     const [companyId, setCompanyId] = useState<number>(0);
 
     const { data: allCompanies } = useGetAllCompaniesQuery();
-    const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(companyId, { skip: !companyId });
+    const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(companyId, {
+        skip: !companyId,
+        refetchOnMountOrArgChange: true,
+    });
 
     const handleClose = useCallback(() => dispatch(setCompanyModalOpen(false)), [dispatch]);
 
@@ -54,6 +60,11 @@ const CompanyModal: FC = () => {
 
     useEffect(() => {
         if (companyId && allCompanyRadars && allCompanyRadars.length) {
+            // const match = allCompanyRadars.find((radar) => radar.id === +paramRadarId);
+            // if (!match) {
+            //     idCompany.current = paramCompanyId;
+            //     navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
+            // }
             navigate(`/techradar/company/${companyId}/radar/${allCompanyRadars[0].id}/version/latest`);
             dispatch(setCompanyModalOpen(false));
             setCompanyId(0);
@@ -96,6 +107,7 @@ const CompanyModal: FC = () => {
                     disableRowSelectionOnClick
                     localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
                     onRowClick={handleClick}
+                    sx={styles.grid}
                 />
                 <Button type="button" variant="outlined" sx={styles.btn} onClick={handleClose}>
                     закрыть
