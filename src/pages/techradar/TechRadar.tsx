@@ -21,6 +21,7 @@ import {
     setVersionAsset,
 } from '../../store/displayRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import CompanyNameContainer from './components/companyName/CompanyNameContainer';
 import LegendContainer from './components/legend/LegendContainer';
 import RadarContainer from './components/radar/RadarContainer';
 import TabContainer from './components/tab/TabContainer';
@@ -129,18 +130,21 @@ const TechRadar: FC = () => {
     }
 
     return (
-        <Layout>
-            {isButtonShows && (
-                <Fab variant="extended" sx={style.button} color="info" onClick={clickHandler}>
-                    <ArrowUpward /> К выбору радара
-                </Fab>
-            )}
-            <TabContainer />
-            <div className={styles.main} ref={ref}>
-                <RadarContainer />
-                <LegendContainer />
-            </div>
-        </Layout>
+        <>
+            <CompanyNameContainer />
+            <Layout>
+                {isButtonShows && (
+                    <Fab variant="extended" sx={style.button} color="info" onClick={clickHandler}>
+                        <ArrowUpward /> К выбору радара
+                    </Fab>
+                )}
+                <TabContainer />
+                <div className={styles.main} ref={ref}>
+                    <RadarContainer />
+                    <LegendContainer />
+                </div>
+            </Layout>
+        </>
     );
 };
 
