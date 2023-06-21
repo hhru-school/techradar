@@ -56,8 +56,8 @@ const RadarBlipShape: FC<Props> = ({ x, y, r, drawInfo, isActive = false, color 
                     <circle
                         cx={x}
                         cy={y}
-                        r={r * 1.2}
-                        strokeWidth={r / 5}
+                        r={r * 1.25}
+                        strokeWidth={r / 4.5}
                         stroke={color}
                         className={styles.newBlipFrame}
                     />

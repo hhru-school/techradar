@@ -17,6 +17,8 @@ import ModalMoveBlip from './ModalMoveBlip';
 import ModalSwitchRelease from './ModalSwitchRelease';
 import ModalBlipEvent from './blipEvent/ModalBlipEvent';
 import ModalSaveDialog from './save/ModalSaveDialog';
+import ModalDeleteVersion from './version/ModalDeleteVersion';
+import ModalEditVersion from './version/ModalEditVerison';
 
 const Modals: FC = () => {
     const showCreateBlipModal = useAppSelector((state) => state.editRadar.showCreateBlipModal);
@@ -35,6 +37,8 @@ const Modals: FC = () => {
     const showEditRadarVersionModal = useAppSelector((state) => state.editRadar.showEditVersionNameModal);
     const showBlipEventModal = useAppSelector((state) => state.editRadar.showBlipEventModal);
     const showDeleteBlipEventModal = useAppSelector((state) => state.editRadar.showDeleteBlipEventModal);
+    const showEditVersionModal = useAppSelector((state) => state.editRadar.showEditVersionModal);
+    const showDeleteVersionModal = useAppSelector((state) => state.editRadar.showDeleteVersionModal);
 
     return (
         <>
@@ -54,6 +58,8 @@ const Modals: FC = () => {
             {showEditRadarVersionModal && <ModalEditVersionName />}
             {showBlipEventModal && <ModalBlipEvent />}
             {showDeleteBlipEventModal && <ModalDeleteBlipEvent />}
+            {showEditVersionModal && <ModalEditVersion />}
+            {showDeleteVersionModal && <ModalDeleteVersion />}
         </>
     );
 };

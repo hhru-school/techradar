@@ -4,10 +4,12 @@ import { ArrowForward } from '@mui/icons-material';
 import { Button } from '@mui/material';
 
 import { buildRadarViewerUrl } from '../../../../api/radarApiUtils';
-import { setShowSwitchReleaseModal } from '../../../../store/editRadarSlice';
+import { openEditRadarNameModal, setShowEditVersionModal } from '../../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import PropertyItem from '../../components/PropertyItem';
+import OnSaveInfoMessage from '../OnSaveInfoMessage';
 import VersionStatusContainer from '../VersionStatusContainer';
-import PropertiesContainer from './PropertiesContainer';
+import EditPropertyButtonPane from '../editPropertyButtonPanel/EditPropertyButtonPane';
 
 import styles from './mainEditPanel.module.less';
 
@@ -19,35 +21,37 @@ const EditRadarPanel: FC = () => {
 
     const navigate = useNavigate();
 
-    const isReleased = version?.release;
-
-    const toggleReleaseClickHandler = useCallback(() => {
-        dispatch(setShowSwitchReleaseModal(true));
-    }, [dispatch]);
-
     const navigateClickHandeler = useCallback(() => {
         if (version) {
             navigate(buildRadarViewerUrl(1, version?.radarId, version?.id));
         }
     }, [navigate, version]);
 
+    const editRadarHandler = useCallback(() => {
+        dispatch(openEditRadarNameModal());
+    }, [dispatch]);
+
+    const editVersionHandler = useCallback(() => {
+        dispatch(setShowEditVersionModal(true));
+    }, [dispatch]);
+
     return (
         <>
-            {version && <PropertiesContainer radarName={radarName} versionName={version.name} />}
-            <Button variant="outlined" onClick={navigateClickHandeler} endIcon={<ArrowForward />}>
-                На страницу просмотра
-            </Button>
+            <EditPropertyButtonPane clickHandler={editRadarHandler}>
+                <PropertyItem label={'Название радара'} value={radarName} />
+            </EditPropertyButtonPane>
+
+            <EditPropertyButtonPane clickHandler={editVersionHandler}>
+                <PropertyItem label={'Версия'} value={version.name} />
+                <VersionStatusContainer release={version?.release} />
+            </EditPropertyButtonPane>
+
             <div className={styles.spacer}></div>
-            {version && <VersionStatusContainer release={version?.release} />}
-            {isReleased ? (
-                <Button variant="outlined" color="error" onClick={toggleReleaseClickHandler}>
-                    Снять с публикации
-                </Button>
-            ) : (
-                <Button variant="contained" color="success" onClick={toggleReleaseClickHandler}>
-                    Опубликовать
-                </Button>
-            )}
+            <OnSaveInfoMessage />
+
+            <Button onClick={navigateClickHandeler} endIcon={<ArrowForward />} size="small">
+                К просмотру
+            </Button>
         </>
     );
 };
