@@ -1,8 +1,11 @@
 import { FC, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Alert, Button, Modal } from '@mui/material';
 
+import { useDeleteVersionMutation } from '../../../../api/companyRadarsApi';
 import { setShowDeleteVersionModal } from '../../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import CloseButton from '../CloseButton';
 
 import styles from '../modal.module.less';
 
@@ -15,13 +18,51 @@ const ModalDeleteVersion: FC = () => {
 
     const version = useAppSelector((state) => state.editRadar.version);
 
+    const { companyId, id: radarId } = useAppSelector((state) => state.editRadar.radar);
+
+    const [deleteVersion, { isSuccess, error }] = useDeleteVersionMutation();
+
     const cancelBtnClickHandler = useCallback(() => {
         dispatch(setShowDeleteVersionModal(false));
     }, [dispatch]);
 
+    const navigate = useNavigate();
+
     const confirmBtnClickHandler = useCallback(() => {
-        dispatch(setShowDeleteVersionModal(false));
-    }, [dispatch]);
+        deleteVersion(version.id)
+            .unwrap()
+
+            .then(() =>
+                setTimeout(() => {
+                    navigate(`/admin/my-radars/company/${companyId}/grid/${radarId}`);
+                }, 2000)
+            )
+            .catch(() => {
+                console.error('Delete version error');
+            });
+    }, [navigate, companyId, deleteVersion, radarId, version.id]);
+
+    if (isSuccess) {
+        return (
+            <Modal open={true}>
+                <div className={styles.modal}>
+                    <Alert severity="success">Версия успешно удалена!</Alert>
+                    <div>Перенаправление в "Мои радары"....</div>
+                </div>
+            </Modal>
+        );
+    }
+
+    if (error) {
+        return (
+            <Modal open={true}>
+                <div className={styles.modal}>
+                    <CloseButton closeHandler={cancelBtnClickHandler} />
+                    <Alert severity="error">Удаление версии невозможно!</Alert>
+                </div>
+            </Modal>
+        );
+    }
 
     return (
         <Modal open={true}>

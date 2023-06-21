@@ -239,8 +239,6 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'DELETE',
                 url: `/radar-versions/${versionId}`,
             }),
-
-            invalidatesTags: ['Radar', 'Version', 'Log'],
         }),
     }),
 });
