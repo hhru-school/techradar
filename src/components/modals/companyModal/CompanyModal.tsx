@@ -60,14 +60,8 @@ const CompanyModal: FC = () => {
 
     useEffect(() => {
         if (companyId && allCompanyRadars && allCompanyRadars.length) {
-            // const match = allCompanyRadars.find((radar) => radar.id === +paramRadarId);
-            // if (!match) {
-            //     idCompany.current = paramCompanyId;
-            //     navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
-            // }
             navigate(`/techradar/company/${companyId}/radar/${allCompanyRadars[0].id}/version/latest`);
             dispatch(setCompanyModalOpen(false));
-            setCompanyId(0);
         }
     }, [allCompanyRadars, companyId, dispatch, navigate]);
 
