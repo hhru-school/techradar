@@ -3,6 +3,7 @@ import { Skeleton } from '@mui/material';
 
 import Radar from '../../../../components/radar/Radar';
 import { RadarVariant } from '../../../../components/radar/types';
+import SymbolLegend from '../../../../components/symbolLegend/SymbolLegend';
 import { useAppSelector } from '../../../../store/hooks';
 import SectorControlPanel from './controls/SectorControlPanel';
 import SelectVersion from './selectMenu/SelectVersion';
@@ -37,7 +38,7 @@ const RadarContainer: FC = () => {
                     <Skeleton variant="rectangular" sx={style.constrolSkeleton} />
                 )}
             </div>
-
+            <SymbolLegend />
             <div className={styles.radarContainer}>
                 {radar ? (
                     <Radar radar={radar} radius={radius} blipRadus={12} variant={RadarVariant.Demonstrative} />
