@@ -22,8 +22,9 @@ const CompanySelect: FC = () => {
     const dispatch = useAppDispatch();
     const { companyId } = useParams();
     const navigate = useNavigate();
-    const { data: companies } = useGetCompaniesQuery();
+    const username = useAppSelector((state) => state.auth.username);
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
+    const { data: companies } = useGetCompaniesQuery(null, { skip: !username });
 
     const [activeCompany, setActiveCompany] = useState('0');
 

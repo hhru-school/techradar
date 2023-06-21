@@ -1,15 +1,20 @@
 import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Box, Button, CircularProgress, Modal, Typography } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, Modal, SxProps, Typography } from '@mui/material';
 import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { useCreateNewVersionMutation } from '../../../../api/radarsGridApi';
-import { NewVersionError, NewVersionResponse } from '../../../../api/types';
+import { ErrorRes, NewVersionResponse } from '../../../../api/types';
 import { styles } from '../../../../components/modals/authFormModal/AuthFormModal';
 import TextInputOutlined from '../../../../components/textInputOutlined/TextInputOutlined';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { setCreateVersionModalOpen } from '../../../../store/myRadarsSlice';
+
+export const style: Record<string, SxProps> = {
+    btnSuccess: { marginTop: '20px' },
+    cancel: { display: 'flex', justifyContent: 'space-between' },
+};
 
 export interface Values {
     name: string;
@@ -47,8 +52,8 @@ const MyRadarCreateModal: FC = () => {
                     dispatch(setCreateVersionModalOpen({ show: false, radarId: null }));
                     setSubmitting(false);
                 })
-                .catch((err: NewVersionError) => {
-                    setErrMessage(err.error);
+                .catch((err: ErrorRes) => {
+                    setErrMessage(err.data.message);
                 });
         },
         [createVersion, dispatch, navigate, radarIdValue]
@@ -80,15 +85,26 @@ const MyRadarCreateModal: FC = () => {
                             placeholder="Введите название новой версии"
                             disabled={isLoading}
                         />
-                        <Button
-                            disabled={isLoading}
-                            type="submit"
-                            variant="contained"
-                            color="success"
-                            sx={styles.btnSuccess}
-                        >
-                            {textCreateVersionBtn}
-                        </Button>
+                        <Box sx={style.cancel}>
+                            <Button
+                                disabled={isLoading}
+                                type="submit"
+                                variant="contained"
+                                color="success"
+                                sx={styles.btnSuccess}
+                            >
+                                {textCreateVersionBtn}
+                            </Button>
+                            <Button
+                                disabled={isLoading}
+                                type="button"
+                                variant="outlined"
+                                sx={style.btnSuccess}
+                                onClick={handleClose}
+                            >
+                                отмена
+                            </Button>
+                        </Box>
                         {errMessage && <Alert severity="error">{errMessage}</Alert>}
                     </Form>
                 </Formik>

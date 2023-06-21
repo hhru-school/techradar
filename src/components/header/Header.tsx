@@ -22,7 +22,7 @@ import {
 
 import { useGetCompaniesQuery } from '../../api/companiesApi';
 import { signOut, setAuthFormOpen } from '../../store/authSlice/authSlice';
-import { setCompanyModalOpen, setStaffModalOpen } from '../../store/companySlice';
+import { setCompanyModalOpen, setCurrentCompany, setStaffModalOpen } from '../../store/companySlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AuthFormModal from '../modals/authFormModal/AuthFormModal';
 import CompanyModal from '../modals/companyModal/CompanyModal';
@@ -48,7 +48,7 @@ const Header: FC = () => {
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const { data: companies } = useGetCompaniesQuery();
+    const { data: companies } = useGetCompaniesQuery(null, { skip: !username });
 
     const handleClick = useCallback((event: MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -60,6 +60,7 @@ const Header: FC = () => {
 
     const handleUnauthorization = useCallback(() => {
         setAnchorEl(null);
+        dispatch(setCurrentCompany(null));
         dispatch(signOut());
         navigate('/');
     }, [dispatch, navigate]);

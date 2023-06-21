@@ -8,6 +8,11 @@ export const logOutMiddleware: Middleware = () => (next) => (action: PayloadActi
         } catch (e) {
             throw new Error((e as Error).message);
         }
+        try {
+            localStorage.removeItem('currentCompany');
+        } catch (e) {
+            throw new Error((e as Error).message);
+        }
     }
 
     return next(action);

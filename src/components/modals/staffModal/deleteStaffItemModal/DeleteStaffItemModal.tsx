@@ -83,6 +83,9 @@ const DeleteStaffItemModal: FC = () => {
                 >
                     {textCreateVersionBtn}
                 </Button>
+                <Button type="button" variant="outlined" sx={styles.btn} onClick={handleClose}>
+                    отмена
+                </Button>
                 {errMessage && <Alert severity="error">{errMessage}</Alert>}
             </Box>
         </Modal>

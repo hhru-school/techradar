@@ -1,7 +1,19 @@
 import { FC, useState } from 'react';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
-import { FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, FormHelperText } from '@mui/material';
+import {
+    FormControl,
+    InputLabel,
+    OutlinedInput,
+    InputAdornment,
+    IconButton,
+    FormHelperText,
+    SxProps,
+} from '@mui/material';
 import { useField } from 'formik';
+
+export const styles: Record<string, SxProps> = {
+    formControl: { marginTop: '20px' },
+};
 
 type InputProps = {
     label: string;
@@ -22,7 +34,7 @@ const PassInput: FC<InputProps> = ({ label, ...props }) => {
     const hasError = Boolean(meta.touched && meta.error);
 
     return (
-        <FormControl variant="outlined" sx={{ marginTop: '20px' }} error={!!hasError}>
+        <FormControl variant="outlined" sx={styles.formControl} error={!!hasError}>
             <InputLabel htmlFor={props.id}>{label}</InputLabel>
             <OutlinedInput
                 {...field}

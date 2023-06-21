@@ -10,7 +10,8 @@ import RequireAuth from './components/requireAuth.tsx/RequireAuth';
 import Main from './pages/main/Main';
 import TechSinglePage from './pages/techSinglePage/TechSinglePage';
 import TechRadar from './pages/techradar/TechRadar';
-import { useCredentials } from './store/hooks';
+import { ConstructorMode } from './store/editRadarSlice';
+import { useCredentials, useCurrentCompany } from './store/hooks';
 
 const styles: Record<string, SxProps> = {
     box: { padding: '0 0 80px 0', position: 'relative', minHeight: 'calc(100vh - 70px)' },
@@ -45,6 +46,7 @@ const theme = createTheme(
 
 const App: FC = () => {
     useCredentials();
+    useCurrentCompany();
 
     return (
         <ThemeProvider theme={theme}>

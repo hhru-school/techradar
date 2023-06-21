@@ -33,7 +33,7 @@ export const companySlice = createSlice({
         setCreateCompanyModalOpen: (state, action: PayloadAction<boolean>) => {
             state.showCreateCompanyModal = action.payload;
         },
-        setCurrentCompany: (state, action: PayloadAction<CreateNewCompanyResponse>) => {
+        setCurrentCompany: (state, action: PayloadAction<CreateNewCompanyResponse | null>) => {
             state.currentCompany = action.payload;
         },
         setStaffModalOpen: (state, action: PayloadAction<boolean>) => {

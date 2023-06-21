@@ -1,4 +1,5 @@
 import { FC, useState, useRef, useCallback, DragEventHandler, ChangeEventHandler } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Alert, SxProps } from '@mui/material';
 
 import { UploadFileError, useCreateFromFileMutation } from '../../../../api/createRadarFromFileApi';
@@ -18,10 +19,11 @@ import './DragDropFile.less';
 // };
 
 const stylesDnd: Record<string, SxProps> = {
-    warning: { width: '300px', margin: '10px auto' },
+    warning: { minWidth: '300px', margin: '10px auto' },
 };
 
 const DragDropFile: FC = () => {
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const [createFromFile, { isLoading }] = useCreateFromFileMutation();
@@ -36,8 +38,9 @@ const DragDropFile: FC = () => {
                 formdata.append('file', file);
                 await createFromFile({ formdata, companyId: currentCompany.id })
                     .unwrap()
-                    .then(() => {
+                    .then(({ radarId }) => {
                         setError(null);
+                        navigate(`admin/my-radars/company/${currentCompany.id}/grid/${radarId}`);
                         dispatch(setCreateRadarModalOpen(false));
                     })
                     .catch((e: UploadFileError) => {
@@ -46,7 +49,7 @@ const DragDropFile: FC = () => {
             }
         },
 
-        [createFromFile, currentCompany, dispatch]
+        [createFromFile, currentCompany, dispatch, navigate]
     );
 
     const handleDrag: DragEventHandler<HTMLDivElement | HTMLFormElement> = useCallback((e) => {
@@ -98,8 +101,9 @@ const DragDropFile: FC = () => {
                             Загрузите файл
                         </Button>
                         <Alert severity="warning" sx={stylesDnd.warning}>
-                            Внимание! В файле формата .xlsx вкладки необходимо расположить последовательно от поздней
-                            версии к ранней
+                            Внимание! В&nbsp;файле формата .xlsx вкладки необходимо расположить последовательно
+                            от&nbsp;поздней версии к&nbsp;ранней. Названия квадрантов и&nbsp;колец должны совпадать
+                            во&nbsp;всех вкладках. Количество квадрантов и&nbsp;колец нельзя увеличивать.
                         </Alert>
                     </Box>
                 </label>

@@ -39,6 +39,9 @@ export const styles: Record<string, SxProps> = {
     },
     list: { maxHeight: '400px', overflowY: 'auto', marginTop: '10px' },
     title: { marginBottom: '10px' },
+    grid: {
+        '& .MuiDataGrid-row: hover': { cursor: 'pointer' },
+    },
 };
 
 const initialState = {
@@ -54,8 +57,13 @@ const StaffModal: FC = () => {
     const showStaffModal = useAppSelector((state) => state.company.showStaffModal);
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const currentCompanyId = currentCompany ? currentCompany.id : 0;
+    const username = useAppSelector((state) => state.auth.username);
 
-    const { data: staffList, error, isError } = useGetStaffQuery(currentCompanyId);
+    const {
+        data: staffList,
+        error,
+        isError,
+    } = useGetStaffQuery(currentCompanyId, { skip: !username, refetchOnMountOrArgChange: true });
 
     const handleClose = useCallback(() => dispatch(setStaffModalOpen(false)), [dispatch]);
 
@@ -114,9 +122,13 @@ const StaffModal: FC = () => {
                         pageSizeOptions={[5]}
                         disableRowSelectionOnClick
                         localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
+                        sx={styles.grid}
                     />
                     <Button type="submit" variant="contained" color="success" sx={styles.btn} onClick={handleClick}>
                         Добавить сотрудника
+                    </Button>
+                    <Button type="button" variant="outlined" sx={styles.btn} onClick={handleClose}>
+                        отмена
                     </Button>
                     {isError && <Alert severity="error">{(error as Error).data.message}</Alert>}
                 </Box>

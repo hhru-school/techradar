@@ -1,10 +1,10 @@
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect, useRef } from 'react';
 import { Routes, Route } from 'react-router';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Typography, Box, Container, Button, SxProps, Checkbox, FormControlLabel } from '@mui/material';
 
 import { useGetAllCompanyRadarsQuery } from '../../../api/companyRadarsApi';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { useAppDispatch, useAppSelector, useCurrentCompany } from '../../../store/hooks';
 import { setCreateVersionModalOpen, setFilteredListVersions } from '../../../store/myRadarsSlice';
 import CompanyCreateModal from './companyCreateModal/CompanyCreateModal';
 import InfoBtn from './infoBtn/InfoBtn';
@@ -31,6 +31,7 @@ const styles: Record<string, SxProps> = {
 const MyRadar: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const idCompany = useRef<number>(0);
     const { paramRadarId } = useParams();
     const currentCompany = useAppSelector((state) => state.company.currentCompany);
     const showCreateRadarModal = useAppSelector((state) => state.myRadars.showCreateRadarModal);
@@ -46,15 +47,23 @@ const MyRadar: FC = () => {
         if (!paramRadarId && allCompanyRadars && allCompanyRadars.length && paramCompanyId) {
             navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
         } else if (allCompanyRadars && !allCompanyRadars.length && paramCompanyId) {
+            idCompany.current = paramCompanyId;
             navigate(`company/${paramCompanyId}`);
-        } else if (paramRadarId && allCompanyRadars && allCompanyRadars.length) {
+        } else if (
+            paramRadarId &&
+            allCompanyRadars &&
+            allCompanyRadars.length &&
+            idCompany.current !== paramCompanyId
+        ) {
             const match = allCompanyRadars.find((radar) => radar.id === +paramRadarId);
-
             if (!match) {
+                idCompany.current = paramCompanyId;
                 navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
             }
         }
     }, [allCompanyRadars, paramCompanyId, navigate, paramRadarId, showCreateRadarModal]);
+
+    useCurrentCompany();
 
     const handleChange = useCallback(
         () => dispatch(setFilteredListVersions(!isfilteredVersionsList)),
@@ -68,7 +77,7 @@ const MyRadar: FC = () => {
             <Container maxWidth="xl">
                 <RadarsChips />
                 <Typography variant="h5" sx={styles.title}>
-                    Радары
+                    Версии
                 </Typography>
                 <Box sx={styles.box}>
                     <Button
@@ -78,7 +87,7 @@ const MyRadar: FC = () => {
                         sx={styles.newVersionBtn}
                         disabled={!allCompanyRadars?.length}
                     >
-                        Сделать следующую версию +
+                        Сделать следующую +
                     </Button>
                     <Box sx={styles.checkboxBox}>
                         <FormControlLabel
@@ -101,7 +110,7 @@ const MyRadar: FC = () => {
                         sx={styles.reset}
                         disabled={!allCompanyRadars?.length}
                     >
-                        Сбросить таблицу
+                        Сбросить
                     </Button>
                 </Box>
                 <Routes>

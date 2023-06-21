@@ -14,6 +14,7 @@ import constructorRadarReducer from './constructorRadarSlice';
 import displayRadarReducer from './displayRadarSlice';
 import editRadarReducer from './editRadarSlice';
 import { authMiddleware } from './middleware/authMiddleware';
+import { companyMiddleware } from './middleware/companyMiddleware';
 import { logOutMiddleware } from './middleware/logOutMiddleware';
 import myRadarsReducer from './myRadarsSlice';
 import techSinglePageReducer from './techSinglePageSlice';
@@ -47,6 +48,7 @@ export const store = configureStore({
             publicCompaniesApi.middleware,
             authMiddleware,
             logOutMiddleware,
+            companyMiddleware,
         ]),
 });
 

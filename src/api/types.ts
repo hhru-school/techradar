@@ -209,10 +209,6 @@ export interface NewVersionRequest {
     radarId: number;
     blipEventId?: number;
 }
-export interface NewVersionError {
-    error: string;
-    status: string;
-}
 
 export interface BlipResponse {
     id: number;
@@ -290,4 +286,14 @@ export interface CreateNewCompanyResponse {
 
 export interface CreateNewCompanyRequest {
     name: string;
+}
+
+export interface ErrorRes {
+    data: {
+        message: string;
+        status: string;
+        timestamp: string;
+        type: string;
+    };
+    status: number;
 }
