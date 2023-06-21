@@ -1,4 +1,5 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Tooltip } from '@mui/material';
 import classNames from 'classnames';
 
 import { openEditRingModal, setShowEditIcon } from '../../store/editRadarSlice';
@@ -28,10 +29,6 @@ const RadarRingLabel: FC<Props> = ({ x, y, segment, ring, variant = RadarVariant
     const isEditable = variant === RadarVariant.Editable;
 
     const dispatch = useAppDispatch();
-
-    const clickHandler = () => {
-        dispatch(openEditRingModal(ring));
-    };
 
     const [isActive, setIsActive] = useState(false);
 
@@ -63,23 +60,43 @@ const RadarRingLabel: FC<Props> = ({ x, y, segment, ring, variant = RadarVariant
         }
     }, [ring.name, segmentWidth]);
 
-    return (
-        <g transform={getTransform(segment.startAngle, x, y)}>
-            <text
-                ref={ref}
-                onClick={isEditable ? clickHandler : undefined}
-                onMouseEnter={isEditable ? mouseEnterHandler : undefined}
-                onMouseLeave={isEditable ? mouseLeaveHandler : undefined}
-                className={classes}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                x={x}
-                y={y}
-            >
-                {textValue}
-            </text>
-        </g>
-    );
+    const labelSvg = useMemo(() => {
+        const clickHandler = () => {
+            dispatch(openEditRingModal(ring));
+        };
+        return (
+            <g transform={getTransform(segment.startAngle, x, y)}>
+                <text
+                    ref={ref}
+                    onClick={isEditable ? clickHandler : undefined}
+                    onMouseEnter={isEditable ? mouseEnterHandler : undefined}
+                    onMouseLeave={isEditable ? mouseLeaveHandler : undefined}
+                    className={classes}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    x={x}
+                    y={y}
+                >
+                    {textValue}
+                </text>
+            </g>
+        );
+    }, [
+        x,
+        y,
+        isEditable,
+        classes,
+        mouseEnterHandler,
+        mouseLeaveHandler,
+        segment.startAngle,
+        textValue,
+        dispatch,
+        ring,
+    ]);
+
+    if (isEditable) return labelSvg;
+
+    return <Tooltip title={`Кольцо: ${ring.name}`}>{labelSvg}</Tooltip>;
 };
 
 export default RadarRingLabel;

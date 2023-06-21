@@ -33,8 +33,6 @@ const ModalDeleteBlip: FC = () => {
         dispatch(deleteBlip());
     }, [dispatch]);
 
-    // Удаление перемещенной точки не работает
-
     const submitBtnHandler = useCallback(
         async (values: Values) => {
             if (!isNewRadar && blip) {
