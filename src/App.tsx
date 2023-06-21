@@ -7,11 +7,9 @@ import { ruRU } from '@mui/x-data-grid';
 import Footer from './components/footer/Footer';
 import Header from './components/header/Header';
 import RequireAuth from './components/requireAuth.tsx/RequireAuth';
-import Constructor from './pages/constructor/Constructor';
 import Main from './pages/main/Main';
 import TechSinglePage from './pages/techSinglePage/TechSinglePage';
 import TechRadar from './pages/techradar/TechRadar';
-import { ConstructorMode } from './store/editRadarSlice';
 import { useCredentials } from './store/hooks';
 
 const styles: Record<string, SxProps> = {
@@ -61,18 +59,8 @@ const App: FC = () => {
                         />
                     </Route>
                     <Route path="/tech/:techId" element={<TechSinglePage />} />
-                    <Route path="/constructor">
-                        <Route path="new/radar/company/:companyId" element={<Constructor />} />
-                        <Route
-                            path="edit/version/:versionId"
-                            element={<Constructor mode={ConstructorMode.VersionEditing} />}
-                        />
-                        <Route
-                            path="new/version/radar/:radarId"
-                            element={<Constructor mode={ConstructorMode.NewVersionCreation} />}
-                        />
-                    </Route>
                     <Route path="/admin/*" element={<RequireAuth />} />
+                    <Route path="/constructor/*" element={<RequireAuth />} />
                 </Routes>
                 <Footer />
             </Box>
