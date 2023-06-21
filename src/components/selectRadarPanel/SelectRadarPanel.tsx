@@ -10,7 +10,6 @@ const defaultChip: SxProps = { borderRadius: 1, fontSize: 14 };
 
 const muiStyles: Record<string, SxProps> = {
     chip: defaultChip,
-    activeChip: { ...defaultChip, backgroundColor: '#eff294', '&:hover': { backgroundColor: '#eff294' } },
 };
 
 type Props = {
@@ -30,7 +29,8 @@ const SelectRadarPanel: FC<Props> = ({ radars, companyId }) => {
                 <Chip
                     key={radar.id}
                     label={radar.name.toUpperCase()}
-                    sx={isActive ? muiStyles.activeChip : muiStyles.chip}
+                    sx={muiStyles.chip}
+                    color={isActive ? 'success' : 'default'}
                     onClick={() => {
                         navigate(buildRadarViewerUrl(companyId, radar.id));
                     }}

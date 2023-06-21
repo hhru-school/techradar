@@ -16,10 +16,10 @@ type Props = {
 const label = 'Версия радара';
 
 const style = {
-    select: { width: 300, my: 2 },
+    select: { width: 300, my: 1 },
 };
 
-const formatDate = (dateStr: string) => new Date(dateStr).toLocaleString();
+const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString();
 
 const SelectVersion: FC<Props> = ({ versions, currentVersionId, companyId }) => {
     const options = useMemo(

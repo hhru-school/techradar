@@ -14,7 +14,7 @@ const style = {
     selectSceleton: { height: 50, width: 300, my: 1 },
 };
 
-const radius = 250;
+const radius = 400;
 
 const RadarContainer: FC = () => {
     const radar = useAppSelector((state) => state.displayRadar.radar);
