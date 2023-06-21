@@ -10,7 +10,6 @@ import RequireAuth from './components/requireAuth.tsx/RequireAuth';
 import Main from './pages/main/Main';
 import TechSinglePage from './pages/techSinglePage/TechSinglePage';
 import TechRadar from './pages/techradar/TechRadar';
-import { ConstructorMode } from './store/editRadarSlice';
 import { useCredentials, useCurrentCompany } from './store/hooks';
 
 const styles: Record<string, SxProps> = {
