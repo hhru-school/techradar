@@ -225,6 +225,15 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
             }),
             providesTags: ['LastBlipEvent'],
         }),
+
+        deleteVersion: builder.mutation<void, number>({
+            query: (versionId) => ({
+                method: 'DELETE',
+                url: `/radar-versions/${versionId}`,
+            }),
+
+            invalidatesTags: ['Radar', 'Version', 'Log'],
+        }),
     }),
 });
 
