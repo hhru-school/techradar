@@ -11,6 +11,7 @@ import {
 import { isFetchBaseQueryError } from '../../api/helpers';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import Layout from '../../components/layout/Layout';
+import SymbolLegend from '../../components/symbolLegend/SymbolLegend';
 import {
     VersionSettingData,
     cleanUpPage,
@@ -136,6 +137,7 @@ const TechRadar: FC = () => {
                 </Fab>
             )}
             <TabContainer />
+            <SymbolLegend />
             <div className={styles.main} ref={ref}>
                 <RadarContainer />
                 <LegendContainer />

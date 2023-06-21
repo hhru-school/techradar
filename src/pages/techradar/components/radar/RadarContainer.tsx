@@ -40,7 +40,7 @@ const RadarContainer: FC = () => {
 
             <div className={styles.radarContainer}>
                 {radar ? (
-                    <Radar radar={radar} radius={radius} variant={RadarVariant.Demonstrative} />
+                    <Radar radar={radar} radius={radius} blipRadus={12} variant={RadarVariant.Demonstrative} />
                 ) : (
                     <Skeleton variant="circular" width={2 * radius} height={2 * radius} />
                 )}
