@@ -80,6 +80,7 @@ export interface EditRadarState {
     editingBlipEvent: IndexBlipEventApi | null;
     newBlipEventId: number;
     idToLabelDict: IdToLabelDict | null;
+    showSaveInfoMessage: boolean;
 }
 
 const initialState: EditRadarState = {
@@ -118,6 +119,7 @@ const initialState: EditRadarState = {
     editingBlipEvent: null,
     newBlipEventId: -1,
     idToLabelDict: null,
+    showSaveInfoMessage: false,
 };
 
 const getBlipById = (state: EditRadarState, id: number): Blip | null => {
@@ -490,6 +492,10 @@ export const editRadarSlice = createSlice({
             if (!state.editingBlipEvent) throw new Error('Editing blipEvent not assigned');
             state.editingBlipEvent.comment = action.payload;
         },
+
+        setShowSaveInfoMessage: (state, action: PayloadAction<boolean>) => {
+            state.showSaveInfoMessage = action.payload;
+        },
     },
 });
 
@@ -554,6 +560,7 @@ export const {
     setNewBlipEventId,
     updateBlipEventComment,
     updateDict,
+    setShowSaveInfoMessage,
 } = editRadarSlice.actions;
 
 export default editRadarSlice.reducer;

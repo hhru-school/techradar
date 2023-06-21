@@ -10,7 +10,7 @@ import {
 import { buildBlipEventRequest } from '../../api/radarApiUtils';
 import { CreateBlipEventApiRequest, UpdateVersionRequest } from '../../api/types';
 import { Blip } from '../../components/radar/types';
-import { Segment, setNewBlipEventId, setVersion, updateDict } from '../../store/editRadarSlice';
+import { Segment, setNewBlipEventId, setShowSaveInfoMessage, setVersion, updateDict } from '../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getLastBlipEvents, getNextBlipLabel } from './utils';
 
@@ -89,6 +89,7 @@ export const useOperationHandler = (
                 const updatedVersion = await updateVersion(versionRequest).unwrap();
                 dispatch(setVersion(updatedVersion));
                 setState({ isLoading: false, hasError: false });
+                dispatch(setShowSaveInfoMessage(true));
             } catch (error) {
                 console.error('Blip operation error');
                 setState({ isLoading: false, hasError: true });
@@ -129,12 +130,13 @@ export const useOperationHandler = (
                 }
 
                 setState({ isLoading: false, hasError: false });
+                dispatch(setShowSaveInfoMessage(true));
             } catch (error) {
                 console.error('Blip operation error');
                 setState({ isLoading: false, hasError: true });
             }
         },
-        [setState, version, operation, deleteBlipEvent, log, updateBlipEvent]
+        [setState, version, operation, deleteBlipEvent, dispatch, log, updateBlipEvent]
     );
     return [state, handler, editHandler];
 };

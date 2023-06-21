@@ -6,6 +6,7 @@ import { Button } from '@mui/material';
 import { buildRadarViewerUrl } from '../../../../api/radarApiUtils';
 import { setShowSwitchReleaseModal } from '../../../../store/editRadarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
+import OnSaveInfoMessage from '../OnSaveInfoMessage';
 import VersionStatusContainer from '../VersionStatusContainer';
 import PropertiesContainer from './PropertiesContainer';
 
@@ -38,6 +39,7 @@ const EditRadarPanel: FC = () => {
                 На страницу просмотра
             </Button>
             <div className={styles.spacer}></div>
+            <OnSaveInfoMessage />
             {version && <VersionStatusContainer release={version?.release} />}
             {isReleased ? (
                 <Button variant="outlined" color="error" onClick={toggleReleaseClickHandler}>
