@@ -9,7 +9,7 @@ const forwardMessage = 'Перемещена к центру';
 const backwardMessage = 'Перемещена от центра';
 const secMoveMessage = 'Перемещена из другого сектора';
 
-const color = '#3c9df2';
+const color = 'rgb(106, 115, 123)';
 const size = 18;
 
 const SymbolLegend: FC = () => {
