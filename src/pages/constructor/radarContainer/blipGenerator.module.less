@@ -1,3 +1,4 @@
+@import '../../../styles/global.less';
 @generator-size: 50px;
 
 .generator {
@@ -5,8 +6,8 @@
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 50px;
-    left: 120px;
+    top: 40px;
+    left: 100px;
     width: @generator-size;
     height: @generator-size;
     border-radius: calc(@generator-size / 2);
@@ -14,9 +15,10 @@
 }
 
 .active {
-    background-color: rgb(245, 222, 13);
+    background-color: @button-hh-color;
     font-size: 30px;
     font-weight: bold;
+    color: white;
     box-shadow: 2px 3px 3px rgba(71, 71, 71, 0.493);
     cursor: grab;
     &:hover {
