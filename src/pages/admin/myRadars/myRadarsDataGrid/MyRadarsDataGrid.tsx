@@ -11,6 +11,9 @@ import { RadarVersionData, VersionData } from './types';
 
 const styles: Record<string, SxProps> = {
     box: { height: 'calc(100vh - 320px)', width: '100%' },
+    grid: {
+        '& .MuiDataGrid-row: hover': { cursor: 'pointer' },
+    },
 };
 
 const initialState = {
@@ -122,6 +125,7 @@ const MyRadarsDataGrid: FC = () => {
                     localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
                     getRowClassName={(params) => `super-app-theme--${params.row.release as string}`}
                     onRowClick={(params) => navigate(`/constructor/edit/version/${(params.row as VersionData).id}`)}
+                    sx={styles.grid}
                 />
             )}
         </Box>
