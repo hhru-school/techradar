@@ -3,7 +3,7 @@ import { Box, Typography, Button, SxProps } from '@mui/material';
 
 import { useGetCompaniesQuery } from '../../../../api/companiesApi';
 import CreateCompanyBtn from '../../../../components/header/createCompanyBtn/CreateCompanyBtn';
-import { useAppDispatch } from '../../../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { setCreateRadarModalOpen } from '../../../../store/myRadarsSlice';
 
 const styles: Record<string, SxProps> = {
@@ -20,9 +20,10 @@ const styles: Record<string, SxProps> = {
 
 const NoRadarsMock: FC = () => {
     const dispatch = useAppDispatch();
-    const handleClick = useCallback(() => dispatch(setCreateRadarModalOpen(true)), [dispatch]);
-    const { data: companies } = useGetCompaniesQuery();
+    const username = useAppSelector((state) => state.auth.username);
+    const { data: companies } = useGetCompaniesQuery(null, { skip: !username });
 
+    const handleClick = useCallback(() => dispatch(setCreateRadarModalOpen(true)), [dispatch]);
     return (
         <Box sx={styles.boxText}>
             {companies && companies.length ? (

@@ -47,10 +47,8 @@ const CompanyModal: FC = () => {
     const dispatch = useAppDispatch();
     const showCompanyModal = useAppSelector((state) => state.company.showCompanyModal);
     const [companyId, setCompanyId] = useState<number>(0);
-
     const { data: allCompanies } = useGetAllCompaniesQuery();
     const { data: allCompanyRadars } = useGetAllCompanyRadarsQuery(companyId, {
-        skip: !companyId,
         refetchOnMountOrArgChange: true,
     });
 
@@ -62,6 +60,7 @@ const CompanyModal: FC = () => {
         if (companyId && allCompanyRadars && allCompanyRadars.length) {
             navigate(`/techradar/company/${companyId}/radar/${allCompanyRadars[0].id}/version/latest`);
             dispatch(setCompanyModalOpen(false));
+            setCompanyId(0);
         }
     }, [allCompanyRadars, companyId, dispatch, navigate]);
 
