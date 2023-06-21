@@ -14,9 +14,10 @@ type Props = {
     ring: Ring;
     blips: Blip[];
     isSearching: boolean;
+    color: string;
 };
 
-const EditableLegendRingContainer: FC<Props> = ({ sector, ring, blips, isSearching = false }) => {
+const EditableLegendRingContainer: FC<Props> = ({ sector, ring, blips, isSearching = false, color }) => {
     const dispatch = useAppDispatch();
 
     const items = useMemo(
@@ -40,7 +41,9 @@ const EditableLegendRingContainer: FC<Props> = ({ sector, ring, blips, isSearchi
 
     return (
         <div className={containerClasses} ref={dropRef}>
-            <h4 className={styles.ringName}>{ring.name}</h4>
+            <h4 className={styles.ringName} style={{ color }}>
+                {ring.name}
+            </h4>
             {items.length > 0 && <ul className={styles.itemList}>{items}</ul>}
             {items.length === 0 && <div className={styles.emptyContainer}>Пусто</div>}
         </div>

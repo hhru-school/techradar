@@ -27,7 +27,7 @@ const EditableLegendMain: FC<Props> = ({
 }) => {
     const sectorContainers = useMemo(
         () =>
-            sectors.map((sector, i) => {
+            sectors.map((sector) => {
                 const sectorBlips = blips.filter((blip) => blip.sector.id === sector.id);
                 if (isSearching && sectorBlips.length === 0) return null;
                 return (
@@ -36,7 +36,7 @@ const EditableLegendMain: FC<Props> = ({
                         sector={sector}
                         rings={rings}
                         blips={sectorBlips}
-                        color={colorScheme[i]}
+                        colorScheme={colorScheme}
                         isSearching={isSearching}
                     />
                 );

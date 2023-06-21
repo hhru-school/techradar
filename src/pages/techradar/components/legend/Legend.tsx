@@ -44,7 +44,7 @@ const Legend: FC<Props> = ({ radar, colorScheme = defaultColorScheme }) => {
 
     const sectorGroups = useMemo(
         () =>
-            radar.sectors.map((sector, i) => {
+            radar.sectors.map((sector) => {
                 if (activeSectorId && activeSectorId !== sector.id) return null;
                 return (
                     <LegendSectorGroup
@@ -52,7 +52,7 @@ const Legend: FC<Props> = ({ radar, colorScheme = defaultColorScheme }) => {
                         blips={radar.blips.filter((blip) => blip.sector.id === sector.id)}
                         sectorName={sector.name}
                         ringNames={getRingNames(radar)}
-                        color={colorScheme[i]}
+                        colorScheme={colorScheme}
                         opacity={hoveredSectorId && hoveredSectorId !== sector.id ? 0.2 : 1}
                     />
                 );

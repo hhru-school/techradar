@@ -1,5 +1,6 @@
 import { FC, memo, useMemo } from 'react';
 
+import { defaultColorScheme } from '../../../components/radar/styleConfig';
 import { Blip, Ring, Sector } from '../../../components/radar/types';
 import EditableLegendRingContainer from './EditableLegendRingContainer';
 
@@ -9,14 +10,20 @@ type Props = {
     sector: Sector;
     rings: Ring[];
     blips: Blip[];
-    color?: string;
+    colorScheme?: string[];
     isSearching?: boolean;
 };
 
-const EditableLegendSectorContainer: FC<Props> = ({ sector, rings, blips, color, isSearching = false }) => {
+const EditableLegendSectorContainer: FC<Props> = ({
+    sector,
+    rings,
+    blips,
+    colorScheme = defaultColorScheme,
+    isSearching = false,
+}) => {
     const ringContainers = useMemo(
         () =>
-            rings.map((ring) => {
+            rings.map((ring, i) => {
                 const ringBlips = blips.filter((blip) => blip.ring.id === ring.id);
                 if (isSearching && ringBlips.length === 0) return null;
                 return (
@@ -26,17 +33,16 @@ const EditableLegendSectorContainer: FC<Props> = ({ sector, rings, blips, color,
                         ring={ring}
                         blips={ringBlips}
                         isSearching={isSearching}
+                        color={colorScheme[i]}
                     />
                 );
             }),
-        [rings, sector, blips, isSearching]
+        [rings, sector, blips, isSearching, colorScheme]
     );
 
     return (
         <div className={styles.sectorContainer}>
-            <h3 style={{ color }} className={styles.sectorName}>
-                {sector.name}
-            </h3>
+            <h3 className={styles.sectorName}>{sector.name}</h3>
             <div className={styles.sectorContainerList}> {ringContainers}</div>
         </div>
     );
