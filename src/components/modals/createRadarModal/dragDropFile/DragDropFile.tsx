@@ -19,7 +19,7 @@ import './DragDropFile.less';
 // };
 
 const stylesDnd: Record<string, SxProps> = {
-    warning: { width: '300px', margin: '10px auto' },
+    warning: { minWidth: '300px', margin: '10px auto' },
 };
 
 const DragDropFile: FC = () => {
@@ -101,8 +101,9 @@ const DragDropFile: FC = () => {
                             Загрузите файл
                         </Button>
                         <Alert severity="warning" sx={stylesDnd.warning}>
-                            Внимание! В файле формата .xlsx вкладки необходимо расположить последовательно от поздней
-                            версии к ранней
+                            Внимание! В&nbsp;файле формата .xlsx вкладки необходимо расположить последовательно
+                            от&nbsp;поздней версии к&nbsp;ранней. Названия квадрантов и&nbsp;колец должны совпадать
+                            во&nbsp;всех вкладках. Количество квадрантов и&nbsp;колец нельзя увеличивать.
                         </Alert>
                     </Box>
                 </label>
