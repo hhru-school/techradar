@@ -56,7 +56,6 @@ const MyRadar: FC = () => {
             idCompany.current !== paramCompanyId
         ) {
             const match = allCompanyRadars.find((radar) => radar.id === +paramRadarId);
-
             if (!match) {
                 idCompany.current = paramCompanyId;
                 navigate(`company/${paramCompanyId}/grid/${allCompanyRadars[0].id}`);
@@ -78,7 +77,7 @@ const MyRadar: FC = () => {
             <Container maxWidth="xl">
                 <RadarsChips />
                 <Typography variant="h5" sx={styles.title}>
-                    Все версии
+                    Версии
                 </Typography>
                 <Box sx={styles.box}>
                     <Button
