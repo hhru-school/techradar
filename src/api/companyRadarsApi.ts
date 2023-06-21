@@ -158,19 +158,19 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
         }),
 
         updateSector: builder.mutation<RenameContainerItemApi, RenameContainerItemApi>({
-            query: (body) => ({
+            query: ({ id, name }) => ({
                 method: 'PUT',
-                url: `quadrants/${body.id}`,
-                body,
+                url: `quadrants/${id}`,
+                body: { name },
             }),
             invalidatesTags: ['Radar'],
         }),
 
         updateRing: builder.mutation<RenameContainerItemApi, RenameContainerItemApi>({
-            query: (body) => ({
+            query: ({ id, name }) => ({
                 method: 'PUT',
-                url: `rings/${body.id}`,
-                body,
+                url: `rings/${id}`,
+                body: { name },
             }),
 
             invalidatesTags: ['Radar'],
