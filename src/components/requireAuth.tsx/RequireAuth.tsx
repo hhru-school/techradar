@@ -15,14 +15,13 @@ const RequireAuth: FC = () => {
             <Route path="/my-radars/*" element={<MyRadars />}>
                 <Route path="company/:companyId/grid/:paramRadarId" element={<MyRadars />} />
             </Route>
-            {/* <Route path="/constructor"> */}
+
             <Route path="new/radar/company/:companyId" element={<Constructor />} />
             <Route path="edit/version/:versionId" element={<Constructor mode={ConstructorMode.VersionEditing} />} />
             <Route
                 path="new/version/radar/:radarId"
                 element={<Constructor mode={ConstructorMode.NewVersionCreation} />}
             />
-            {/* </Route> */}
         </Routes>
     ) : (
         <ErrorMessage errorStatus={401} />
