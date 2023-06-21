@@ -2,6 +2,8 @@ import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import MyRadars from '../../pages/admin/myRadars/MyRadars';
+import Constructor from '../../pages/constructor/Constructor';
+import { ConstructorMode } from '../../store/editRadarSlice';
 import { useAppSelector } from '../../store/hooks';
 import ErrorMessage from '../error/ErrorMessage';
 
@@ -13,6 +15,13 @@ const RequireAuth: FC = () => {
             <Route path="/my-radars/*" element={<MyRadars />}>
                 <Route path="company/:companyId/grid/:paramRadarId" element={<MyRadars />} />
             </Route>
+
+            <Route path="new/radar/company/:companyId" element={<Constructor />} />
+            <Route path="edit/version/:versionId" element={<Constructor mode={ConstructorMode.VersionEditing} />} />
+            <Route
+                path="new/version/radar/:radarId"
+                element={<Constructor mode={ConstructorMode.NewVersionCreation} />}
+            />
         </Routes>
     ) : (
         <ErrorMessage errorStatus={401} />
