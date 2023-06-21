@@ -15,8 +15,8 @@ import {
 
 import { setAuthFormOpen } from '../../store/authSlice/authSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { setCreateRadarModalOpen } from '../../store/myRadarsSlice';
 import backPic from './img/circles.png';
+import radar from './img/image.png';
 
 import styles from './main.module.less';
 
@@ -33,11 +33,10 @@ const style: Record<string, SxProps> = {
     howUse: { marginBottom: '15px' },
     imgRadar: { display: 'flex', justifyContent: 'space-between', padding: '100px 0' },
     try: { maxWidth: '500px' },
+    tryBtn: { mr: '5px' },
     useful: { backgroundColor: 'rgb(220,220,220)', padding: '100px 0' },
     boxRightText: { display: 'flex', flexDirection: 'column', minWidth: '300px', marginTop: '15px' },
 };
-
-const imgSrc = 'https://raw.githubusercontent.com/hhru-school/techradar/readme-asset/radarView.JPG';
 
 const forDevelopers: Array<string> = [
     'выбирать подходящие для нового проекта технологии;',
@@ -53,12 +52,9 @@ const besides: Array<string> = [
 
 const Main: FC = () => {
     const dispatch = useAppDispatch();
-    const accessToken = useAppSelector((state) => state.auth.accessToken);
+    const username = useAppSelector((state) => state.auth.username);
 
     const handleAuthFormOpen = useCallback(() => dispatch(setAuthFormOpen(true)), [dispatch]);
-    const handleCreateRadar = useCallback(() => {
-        dispatch(setCreateRadarModalOpen(true));
-    }, [dispatch]);
 
     const renderText = (arr: Array<string>) =>
         arr.map((text, id) => (
@@ -91,19 +87,17 @@ const Main: FC = () => {
             <Container maxWidth="xl">
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Box sx={style.imgRadar}>
-                        {/* МЕСТО ДЛЯ ДЕМОНСТРАТИВНОГО РАДАРА ДЛЯ ПОТЫКАТЬ */}
-                        <img className={styles.img} src={imgSrc}></img>
+                        <img className={styles.img} src={radar}></img>
                     </Box>
                     <Typography paragraph={true} variant="h6" sx={style.try}>
-                        {accessToken ? (
-                            <Button variant="contained" onClick={handleAuthFormOpen}>
-                                Попробуйте
-                            </Button>
-                        ) : (
-                            <Button variant="contained" onClick={handleCreateRadar}>
-                                Попробуйте
-                            </Button>
-                        )}{' '}
+                        <Button
+                            variant="contained"
+                            onClick={handleAuthFormOpen}
+                            disabled={!!username}
+                            sx={style.tryBtn}
+                        >
+                            Попробуйте
+                        </Button>
                         создать свой радар с&nbsp;нуля в&nbsp;конструкторе или добавьте готовый в&nbsp;формате файла
                         .xlsx или .csv
                     </Typography>
