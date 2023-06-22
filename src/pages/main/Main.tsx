@@ -90,14 +90,18 @@ const Main: FC = () => {
                         <img className={styles.img} src={radar}></img>
                     </Box>
                     <Typography paragraph={true} variant="h6" sx={style.try}>
-                        <Button
-                            variant="contained"
-                            onClick={handleAuthFormOpen}
-                            disabled={!!username}
-                            sx={style.tryBtn}
-                        >
-                            Попробуйте
-                        </Button>
+                        {username ? (
+                            'Попробуйте '
+                        ) : (
+                            <Button
+                                variant="contained"
+                                onClick={handleAuthFormOpen}
+                                disabled={!!username}
+                                sx={style.tryBtn}
+                            >
+                                Попробуйте
+                            </Button>
+                        )}
                         создать свой радар с&nbsp;нуля в&nbsp;конструкторе или добавьте готовый в&nbsp;формате файла
                         .xlsx или .csv
                     </Typography>
