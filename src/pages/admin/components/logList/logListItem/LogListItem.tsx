@@ -60,20 +60,20 @@ const LogListItem: FC<LogListItemProps> = ({ blipEvent }) => {
         <Box sx={styles.logListItemBox}>
             <Box sx={styles.logListItemHeader}>
                 <Box sx={styles.headerBtnAndText}>
-                    <Typography align={'right'} variant={'h6'}>
+                    <Typography align={'right'} variant={'body1'}>
                         {getDate(blipEvent.lastChangeTime)}
                     </Typography>
                 </Box>
                 {blipEvent.blip && (
-                    <Typography align={'center'} variant={'h6'}>
+                    <Typography align={'center'} variant={'body1'}>
                         Автор: {blipEvent.author.username}
                     </Typography>
                 )}
                 <Box sx={styles.verAndType}>
-                    <Typography align={'right'} variant={'h6'}>
+                    <Typography align={'right'} variant={'body1'}>
                         Версия радара: {blipEvent.radarVersion}
                     </Typography>
-                    <Typography align={'right'} variant={'h6'}>
+                    <Typography align={'right'} variant={'body1'}>
                         Тип: {getType(blipEvent.drawInfo)}
                     </Typography>
                 </Box>
