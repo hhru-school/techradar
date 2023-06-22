@@ -30,7 +30,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'GET',
                 url: `/radars?company-id=${companyId}`,
             }),
-            providesTags: ['Radar'],
+            providesTags: ['Radar', 'CompanyRadars'],
         }),
 
         getCompanyName: builder.query<string, number>({
@@ -125,6 +125,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
 
                 return { data: result.data as VersionApiResponse };
             },
+            invalidatesTags: ['CompanyRadars'],
         }),
 
         createBlip: builder.mutation<CreateBlipApiResponse, { blip: Blip; radarId: number }>({
