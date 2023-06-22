@@ -46,7 +46,9 @@ export const getLastBlipEvents = (
 
 export const getNextBlipLabel = (dict: IdToLabelDict | null): number => {
     if (!dict) return 1;
-    return Math.max(...(Object.values(dict) as number[])) + 1;
+    const values = [...(Object.values(dict) as number[])];
+    if (values.length === 0) return 1;
+    return Math.max(...values) + 1;
 };
 
 export const getBlipEventStatus = (blipEvent: IndexBlipEventApi): string => {
