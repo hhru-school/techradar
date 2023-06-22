@@ -3,7 +3,7 @@ import { SxProps } from '@mui/material/styles';
 export const styles: Record<string, SxProps> = {
     iconBtnUnauth: { ml: 2 },
     iconBtn: { margin: 'auto 0' },
-    label: { flexGrow: 1 },
+    label: { flexGrow: 1, alignItems: 'center' },
     menu: {
         overflow: 'visible',
         filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
@@ -43,7 +43,7 @@ export const styles: Record<string, SxProps> = {
     },
     icon: { mr: '3px' },
     boxLeft: { flexGrow: 1, display: 'flex' },
-    boxLogo: { display: 'flex', mr: '60px' },
+    boxLogo: { display: 'flex', mr: '60px', alignItems: 'center' },
     boxLinks: { display: 'flex', flexWrap: 'wrap' },
     generalBtn: { marginRight: '50px' },
 };

@@ -32,7 +32,7 @@ const style: Record<string, SxProps> = {
     boxHowUse: { display: 'flex', flexDirection: 'column', padding: '100px 0' },
     howUse: { marginBottom: '15px' },
     imgRadar: { display: 'flex', justifyContent: 'space-between', padding: '100px 0' },
-    try: { maxWidth: '500px' },
+    try: { maxWidth: '700px' },
     tryBtn: { mr: '5px' },
     useful: { backgroundColor: 'rgb(220,220,220)', padding: '100px 0' },
     boxRightText: { display: 'flex', flexDirection: 'column', minWidth: '300px', marginTop: '15px' },
