@@ -74,7 +74,7 @@ const TechSinglePage: FC = () => {
                     )}
                 </Grid>
                 <Grid item xs={12} md={6} sx={styles.logListGrid}>
-                    <LogList boxWidth="95%" boxMaxHeight="72vh" blipEvents={logData} isEditable={false} />
+                    <LogList boxWidth="95%" boxHeight="72vh" blipEvents={logData} isEditable={false} />
                     {logLoading && <CircularProgress color="inherit" sx={styles.logLoading} />}
                 </Grid>
             </Grid>

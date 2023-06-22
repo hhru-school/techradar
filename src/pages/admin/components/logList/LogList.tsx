@@ -22,11 +22,12 @@ const styles: Record<string, SxProps> = {
     boxContainer: { padding: '0 16px' },
     textHeaderStyle: { textAlign: 'center', height: '36px' },
     textField: { width: '100%' },
+    textLog: { margin: 'auto auto' },
 };
 
 type LogProps = {
     boxWidth?: string;
-    boxMaxHeight?: string;
+    boxHeight?: string;
     blipEvents: IndexBlipEventApi[];
     hasHeader?: boolean;
     color?: string;
@@ -36,7 +37,7 @@ type LogProps = {
 
 const LogList: FC<LogProps> = ({
     boxWidth = '100%',
-    boxMaxHeight = '100%',
+    boxHeight = '100%',
     blipEvents,
     hasHeader = true,
     isEditable = true,
@@ -50,7 +51,7 @@ const LogList: FC<LogProps> = ({
         [blipEvents, isEditable]
     );
 
-    const logBoxStyle = useMemo(() => ({ ...styles.boxItems, maxHeight: boxMaxHeight }), [boxMaxHeight]);
+    const logBoxStyle = useMemo(() => ({ ...styles.boxItems, height: boxHeight }), [boxHeight]);
 
     return (
         <Box width={boxWidth} sx={styles.boxContainer} role="presentation">
@@ -68,7 +69,15 @@ const LogList: FC<LogProps> = ({
                     placeholder="Искать по логу..."
                 />
             )}
-            <Box sx={logBoxStyle}>{items}</Box>
+            <Box sx={logBoxStyle}>
+                {!blipEvents.length ? (
+                    <Typography variant="h6" sx={styles.textLog}>
+                        Нет событий
+                    </Typography>
+                ) : (
+                    items
+                )}
+            </Box>
         </Box>
     );
 };

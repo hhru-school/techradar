@@ -1,18 +1,6 @@
-import { FC, useCallback, useState } from 'react';
-import { Delete } from '@mui/icons-material';
+import { FC } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import PreviewIcon from '@mui/icons-material/Preview';
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Box,
-    IconButton,
-    Popover,
-    PopoverOrigin,
-    SxProps,
-    Typography,
-} from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, SxProps, Typography } from '@mui/material';
 
 import { IndexBlipEventApi } from '../../../../../api/types';
 
@@ -36,21 +24,29 @@ const styles: Record<string, SxProps> = {
     popover: {
         pointerEvents: 'none',
     },
-};
-
-const anchorOrigin: PopoverOrigin = {
-    vertical: 'bottom',
-    horizontal: 'left',
-};
-
-const transformOrigin: PopoverOrigin = {
-    vertical: 'top',
-    horizontal: 'left',
+    verAndType: { display: 'flex', flexDirection: 'column' },
 };
 
 const getDate = (dateString: string): string => {
     const date = new Date(dateString);
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+};
+
+const getType = (type: string | undefined): string => {
+    switch (type) {
+        case 'NEW':
+            return 'НОВЫЙ';
+        case 'BACKWARD':
+            return 'ОТ ЦЕНТРА';
+        case 'FORWARD':
+            return 'К ЦЕНТРУ';
+        case 'DELETE':
+            return 'УДАЛЕНИЕ';
+        case 'SEC_MOVE':
+            return 'ПЕРЕМЕЩЕНА В ДРУГОЙ СЕКТОР';
+        default:
+            return '';
+    }
 };
 
 type LogListItemProps = {
@@ -59,72 +55,28 @@ type LogListItemProps = {
     isEditable: boolean;
 };
 
-const ShowRadarBtn: FC = () => {
-    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
-    const handlePopoverOpen = useCallback((event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    }, []);
-
-    const handlePopoverClose = useCallback(() => {
-        setAnchorEl(null);
-    }, []);
-
-    const open = Boolean(anchorEl);
-    const ariaOwns: string | undefined = open ? 'mouse-over-popover' : undefined;
-
-    return (
-        <Box
-            onMouseEnter={handlePopoverOpen}
-            onMouseLeave={handlePopoverClose}
-            aria-owns={ariaOwns}
-            sx={styles.showRadarBtnBox}
-        >
-            <PreviewIcon />
-            <Popover
-                id="mouse-over-popover"
-                sx={styles.popover}
-                open={open}
-                anchorEl={anchorEl}
-                anchorOrigin={anchorOrigin}
-                transformOrigin={transformOrigin}
-                onClose={handlePopoverClose}
-                disableRestoreFocus
-            >
-                <Typography variant={'body2'} sx={styles.popoverText}>
-                    Смотреть радар
-                </Typography>
-            </Popover>
-        </Box>
-    );
-};
-
-const LogListItem: FC<LogListItemProps> = ({ blipEvent, isEditable }) => {
-    // То что закомментировано здесь, будет удалено в случае успеха с логом, примененным на странице конструктора
-
-    // const dispatch = useAppDispatch();
-
-    const deleteBtnClickHandler = useCallback(() => {
-        // dispatch(openDeleteBlipEventModal(blipEvent.id));
-    }, []);
-
+const LogListItem: FC<LogListItemProps> = ({ blipEvent }) => {
     return (
         <Box sx={styles.logListItemBox}>
             <Box sx={styles.logListItemHeader}>
-                {isEditable && blipEvent.parentId && (
-                    <IconButton color="warning" onClick={deleteBtnClickHandler}>
-                        <Delete />
-                    </IconButton>
-                )}
                 <Box sx={styles.headerBtnAndText}>
-                    <ShowRadarBtn />
-                    <Typography align={'right'}>{getDate(blipEvent.lastChangeTime)}</Typography>
+                    <Typography align={'right'} variant={'h6'}>
+                        {getDate(blipEvent.lastChangeTime)}
+                    </Typography>
                 </Box>
                 {blipEvent.blip && (
                     <Typography align={'center'} variant={'h6'}>
-                        {blipEvent.blip.name}
+                        Автор: {blipEvent.author.username}
                     </Typography>
                 )}
+                <Box sx={styles.verAndType}>
+                    <Typography align={'right'} variant={'h6'}>
+                        Версия радара: {blipEvent.radarVersion}
+                    </Typography>
+                    <Typography align={'right'} variant={'h6'}>
+                        Тип: {getType(blipEvent.drawInfo)}
+                    </Typography>
+                </Box>
             </Box>
 
             <Accordion sx={styles.accordion}>
@@ -141,7 +93,7 @@ const LogListItem: FC<LogListItemProps> = ({ blipEvent, isEditable }) => {
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Typography>{blipEvent.comment}</Typography>
+                    <Typography>{blipEvent.comment ? blipEvent.comment : 'нет комментария'}</Typography>
                 </AccordionDetails>
             </Accordion>
         </Box>
