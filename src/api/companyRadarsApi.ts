@@ -145,7 +145,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'PUT',
                 body: version,
             }),
-            invalidatesTags: ['Radar', 'Version', 'Log'],
+            invalidatesTags: ['Radar', 'Version', 'Log', 'VersionsList'],
         }),
 
         createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApiRequestParams>({
@@ -191,7 +191,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 body,
             }),
 
-            invalidatesTags: ['Radar'],
+            invalidatesTags: ['Radar', 'VersionsList'],
         }),
 
         deleteBlipEvent: builder.mutation<void, number>({
