@@ -38,13 +38,7 @@ const ModalEditBlip: FC = () => {
                 </h3>
                 <div className={styles.message}>Перейти на страницу технологии?</div>
                 <Stack spacing={2} sx={style.stack}>
-                    <Button
-                        fullWidth={true}
-                        endIcon={<ArrowForward />}
-                        variant="contained"
-                        color="secondary"
-                        onClick={linkBtnHandler}
-                    >
+                    <Button fullWidth={true} endIcon={<ArrowForward />} variant="contained" onClick={linkBtnHandler}>
                         К странице технологии
                     </Button>
                     <Button fullWidth={true} variant="outlined" onClick={cancelBtnHandler}>

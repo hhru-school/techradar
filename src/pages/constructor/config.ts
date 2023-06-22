@@ -12,7 +12,7 @@ export const defaultRadarAsset: RadarInterface = {
     name: defaultRadarName,
     sectors: defaultSectorNames.map((sectorName, i) => ({ id: i, name: sectorName })),
     rings: defaultRingNames.map((ringName, i) => ({ id: i, name: ringName })),
-    companyId: 1,
+    companyId: -1,
     authorId: 1,
     blips: [],
 };

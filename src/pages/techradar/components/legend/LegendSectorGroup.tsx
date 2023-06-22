@@ -9,26 +9,28 @@ type Props = {
     blips: Blip[];
     sectorName: string;
     ringNames: string[];
-    color: string;
+    colorScheme: string[];
     opacity: number;
 };
 
-const LegendSectorGroup: FC<Props> = ({ blips, sectorName, ringNames, color, opacity }) => {
+const LegendSectorGroup: FC<Props> = ({ blips, sectorName, ringNames, colorScheme, opacity }) => {
     const ringGroups = useMemo(
         () =>
-            ringNames.map((ringName) => (
+            ringNames.map((ringName, i) => (
                 <li key={ringName}>
-                    <LegendRingGroup blips={blips.filter((blip) => blip.ring.name === ringName)} ringName={ringName} />
+                    <LegendRingGroup
+                        blips={blips.filter((blip) => blip.ring.name === ringName)}
+                        ringName={ringName}
+                        color={colorScheme[i]}
+                    />
                 </li>
             )),
-        [blips, ringNames]
+        [blips, ringNames, colorScheme]
     );
 
     return (
         <div className={styles.sectorGroupContainer} style={{ opacity }}>
-            <h3 className={styles.sectorGroupHeader} style={{ color }}>
-                {sectorName}
-            </h3>
+            <h3 className={styles.sectorGroupHeader}>{sectorName}</h3>
             <ul className={styles.sectorGroup}>{ringGroups}</ul>
         </div>
     );

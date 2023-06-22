@@ -33,6 +33,14 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
             providesTags: ['Radar'],
         }),
 
+        getCompanyName: builder.query<string, number>({
+            query: (companyId) => ({
+                method: 'GET',
+                url: `/companies/${companyId}`,
+            }),
+            transformResponse: (rawResult: { id: number; name: string }) => rawResult.name,
+        }),
+
         getRadar: builder.query<RadarInterface, number>({
             query: (blipEventId) => ({
                 method: 'GET',
@@ -137,7 +145,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 method: 'PUT',
                 body: version,
             }),
-            invalidatesTags: ['Radar', 'Version', 'Log'],
+            invalidatesTags: ['Radar', 'Version', 'Log', 'VersionsList'],
         }),
 
         createBlipEvent: builder.mutation<CreateBlipEventApiResponse, CreateBlipEventApiRequestParams>({
@@ -183,7 +191,7 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
                 body,
             }),
 
-            invalidatesTags: ['Radar'],
+            invalidatesTags: ['Radar', 'VersionsList'],
         }),
 
         deleteBlipEvent: builder.mutation<void, number>({
@@ -225,6 +233,13 @@ export const companyRadarsApi = apiSlice.injectEndpoints({
             }),
             providesTags: ['LastBlipEvent'],
         }),
+
+        deleteVersion: builder.mutation<void, number>({
+            query: (versionId) => ({
+                method: 'DELETE',
+                url: `/radar-versions/${versionId}`,
+            }),
+        }),
     }),
 });
 
@@ -249,4 +264,6 @@ export const {
     useUpdateBlipEventCommentMutation,
     useUpdateBlipEventSegmentMutation,
     useGetLastBlipEventQuery,
+    useDeleteVersionMutation,
+    useGetCompanyNameQuery,
 } = companyRadarsApi;

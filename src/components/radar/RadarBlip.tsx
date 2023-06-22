@@ -1,4 +1,5 @@
 import { FC, MouseEvent, memo, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
 import classNames from 'classnames';
 
@@ -41,6 +42,8 @@ const RadarBlip: FC<Props> = ({
 
     const dispatch = useAppDispatch();
 
+    const navigate = useNavigate();
+
     const isActive = activeId === id;
     const isDemonsrtative = variant === RadarVariant.Demonstrative;
     const isEditable = variant === RadarVariant.Editable;
@@ -52,10 +55,6 @@ const RadarBlip: FC<Props> = ({
     const mouseLeaveHandler = useCallback(() => {
         dispatch(clearActiveBlip());
     }, [dispatch]);
-
-    const onClickHandler = (event: React.SyntheticEvent) => {
-        event.stopPropagation();
-    };
 
     const blipClasses = classNames({
         [styles.blipDemonsrative]: isDemonsrtative,
@@ -86,8 +85,14 @@ const RadarBlip: FC<Props> = ({
         [variant, r, id, dispatch]
     );
 
-    const blip = useMemo(
-        () => (
+    const blip = useMemo(() => {
+        const onClickHandler = (event: React.SyntheticEvent) => {
+            event.stopPropagation();
+            if (isDemonsrtative) {
+                navigate(`/tech/${id}`);
+            }
+        };
+        return (
             <g
                 className={blipClasses}
                 onMouseEnter={isDragging ? undefined : mouseEnterHandler}
@@ -110,25 +115,26 @@ const RadarBlip: FC<Props> = ({
                     {label}
                 </text>
             </g>
-        ),
-        [
-            id,
-            label,
-            x,
-            y,
-            r,
-            blipClasses,
-            isActive,
-            blipTextClasses,
-            draggingId,
-            isDragging,
-            mouseDownHandler,
-            mouseEnterHandler,
-            mouseLeaveHandler,
-            drawInfo,
-            color,
-        ]
-    );
+        );
+    }, [
+        id,
+        label,
+        x,
+        y,
+        r,
+        blipClasses,
+        isActive,
+        blipTextClasses,
+        draggingId,
+        isDragging,
+        mouseDownHandler,
+        mouseEnterHandler,
+        mouseLeaveHandler,
+        drawInfo,
+        color,
+        navigate,
+        isDemonsrtative,
+    ]);
 
     if ((isTransforming && isDemonsrtative) || isDragging) {
         return blip;

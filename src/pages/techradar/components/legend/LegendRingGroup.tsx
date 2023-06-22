@@ -5,9 +5,9 @@ import LegendItem from './LegendItem';
 
 import styles from './legend.module.less';
 
-type Props = { blips: Blip[]; ringName: string };
+type Props = { blips: Blip[]; ringName: string; color: string };
 
-const LegendRingGroup: FC<Props> = ({ blips, ringName }) => {
+const LegendRingGroup: FC<Props> = ({ blips, ringName, color }) => {
     const list = useMemo(
         () =>
             blips.map((blip) => {
@@ -25,7 +25,9 @@ const LegendRingGroup: FC<Props> = ({ blips, ringName }) => {
 
     return (
         <div>
-            <h4 className={styles.ringGroupHeader}>{ringName}</h4>
+            <h4 className={styles.ringGroupHeader} style={{ color }}>
+                {ringName}
+            </h4>
             {list.length > 0 && <ul className={styles.ringGroup}>{list}</ul>}
             {list.length === 0 && <div className={styles.emptyContainer}>Пусто</div>}
         </div>

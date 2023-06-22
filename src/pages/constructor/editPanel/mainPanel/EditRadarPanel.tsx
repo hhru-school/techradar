@@ -16,16 +16,16 @@ import styles from './mainEditPanel.module.less';
 const EditRadarPanel: FC = () => {
     const dispatch = useAppDispatch();
 
-    const radarName = useAppSelector((state) => state.editRadar.radar.name);
+    const { name: radarName, companyId } = useAppSelector((state) => state.editRadar.radar);
     const version = useAppSelector((state) => state.editRadar.version);
 
     const navigate = useNavigate();
 
     const navigateClickHandeler = useCallback(() => {
         if (version) {
-            navigate(buildRadarViewerUrl(1, version?.radarId, version?.id));
+            navigate(buildRadarViewerUrl(companyId, version?.radarId, version?.id));
         }
-    }, [navigate, version]);
+    }, [navigate, version, companyId]);
 
     const editRadarHandler = useCallback(() => {
         dispatch(openEditRadarNameModal());
