@@ -1,6 +1,6 @@
 import { FC, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowForward, Edit } from '@mui/icons-material';
+import { ArrowBack, ArrowForward, Edit } from '@mui/icons-material';
 import { Alert, AlertTitle, Button, Stack } from '@mui/material';
 
 import { buildEditRadarVersionUrl, buildRadarViewerUrl } from '../../../../api/radarApiUtils';
@@ -32,6 +32,11 @@ const SuccessDialog: FC<Props> = ({ radarName, radarVersion, radarId, versionId,
         dispatch(setShowSaveRadarDialog(false));
     }, [navigate, versionId, dispatch]);
 
+    const radarAdminLinkBtn = useCallback(() => {
+        navigate(`/admin/my-radars/company/${companyId}/grid/${radarId}`);
+        dispatch(setShowSaveRadarDialog(false));
+    }, [navigate, companyId, radarId, dispatch]);
+
     return (
         <>
             <Alert severity="success">
@@ -42,8 +47,23 @@ const SuccessDialog: FC<Props> = ({ radarName, radarVersion, radarId, versionId,
                 успешно сохранён.
             </Alert>
             <Stack spacing={2} sx={style.stack}>
-                <Button fullWidth={true} endIcon={<ArrowForward />} variant="contained" onClick={radarViewerLinkBtn}>
+                <Button
+                    fullWidth={true}
+                    endIcon={<ArrowForward />}
+                    variant="outlined"
+                    color="success"
+                    onClick={radarViewerLinkBtn}
+                >
                     К просмотру радара
+                </Button>
+                <Button
+                    fullWidth={true}
+                    startIcon={<ArrowBack />}
+                    variant="outlined"
+                    color="success"
+                    onClick={radarAdminLinkBtn}
+                >
+                    В мои радары
                 </Button>
                 <Button fullWidth={true} startIcon={<Edit />} variant="outlined" onClick={radarEditLinkBtn}>
                     Редактировать радар
