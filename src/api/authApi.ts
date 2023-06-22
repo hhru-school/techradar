@@ -95,6 +95,7 @@ export const apiSlice = createApi({
         'Radar',
         'Version',
         'Log',
+        'CompanyRadars',
         'LastBlipEvent',
         'VersionsList',
         'CreateVersion',
