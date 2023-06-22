@@ -34,6 +34,7 @@ export const singlePageBlipApi = apiSlice.injectEndpoints({
                 method: 'GET',
                 url: `/blip-events?blip-id=${blipId}`,
             }),
+            providesTags: ['Radar', 'Version'],
         }),
     }),
 });
